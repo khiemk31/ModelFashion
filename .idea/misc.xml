@@ -5,11 +5,16 @@
       <map>
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.10989583333333333" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_content_top.xml" value="0.18888888888888888" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_gradient_blue.xml" value="0.21614583333333334" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_information_line.xml" value="0.21614583333333334" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/cart_background_oval.xml" value="0.10989583333333333" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/category_background_oval.xml" value="0.10989583333333333" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/home_background_oval.xml" value="0.15925925925925927" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/ic_check.xml" value="0.18888888888888888" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/ic_home.xml" value="0.10989583333333333" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/ic_launcher_background.xml" value="0.10989583333333333" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/ic_mail.xml" value="0.21614583333333334" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/ic_person.xml" value="0.10989583333333333" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/map_background_oval.xml" value="0.15925925925925927" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/massage_background_oval.xml" value="0.15925925925925927" />
@@ -21,6 +26,7 @@
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/transition_background_drawable_massage.xml" value="0.15925925925925927" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/transition_background_drawable_person.xml" value="0.15925925925925927" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.14" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/fragment_blank2.xml" value="0.14673913043478262" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/fragment_blank3.xml" value="0.14673913043478262" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/fragment_blank4.xml" value="0.14673913043478262" />
