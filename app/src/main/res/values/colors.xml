@@ -10,7 +10,8 @@
     <color name="statusbar">#8E97FD</color>
     <color name="text">#4A4A4A</color>
     <color name="text_hint">#737373</color>
-
+    <color name="search_bar">#AEAEB2</color>
+    <color name="vp_sale">#C4C4C4</color>
     <color name="red_active">#f44336</color>
     <color name="purple_active">#9c27b0</color>
     <color name="blue_active">#03a9f4</color>
@@ -37,4 +38,6 @@
     <color name="yellow_bg_light">#fffde7</color>
     <color name="orange_bg_light">#fff3e0</color>
     <color name="grey_bg_light">#fafafa</color>
+    <color name="gray">#D3D3D3</color>
+    <color name="dark_gray_color">#595C76</color>
 </resources>

@@ -39,12 +39,19 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-base:17.6.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    // fb
+    implementation 'com.facebook.android:facebook-login:6.+'
+    implementation 'me.relex:circleindicator:2.1.6'
+
+
     //bubble navigation
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
+
 
     //tạo các hình tròn, bầu dục
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -52,5 +59,6 @@ dependencies {
     //lấy hình ảnh từ máy hoặc chụp ảnh để đưa lên
     implementation 'gun0912.ted:tedbottompicker:2.0.1'
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
-
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
 }
