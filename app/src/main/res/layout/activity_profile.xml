@@ -23,18 +23,19 @@
                 android:background="@drawable/bg_gradient_blue" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_profile_btn_back"
+                android:id="@+id/btn_act_profile_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/ic_arrow_left"
                 android:tint="@color/white" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="15dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_check"
                 android:tint="@color/white" />
@@ -50,20 +51,38 @@
                 android:textStyle="bold" />
 
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/act_profile_img_avatar"
+            <RelativeLayout
+                android:id="@+id/layout_act_profile_avatar"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_gradient_blue"
-                app:riv_corner_radius="50dp" />
+                android:layout_marginTop="70dp">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/img_act_profile_avatar"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_gradient_blue"
+                    app:riv_corner_radius="50dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="100dp"
+                    android:text="Sửa"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_TenDangNhap"
+            android:id="@+id/layout_act_Profile_TenDangNhap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -82,12 +101,12 @@
                 android:text=" Tên đăng nhập"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_tenDangNhap"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_tenDangNhap"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_tenDangNhap"
+                android:id="@+id/tv_act_Profile_tenDangNhap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -102,7 +121,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_Email"
+            android:id="@+id/layout_act_Profile_Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -117,16 +136,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_mail"
+                android:drawableLeft="@drawable/ic_email"
                 android:text=" Email"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_mail"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_mail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_mail"
+                android:id="@+id/tv_act_Profile_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -140,12 +159,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_Name"
+            android:id="@+id/layout_act_Profile_Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="4"
             android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
@@ -159,12 +178,12 @@
                 android:text=" Họ và tên"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_name"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_name"
+                android:id="@+id/tv_act_Profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -176,6 +195,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/act_Profile_change_name"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
@@ -187,12 +207,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_phone"
+            android:id="@+id/layout_act_Profile_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="4"
             android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
@@ -206,12 +226,12 @@
                 android:text=" Số điện thoại"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_phone"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_phone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_phone"
+                android:id="@+id/tv_act_Profile_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -223,6 +243,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/act_Profile_change_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
@@ -234,12 +255,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_Sex"
+            android:id="@+id/layout_act_Profile_Sex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="4"
             android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
@@ -253,12 +274,12 @@
                 android:text=" giới tính"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_sex"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_sex"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_sex"
+                android:id="@+id/tv_act_Profile_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -270,6 +291,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/act_Profile_change_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
@@ -281,12 +303,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_birthday"
+            android:id="@+id/layout_act_Profile_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="4"
             android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
@@ -300,12 +322,12 @@
                 android:text=" Sinh nhật"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/act_Profile_TV_birthday"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_birthday"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/act_Profile_TV_birthday"
+                android:id="@+id/tv_act_Profile_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -317,6 +339,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/act_Profile_change_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
@@ -328,12 +351,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/act_Profile_Layout_addrest"
+            android:id="@+id/layout_act_Profile_addrest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="4"
             android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
@@ -347,12 +370,12 @@
                 android:text=" Địa chỉ"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_address"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_act_Profile_address"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -364,6 +387,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/act_Profile_change_address"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
