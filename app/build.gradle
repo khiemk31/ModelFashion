@@ -11,7 +11,7 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,6 +25,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        viewBinding true;
+    }
+
+
 }
 
 dependencies {
@@ -46,6 +52,13 @@ dependencies {
     //bubble navigation
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
 
+
+    //tạo các hình tròn, bầu dục
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
+    //lấy hình ảnh từ máy hoặc chụp ảnh để đưa lên
+    implementation 'gun0912.ted:tedbottompicker:2.0.1'
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
     // glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
 }
