@@ -152,7 +152,7 @@
                 android:id="@+id/title_summoney_detail_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ngày nhận hàng: "
+                android:text="Tổng tiền: "
                 android:textColor="#7D7D7D"
                 android:textSize="18sp"
                 android:textStyle="normal" />
