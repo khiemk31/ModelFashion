@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".History.ViewHistory.HistoryActivity">
+    tools:context=".OrderStatus.ViewOrderStatus.OrderStatusActivity">
+
     <RelativeLayout
-        android:id="@+id/rl_history"
+        android:id="@+id/rl_orderstatus"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/img_history_back"
+            android:id="@+id/img_orderstatus_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="10dp"
@@ -22,16 +23,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/img_history_back"
+            android:layout_toRightOf="@+id/img_orderstatus_back"
             android:paddingHorizontal="20dp"
-            android:text="Lịch sử mua hàng"
+            android:text="Tình trạng đơn hàng"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="normal" />
     </RelativeLayout>
     <LinearLayout
-        android:layout_below="@+id/rl_history"
-        android:id="@+id/ll_histoey"
+        android:layout_below="@+id/rl_orderstatus"
+        android:id="@+id/ll_orderstatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -58,16 +59,16 @@
 
     </LinearLayout>
     <View
-        android:id="@+id/view_history"
-        android:layout_below="@+id/ll_histoey"
+        android:id="@+id/view_orderstatus"
+        android:layout_below="@+id/ll_orderstatus"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#CDCDCD"/>
 
     <ListView
-        android:id="@+id/lv_history"
+        android:id="@+id/lv_orderstatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_history" />
+        android:layout_below="@+id/view_orderstatus" />
 
 </RelativeLayout>

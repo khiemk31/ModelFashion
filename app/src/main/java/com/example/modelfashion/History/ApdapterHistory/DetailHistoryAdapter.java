@@ -12,7 +12,10 @@ import com.bumptech.glide.Glide;
 import com.example.modelfashion.History.MHistory.ProductHistory;
 import com.example.modelfashion.R;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class DetailHistoryAdapter extends BaseAdapter {
     Context context;
@@ -48,7 +51,11 @@ public class DetailHistoryAdapter extends BaseAdapter {
         TextView tv_sumproduct = view.findViewById(R.id.tv_sumproduct);
         ProductHistory productHistory = productHistoryList.get(i);
         tv_name_subproduct.setText(productHistory.getmNameProduct());
-        tv_price.setText(productHistory.getmPriceProduct()+"đ");
+        Locale locale = new Locale("vi","VN");
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+        String money = numberFormat.format(Double.parseDouble(productHistory.getmPriceProduct()));
+        tv_price.setText(money);
         tv_size_subproduct.setText(productHistory.getmSizeProduct());
         tv_sumproduct.setText(productHistory.getmSumProduct());
         Glide.with(context).load(productHistory.getmImgeProduct()).into(img_subproduct);

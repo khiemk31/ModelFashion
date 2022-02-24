@@ -20,7 +20,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_back_detail_history" />
-
         <ImageView
             android:id="@+id/lg_detail_history"
             android:layout_width="150dp"
@@ -119,7 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_address"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="5dp"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/title_date_detail_history"
@@ -140,6 +140,7 @@
                 android:textSize="18sp"
                 android:textStyle="normal" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_summoney_detail_history"
             android:layout_width="match_parent"
