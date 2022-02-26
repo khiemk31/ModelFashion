@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Fragment.MainFragment;
-import com.example.modelfashion.Fragment.BlankFragment2;
+import com.example.modelfashion.Fragment.CategoryFragment;
 import com.example.modelfashion.Fragment.BlankFragment3;
-import com.example.modelfashion.Fragment.BlankFragment4;
 
 public class AdapterBottomNavigation extends FragmentStatePagerAdapter {
 
@@ -24,11 +24,11 @@ public class AdapterBottomNavigation extends FragmentStatePagerAdapter {
             case 0:
                 return  new MainFragment();
             case 1:
-                return new BlankFragment2();
+                return new CategoryFragment();
             case 2:
                 return new BlankFragment3();
             case 3:
-                return new BlankFragment4();
+                return new FragmentProfile();
             default:return new MainFragment();
         }
     }

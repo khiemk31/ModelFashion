@@ -40,7 +40,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/border_edit_text"
-        android:hint="Enter email"
+        android:hint="Email"
         android:paddingLeft="15dp"
         android:singleLine="true"
         android:textColor="#0D0D0D" />
@@ -58,7 +58,7 @@
             android:layout_height="55dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/border_edit_text"
-            android:hint="Enter password"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:paddingLeft="15dp"
             android:paddingBottom="15dp"
@@ -76,7 +76,7 @@
             android:id="@+id/checkbox_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remember Password?"
+            android:text="Nhớ mật khẩu?"
             android:textColor="#3F414E"
             android:textSize="14sp" />
 
@@ -84,13 +84,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Forgot Password"
+            android:text="Quên mật khẩu?"
             android:textColor="#3F414E"
             android:textSize="14sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:text="Sign In"
+        android:text="Đăng nhập"
         android:layout_marginTop="20dp"
         android:textSize="15sp"
         android:textColor="@color/white"
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="40dp"
-            android:text="Continue with google"
+            android:text="Đăng nhập với google"
             android:textSize="15sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -144,7 +144,7 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:layout_marginLeft="40dp"
-            android:text="Continue with facebook"
+            android:text="Đăng nhập vớifacebook"
             android:textSize="15sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderStatus.ViewOrderStatus.OrderStatusActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_orderstatus"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_orderstatus_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_back_history" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/img_orderstatus_back"
+            android:paddingHorizontal="20dp"
+            android:text="Tình trạng đơn hàng"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_below="@+id/rl_orderstatus"
+        android:id="@+id/ll_orderstatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <TextView
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:text="Mã đơn hàng"/>
+        <TextView
+            android:paddingRight="10dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:text="Thời gian đặt hàng"/>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/view_orderstatus"
+        android:layout_below="@+id/ll_orderstatus"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CDCDCD"/>
+
+    <ListView
+        android:id="@+id/lv_orderstatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_orderstatus" />
+
+</RelativeLayout>
