@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
+import com.example.modelfashion.History.ViewHistory.HistoryActivity;
+import com.example.modelfashion.OrderStatus.ViewOrderStatus.OrderStatusActivity;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
@@ -47,11 +49,11 @@ public class FragmentProfile extends Fragment {
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-        if (preferenceManager.getString(Constants.KEY_PROFILE_USER).equals("")){
+        if (preferenceManager.getString(Constants.KEY_PROFILE_USER).equals("")) {
             tv_user.setVisibility(View.GONE);
             tv_name.setVisibility(View.GONE);
             tv_login.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tv_user.setVisibility(View.VISIBLE);
             tv_name.setVisibility(View.VISIBLE);
             tv_login.setVisibility(View.GONE);
@@ -62,17 +64,25 @@ public class FragmentProfile extends Fragment {
 
     //thêm chức năng vào các nút bấm
     private void setListener() {
-tv_login.setOnClickListener(v -> {
-    Intent intent= new Intent(getContext(), SignInActivity.class);
-    startActivity(intent);
-});
+        tv_login.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SignInActivity.class);
+            startActivity(intent);
+        });
         btn_logout.setOnClickListener(v -> {
             preferenceManager.clear();
-            Intent intent= new Intent(getContext(), SignInActivity.class);
+            Intent intent = new Intent(getContext(), SignInActivity.class);
             startActivity(intent);
         });
         btn_profile.setOnClickListener(v -> {
-            Intent intent= new Intent(getContext(), ProfileActivity.class);
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        });
+        btn_history.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), HistoryActivity.class);
+            startActivity(intent);
+        });
+        btn_status.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), OrderStatusActivity.class);
             startActivity(intent);
         });
 
