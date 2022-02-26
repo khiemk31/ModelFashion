@@ -4,6 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.2361111111111111" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_detail_history.xml" value="0.264" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_history.xml" value="0.264" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.12563323201621074" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status.xml" value="0.19429347826086957" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status_detail.xml" value="0.11614583333333334" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_history.xml" value="0.16621376811594202" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_orderstatus.xml" value="0.19429347826086957" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_subproducts.xml" value="0.2" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.10989583333333333" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_content_top.xml" value="0.18888888888888888" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_gradient_blue.xml" value="0.21614583333333334" />
@@ -53,7 +62,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
