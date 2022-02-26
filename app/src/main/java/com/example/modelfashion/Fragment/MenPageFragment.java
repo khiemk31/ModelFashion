@@ -1,66 +1,59 @@
 package com.example.modelfashion.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.modelfashion.Adapter.ProductListAdapter;
+import com.example.modelfashion.Class.Product;
 import com.example.modelfashion.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MenPageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MenPageFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private RecyclerView rvMenPage;
+    private Context mContext;
     public MenPageFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MenPageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MenPageFragment newInstance(String param1, String param2) {
-        MenPageFragment fragment = new MenPageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.mContext = context;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_men_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_men_page, container, false);
+        rvMenPage = view.findViewById(R.id.rv_men_page_fm);
+        ArrayList<Product> arrProduct = new ArrayList<>();
+        ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo","Quần","Ba Lô"));
+        arrProduct.add(new Product("Áo 1","100.000 đ",0,"Áo"));
+        arrProduct.add(new Product("Áo 2","200.000 đ",0,"Áo"));
+        arrProduct.add(new Product("Quần 1","100.000 đ",0,"Quần"));
+        arrProduct.add(new Product("Quần 2","200.000 đ",0,"Quần"));
+        arrProduct.add(new Product("Quần 3","300.000 đ",0,"Quần"));
+        arrProduct.add(new Product("Ba lô 1","100.000 đ",0,"Ba Lô"));
+        ProductListAdapter productListAdapter = new ProductListAdapter(mContext, arrProductType, arrProduct);
+        rvMenPage.setLayoutManager(new LinearLayoutManager(mContext,RecyclerView.VERTICAL,false));
+        rvMenPage.setAdapter(productListAdapter);
+        return view;
     }
 }
