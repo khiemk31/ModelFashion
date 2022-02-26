@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/ic_logo.xml" value="0.2055" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_splash.xml" value="0.19791666666666666" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_cart.xml" value="0.19801980198019803" />
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.2361111111111111" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_detail_history.xml" value="0.264" />
