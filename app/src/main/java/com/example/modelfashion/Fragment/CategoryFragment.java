@@ -71,9 +71,9 @@ public class CategoryFragment extends Fragment {
 
     private void initView(View view) {
         tabLayout = view.findViewById(R.id.tab_layout_category);
-        viewPager2 = view.findViewById(R.id.view_pager);
+        viewPager2 = view.findViewById(R.id.view_pager_category);
         searchBar = view.findViewById(R.id.search_bar);
-        viewPagerAdapter = new CategoryViewPagerAdapter(requireActivity().getSupportFragmentManager(), getLifecycle());
+        viewPagerAdapter = new CategoryViewPagerAdapter(getChildFragmentManager(), getLifecycle());
 
         viewPager2.setAdapter(viewPagerAdapter);
 
