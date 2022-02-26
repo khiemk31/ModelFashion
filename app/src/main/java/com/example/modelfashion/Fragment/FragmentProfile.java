@@ -15,8 +15,6 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
-import com.example.modelfashion.databinding.ActivityProfileBinding;
-import com.example.modelfashion.databinding.FragmentProfileBinding;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 
