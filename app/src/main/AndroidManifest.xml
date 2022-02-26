@@ -50,6 +50,10 @@
             android:name=".OrderStatus.ViewOrderStatus.OrderStatusActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
+        <activity
+            android:name=".History.ViewHistory.DetailHistoryActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
 
     </application>
 
