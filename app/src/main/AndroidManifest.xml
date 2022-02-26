@@ -2,7 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.modelfashion">
 
+
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -12,11 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ModelFashion">
         <activity
-            android:name=".OrderStatus.ViewOrderStatus.OrderStatusActivity"
-            android:exported="true" >
+            android:name=".Activity.SplashActivity"
+            android:exported="true"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -30,9 +37,23 @@
 
 
         </activity>
+
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.SignIn.SignInActivity"
+            android:exported="true" />
+
         <activity
             android:name=".Activity.MainActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true" />
+        <activity
+            android:name=".OrderStatus.ViewOrderStatus.OrderStatusActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
+
     </application>
 
 </manifest>
