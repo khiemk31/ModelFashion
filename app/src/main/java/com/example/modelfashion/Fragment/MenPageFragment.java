@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.modelfashion.Adapter.ProductListAdapter;
-import com.example.modelfashion.Class.Product;
+import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
@@ -23,7 +23,6 @@ public class MenPageFragment extends Fragment {
     private RecyclerView rvMenPage;
     private Context mContext;
     public MenPageFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -45,12 +44,12 @@ public class MenPageFragment extends Fragment {
         rvMenPage = view.findViewById(R.id.rv_men_page_fm);
         ArrayList<Product> arrProduct = new ArrayList<>();
         ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo","Quần","Ba Lô"));
-        arrProduct.add(new Product("Áo 1","100.000 đ",0,"Áo"));
-        arrProduct.add(new Product("Áo 2","200.000 đ",0,"Áo"));
-        arrProduct.add(new Product("Quần 1","100.000 đ",0,"Quần"));
-        arrProduct.add(new Product("Quần 2","200.000 đ",0,"Quần"));
-        arrProduct.add(new Product("Quần 3","300.000 đ",0,"Quần"));
-        arrProduct.add(new Product("Ba lô 1","100.000 đ",0,"Ba Lô"));
+        arrProduct.add(new Product(1,"Áo 1","","100.000 đ","","Áo",0));
+        arrProduct.add(new Product(2,"Áo 2","","200.000 đ","","Áo",0));
+        arrProduct.add(new Product(3,"Quần 1","","100.000 đ","","Quần",0));
+        arrProduct.add(new Product(4,"Quần 2","","200.000 đ","","Quần",0));
+        arrProduct.add(new Product(5,"Quần 3","","300.000 đ","","Quần",0));
+        arrProduct.add(new Product(6,"Ba lô 1","","100.000 đ","","Ba Lô",0));
         ProductListAdapter productListAdapter = new ProductListAdapter(mContext, arrProductType, arrProduct);
         rvMenPage.setLayoutManager(new LinearLayoutManager(mContext,RecyclerView.VERTICAL,false));
         rvMenPage.setAdapter(productListAdapter);

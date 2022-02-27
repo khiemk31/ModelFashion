@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.R;
-import com.example.modelfashion.model.Product;
+import com.example.modelfashion.Model.Product;
 
 import java.util.List;
 
