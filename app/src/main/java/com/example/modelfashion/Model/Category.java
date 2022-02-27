@@ -1,4 +1,4 @@
-package com.example.modelfashion.model;
+package com.example.modelfashion.Model;
 
 public class Category {
     private int categoryId;

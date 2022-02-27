@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.modelfashion.Adapter.ViewPagerMainFmAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
-import com.example.modelfashion.Class.ItemSaleMain;
+import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

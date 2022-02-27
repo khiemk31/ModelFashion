@@ -1,4 +1,4 @@
-package com.example.modelfashion.Class;
+package com.example.modelfashion.Model;
 
 public class ItemSaleMain {
     private int imgResource;

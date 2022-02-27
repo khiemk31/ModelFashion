@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modelfashion.Class.ItemSaleMain;
+import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;

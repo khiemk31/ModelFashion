@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modelfashion.Class.Product;
+import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
@@ -23,6 +23,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.arrProductType = arrProductType;
         this.arrProduct = arrProduct;
     }
+
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
