@@ -10,6 +10,7 @@
     tools:context=".Activity.SignIn.SignInActivity">
 
     <ImageView
+        android:id="@+id/btn_signIn_back"
         android:layout_marginTop="10dp"
         android:layout_gravity="left"
         android:background="@drawable/border_around"
