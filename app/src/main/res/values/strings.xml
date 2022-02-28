@@ -6,4 +6,5 @@
     <string name="kick_thuoc">Kích thước: </string>
     <string name="mua_ngay">Mua ngay</string>
     <string name="them_vao_gio_hang">Thêm vào giỏ hàng</string>
+    <string name="hint_search">Tìm Kiếm Sản Phẩm</string>
 </resources>

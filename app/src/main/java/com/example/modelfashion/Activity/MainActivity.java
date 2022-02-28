@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     public static BubbleNavigationLinearView bubbleNavigationLinearView;
     public static ViewPager viewPager;
     AdapterBottomNavigation adapterBottomNavigation;
-    //check commit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

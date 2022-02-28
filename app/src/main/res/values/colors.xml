@@ -40,4 +40,6 @@
     <color name="grey_bg_light">#fafafa</color>
     <color name="gray">#D3D3D3</color>
     <color name="dark_gray_color">#595C76</color>
+    <color name="background_category_gray">#DBDBDB</color>
+    <color name="background_search_view">#DBDBDB</color>
 </resources>

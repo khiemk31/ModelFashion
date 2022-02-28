@@ -1,6 +1,4 @@
-package com.example.modelfashion.History.MHistory;
-
-import android.os.Parcelable;
+package com.example.modelfashion.Model.MHistory;
 
 import java.io.Serializable;
 import java.util.ArrayList;

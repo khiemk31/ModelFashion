@@ -1,4 +1,4 @@
-package com.example.modelfashion.History.MHistory;
+package com.example.modelfashion.Model.MHistory;
 
 public class ProductHistory {
     private String mID;
