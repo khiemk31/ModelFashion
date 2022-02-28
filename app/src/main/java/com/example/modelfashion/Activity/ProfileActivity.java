@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -43,10 +44,11 @@ import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 
 public class ProfileActivity extends AppCompatActivity {
 
+
     PreferenceManager preferenceManager;
     ConstraintLayout layoutActProfileName,layoutActProfilePhone,layoutActProfileSex,layoutActProfileBirthday,layoutActProfileAddrest,layoutActProfileTenDangNhap,layoutActProfileEmail;
     RelativeLayout layoutActProfileAvatar;
-    AppCompatImageView btnActProfileBack;
+    AppCompatImageView btnActProfileBack,btnActProfileCheck;
     TextView tvActProfileSex,tvActProfileName,tvActProfilePhone,tvActProfileAddress,tvActProfileBirthday;
     RoundedImageView imgActProfileAvatar;
 
@@ -79,8 +81,18 @@ public class ProfileActivity extends AppCompatActivity {
         tvActProfileBirthday=findViewById(R.id.tv_act_Profile_birthday);
 
         btnActProfileBack=findViewById(R.id.btn_act_profile_back);
+        btnActProfileCheck=findViewById(R.id.btn_act_profile_check);
 
         imgActProfileAvatar=findViewById(R.id.img_act_profile_avatar);
+    }
+
+//    kiểm tra dữ liệu có thay đổi không
+    private void checkChange(){
+        btnActProfileCheck.setVisibility(View.VISIBLE);
+
+        btnActProfileCheck.setOnClickListener(v -> {
+            startActivity( new Intent(this,MainActivity.class));
+        });
     }
 
     //load dữ liệu lên màn hình
@@ -112,7 +124,6 @@ public class ProfileActivity extends AppCompatActivity {
         btnActProfileBack.setOnClickListener(v -> {
             onBackPressed();
         });
-
         layoutActProfileName.setOnClickListener(v -> {
             changeProfile(1);
         });
@@ -157,6 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvOK.setOnClickListener(v -> {
                 tvActProfileName.setText(edt.getText());
                 Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
+                checkChange();
                 dialog.dismiss();
             });
         } else if (check == 2) {
@@ -167,6 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvOK.setOnClickListener(v -> {
                 tvActProfilePhone.setText(edt.getText());
                 Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
+                checkChange();
                 dialog.dismiss();
             });
 
@@ -177,6 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvOK.setOnClickListener(v -> {
                 tvActProfileAddress.setText(edt.getText());
                 Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
+                checkChange();
                 dialog.dismiss();
             });
 
@@ -225,6 +239,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvActProfileBirthday.setText(day + " - " + month + " - " + year);
 
             Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
+            checkChange();
             dialog.dismiss();
         });
 
@@ -276,6 +291,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             putTVSex(preferenceManager.getString(Constants.KEY_PROFILE_SEX));
             Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
+            checkChange();
             dialog.dismiss();
         });
 
