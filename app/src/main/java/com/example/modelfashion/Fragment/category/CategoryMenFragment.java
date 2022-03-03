@@ -19,9 +19,10 @@ import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
 import com.example.modelfashion.Model.response.category.Category;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
+import com.example.modelfashion.Model.response.product.ProductPreview;
+import com.example.modelfashion.Model.response.product.ProductResponse;
 import com.example.modelfashion.R;
 import com.example.modelfashion.customview.SpacesItemDecoration;
-import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.network.Repository;
 
 import java.util.ArrayList;
@@ -59,23 +60,21 @@ public class CategoryMenFragment extends Fragment {
     private void initData() {
         repository = new Repository(requireContext());
         getCategory(repository);
-
     }
 
     private void initListener() {
         categoryAdapter.setClickListener((view, position) -> {
             currentCategory = position;
             categoryAdapter.highLightSelectedItem(position);
-            // TODO category
-
+            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
         });
 
         clothesAdapter.setClickListener((view, position) -> {
-            // TODO clothes
             startActivity(new Intent(getActivity(), ProductDetailActivity.class));
         });
 
         refreshLayout.setOnRefreshListener(() -> {
+            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
             getCategory(repository);
             refreshLayout.setRefreshing(false);
         });
@@ -98,6 +97,24 @@ public class CategoryMenFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refresh_layout);
     }
 
+    private void getProductByCategory(Repository repository, String id) {
+        Log.d("cvxxcv", "getProductByCategory: " + id);
+        Single<ProductResponse> productByCategory = repository.getProductByCategory(id);
+        compositeDisposable.add(productByCategory.doOnSubscribe(disposable -> {
+            // show loading
+            progressBar.setVisibility(View.VISIBLE);
+        })
+                .doFinally(() -> {
+                    // hide loading
+                    progressBar.setVisibility(View.GONE);
+                })
+                .subscribe(productResponse -> {
+                    clothesAdapter.setListProduct(productResponse.getData().getResults());
+                }, throwable -> {
+                    Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+                }));
+    }
+
     private void getCategory(Repository repository) {
         Single<CategoryResponse> categoryResponseSingle = repository.getCategory();
         compositeDisposable.add(categoryResponseSingle.doOnSubscribe(disposable -> {
@@ -110,8 +127,7 @@ public class CategoryMenFragment extends Fragment {
                 })
                 .subscribe(catogoryResponse -> {
                     categoryAdapter.setListCategory(catogoryResponse.getData().getResults());
-                    currentCategory = 0;
-                    categoryAdapter.highLightSelectedItem(currentCategory);
+                    getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
                 }, throwable -> {
                     Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
@@ -127,16 +143,16 @@ public class CategoryMenFragment extends Fragment {
         return list;
     }
 
-    private List<Product> listProduct() {
-        ArrayList<Product> list = new ArrayList();
-        list.add(new Product(1, "KIDO SHIRT - BLACK", "", "450,000đ", "https://zunezx.com/upload/image/cache/data/banner/Tee/47CC5493-74D4-4164-8454-67A648B99FEA-9d1-crop-400-400.jpeg", "Áo", 0));
-        list.add(new Product(2, "TOSHIRO JACKET", "", "450,000đ", "https://zunezx.com/upload/image/cache/data/banner/---bAnnEr-tU-chE/2438672C-DE86-413E-8DFA-8B254077B672-0ac-crop-400-400.jpeg", "Áo", 0));
-        list.add(new Product(3, "GD - BLACK", "", "450.000 đ", "", "Áo", 0));
-        list.add(new Product(4, "GD - WHITE", "", "420.000 đ", "", "Áo", 0));
-        list.add(new Product(5, "GD - BLACK", "", "100.000 đ", "", "Quần", 0));
-        list.add(new Product(6, "Quần 2", "", "420.000 đ", "", "Quần", 0));
-        list.add(new Product(7, "Quần 3", "", "300.000 đ", "", "Quần", 0));
-        list.add(new Product(8, "Ba lô 1", "", "100.000 đ", "", "Ba Lô", 0));
+    private List<ProductPreview> listProduct() {
+        ArrayList<ProductPreview> list = new ArrayList();
+        list.add(new ProductPreview("1", "KIDO SHIRT - BLACK", 21321.0, "", "https://zunezx.com/upload/image/cache/data/banner/Tee/47CC5493-74D4-4164-8454-67A648B99FEA-9d1-crop-400-400.jpeg", "S", 10, 6));
+        list.add(new ProductPreview("2", "TOSHIRO JACKET", 21321.0, "", "https://zunezx.com/upload/image/cache/data/banner/---bAnnEr-tU-chE/2438672C-DE86-413E-8DFA-8B254077B672-0ac-crop-400-400.jpeg", "S", 20, 1));
+        list.add(new ProductPreview("3", "GD - BLACK", 21321.0, "", "", "M", 0, 30));
+        list.add(new ProductPreview("4", "GD - WHITE", 21321.0, "", "", "M", 0, 30));
+        list.add(new ProductPreview("5", "GD - BLACK", 21321.0, "", "", "M", 0, 30));
+        list.add(new ProductPreview("6", "Quần 2", 21321.0, "", "", "M", 0, 30));
+        list.add(new ProductPreview("7", "Quần 3", 21321.0, "", "", "M", 0, 30));
+        list.add(new ProductPreview("8", "Ba lô 1", 21321.0, "", "", "M", 0, 30));
         return list;
     }
 

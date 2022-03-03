@@ -2,10 +2,11 @@ package com.example.modelfashion.Fragment;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,19 @@ public class MainFragment extends Fragment {
     private CircleIndicator3 ciSale;
 
     private List<CategoryFragment.TabFragment> fragmentList = new ArrayList<>();
+    ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
+
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Runnable mRunable = new Runnable() {
+        @Override
+        public void run() {
+            int currentPosition = vpSaleMain.getCurrentItem();
+            if (currentPosition == arrItem.size() - 1) {
+                vpSaleMain.setCurrentItem(0);
+            } else
+                vpSaleMain.setCurrentItem(currentPosition + 1);
+        }
+    };
 
     public MainFragment() {
         // Required empty public constructor
@@ -50,7 +64,7 @@ public class MainFragment extends Fragment {
         vpMain = view.findViewById(R.id.vp_main_fm);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
-        ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
+
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -74,6 +88,24 @@ public class MainFragment extends Fragment {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+
+        vpSaleMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                mHandler.removeCallbacks(mRunable);
+                mHandler.postDelayed(mRunable, 2000);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mRunable);
+        mRunable = null;
+        mHandler = null;
     }
 }
