@@ -411,10 +411,9 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onImageSelected(Uri uri) {
                         // here is selected image uri
                         imgActProfileAvatar.setImageURI(uri);
+                        checkChange();
                     }
                 });
 
     }
-
-
 }
