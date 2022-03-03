@@ -31,10 +31,10 @@
         </activity>
         <activity
             android:name=".Activity.SignIn.SignInActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
         <activity
             android:name=".History.ViewHistory.HistoryActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
         <activity
             android:name=".Activity.ProfileActivity"
             android:exported="true" />
@@ -50,6 +50,10 @@
             android:exported="true" />
         <activity
             android:name=".History.ViewHistory.DetailHistoryActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.ProductDetailActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
 

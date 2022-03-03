@@ -14,18 +14,22 @@ import com.example.modelfashion.Adapter.ViewPagerMainFmAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.R;
-import com.google.android.material.tabs.TabLayout;
+import com.example.modelfashion.customview.InnerTabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator3;
 
 
 public class MainFragment extends Fragment {
-    private TabLayout tabLayout;
+    private InnerTabLayout tabLayout;
     private ViewPager2 vpMain, vpSaleMain;
     private CircleIndicator3 ciSale;
+
+    private List<CategoryFragment.TabFragment> fragmentList = new ArrayList<>();
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -56,19 +60,20 @@ public class MainFragment extends Fragment {
         ViewPagerMainFmAdapter viewPagerMainFmAdapter = new ViewPagerMainFmAdapter(getActivity());
         vpMain.setAdapter(viewPagerMainFmAdapter);
         ciSale.setViewPager(vpSaleMain);
-        new TabLayoutMediator(tabLayout, vpMain, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position){
-                    case 0:
-                        tab.setText("Men");
-                        break;
-                    case 1:
-                        tab.setText("Women");
-                        break;
-                }
-            }
+
+        fragmentList.add(new CategoryFragment.TabFragment(new MenPageFragment(), "Men"));
+        fragmentList.add(new CategoryFragment.TabFragment(new WomenPageFragment(), "Women"));
+        new TabLayoutMediator(tabLayout, vpMain, false, true, (tab, position) -> {
+            tabLayout.setupTabLayout(tab, fragmentList.get(position));
         }).attach();
+
+
+        vpMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
         return view;
     }
 }

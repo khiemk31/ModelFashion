@@ -13,10 +13,17 @@
         android:layout_height="wrap_content"
         app:right_drawable="@drawable/ic_mail" />
 
-    <com.google.android.material.tabs.TabLayout
+    <com.example.modelfashion.customview.InnerTabLayout
         android:id="@+id/tab_layout_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:tabIconTint="@color/tab_color"
+        app:tabIndicatorColor="@color/statusbar"
+        app:tabIndicatorHeight="2dp"
+        app:tabInlineLabel="true"
+        app:tabSelectedTextColor="@color/statusbar"
+        app:tabTextAppearance="@style/TabFont"
+        app:tabTextColor="@color/statusbar" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_category"

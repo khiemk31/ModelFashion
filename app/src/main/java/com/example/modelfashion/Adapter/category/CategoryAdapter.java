@@ -8,9 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.modelfashion.Model.response.category.Category;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -18,10 +19,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public CategoryAdapter() {
     }
 
-    private List<Category> listCategory;
+    private List<Category> listCategory = new ArrayList<>();;
     private ItemClickListener mClickListener;
+    private int index;
 
     public void setListCategory(List<Category> list) {
+        this.listCategory.clear();
         this.listCategory = list;
         notifyDataSetChanged();
     }
@@ -44,7 +47,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category category = listCategory.get(position);
-        holder.myTextView.setText(category.getCategoryName());
+        holder.myTextView.setText(category.getTitle());
+        if (position == index) {
+            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.grey_active));
+        }else {
+            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.white));
+        }
     }
 
     @Override
@@ -58,10 +66,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.tv_category_name);
-            itemView.setOnClickListener(view -> {
+            myTextView.setOnClickListener(view -> {
                 mClickListener.onItemClick(view, getAdapterPosition());
             });
         }
+    }
+
+    public void highLightSelectedItem(int position) {
+        index = position;
+        notifyDataSetChanged();
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
+import com.example.modelfashion.Model.response.category.Category;
 import com.example.modelfashion.R;
 import com.example.modelfashion.customview.SpacesItemDecoration;
-import com.example.modelfashion.Model.Category;
 import com.example.modelfashion.Model.Product;
 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public class CategoryWomenFragment extends Fragment{
     private ClothesAdapter clothesAdapter;
     private RecyclerView rcvCategory, rcvClothes;
 
+    private int currentCategory = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +45,10 @@ public class CategoryWomenFragment extends Fragment{
 
     private void initListener() {
         categoryAdapter.setClickListener((view, position) -> {
+            currentCategory = position;
+            categoryAdapter.highLightSelectedItem(position);
             // TODO category
+
         });
 
         clothesAdapter.setClickListener((view, position) -> {
@@ -54,9 +58,10 @@ public class CategoryWomenFragment extends Fragment{
 
     private void initView(View view) {
         categoryAdapter = new CategoryAdapter();
-        categoryAdapter.setListCategory(listCategory());
+        categoryAdapter.setListCategory(listCategory1());
         rcvCategory = view.findViewById(R.id.rcv_category);
         rcvCategory.setAdapter(categoryAdapter);
+        categoryAdapter.highLightSelectedItem(currentCategory);
 
         rcvClothes = view.findViewById(R.id.rcv_clothes);
         clothesAdapter = new ClothesAdapter();
@@ -66,13 +71,13 @@ public class CategoryWomenFragment extends Fragment{
 
     }
 
-    private List<Category> listCategory() {
+    private List<Category> listCategory1() {
         ArrayList<Category> list = new ArrayList();
-        list.add(new Category(1, "Ba lô"));
-        list.add(new Category(2, "Quần"));
-        list.add(new Category(3, "Áo"));
-        list.add(new Category(4, "Giày"));
-        list.add(new Category(5, "Đồ bộ"));
+        list.add(new Category("1", "Ba lô", 30));
+        list.add(new Category("2", "Quần", 30));
+        list.add(new Category("3", "Áo", 30));
+        list.add(new Category("4", "Giày", 30));
+        list.add(new Category("5", "Đồ bộ", 30));
         return list;
     }
 

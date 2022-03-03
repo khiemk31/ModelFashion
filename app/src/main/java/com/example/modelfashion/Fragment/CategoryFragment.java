@@ -2,6 +2,7 @@ package com.example.modelfashion.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -10,15 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.modelfashion.Adapter.category.CategoryViewPagerAdapter;
+import com.example.modelfashion.Fragment.category.CategoryMenFragment;
+import com.example.modelfashion.Fragment.category.CategoryWomenFragment;
 import com.example.modelfashion.R;
+import com.example.modelfashion.customview.InnerTabLayout;
 import com.example.modelfashion.customview.SearchBar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryFragment extends Fragment {
     CategoryViewPagerAdapter viewPagerAdapter;
     SearchBar searchBar;
-    TabLayout tabLayout;
+    InnerTabLayout tabLayout;
     ViewPager2 viewPager2;
+
+    private List<TabFragment> fragmentList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,27 +43,10 @@ public class CategoryFragment extends Fragment {
 
     private void initListener() {
         searchBar.onSearchBarClick(() -> {
-            if (viewPager2.getCurrentItem() == 0){
+            if (viewPager2.getCurrentItem() == 0) {
                 // TODO Men search
-            }else if (viewPager2.getCurrentItem() == 1){
+            } else if (viewPager2.getCurrentItem() == 1) {
                 // TODO Women search
-            }
-        });
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
@@ -77,7 +70,36 @@ public class CategoryFragment extends Fragment {
 
         viewPager2.setAdapter(viewPagerAdapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Men"));
-        tabLayout.addTab(tabLayout.newTab().setText("Women"));
+        fragmentList.add(new TabFragment(new CategoryMenFragment(), "Men"));
+        fragmentList.add(new TabFragment(new CategoryWomenFragment(), "Women"));
+        new TabLayoutMediator(tabLayout, viewPager2, false, true, (tab, position) -> {
+            tabLayout.setupTabLayout(tab, fragmentList.get(position));
+        }).attach();
+    }
+
+    public static class TabFragment {
+        private Fragment fragment;
+        private String title;
+
+        public Fragment getFragment() {
+            return fragment;
+        }
+
+        public void setFragment(Fragment fragment) {
+            this.fragment = fragment;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public TabFragment(Fragment fragment, String title) {
+            this.fragment = fragment;
+            this.title = title;
+        }
     }
 }
