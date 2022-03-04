@@ -10,26 +10,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.modelfashion.Model.response.product.ProductPreview;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHolder> {
 
-    private List<Product> listProduct;
+    private List<ProductPreview> listProduct = new ArrayList<>();
     private ItemClickListener mClickListener;
 
-    public void setListProduct(List<Product> list) {
+    public void setListProduct(List<ProductPreview> list) {
+        this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
     }
 
-    public List<Product> getListProduct() {
+    public List<ProductPreview> getListProduct() {
         return this.listProduct;
     }
 
-    public Product getProduct(int position) {
+    public ProductPreview getProduct(int position) {
         return listProduct.get(position);
     }
 
@@ -42,11 +46,12 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Product product = listProduct.get(position);
-        holder.tvName.setText(product.getProductName());
-        holder.tvPrice.setText(product.getProductPrice());
+        ProductPreview product = listProduct.get(position);
+        holder.tvName.setText(product.getName());
+        holder.tvPrice.setText(String.valueOf(product.getPrice()));
         Glide.with(holder.imgAva.getContext())
-                .load(product.getProductAvatarUrl())
+                .load(product.getLogoUrl().replace("http:","https:"))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .placeholder(R.drawable.test_img)
                 .into(holder.imgAva);
     }

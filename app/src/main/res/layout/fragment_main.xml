@@ -1,74 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:weightSum="10"
     tools:context=".Fragment.MainFragment">
+
+    <com.example.modelfashion.customview.SearchBar
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:right_drawable="@drawable/ic_mail" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:padding="5dp"
-        android:weightSum="10">
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8.5"
-            android:background="@drawable/background_searchview"
-            app:queryHint="Tìm Kiếm Sản Phẩm"
-            app:iconifiedByDefault="false"
-            />
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_mail"
-            android:padding="2dp"
-            android:layout_weight="1.5"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9.2"
-        android:orientation="vertical"
-        android:weightSum="10">
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.example.modelfashion.customview.InnerTabLayout
             android:id="@+id/tablayout_main_fm"
-            app:tabTextAppearance="@style/TabFont"
-            app:tabTextColor="@color/black"
-            app:tabIndicatorHeight="0dp"
-            />
-        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2.8"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:background="@color/vp_sale"
-            >
+            android:layout_height="wrap_content"
+            app:tabIconTint="@color/tab_color"
+            app:tabIndicatorColor="@color/statusbar"
+            app:tabIndicatorHeight="2dp"
+            app:tabInlineLabel="true"
+            app:tabSelectedTextColor="@color/statusbar"
+            app:tabTextAppearance="@style/TabFont"
+            app:tabTextColor="@color/statusbar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/vp_sale">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_sale_main_fm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
             <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/ci_sale_main_fm"
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"
-                android:layout_centerInParent="true"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/ci_sale_main_fm"/>
-        </RelativeLayout>
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray" />
 
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_main_fm"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6.6"
-            android:id="@+id/vp_main_fm"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </LinearLayout>
