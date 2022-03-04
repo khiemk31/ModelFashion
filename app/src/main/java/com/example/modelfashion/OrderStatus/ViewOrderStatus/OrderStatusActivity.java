@@ -41,17 +41,7 @@ public class OrderStatusActivity extends AppCompatActivity {
         fakeData();
         OrderStatusAdapter orderStatusAdapter = new OrderStatusAdapter(OrderStatusActivity.this,listModelOrderStatus);
         lv_orderstatus.setAdapter(orderStatusAdapter);
-        lv_orderstatus.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(OrderStatusActivity.this, DetailHistoryActivity.class);
-                ModelHistory modelHistory = listModelOrderStatus.get(i);
-                intent.putExtra("index",i);
-                intent.putExtra("view","OrderStatus");
-                startActivity(intent);
 
-            }
-        });
 
     }
 

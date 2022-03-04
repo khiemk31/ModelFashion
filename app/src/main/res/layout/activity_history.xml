@@ -9,14 +9,16 @@
         android:id="@+id/rl_history"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:background="@drawable/bt_toolbar_history">
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/img_history_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="10dp"
-            android:src="@drawable/ic_back_history" />
+            android:src="@drawable/ic_back_detail_history" />
 
         <TextView
             android:layout_width="match_parent"
@@ -25,49 +27,19 @@
             android:layout_toRightOf="@+id/img_history_back"
             android:paddingHorizontal="20dp"
             android:text="Lịch sử mua hàng"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20dp"
-            android:textStyle="normal" />
+            android:textStyle="bold" />
     </RelativeLayout>
-    <LinearLayout
-        android:layout_below="@+id/rl_history"
-        android:id="@+id/ll_histoey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <TextView
-            android:paddingLeft="10dp"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="15dp"
-            android:text="Mã đơn hàng"/>
-        <TextView
-            android:paddingRight="10dp"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="15dp"
-            android:text="Thời gian đặt hàng"/>
 
-    </LinearLayout>
-    <View
-        android:id="@+id/view_history"
-        android:layout_below="@+id/ll_histoey"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CDCDCD"/>
 
     <ListView
         android:id="@+id/lv_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_history" />
+        android:layout_below="@+id/rl_history"
+        android:divider="@null"
+        android:dividerHeight="10dp"
+        android:padding="10dp" />
 
 </RelativeLayout>

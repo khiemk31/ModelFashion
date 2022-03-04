@@ -57,13 +57,13 @@ public class DetailHistoryActivity extends AppCompatActivity {
             ModelHistory modelHistory = HistoryActivity.listModelHistory.get(index);
             list = new ArrayList<>();
             list = modelHistory.getProductHistoryList();
-            tv_dh_detail_history.setText("Đơn hàng : "+modelHistory.getmIDHistory());
+            tv_dh_detail_history.setText("Mã đơn : "+modelHistory.getmIDHistory());
             phoneNumber_detail_history.setText(modelHistory.getmPhoneNumber());
             address_detail_history.setText(" - "+modelHistory.getmAddress());
             title_date_detail_history.setText("Ngày nhận hàng: ");
             date_detail_history.setText(modelHistory.getmTimeRecieve());
             date_detail_history.setTextColor(Color.parseColor("#000000"));
-            String summoney = numberFormat.format(Double.parseDouble(modelHistory.getmSumPrice()));
+            String summoney = sumPrice(list);
             summoney_detail_history.setText(summoney);
             DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,list);
             lv_detail_history.setAdapter(historyAdapter);
@@ -71,7 +71,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
             ModelHistory modelHistory = OrderStatusActivity.listModelOrderStatus.get(index);
             list = new ArrayList<>();
             list = modelHistory.getProductHistoryList();
-            tv_dh_detail_history.setText("Đơn hàng : "+modelHistory.getmIDHistory());
+            tv_dh_detail_history.setText("Mã đơn : "+modelHistory.getmIDHistory());
             phoneNumber_detail_history.setText(modelHistory.getmPhoneNumber());
             address_detail_history.setText(" - "+modelHistory.getmAddress());
             title_date_detail_history.setText("Tình trạng đơn: ");
@@ -81,7 +81,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
             }else if(modelHistory.getmStatus().matches("Đang Giao")){
                 date_detail_history.setTextColor(Color.parseColor("#008E06"));
             }
-            String summoney = numberFormat.format(Double.parseDouble(modelHistory.getmSumPrice()));
+            String summoney = sumPrice(list);
             summoney_detail_history.setText(summoney);
             DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,list);
             lv_detail_history.setAdapter(historyAdapter);
@@ -89,5 +89,16 @@ public class DetailHistoryActivity extends AppCompatActivity {
 
 
 
+    }
+    private String sumPrice(List<ProductHistory> list){
+        int sum = 0;
+        for (int i = 0;i<list.size();i++){
+            sum+=Integer.parseInt(list.get(i).getmPriceProduct())*Integer.parseInt(list.get(i).getmSumProduct());
+        }
+        Locale locale = new Locale("vi","VN");
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+        String sumP = numberFormat.format(Double.parseDouble(String.valueOf(sum)));
+        return sumP;
     }
 }
