@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.History.MHistory.ProductHistory;
+import com.example.modelfashion.Model.MHistory.ProductHistory;
 import com.example.modelfashion.R;
 
 import java.math.RoundingMode;

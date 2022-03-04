@@ -9,10 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.modelfashion.History.MHistory.ModelHistory;
-import com.example.modelfashion.History.MHistory.ProductHistory;
+import com.example.modelfashion.Model.MHistory.ModelHistory;
+import com.example.modelfashion.Model.MHistory.ProductHistory;
 import com.example.modelfashion.History.ViewHistory.DetailHistoryActivity;
-import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.OrderStatus.AdapterOrderStatus.OrderStatusAdapter;
 import com.example.modelfashion.R;
 
