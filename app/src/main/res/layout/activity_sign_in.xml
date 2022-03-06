@@ -22,6 +22,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="100dp"
         android:layout_height="64dp"
+        android:id="@+id/img_user_avatar"
         android:src="@drawable/logo_icon" />
 
     <TextView
@@ -97,6 +98,7 @@
         android:textColor="@color/white"
         android:layout_width="match_parent"
         android:background="@drawable/border_button_fb"
+        android:onClick="DangNhap"
         android:layout_height="45dp"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -163,6 +165,7 @@
 
         <TextView
             android:text="Đăng Ký "
+            android:onClick="DangKy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </androidx.appcompat.widget.LinearLayoutCompat>

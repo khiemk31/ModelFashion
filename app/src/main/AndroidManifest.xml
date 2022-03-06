@@ -13,9 +13,16 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ModelFashion">
+        android:theme="@style/Theme.ModelFashion"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Activity.SignUpTestAct"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".Activity.SignIn.SignUpActivity"
             android:exported="false" />
@@ -31,19 +38,17 @@
         </activity>
         <activity
             android:name=".Activity.SignIn.SignInActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".History.ViewHistory.HistoryActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.ProfileActivity"
             android:exported="true" />
-
         <activity
             android:name=".Activity.MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
-
         <activity
             android:name=".OrderStatus.ViewOrderStatus.OrderStatusActivity"
             android:configChanges="orientation|screenSize"
@@ -52,7 +57,6 @@
             android:name=".History.ViewHistory.DetailHistoryActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
-
     </application>
 
 </manifest>

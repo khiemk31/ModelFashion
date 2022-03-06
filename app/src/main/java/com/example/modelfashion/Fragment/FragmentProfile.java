@@ -85,8 +85,6 @@ public class FragmentProfile extends Fragment {
             Intent intent = new Intent(getContext(), OrderStatusActivity.class);
             startActivity(intent);
         });
-
-
     }
 
 }
