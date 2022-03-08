@@ -164,6 +164,23 @@
             android:textColor="@color/white"
             android:textSize="23dp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/btn_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bg_btn_product_detail_buy"
+
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Phản hồi"
+            android:textColor="@color/white"
+            android:textSize="23dp"
+            android:textStyle="bold" />
 
 
 
