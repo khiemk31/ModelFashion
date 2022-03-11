@@ -1,13 +1,18 @@
 package com.example.modelfashion.History.ApdapterHistory;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +70,7 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_detail = view.findViewById(R.id.tv_detail);
         TextView item_history_ma = view.findViewById(R.id.item_history_ma);
         TextView item_history_time = view.findViewById(R.id.item_history_time);
+        TextView tv_feedback = view.findViewById(R.id.tv_feedback);
         LinearLayout ll_item_history = view.findViewById(R.id.ll_item_history);
         item_history_ma.setText("Mã đơn: "+listModel.get(i).getmIDHistory());
         item_history_time.setText("Ngày nhận: "+listModel.get(i).getmTimeOrder());
@@ -85,6 +91,12 @@ public class HistoryAdapter extends BaseAdapter {
 
             }
         });
+        tv_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadDialogFeedback(context,listModel.get(i).getmIDHistory());
+            }
+        });
         return view;
     }
 
@@ -98,5 +110,38 @@ public class HistoryAdapter extends BaseAdapter {
         numberFormat.setRoundingMode(RoundingMode.HALF_UP);
         String sumP = numberFormat.format(Double.parseDouble(String.valueOf(sum)));
         return sumP;
+    }
+
+    private void loadDialogFeedback(Context context,String maDH){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_feedback);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        EditText edt_title = dialog.findViewById(R.id.edt_title);
+        EditText edt_content = dialog.findViewById(R.id.edt_content);
+        TextView btn_send = dialog.findViewById(R.id.btn_send);
+        edt_title.setText("Feedback đơn hàng "+maDH);
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String content;
+                content = edt_content.getText().toString().trim();
+                if (content.isEmpty() ){
+                    Toast.makeText(context,"Bạn chưa nhập nội dung",Toast.LENGTH_SHORT).show();
+                }else {
+                    String uriText = "mailto:" + "khiemnxph10098@fpt.edt.vn" +
+                            "?subject=" +"Feedback đơn hàng " +maDH +
+                            "&body=" + content;
+                    Uri uri = Uri.parse(uriText);
+                    Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                    sendIntent.setData(uri);
+                    context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
+                    dialog.dismiss();
+
+                }
+            }
+        });
+        dialog.show();
     }
 }

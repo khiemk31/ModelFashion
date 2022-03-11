@@ -16,7 +16,8 @@
         android:backgroundTint="#8E97FD"
         android:fontFamily="@font/nunito_bold"
         android:hint="Tiêu đề"
-        android:textColor="@color/black"
+        android:enabled="false"
+        android:textColor="#8E97FD"
         android:textColorHint="#8E97FD"
         android:textSize="20dp" />
     <EditText
