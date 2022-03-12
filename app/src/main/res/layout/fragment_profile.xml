@@ -142,6 +142,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/bg_btn_product_detail_buy"
                         android:gravity="center"
+
                         android:orientation="vertical">
 
                         <ImageView
@@ -193,6 +194,38 @@
                             android:textSize="20dp"
                             android:textStyle="bold" />
                     </LinearLayout>
+                        android:text="User name"
+                        android:textColor="@color/grey_active"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/tv_SingIn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Đăng nhập / "
+                            android:textColor="@color/text"
+                            android:textSize="17dp"
+                            android:textStyle="bold"
+                            android:visibility="visible"/>
+
+                        <TextView
+                            android:id="@+id/tv_SignUp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Đăng ký"
+                            android:textColor="@color/text"
+                            android:textSize="17dp"
+                            android:textStyle="bold"
+                            android:visibility="visible"/>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </LinearLayout>
 
                 <LinearLayout
