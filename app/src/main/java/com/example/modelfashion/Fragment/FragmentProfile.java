@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
+import com.example.modelfashion.Activity.SignIn.SignUpActivity;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.OrderStatus.ViewOrderStatus.OrderStatusActivity;
 import com.example.modelfashion.R;
@@ -28,7 +29,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 public class FragmentProfile extends Fragment {
     PreferenceManager preferenceManager;
-    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_status, btn_history, btn_logout;
+    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_status, btn_history, btn_logout, tv_signUp;
     RoundedImageView img;
     TextView btn_feedback;
 
@@ -39,7 +40,8 @@ public class FragmentProfile extends Fragment {
         img = view.findViewById(R.id.img_frag_profile_avatar);
         tv_name = view.findViewById(R.id.tv_frag_Profile_Name);
         tv_user = view.findViewById(R.id.tv_frag_Profile_user);
-        tv_login = view.findViewById(R.id.tv_frag_Profile_Login);
+        tv_login = view.findViewById(R.id.tv_SingIn);
+        tv_signUp = view.findViewById(R.id.tv_SignUp);
 
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
@@ -61,13 +63,13 @@ public class FragmentProfile extends Fragment {
             tv_user.setVisibility(View.GONE);
             tv_name.setVisibility(View.GONE);
             tv_login.setVisibility(View.VISIBLE);
+            tv_signUp.setVisibility(View.VISIBLE);
         } else {
             tv_user.setVisibility(View.VISIBLE);
             tv_name.setVisibility(View.VISIBLE);
             tv_login.setVisibility(View.GONE);
+            tv_signUp.setVisibility(View.GONE);
         }
-
-
     }
 
     //thêm chức năng vào các nút bấm
@@ -76,6 +78,12 @@ public class FragmentProfile extends Fragment {
             Intent intent = new Intent(getContext(), SignInActivity.class);
             startActivity(intent);
         });
+
+        tv_signUp.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SignUpActivity.class);
+            startActivity(intent);
+        });
+
         btn_logout.setOnClickListener(v -> {
             preferenceManager.clear();
             Intent intent = new Intent(getContext(), SignInActivity.class);
