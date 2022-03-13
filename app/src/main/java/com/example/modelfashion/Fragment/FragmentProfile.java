@@ -43,9 +43,8 @@ public class FragmentProfile extends Fragment {
         tv_name = view.findViewById(R.id.tv_frag_Profile_Name);
         tv_user = view.findViewById(R.id.tv_frag_Profile_user);
         tv_login = view.findViewById(R.id.tv_frag_Profile_Login);
+        tv_signUp = view.findViewById(R.id.tv_frag_Profile_Sign_Up);
         ll_login = view.findViewById(R.id.ll_login);
-        tv_login = view.findViewById(R.id.tv_SingIn);
-        tv_signUp = view.findViewById(R.id.tv_SignUp);
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
@@ -72,11 +71,6 @@ public class FragmentProfile extends Fragment {
             ll_login.setVisibility(View.GONE);
             tv_login.setVisibility(View.VISIBLE);
             tv_signUp.setVisibility(View.VISIBLE);
-        } else {
-            tv_user.setVisibility(View.VISIBLE);
-            tv_name.setVisibility(View.VISIBLE);
-            tv_login.setVisibility(View.GONE);
-            tv_signUp.setVisibility(View.GONE);
         }
     }
 
