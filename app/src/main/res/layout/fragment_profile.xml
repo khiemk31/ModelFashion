@@ -1,224 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.FragmentProfile">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_frag_Profile_Logout"
+        android:layout_alignParentTop="true">
 
-        <RelativeLayout
-            android:id="@+id/layout_info_logo"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/bg_gradient_blue" />
-
-
-            <LinearLayout
-                android:id="@+id/layout_frag_profile_avatar"
+            <RelativeLayout
+                android:id="@+id/layout_info_logo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:orientation="horizontal">
+                android:layout_marginBottom="10dp">
 
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/img_frag_profile_avatar"
-                    android:layout_width="140dp"
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@drawable/bg_gradient_blue" />
+
+
+                <LinearLayout
+                    android:id="@+id/layout_frag_profile_avatar"
+                    android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:layout_marginLeft="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/bg_gradient_blue"
-                    app:riv_corner_radius="50dp" />
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/img_frag_profile_avatar"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bg_gradient_blue"
+                        app:riv_corner_radius="50dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="20dp">
+
+                        <TextView
+                            android:id="@+id/tv_frag_Profile_Name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Tên người dùng"
+                            android:textColor="@color/white"
+                            android:textSize="27dp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/tv_frag_Profile_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="User name"
+                            android:textColor="@color/grey_active"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_login"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_frag_Profile_Login"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bt_item_history"
+                                android:gravity="center"
+                                android:paddingVertical="5dp"
+                                android:text="Đăng nhập"
+                                android:textColor="@color/text"
+                                android:textSize="17dp"
+                                android:textStyle="normal"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/tv_frag_Profile_Sign_Up"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bt_item_history"
+                                android:gravity="center"
+                                android:paddingVertical="5dp"
+                                android:text="Đăng ký"
+                                android:textColor="@color/text"
+                                android:textSize="17dp"
+                                android:textStyle="normal"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="10dp"
+                android:background="#8E97FD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_product_detail_buy"
+                    android:gravity="center"
+
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_frag_Profile_Name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Tên người dùng"
-                        android:textColor="@color/white"
-                        android:textSize="27dp"
-                        android:textStyle="bold"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_frag_Profile_user"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:text="User name"
-                        android:textColor="@color/grey_active"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        />
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="wrap_content"
-                        android:orientation="horizontal"
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="40dp"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/tv_SingIn"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Đăng nhập / "
-                            android:textColor="@color/text"
-                            android:textSize="17dp"
-                            android:textStyle="bold"
-                            android:visibility="visible"/>
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/user" />
 
-                        <TextView
-                            android:id="@+id/tv_SignUp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Đăng ký"
-                            android:textColor="@color/text"
-                            android:textSize="17dp"
-                            android:textStyle="bold"
-                            android:visibility="visible"/>
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    <TextView
+                        android:id="@+id/btn_frag_Profile_Profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Tôi"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_product_detail_buy"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/cart" />
+
+                    <TextView
+                        android:id="@+id/btn_frag_Profile_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Giỏ Hàng"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
-        </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_product_detail_buy"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/order" />
+
+                    <TextView
+                        android:id="@+id/btn_frag_Profile_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_btn_product_detail_buy"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Đơn Hàng"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_product_detail_buy"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/history" />
+
+                    <TextView
+                        android:id="@+id/btn_frag_Profile_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_btn_product_detail_buy"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Lịch Sử"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/bg_btn_product_detail_buy"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Phản hồi"
+                android:textColor="@color/white"
+                android:textSize="23dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_margin="10dp"
-            android:background="@color/search_bar" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/btn_frag_Profile_Profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+    </ScrollView>
 
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Thông Tin Chi Tiết"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btn_frag_Profile_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Giỏ Hàng"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btn_frag_Profile_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Tình Trạng Đơn Hàng"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btn_frag_Profile_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Lịch Sử Mua Hàng"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/btn_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Phản hồi"
-            android:textColor="@color/white"
-            android:textSize="23dp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/btn_frag_Profile_Logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/bg_btn_out"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="ĐĂNG XUẤT"
+        android:textColor="@color/white"
+        android:textSize="22dp"
+        android:textStyle="bold" />
 
 
-
-        <TextView
-            android:id="@+id/btn_frag_Profile_Logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_btn_product_detail_buy"
-
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="ĐĂNG XUẤT"
-            android:textColor="@color/white"
-            android:textSize="25dp"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

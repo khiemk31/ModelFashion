@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class FragmentProfile extends Fragment {
     TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_status, btn_history, btn_logout, tv_signUp;
     RoundedImageView img;
     TextView btn_feedback;
+    LinearLayout ll_login;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,9 +42,9 @@ public class FragmentProfile extends Fragment {
         img = view.findViewById(R.id.img_frag_profile_avatar);
         tv_name = view.findViewById(R.id.tv_frag_Profile_Name);
         tv_user = view.findViewById(R.id.tv_frag_Profile_user);
-        tv_login = view.findViewById(R.id.tv_SingIn);
-        tv_signUp = view.findViewById(R.id.tv_SignUp);
-
+        tv_login = view.findViewById(R.id.tv_frag_Profile_Login);
+        tv_signUp = view.findViewById(R.id.tv_frag_Profile_Sign_Up);
+        ll_login = view.findViewById(R.id.ll_login);
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
@@ -62,13 +64,13 @@ public class FragmentProfile extends Fragment {
         if (preferenceManager.getString(Constants.KEY_PROFILE_USER).equals("")) {
             tv_user.setVisibility(View.GONE);
             tv_name.setVisibility(View.GONE);
-            tv_login.setVisibility(View.VISIBLE);
-            tv_signUp.setVisibility(View.VISIBLE);
+            ll_login.setVisibility(View.VISIBLE);
         } else {
             tv_user.setVisibility(View.VISIBLE);
             tv_name.setVisibility(View.VISIBLE);
-            tv_login.setVisibility(View.GONE);
-            tv_signUp.setVisibility(View.GONE);
+            ll_login.setVisibility(View.GONE);
+            tv_login.setVisibility(View.VISIBLE);
+            tv_signUp.setVisibility(View.VISIBLE);
         }
     }
 
