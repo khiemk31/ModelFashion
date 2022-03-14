@@ -42,8 +42,4 @@ public class InnerTabLayout extends TabLayout implements TabLayout.OnTabSelected
     public void onTabReselected(Tab tab) {
 
     }
-
-    public void setupTabLayout(Tab tab, CategoryFragment.TabFragment item) {
-        ((TextView) tab.getCustomView().findViewById(R.id.tv_tab_title)).setText(item.getTitle());
-    }
 }
