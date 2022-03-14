@@ -45,6 +45,18 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         viewHolder.recyclerView.setAdapter(productAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         viewHolder.recyclerView.setLayoutManager(linearLayoutManager);
+
+        productAdapter.onItemClickListener(new ProductAdapter.OnItemClick() {
+            @Override
+            public void imgClick(int position, Product product) {
+                onItemClick.imgClick(position, product);
+            }
+
+            @Override
+            public void imgAddToCartClick(int position, Product product) {
+                onItemClick.imgAddToCartClick(position, product);
+            }
+        });
     }
 
     @Override
@@ -60,5 +72,16 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             this.view = itemView;
             this.recyclerView = itemView.findViewById(R.id.rv_product_item);
         }
+    }
+
+    private OnItemClickListener onItemClick;
+
+    public void onItemClickListener(OnItemClickListener listener){
+        this.onItemClick = listener;
+    }
+
+    public interface OnItemClickListener{
+        void imgClick(int position, Product product);
+        void imgAddToCartClick(int position, Product product);
     }
 }

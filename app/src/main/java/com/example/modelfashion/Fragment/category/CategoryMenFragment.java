@@ -98,7 +98,6 @@ public class CategoryMenFragment extends Fragment {
     }
 
     private void getProductByCategory(Repository repository, String id) {
-        Log.d("cvxxcv", "getProductByCategory: " + id);
         Single<ProductResponse> productByCategory = repository.getProductByCategory(id);
         compositeDisposable.add(productByCategory.doOnSubscribe(disposable -> {
             // show loading

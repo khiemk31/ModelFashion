@@ -18,18 +18,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.modelfashion.customview.InnerTabLayout
-            android:id="@+id/tablayout_main_fm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIconTint="@color/tab_color"
-            app:tabIndicatorColor="@color/statusbar"
-            app:tabIndicatorHeight="2dp"
-            app:tabInlineLabel="true"
-            app:tabSelectedTextColor="@color/statusbar"
-            app:tabTextAppearance="@style/TabFont"
-            app:tabTextColor="@color/statusbar" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -57,10 +45,12 @@
             android:layout_height="2dp"
             android:background="@color/gray" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_main_fm"
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:id="@+id/rv_men_page_fm"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

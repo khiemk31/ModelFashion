@@ -49,11 +49,23 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
         ProductPreview product = listProduct.get(position);
         holder.tvName.setText(product.getName());
         holder.tvPrice.setText(String.valueOf(product.getPrice()));
-        Glide.with(holder.imgAva.getContext())
-                .load(product.getLogoUrl().replace("http:","https:"))
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .placeholder(R.drawable.test_img)
-                .into(holder.imgAva);
+        holder.itemView.setOnClickListener(view -> {
+            mClickListener.onItemClick(position, product);
+        });
+        if (product.getLogoUrl().contains("http:")){
+            Glide.with(holder.imgAva.getContext())
+                    .load(product.getLogoUrl().replace("http:","https:"))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .placeholder(R.drawable.test_img)
+                    .into(holder.imgAva);
+        }else {
+            Glide.with(holder.imgAva.getContext())
+                    .load(product.getLogoUrl())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .placeholder(R.drawable.test_img)
+                    .into(holder.imgAva);
+        }
+
     }
 
     @Override
@@ -70,9 +82,6 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
             tvName = itemView.findViewById(R.id.tv_product_name);
             tvPrice = itemView.findViewById(R.id.tv_product_price);
             imgAva = itemView.findViewById(R.id.img_clothes_avatar);
-            itemView.setOnClickListener(view -> {
-                mClickListener.onItemClick(view, getAdapterPosition());
-            });
         }
     }
 
@@ -81,6 +90,6 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
     }
 
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position, ProductPreview productPreview);
     }
 }
