@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view_linear"
@@ -18,64 +18,20 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="30dp"
-        android:padding="5dp"
-        android:orientation="horizontal"
+        app:itemBackground="@color/background_item_navigation"
+        app:itemIconTint="@color/custom_color_bottomnavigation"
+        app:itemTextColor="@color/custom_color_bottomnavigation"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_navigation">
 
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/main_item_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_active="true"
-            app:bt_colorActive="@color/blue_active"
-            app:bt_colorInactive="@color/blue_inactive"
-            app:bt_icon="@drawable/ic_home"
-            android:layout_marginRight="10dp"
-            app:bt_shape="@drawable/transition_background_drawable_home"
-            app:bt_title="Home" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/main_item_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_badgeBackgroundColor="@color/green_active"
-            app:bt_colorActive="@color/green_active"
-            android:layout_marginRight="10dp"
-            app:bt_colorInactive="@color/green_inactive"
-            app:bt_icon="@drawable/ic_category"
-            app:bt_shape="@drawable/transition_background_drawable_category"
-            app:bt_title="Category" />
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/main_item_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_colorActive="@color/purple_active"
-            app:bt_colorInactive="@color/purple_inactive"
-            app:bt_icon="@drawable/ic_cart"
-            app:bt_shape="@drawable/transition_background_drawable_cart"
-            android:layout_marginRight="10dp"
-            app:bt_title="Cart" />
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/main_item_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_colorActive="@color/red_active"
-            app:bt_colorInactive="@color/red_inactive"
-            app:bt_icon="@drawable/ic_person"
-            app:bt_shape="@drawable/transition_background_drawable_person"
-            app:bt_title="Profile" />
-
-        <!-- Add more child items here - max upto 5 -->
-
-    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

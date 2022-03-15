@@ -77,8 +77,10 @@
                         android:layout_marginTop="40dp"
                         android:text="Đăng nhập/Đăng ký"
                         android:textColor="@color/text"
+                        android:drawableRight="@drawable/ic_login"
                         android:textSize="17dp"
                         android:textStyle="bold"
+                        android:paddingRight="30dp"
                         android:visibility="gone"/>
                 </LinearLayout>
 
@@ -104,6 +106,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_btn_product_detail_buy"
 
+            android:drawableLeft="@drawable/ic_person"
             android:gravity="center"
             android:padding="10dp"
             android:text="Thông Tin Chi Tiết"
@@ -122,6 +125,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_btn_product_detail_buy"
 
+            android:drawableLeft="@drawable/ic_cart"
             android:gravity="center"
             android:padding="10dp"
             android:text="Giỏ Hàng"
@@ -140,6 +144,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_btn_product_detail_buy"
 
+            android:drawableLeft="@drawable/ic_category"
             android:gravity="center"
             android:padding="10dp"
             android:text="Tình Trạng Đơn Hàng"
@@ -158,6 +163,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_btn_product_detail_buy"
 
+            android:drawableLeft="@drawable/ic_history"
             android:gravity="center"
             android:padding="10dp"
             android:text="Lịch Sử Mua Hàng"
@@ -178,11 +184,12 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_btn_product_detail_buy"
 
+            android:drawableLeft="@drawable/ic_logout"
             android:gravity="center"
-            android:padding="15dp"
+            android:padding="10dp"
             android:text="ĐĂNG XUẤT"
             android:textColor="@color/white"
-            android:textSize="25dp"
+            android:textSize="23dp"
             android:textStyle="bold" />
 
 
