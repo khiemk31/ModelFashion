@@ -1,60 +1,60 @@
 package com.example.modelfashion.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.MenuItem;
 
-import com.example.modelfashion.Adapter.AdapterBottomNavigation;
+import com.example.modelfashion.Fragment.CartFragment;
+import com.example.modelfashion.Fragment.CategoryFragment;
+import com.example.modelfashion.Fragment.FragmentProfile;
+import com.example.modelfashion.Fragment.MainFragment;
 import com.example.modelfashion.R;
-import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static BubbleNavigationLinearView bubbleNavigationLinearView;
-    public static ViewPager viewPager;
-    AdapterBottomNavigation adapterBottomNavigation;
+    public static BottomNavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bubbleNavigationLinearView=findViewById(R.id.bottom_navigation_view_linear);
-        viewPager=findViewById(R.id.view_pager);
-
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.white));
-
-        adapterBottomNavigation= new AdapterBottomNavigation(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        viewPager.setAdapter(adapterBottomNavigation);
-
-        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+        navigationView=findViewById(R.id.bottom_navigation_view_linear);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onNavigationChanged(View view, int position) {
-                viewPager.setCurrentItem(position);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.main_item_home:
+                        replaceFragment(new MainFragment());
+                        break;
+                    case R.id.main_item_cart:
+                        replaceFragment(new CartFragment());
+                        break;
+                    case R.id.main_item_category:
+                        replaceFragment(new CategoryFragment());
+                        break;
+                    case R.id.main_item_profile:
+                        replaceFragment(new FragmentProfile());
+                        break;
+                }
+                return true;
             }
         });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
 
-            @Override
-            public void onPageSelected(int position) {
+    }
+    private void replaceFragment(Fragment fm){
+        FragmentManager fragmentManager= getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
 
-                bubbleNavigationLinearView.setCurrentActiveItem(position);
-            }
+        fragmentTransaction.replace(R.id.frameLayout,fm);
+        fragmentTransaction.commit();
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     @Override

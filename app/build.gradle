@@ -46,8 +46,6 @@ dependencies {
     // fb
     implementation 'com.facebook.android:facebook-login:6.+'
     implementation 'me.relex:circleindicator:2.1.6'
-    //bubble navigation
-    implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
 
     //tạo các hình tròn, bầu dục
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -60,5 +58,8 @@ dependencies {
 
     //Bubble Navigation
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
+
+//bottom navigation
+    implementation 'com.google.android.material:material:1.5.0'
 
 }
