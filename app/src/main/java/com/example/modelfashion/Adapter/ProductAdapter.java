@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.arrProduct = arrProduct;
     }
 
+    public Product getProduct(int position){
+        return arrProduct.get(position);
+    }
 
     @NonNull
     @Override
@@ -30,7 +35,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.img.setOnClickListener(view -> {
+            onItemClick.imgClick(i, arrProduct.get(i));
+        });
 
+        viewHolder.imgAddToCart.setOnClickListener(view -> {
+            onItemClick.imgAddToCartClick(i, arrProduct.get(i));
+        });
     }
 
     @Override
@@ -39,8 +50,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView img;
+        ImageButton imgAddToCart;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            img = itemView.findViewById(R.id.img_product_main_avatar);
+            imgAddToCart = itemView.findViewById(R.id.btn_add_to_cart);
         }
+    }
+
+    private OnItemClick onItemClick;
+
+    public void onItemClickListener(OnItemClick listener){
+        this.onItemClick = listener;
+    }
+
+    interface OnItemClick{
+        void imgClick(int position, Product product);
+        void imgAddToCartClick(int position, Product product);
     }
 }

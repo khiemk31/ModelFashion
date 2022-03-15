@@ -3,22 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/bg_btn_product_detail_buy.xml" value="0.1125" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/bg_content_top.xml" value="0.1125" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.1125" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/bg_gradient_blue.xml" value="0.1125" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/bg_information_line.xml" value="0.1125" />
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.2361111111111111" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_bg_feedback.xml" value="0.2025" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_btn_feedback.xml" value="0.2025" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_item_history.xml" value="0.1735" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_toolbar_history.xml" value="0.1735" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_detail_history.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_history.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.12563323201621074" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status_detail.xml" value="0.11614583333333334" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.11614583333333334" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.19429347826086957" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/dialog_feedback.xml" value="0.19429347826086957" />
+        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_history.xml" value="0.16621376811594202" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_orderstatus.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_subproducts.xml" value="0.2" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.10989583333333333" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/background_searchview.xml" value="0.1465" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_btn_product_detail_buy.xml" value="0.21614583333333334" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_clothes_avatar.xml" value="0.1465" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_content_top.xml" value="0.18888888888888888" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.1465" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_gradient_blue.xml" value="0.21614583333333334" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_information_line.xml" value="0.21614583333333334" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/bg_product_detail_info.xml" value="0.21614583333333334" />
@@ -43,7 +53,7 @@
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/transition_background_drawable_map.xml" value="0.15925925925925927" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/transition_background_drawable_massage.xml" value="0.15925925925925927" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/drawable/transition_background_drawable_person.xml" value="0.15925925925925927" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.17" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.29779837775202783" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/activity_splash.xml" value="0.16485507246376813" />
@@ -55,14 +65,15 @@
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/layout_dialog_change_birthday.xml" value="0.22" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/layout_dialog_change_profile.xml" value="0.1358695652173913" />
         <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/layout/layout_dialog_change_sex.xml" value="0.2" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/menu/menu.xml" value="0.2" />
-        <entry key="..\:/Spring2022/DuAnTotNghiep/project/ModelFashion/app/src/main/res/menu/menu_navigation.xml" value="0.2" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/drawable/border_around.xml" value="0.179" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/drawable/border_button_fb.xml" value="0.183" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/drawable/border_edit_text.xml" value="0.183" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/drawable/ic_cart.xml" value="0.183" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/drawable/ic_home.xml" value="0.16" />
+        <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
+        <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
+        <entry key="..\:/Users/MSI GF/AndroidStudioProjects/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/P/Desktop/TotNghiep/ModelFashion/app/src/main/res/drawable/background_searchview.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/P/Desktop/TotNghiep/ModelFashion/app/src/main/res/drawable/cart_background_oval.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/P/Desktop/TotNghiep/ModelFashion/app/src/main/res/drawable/category_background_oval.xml" value="0.21614583333333334" />

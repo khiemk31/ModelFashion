@@ -10,6 +10,7 @@ public class Constants {
     public static final String KEY_PROFILE_SEX = "KEY_PROFILE_SEX";
     public static final String KEY_PROFILE_USER = "KEY_PROFILE_USER";
     public static final String KEY_PROFILE_NAME = "KEY_PROFILE_NAME";
+    public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
 
 
 

@@ -10,26 +10,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.modelfashion.Model.response.product.ProductPreview;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHolder> {
 
-    private List<Product> listProduct;
+    private List<ProductPreview> listProduct = new ArrayList<>();
     private ItemClickListener mClickListener;
 
-    public void setListProduct(List<Product> list) {
+    public void setListProduct(List<ProductPreview> list) {
+        this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
     }
 
-    public List<Product> getListProduct() {
+    public List<ProductPreview> getListProduct() {
         return this.listProduct;
     }
 
-    public Product getProduct(int position) {
+    public ProductPreview getProduct(int position) {
         return listProduct.get(position);
     }
 
@@ -42,13 +46,26 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Product product = listProduct.get(position);
-        holder.tvName.setText(product.getProductName());
-        holder.tvPrice.setText(product.getProductPrice());
-        Glide.with(holder.imgAva.getContext())
-                .load(product.getProductAvatarUrl())
-                .placeholder(R.drawable.test_img)
-                .into(holder.imgAva);
+        ProductPreview product = listProduct.get(position);
+        holder.tvName.setText(product.getName());
+        holder.tvPrice.setText(String.valueOf(product.getPrice()));
+        holder.itemView.setOnClickListener(view -> {
+            mClickListener.onItemClick(position, product);
+        });
+        if (product.getLogoUrl().contains("http:")){
+            Glide.with(holder.imgAva.getContext())
+                    .load(product.getLogoUrl().replace("http:","https:"))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .placeholder(R.drawable.test_img)
+                    .into(holder.imgAva);
+        }else {
+            Glide.with(holder.imgAva.getContext())
+                    .load(product.getLogoUrl())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .placeholder(R.drawable.test_img)
+                    .into(holder.imgAva);
+        }
+
     }
 
     @Override
@@ -65,9 +82,6 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
             tvName = itemView.findViewById(R.id.tv_product_name);
             tvPrice = itemView.findViewById(R.id.tv_product_price);
             imgAva = itemView.findViewById(R.id.img_clothes_avatar);
-            itemView.setOnClickListener(view -> {
-                mClickListener.onItemClick(view, getAdapterPosition());
-            });
         }
     }
 
@@ -76,6 +90,6 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
     }
 
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position, ProductPreview productPreview);
     }
 }

@@ -57,7 +57,7 @@ public class DetailHistoryAdapter extends BaseAdapter {
         String money = numberFormat.format(Double.parseDouble(productHistory.getmPriceProduct()));
         tv_price.setText(money);
         tv_size_subproduct.setText(productHistory.getmSizeProduct());
-        tv_sumproduct.setText(productHistory.getmSumProduct());
+        tv_sumproduct.setText("x"+productHistory.getmSumProduct());
         Glide.with(context).load(productHistory.getmImgeProduct()).into(img_subproduct);
         return view;
     }

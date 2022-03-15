@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -35,6 +36,7 @@ public class SearchBar extends ConstraintLayout {
 
         // init view
         ImageView icRight = view.findViewById(R.id.img_right_ic_search_view);
+        EditText edt = view.findViewById(R.id.edt_search_view);
 
 
         if (rightIcon != null) {
@@ -45,7 +47,7 @@ public class SearchBar extends ConstraintLayout {
         }
 
         icRight.setOnClickListener(view1 -> {
-            searchListener.onSearchClick();
+            searchListener.onSearchClick(edt.getText().toString());
         });
 
 
@@ -59,7 +61,7 @@ public class SearchBar extends ConstraintLayout {
     }
 
     public interface SearchListener{
-        void onSearchClick();
+        void onSearchClick(String contentSearch);
     }
 
 }

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
 
-        fragmentTransaction.replace(R.id.frameLayout,fm);
+        fragmentTransaction.replace(R.id.frmlayout,fm);
         fragmentTransaction.commit();
 
     }
