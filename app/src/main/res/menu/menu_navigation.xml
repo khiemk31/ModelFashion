@@ -3,23 +3,23 @@
     <item
         android:id="@+id/main_item_home"
         android:icon="@drawable/ic_home"
-        android:title="Home"
+        android:title="Trang Chủ"
         />
 
     <item
         android:id="@+id/main_item_category"
         android:icon="@drawable/ic_category"
-        android:title="Category"/>
+        android:title="Thể Loại"/>
 
     <item
         android:id="@+id/main_item_cart"
         android:icon="@drawable/ic_cart"
-        android:title="Cart"  />
+        android:title="Giỏ Hàng"  />
 
     <item
         android:id="@+id/main_item_profile"
         android:icon="@drawable/ic_person"
-        android:title="Profile" />
+        android:title="Thông Tin" />
 
 
 </menu>

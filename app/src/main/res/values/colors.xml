@@ -45,5 +45,5 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="background_item_navigation">#FFFFFF</color>
     <color name="tint_item_navigation">#AEAEB2</color>
-    <color name="tint_item_navigation_choice">#54B175</color>
+    <color name="tint_item_navigation_choice">#8E97FD</color>
 </resources>
