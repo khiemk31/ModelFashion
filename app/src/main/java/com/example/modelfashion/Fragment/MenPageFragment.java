@@ -41,18 +41,18 @@ public class MenPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_men_page, container, false);
-        rvMenPage = view.findViewById(R.id.rv_men_page_fm);
-        ArrayList<Product> arrProduct = new ArrayList<>();
-        ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo","Quần","Ba Lô"));
-        arrProduct.add(new Product(1,"Áo 1","","100.000 đ","","Áo",0));
-        arrProduct.add(new Product(2,"Áo 2","","200.000 đ","","Áo",0));
-        arrProduct.add(new Product(3,"Quần 1","","100.000 đ","","Quần",0));
-        arrProduct.add(new Product(4,"Quần 2","","200.000 đ","","Quần",0));
-        arrProduct.add(new Product(5,"Quần 3","","300.000 đ","","Quần",0));
-        arrProduct.add(new Product(6,"Ba lô 1","","100.000 đ","","Ba Lô",0));
-        ProductListAdapter productListAdapter = new ProductListAdapter(mContext, arrProductType, arrProduct);
-        rvMenPage.setLayoutManager(new LinearLayoutManager(mContext,RecyclerView.VERTICAL,false));
-        rvMenPage.setAdapter(productListAdapter);
+//        rvMenPage = view.findViewById(R.id.rv_men_page_fm);
+//        ArrayList<Product> arrProduct = new ArrayList<>();
+//        ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo","Quần","Ba Lô"));
+//        arrProduct.add(new Product(1,"Áo 1","","100.000 đ","","Áo",0));
+//        arrProduct.add(new Product(2,"Áo 2","","200.000 đ","","Áo",0));
+//        arrProduct.add(new Product(3,"Quần 1","","100.000 đ","","Quần",0));
+//        arrProduct.add(new Product(4,"Quần 2","","200.000 đ","","Quần",0));
+//        arrProduct.add(new Product(5,"Quần 3","","300.000 đ","","Quần",0));
+//        arrProduct.add(new Product(6,"Ba lô 1","","100.000 đ","","Ba Lô",0));
+//        ProductListAdapter productListAdapter = new ProductListAdapter(mContext, arrProductType, arrProduct);
+//        rvMenPage.setLayoutManager(new LinearLayoutManager(mContext,RecyclerView.VERTICAL,false));
+//        rvMenPage.setAdapter(productListAdapter);
         return view;
     }
 }
