@@ -10,6 +10,7 @@
         android:src="@drawable/test_img2"
         android:padding="5dp"/>
     <TextView
+        android:id="@+id/tv_my_product_name"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:text="Product name"
@@ -20,6 +21,7 @@
         android:layout_width="152dp"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/tv_my_product_price"
             android:layout_width="152dp"
             android:layout_height="wrap_content"
             android:text="800.000 đ"

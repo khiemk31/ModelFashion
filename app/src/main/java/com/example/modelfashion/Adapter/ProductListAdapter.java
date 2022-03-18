@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modelfashion.Model.Product;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
@@ -17,8 +19,12 @@ import java.util.ArrayList;
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
     Context context;
     ArrayList<String> arrProductType;
-    ArrayList<Product> arrProduct;
-    public ProductListAdapter(Context context, ArrayList<String> arrProductType, ArrayList<Product> arrProduct){
+    ArrayList<MyProduct> arrProduct;
+
+    public ProductListAdapter() {
+    }
+
+    public ProductListAdapter(Context context, ArrayList<String> arrProductType, ArrayList<MyProduct> arrProduct){
         this.context = context;
         this.arrProductType = arrProductType;
         this.arrProduct = arrProduct;
@@ -35,9 +41,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ArrayList<Product> productsFiltered = new ArrayList<>();
+        ArrayList<MyProduct> productsFiltered = new ArrayList<>();
         for(int j = 0; j < arrProduct.size(); j++){
-            if(arrProduct.get(j).getProductType().equals(arrProductType.get(i))){
+            if(arrProduct.get(j).getType().equals(arrProductType.get(i))){
                 productsFiltered.add(arrProduct.get(j));
             }
         }
@@ -46,14 +52,16 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         viewHolder.recyclerView.setLayoutManager(linearLayoutManager);
 
+        viewHolder.tv_product_item.setText(arrProductType.get(i));
+
         productAdapter.onItemClickListener(new ProductAdapter.OnItemClick() {
             @Override
-            public void imgClick(int position, Product product) {
+            public void imgClick(int position, MyProduct product) {
                 onItemClick.imgClick(position, product);
             }
 
             @Override
-            public void imgAddToCartClick(int position, Product product) {
+            public void imgAddToCartClick(int position, MyProduct product) {
                 onItemClick.imgAddToCartClick(position, product);
             }
         });
@@ -67,10 +75,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView;
         View view;
+        TextView tv_product_item, tv_xem_tat_ca;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.view = itemView;
             this.recyclerView = itemView.findViewById(R.id.rv_product_item);
+            tv_product_item = itemView.findViewById(R.id.tv_product_item);
+            tv_xem_tat_ca = itemView.findViewById(R.id.tv_xem_tat_ca);
         }
     }
 
@@ -81,7 +92,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     public interface OnItemClickListener{
-        void imgClick(int position, Product product);
-        void imgAddToCartClick(int position, Product product);
+        void imgClick(int position, MyProduct product);
+        void imgAddToCartClick(int position, MyProduct product);
     }
 }

@@ -3,7 +3,10 @@ package com.example.modelfashion.network;
 import android.content.Context;
 
 import com.example.modelfashion.Model.response.category.CategoryResponse;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductResponse;
+
+import java.util.ArrayList;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,6 +27,12 @@ public final class Repository {
 
     public Single<ProductResponse> getProductByCategory(String id){
         return apiInterface.getProductByCategory(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<ArrayList<MyProduct>> getAllProduct(){
+        return apiInterface.getAllProduct()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
