@@ -1,9 +1,14 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
     compileSdk 31
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
 
     defaultConfig {
         applicationId "com.example.modelfashion"
@@ -71,4 +76,9 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.7'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:29.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
 }
