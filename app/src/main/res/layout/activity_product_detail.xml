@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ProductDetailActivity">
 
-    <ImageView
-        android:id="@+id/img_cover"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_cart" />
+        app:srcCompat="@drawable/ic_shop_cart" />
 
     <ImageView
         android:id="@+id/img_prev"
@@ -184,6 +184,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:backgroundTint="@color/blue_active"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toTopOf="@+id/textView7"
@@ -203,7 +204,6 @@
             android:id="@+id/img_size_l"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
             app:layout_constraintStart_toEndOf="@+id/img_size_m"
             app:layout_constraintTop_toTopOf="@+id/textView7"

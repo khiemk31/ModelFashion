@@ -1,6 +1,7 @@
 package com.example.modelfashion.Interface;
 
 import com.example.modelfashion.Model.User;
+import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -29,8 +30,18 @@ public interface ApiRetrofit {
     Call<String> uploadAvatar(@Part MultipartBody.Part avatar);
     @FormUrlEncoded
     @POST("FashionShop/insert_user.php")
-    Call<String> InsertUser (@Field("taikhoan") String taikhoan, @Field("matkhau") String matkhau, @Field("avatar") String avatar);
+    Call<String> InsertUser (@Field("taikhoan") String taikhoan, @Field("matkhau") String matkhau);
     @FormUrlEncoded
     @POST("FashionShop/get_user.php")
     Call<ArrayList<User>> GetUser (@Field("taikhoan") String taikhoan, @Field("matkhau") String matkhau);
+    @FormUrlEncoded
+    @POST("FashionShop/get_products_size.php")
+    Call<ArrayList<Sizes>> GetProductsSize(@Field("product_name") String product_name);
+    @FormUrlEncoded
+    @POST("FashionShop/check_quantity_left.php")
+    Call<String> CheckSizeLeft(@Field("size_id") String size_id, @Field("quantity") String quantity);
+    @FormUrlEncoded
+    @POST("FashionShop/insert_bill_buy_now.php")
+    Call<String> InsertBillBuyNow(@Field("user_id") String user_id, @Field("date") String date,
+                                  @Field("price") String price, @Field("size_id") String size_id);
 }

@@ -40,17 +40,6 @@ public class HistoryActivity extends AppCompatActivity {
         fakeData();
         HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,listModelHistory);
         lv_history.setAdapter(historyAdapter);
-        lv_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HistoryActivity.this,DetailHistoryActivity.class);
-                ModelHistory modelHistory = listModelHistory.get(i);
-                intent.putExtra("index",i);
-                intent.putExtra("view","History");
-                startActivity(intent);
-
-            }
-        });
 
 
     }

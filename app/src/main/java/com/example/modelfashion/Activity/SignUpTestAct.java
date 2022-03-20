@@ -76,7 +76,7 @@ public class SignUpTestAct extends AppCompatActivity {
                         if(response != null){
                             String message = response.body();
                             if(message.length()>0){
-                                ApiRetrofit.apiRetrofit.InsertUser(taikhoan,matkhau,baseUrl+response.body().trim()).enqueue(new Callback<String>() {
+                                ApiRetrofit.apiRetrofit.InsertUser(taikhoan,matkhau).enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
                                         if(response.body().trim().equals("Success")){

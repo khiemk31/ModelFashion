@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="top|center"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     tools:context=".Activity.SignIn.SignInActivity">
 
     <ImageView
         android:id="@+id/btn_signIn_back"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="left"
         android:background="@drawable/border_around"
         android:src="@drawable/ic_left_arrow"
@@ -75,7 +75,7 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/checkbox_id"
+            android:id="@+id/cbSaveValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nhớ mật khẩu?"
@@ -92,65 +92,14 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogin"
         android:text="Đăng nhập"
         android:layout_marginTop="20dp"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:layout_width="match_parent"
         android:background="@drawable/border_button_fb"
-        android:onClick="DangNhap"
         android:layout_height="45dp"/>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="65dp"
-        android:gravity="left"
-        android:background="@drawable/border_around"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="43dp"
-            android:src="@drawable/ic_google" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="40dp"
-            android:text="Đăng nhập với google"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="left"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_button_fb"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="53dp"
-            android:src="@drawable/facebook" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:layout_marginLeft="40dp"
-            android:text="Đăng nhập vớifacebook"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -160,12 +109,16 @@
         android:layout_height="wrap_content">
         <TextView
             android:text="Không có tài khoản?  "
+            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="Đăng Ký "
-            android:onClick="DangKy"
+            android:id="@+id/tvSignUp"
+            android:text="Đăng Ký"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#7583CA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
