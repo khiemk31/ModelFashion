@@ -14,7 +14,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiClient {
-    static ApiInterface provideApiInterface(Context context) {
+    public static ApiInterface provideApiInterface(Context context) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
