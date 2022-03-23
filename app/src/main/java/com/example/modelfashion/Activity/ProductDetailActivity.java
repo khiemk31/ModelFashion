@@ -43,16 +43,17 @@ public class ProductDetailActivity extends AppCompatActivity {
     String size_id;
     String user_id = "1";
     String price = "";
+    String product_name = "";
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         Intent intent = getIntent();
-        String name = intent.getStringExtra(KEY_PRODUCT_NAME);
+        product_name = intent.getStringExtra(KEY_PRODUCT_NAME);
         price = intent.getStringExtra(KEY_PRODUCT_PRICE);
         // TODO use id to call detail product api
-        ApiRetrofit.apiRetrofit.GetProductsSize(name).enqueue(new Callback<ArrayList<Sizes>>() {
+        ApiRetrofit.apiRetrofit.GetProductsSize(product_name).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
             public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
                 arr_size = response.body();
@@ -105,22 +106,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
             size_id = arr_size.get(0).getId();
-            Toast.makeText(this, "Đã chọn size S"+arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
             size_id = arr_size.get(1).getId();
-            Toast.makeText(this, "Đã chọn size M"+arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
             size_id = arr_size.get(2).getId();
-            Toast.makeText(this, "Đã chọn size L"+arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
             size_id = arr_size.get(3).getId();
-            Toast.makeText(this, "Đã chọn size XL"+arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
         });
 
         tv_price.setText("650,000 VND");
@@ -159,6 +160,42 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
+            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id,"1").enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if(response.body().equals("ok")){
+                        ApiRetrofit.apiRetrofit.InsertCart(user_id,size_id,product_name,"1").enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.body().equals("duplicated")){
+                                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    if(response.body().equals("ok")){
+                                        Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                        Log.e("err",response.body());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                    }else if(response.body().equals("fail")){
+                        Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+
+                }
+            });
         });
     }
 

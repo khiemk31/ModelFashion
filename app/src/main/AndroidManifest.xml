@@ -19,11 +19,6 @@
         android:theme="@style/Theme.ModelFashion"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activity.SignUpTestAct"
-            android:exported="true">
-
-        </activity>
-        <activity
             android:name=".Activity.SignIn.SignUpActivity"
             android:exported="false" />
         <activity
