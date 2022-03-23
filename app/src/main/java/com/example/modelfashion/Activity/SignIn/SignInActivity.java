@@ -1,7 +1,5 @@
 package com.example.modelfashion.Activity.SignIn;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,15 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
-
 import java.util.regex.Pattern;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -156,4 +151,31 @@ public class SignInActivity extends AppCompatActivity {
             cbSaveValue.setChecked(check);
         }
     }
+
+//    public void DangKy(View view) {
+//        Intent intent = new Intent(SignInActivity.this, SignUpTestAct.class);
+//        startActivity(intent);
+//    }
+
+//    public void DangNhap(View view) {
+//        tk = edt_tk.getText().toString();
+//        mk = edt_mk.getText().toString();
+//        ApiRetrofit.apiRetrofit.GetUser(tk,mk).enqueue(new Callback<ArrayList<User>>() {
+//            @Override
+//            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+//                ArrayList<User> arrUser = response.body();
+//                Toast.makeText(SignInActivity.this, response.body()+"", Toast.LENGTH_LONG).show();
+//                if(arrUser.size()>0){
+//                    Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_LONG).show();
+//                    Glide.with(SignInActivity.this).load(arrUser.get(0).getAvatar()).into(user_avatar);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 }

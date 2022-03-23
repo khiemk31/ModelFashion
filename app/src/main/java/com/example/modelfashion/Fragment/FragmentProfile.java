@@ -103,11 +103,10 @@ public class FragmentProfile extends Fragment {
             Intent intent = new Intent(getContext(), OrderStatusActivity.class);
             startActivity(intent);
         });
+
         btn_feedback.setOnClickListener(v ->{
             loadDialogFeedback();
         });
-
-
     }
     private void loadDialogFeedback(){
         Dialog dialog = new Dialog(getContext());

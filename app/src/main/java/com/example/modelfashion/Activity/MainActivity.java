@@ -25,13 +25,14 @@ import com.example.modelfashion.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
+    String user_id = "1";
     public static BottomNavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Bundle info = new Bundle();
+        info.putString("user_id",user_id);
         replaceFragment(new MainFragment());
 
         navigationView=findViewById(R.id.bottom_navigation_view_linear);
@@ -40,16 +41,24 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.main_item_home:
-                        replaceFragment(new MainFragment());
+                        MainFragment mainFragment = new MainFragment();
+                        mainFragment.setArguments(info);
+                        replaceFragment(mainFragment);
                         break;
                     case R.id.main_item_cart:
-                        replaceFragment(new CartFragment());
+                        CartFragment cartFragment = new CartFragment();
+                        cartFragment.setArguments(info);
+                        replaceFragment(cartFragment);
                         break;
                     case R.id.main_item_category:
-                        replaceFragment(new CategoryFragment());
+                        CategoryFragment categoryFragment = new CategoryFragment();
+                        categoryFragment.setArguments(info);
+                        replaceFragment(categoryFragment);
                         break;
                     case R.id.main_item_profile:
-                        replaceFragment(new FragmentProfile());
+                        FragmentProfile fragmentProfile = new FragmentProfile();
+                        fragmentProfile.setArguments(info);
+                        replaceFragment(fragmentProfile);
                         break;
                 }
                 return true;
@@ -61,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fm){
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
         fragmentTransaction.replace(R.id.frmlayout,fm);
         fragmentTransaction.commit();
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,9 +52,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         viewHolder.recyclerView.setAdapter(productAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         viewHolder.recyclerView.setLayoutManager(linearLayoutManager);
-
         viewHolder.tv_product_item.setText(arrProductType.get(i));
-
         productAdapter.onItemClickListener(new ProductAdapter.OnItemClick() {
             @Override
             public void imgClick(int position, MyProduct product) {

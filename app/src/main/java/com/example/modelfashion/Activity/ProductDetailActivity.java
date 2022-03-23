@@ -1,22 +1,36 @@
 package com.example.modelfashion.Activity;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_PRICE;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
+import com.example.modelfashion.Interface.ApiRetrofit;
+import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
@@ -25,16 +39,32 @@ public class ProductDetailActivity extends AppCompatActivity {
             btn_mua_ngay, btn_them_vao_gio_hang;
     private ViewPager2 viewPager;
     private ViewPagerDetailProductAdapter adapter;
-
+    ArrayList<Sizes> arr_size = new ArrayList<>();
+    String size_id;
+    String user_id = "1";
+    String price = "";
+    String product_name = "";
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
         Intent intent = getIntent();
-        String id = intent.getStringExtra(KEY_PRODUCT_ID);
+        product_name = intent.getStringExtra(KEY_PRODUCT_NAME);
+        price = intent.getStringExtra(KEY_PRODUCT_PRICE);
         // TODO use id to call detail product api
+        ApiRetrofit.apiRetrofit.GetProductsSize(product_name).enqueue(new Callback<ArrayList<Sizes>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
+                arr_size = response.body();
+                size_id = arr_size.get(0).getId();
+            }
 
+            @Override
+            public void onFailure(Call<ArrayList<Sizes>> call, Throwable t) {
+
+            }
+        });
         initView();
         initData();
         initListener();
@@ -46,6 +76,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private int currentCoverImage = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initListener() {
         img_back.setOnClickListener(view -> {
             finish();
@@ -74,15 +105,23 @@ public class ProductDetailActivity extends AppCompatActivity {
         loadImageUrl("https://cf.shopee.vn/file/7624d506af9460c8f4e8e5a80c30b514", img_product);
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
+            size_id = arr_size.get(0).getId();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
+            size_id = arr_size.get(1).getId();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
+            size_id = arr_size.get(2).getId();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
+            size_id = arr_size.get(3).getId();
+            Toast.makeText(this, "Đã chọn size "+arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
         });
 
         tv_price.setText("650,000 VND");
@@ -92,9 +131,71 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         btn_mua_ngay.setOnClickListener(view -> {
             // TODO BUY
+            String date = LocalDate.now().toString();
+            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id,"1").enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if(response.body().equals("ok")){
+                        ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id,date,price,size_id).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                Toast.makeText(ProductDetailActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                    }else if(response.body().equals("fail")){
+                        Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+
+                }
+            });
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
+            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id,"1").enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if(response.body().equals("ok")){
+                        ApiRetrofit.apiRetrofit.InsertCart(user_id,size_id,product_name,"1").enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.body().equals("duplicated")){
+                                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    if(response.body().equals("ok")){
+                                        Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                        Log.e("err",response.body());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                    }else if(response.body().equals("fail")){
+                        Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+
+                }
+            });
         });
     }
 

@@ -1,10 +1,14 @@
 package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_PRICE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -114,8 +118,6 @@ public class MainFragment extends Fragment {
             // TODO Search
         });
 
-        initRcvProduct();
-
         initData();
 
         return view;
@@ -124,6 +126,7 @@ public class MainFragment extends Fragment {
     private void initData() {
         repository = new Repository(requireContext());
         getAllProduct(repository);
+
     }
 
     private void initListener() {
@@ -131,7 +134,8 @@ public class MainFragment extends Fragment {
             @Override
             public void imgClick(int position, MyProduct product) {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_ID, product.getId());
+                intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
+                intent.putExtra(KEY_PRODUCT_PRICE, product.getPrice());
                 startActivity(intent);
             }
 
@@ -183,6 +187,7 @@ public class MainFragment extends Fragment {
                     ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo", "Quần"));
                     productListAdapter = new ProductListAdapter(requireContext(), arrProductType, it);
                     rcvProduct.setAdapter(productListAdapter);
+                    initListener();
                 }, throwable -> {
                     Log.d(Constants.ERROR_MESSAGE, throwable.toString());
                 }));
