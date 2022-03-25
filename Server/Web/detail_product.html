@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="detail_product.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div>
+                <img src="image/1.jpeg" alt="" height="400px" width="400px" class="img0">
+                <div class="img_selector">
+                    <img src="image/1.jpeg" alt="" height="120px" width="133.3px">
+                    <img src="image/2.jpeg" alt="" height="120px" width="133.3px">
+                    <img src="image/3.jpeg" alt="" height="120px" width="133.3px">
+                </div>
+            </div>
+            <div>
+                <h1 id="product_name">Tên sản phẩm</h1>
+                <input type="text" id="product_name_edt" placeholder="Tên sản phẩm">
+                <h2 id="description">Mô tả</h2>
+                <input type="text" id="description_edt" placeholder="Mô tả">
+                <div>
+                    <label for="price">Giá bán:</label>
+                    <h3 id="price">Giá bán</h3>
+                    <input type="number" id="price_edt" placeholder="Giá bán">
+                </div>
+                <div>
+                    <label for="cost">Giá nhập:</label>
+                    <h3 id="cost">Giá nhập</h3>
+                    <input type="number" id="cost_edt" placeholder="Giá nhập">
+                </div>
+                <div>
+                    <button type="button" id="cancel_btn">Hủy</button>
+                    <input type="submit" value="Update" name="submit" id="submit_btn">
+                </div>
+                <div>
+                    <button type="button" id="update_btn">Chỉnh sửa</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+    
+</html>
+<script src="detail_product.js"></script>
