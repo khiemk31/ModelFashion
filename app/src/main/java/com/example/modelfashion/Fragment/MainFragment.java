@@ -43,7 +43,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
@@ -192,7 +194,14 @@ public class MainFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 })
                 .subscribe(it -> {
-                    ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo", "Quần"));
+
+                    HashMap<String, String> hmType = new HashMap<>();
+                    for (int i = 0; i < it.size(); i++) {
+                        hmType.put(it.get(i).getType(),it.get(i).getType());
+                    }
+                    Set<String> key = hmType.keySet();
+                    ArrayList<String> arrProductType = new ArrayList<>(key);
+
                     productListAdapter = new ProductListAdapter(requireContext(), arrProductType, it);
                     rcvProduct.setAdapter(productListAdapter);
                     initListener();
