@@ -52,10 +52,13 @@
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/transition_background_drawable_home.xml" value="0.1125" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/transition_background_drawable_person.xml" value="0.1125" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.136" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_product_detail.xml" value="0.11851851851851852" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_sign_up.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_main.xml" value="0.2747524752475248" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.12" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/layout_inner_tab.xml" value="0.2265625" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/product_item_layout.xml" value="0.4" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/menu/menu_navigation.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.2361111111111111" />
