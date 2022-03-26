@@ -1,6 +1,7 @@
 package com.example.modelfashion.Fragment;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ public class CartFragment extends Fragment {
     private ArrayList<String> arr_product_name = new ArrayList<>();
     private String user_id;
     private TextView tvTotal;
+
     public CartFragment() {
     }
 
@@ -63,18 +65,18 @@ public class CartFragment extends Fragment {
         return initView;
     }
 
-    private void getCart(){
+    private void getCart() {
         ApiRetrofit.apiRetrofit.GetCartProduct(user_id).enqueue(new Callback<ArrayList<CartProduct>>() {
             @Override
             public void onResponse(Call<ArrayList<CartProduct>> call, Response<ArrayList<CartProduct>> response) {
                 arrCart = response.body();
-                for(int i = 0; i < arrCart.size(); i++){
+                for (int i = 0; i < arrCart.size(); i++) {
                     arr_product_name.add(arrCart.get(i).getProductName());
                     arr_size_id.add(arrCart.get(i).getSizeId());
                 }
                 JSONArray json_product_name = new JSONArray(arr_product_name);
                 JSONArray json_size_id = new JSONArray(arr_size_id);
-                getProductInfo(json_product_name,json_size_id);
+                getProductInfo(json_product_name, json_size_id);
                 getAmountCart(json_product_name);
             }
 
@@ -85,7 +87,7 @@ public class CartFragment extends Fragment {
         });
     }
 
-    private void getProductInfo(JSONArray arr_product_name, JSONArray arr_size_id){
+    private void getProductInfo(JSONArray arr_product_name, JSONArray arr_size_id) {
         ApiRetrofit.apiRetrofit.GetProductByName(arr_product_name).enqueue(new Callback<ArrayList<MyProduct>>() {
             @Override
             public void onResponse(Call<ArrayList<MyProduct>> call, Response<ArrayList<MyProduct>> response) {
@@ -100,7 +102,7 @@ public class CartFragment extends Fragment {
         });
     }
 
-    private void getSizeInfo(JSONArray arr_size_id){
+    private void getSizeInfo(JSONArray arr_size_id) {
         ApiRetrofit.apiRetrofit.GetSizeById(arr_size_id).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
             public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
@@ -115,11 +117,11 @@ public class CartFragment extends Fragment {
         });
     }
 
-    private void getAmountCart(JSONArray arr_product_name){
+    private void getAmountCart(JSONArray arr_product_name) {
         ApiRetrofit.apiRetrofit.GetAmountCart(arr_product_name).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                tvTotal.setText("Tổng tiền: "+response.body()+" VNĐ");
+                tvTotal.setText("Tổng tiền: " + response.body() + " VNĐ");
             }
 
             @Override
@@ -131,8 +133,6 @@ public class CartFragment extends Fragment {
 
     private void setAdapter() {
         CartAdapter adapter = new CartAdapter(arrProduct, arrSize, getContext());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
