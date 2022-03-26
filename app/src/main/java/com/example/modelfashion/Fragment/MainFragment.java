@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -56,6 +57,7 @@ public class MainFragment extends Fragment {
     private RecyclerView rcvProduct;
     Repository repository;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
 
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
 
@@ -91,6 +93,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        refreshLayout = view.findViewById(R.id.refresh_layout);
         searchBar = view.findViewById(R.id.search_bar);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
@@ -119,6 +122,11 @@ public class MainFragment extends Fragment {
         });
 
         initData();
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.VISIBLE);
+            getAllProduct(repository);
+        });
 
         return view;
     }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
+import com.example.modelfashion.customview.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         viewHolder.recyclerView.setLayoutManager(linearLayoutManager);
         viewHolder.tv_product_item.setText(arrProductType.get(i));
+
+        viewHolder.recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(20));
+
         productAdapter.onItemClickListener(new ProductAdapter.OnItemClick() {
             @Override
             public void imgClick(int position, MyProduct product) {
