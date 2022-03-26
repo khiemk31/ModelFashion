@@ -112,11 +112,11 @@
             <div class="app-main__outer">
                 <div class="app-main__inner">
                     <div class="pb-20">
-                        <h1 class="text-[40px] leading-[55px] mb-10">
+                        <h1 class="text-blue-400 text-[40px] leading-[55px] font-semibold mb-14">
                             Sản phẩm
                         </h1>
                         <form action="insert_product.php" method="post" enctype="multipart/form-data">
-                            <h2 class="text-[20px] text-[#E51B23] text-center mb-6">
+                            <h2 class="text-[20px] text-blue-400 text-center mb-6">
                                 Thông tin sản phẩm
                             </h2>
                             <!-- Thông tin -->
@@ -138,13 +138,13 @@
                                         <p class="text-[#4285F4] text-[12px] ml-2">Giá bán</p>
                                         <input
                                             class="w-full text-[#333333] text-base border-[1px] border-[#333333] rounded-md px-3 py-2"
-                                            type="number" name="price">
+                                            type="number" min="1000" name="price">
                                     </div>
                                     <div>
                                         <p class="text-[#4285F4] text-[12px] ml-2">Giá nhập</p>
                                         <input
                                             class="w-full text-[#333333] text-base border-[1px] border-[#333333] rounded-md px-3 py-2"
-                                            type="number" name="cost">
+                                            type="number" min="1000" name="cost">
                                     </div>
                                     <div>
                                         <p class="text-[#4285F4] text-[12px] ml-2">Loại</p>
@@ -224,7 +224,7 @@
                             <!-- button -->
                             <div class="flex justify-center">
                                 <input
-                                    class="bg-gradient-to-r from-[#FF1717] to-[#CE0000] text-white px-10 py-4 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l"
+                                    class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-10 py-4 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l"
                                     type="submit" value="Thêm sản phẩm" name="submit">
                             </div>
                         </form>

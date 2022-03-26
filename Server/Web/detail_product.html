@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- import font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- import tailwindcss -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- import css -->
+    <link rel="stylesheet" href="main.css">
+    <!-- import js -->
+    <script src="main.js"></script>
+    <!-- title -->
+    <title>detail product</title>
+</head>
+
+<body class="text-[#333333] text-base font-light">
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            <h1 class="text-blue-400 text-[40px] leading-[55px] font-semibold mb-14">
+                Chi tiết sản phẩm
+            </h1>
+            <div class="flex">
+                <!-- image -->
+                <div class="w-[50%]">
+                    <img src="image/1.jpeg" alt="" height="400px" width="400px" class="img0">
+                    <div class="img_selector grid grid-cols-3 gap-4">
+                        <img src="image/1.jpeg" alt="" height="120px" width="133.3px">
+                        <img src="image/2.jpeg" alt="" height="120px" width="133.3px">
+                        <img src="image/3.jpeg" alt="" height="120px" width="133.3px">
+                    </div>
+                </div>
+                <!-- information -->
+                <div class="w-[50%]">
+                    <div class="flex mb-4">
+                        <p id="product_name" class="w-[20%] font-semibold">
+                            Tên sản phẩm
+                        </p>
+                        <input class="w-[80%]" type="text" id="product_name_edt" placeholder="Tên sản phẩm">
+                    </div>
+
+                    <div class="flex mb-4">
+                        <p id="description" class="w-[20%] font-semibold">
+                            Mô tả
+                        </p>
+                        <input class="w-[80%]" type="text" id="description_edt" placeholder="Mô tả">
+                    </div>
+
+                    <div class="flex mb-4">
+                        <!-- <label for="price">
+                            Giá bán:
+                        </label> -->
+                        <p id="price" class="w-[20%] font-semibold">
+                            Giá bán
+                        </p>
+                        <input type="number" min="1000" id="price_edt" placeholder="Giá bán">
+                    </div>
+
+                    <div class="flex mb-20">
+                        <!-- <label for="cost">
+                            Giá nhập:
+                        </label> -->
+                        <p id="cost" class="w-[20%] font-semibold">
+                            Giá nhập
+                        </p>
+                        <input type="number" min="1000" id="cost_edt" placeholder="Giá nhập">
+                    </div>
+
+                    <!-- logic -->
+                    <div>
+                        <button type="button" id="cancel_btn"
+                            class="bg-gradient-to-r from-[#FF1717] to-[#CE0000] text-white px-10 py-2 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l mb-8">
+                            Hủy
+                        </button>
+                        <!-- <input type="submit" value="Update" name="submit" id="submit_btn"> -->
+                        <button type="submit" value="Update" name="submit" id="submit_btn"
+                            class="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white px-10 py-2 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l">
+                            Update
+                        </button>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button type="button" id="update_btn"
+                            class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l">
+                            Chỉnh sửa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
+<script src="detail_product.js"></script>
