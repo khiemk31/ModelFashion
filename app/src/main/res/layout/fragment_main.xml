@@ -7,16 +7,21 @@
     android:background="#F4F4F6"
     android:orientation="vertical"
     tools:context=".Fragment.MainFragment">
+<SearchView
+    android:id="@+id/search_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:iconifiedByDefault="false"
+    android:background="@drawable/background_searchview"
+    android:layout_marginTop="10dp"
+    android:queryHint="Tìm Kiếm"
+    android:layout_marginHorizontal="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
 
-    <com.example.modelfashion.customview.SearchBar
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:right_drawable="@drawable/ic_mail" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
@@ -34,8 +39,9 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="180dp"
                 android:background="@color/vp_sale">
 
                 <androidx.viewpager2.widget.ViewPager2

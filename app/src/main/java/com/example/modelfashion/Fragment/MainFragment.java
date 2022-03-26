@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.modelfashion.Activity.ProductDetailActivity;
@@ -55,7 +56,7 @@ import me.relex.circleindicator.CircleIndicator3;
 public class MainFragment extends Fragment {
     private ViewPager2 vpSaleMain;
     private CircleIndicator3 ciSale;
-    private SearchBar searchBar;
+    private SearchView searchView;
     private RecyclerView rcvProduct;
     Repository repository;
     private ProgressBar progressBar;
@@ -96,7 +97,7 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         refreshLayout = view.findViewById(R.id.refresh_layout);
-        searchBar = view.findViewById(R.id.search_bar);
+        searchView = view.findViewById(R.id.search_bar);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
@@ -119,9 +120,9 @@ public class MainFragment extends Fragment {
             }
         });
 
-        searchBar.onSearchBarClick(contentSearch -> {
-            // TODO Search
-        });
+//        searchBar.onSearchBarClick(contentSearch -> {
+//            // TODO Search
+//        });
 
         initData();
         refreshLayout.setOnRefreshListener(() -> {
