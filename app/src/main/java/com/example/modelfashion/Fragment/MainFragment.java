@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.modelfashion.Activity.ProductDetailActivity;
@@ -42,7 +44,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
@@ -52,10 +56,11 @@ import me.relex.circleindicator.CircleIndicator3;
 public class MainFragment extends Fragment {
     private ViewPager2 vpSaleMain;
     private CircleIndicator3 ciSale;
-    private SearchBar searchBar;
+    private SearchView searchView;
     private RecyclerView rcvProduct;
     Repository repository;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
 
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
 
@@ -91,7 +96,8 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        searchBar = view.findViewById(R.id.search_bar);
+        refreshLayout = view.findViewById(R.id.refresh_layout);
+        searchView = view.findViewById(R.id.search_bar);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
@@ -114,11 +120,16 @@ public class MainFragment extends Fragment {
             }
         });
 
-        searchBar.onSearchBarClick(contentSearch -> {
-            // TODO Search
-        });
+//        searchBar.onSearchBarClick(contentSearch -> {
+//            // TODO Search
+//        });
 
         initData();
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.VISIBLE);
+            getAllProduct(repository);
+        });
 
         return view;
     }
@@ -184,7 +195,14 @@ public class MainFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 })
                 .subscribe(it -> {
-                    ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo", "Quần"));
+
+                    HashMap<String, String> hmType = new HashMap<>();
+                    for (int i = 0; i < it.size(); i++) {
+                        hmType.put(it.get(i).getType(),it.get(i).getType());
+                    }
+                    Set<String> key = hmType.keySet();
+                    ArrayList<String> arrProductType = new ArrayList<>(key);
+
                     productListAdapter = new ProductListAdapter(requireContext(), arrProductType, it);
                     rcvProduct.setAdapter(productListAdapter);
                     initListener();
