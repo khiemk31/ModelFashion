@@ -1,6 +1,6 @@
 package com.example.modelfashion.Interface;
 
-import com.example.modelfashion.Model.User;
+import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
@@ -16,6 +16,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -68,4 +69,8 @@ public interface ApiRetrofit {
 
     @GET("FashionShop/get_amount_cart.php")
     Call<String> GetAmountCart(@Query("product_name") JSONArray product_name);
+
+    @POST("insert_user.php")
+    Call<User> editUser(@Body User user);
+
 }
