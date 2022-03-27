@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bt_item_history"
-    android:paddingVertical="20dp"
+    android:paddingVertical="10dp"
     >
 
     <LinearLayout
@@ -192,13 +192,13 @@
         android:id="@+id/tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_2"
         android:layout_above="@+id/item_history_time"
+        android:layout_below="@+id/view_2"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="5dp"
         android:fontFamily="@font/nunito_bold"
         android:gravity="center_vertical"
-        android:text="Giao thành công"
+        android:text="Đã giao"
         android:textColor="@color/green_active"
         android:textSize="15dp" />
     <TextView
