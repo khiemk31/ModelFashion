@@ -81,7 +81,7 @@ public class MainFragment extends Fragment {
     };
 
     public MainFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -97,12 +97,11 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         refreshLayout = view.findViewById(R.id.refresh_layout);
-        searchView = view.findViewById(R.id.search_bar);
+        searchView = view.findViewById(R.id.search_view);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
-
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -119,12 +118,23 @@ public class MainFragment extends Fragment {
                 mHandler.postDelayed(mRunable, 2000);
             }
         });
-
-//        searchBar.onSearchBarClick(contentSearch -> {
-//            // TODO Search
-//        });
-
         initData();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                ArrayList<Product> filteredProduct =new ArrayList<Product>( );
+//                for (Product product: productListAdapter)
+//                return false;
+//            }
+        });
+
+
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.VISIBLE);
@@ -157,32 +167,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void initRcvProduct() {
-        ArrayList<Product> arrProduct = new ArrayList<>();
-        ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo", "Quần", "Ba Lô"));
-        arrProduct.add(new Product(1, "Áo 1", "", "100.000 đ", "", "Áo", 0));
-        arrProduct.add(new Product(2, "Áo 2", "", "200.000 đ", "", "Áo", 0));
-        arrProduct.add(new Product(3, "Quần 1", "", "100.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(4, "Quần 2", "", "200.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(5, "Quần 3", "", "300.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(6, "Ba lô 1", "", "100.000 đ", "", "Ba Lô", 0));
-//        ProductListAdapter productListAdapter = new ProductListAdapter(requireContext(), arrProductType, arrProduct);
-//        rcvProduct.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-//        rcvProduct.setAdapter(productListAdapter);
-//        productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
-//            @Override
-//            public void imgClick(int position, MyProduct product) {
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_ID, product.getId());
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void imgAddToCartClick(int position, MyProduct product) {
-//                // TODO add to cart
-//            }
-//        });
-    }
+
 
     private void getAllProduct(Repository repository) {
         Single<ArrayList<MyProduct>> products = repository.getAllProduct();
@@ -198,7 +183,7 @@ public class MainFragment extends Fragment {
 
                     HashMap<String, String> hmType = new HashMap<>();
                     for (int i = 0; i < it.size(); i++) {
-                        hmType.put(it.get(i).getType(),it.get(i).getType());
+                        hmType.put(it.get(i).getType(), it.get(i).getType());
                     }
                     Set<String> key = hmType.keySet();
                     ArrayList<String> arrProductType = new ArrayList<>(key);
@@ -210,6 +195,8 @@ public class MainFragment extends Fragment {
                     Log.d(Constants.ERROR_MESSAGE, throwable.toString());
                 }));
     }
+
+
 
     @Override
     public void onDestroy() {
