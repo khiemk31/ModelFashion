@@ -43,7 +43,8 @@ import bolts.Bolts;
 
 public class FragmentProfile extends Fragment {
     PreferenceManager preferenceManager;
-    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_status, btn_history, btn_logout, tv_signUp;
+    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_history, btn_logout, tv_signUp;
+    LinearLayout btn_status,btn_status2,btn_status3;
     RoundedImageView img;
     TextView btn_feedback;
     LinearLayout ll_login;
@@ -64,8 +65,9 @@ public class FragmentProfile extends Fragment {
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
         btn_logout = view.findViewById(R.id.btn_frag_Profile_Logout);
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
-        btn_feedback = view.findViewById(R.id.btn_feedback);
-        progressLoadingCommon = new ProgressLoadingCommon();
+        btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
+        btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
+
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
@@ -142,53 +144,27 @@ public class FragmentProfile extends Fragment {
         });
         btn_history.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
+            intent.putExtra("numberStatus",4);
             startActivity(intent);
         });
         btn_status.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), OrderStatusActivity.class);
+            Intent intent = new Intent(getContext(), HistoryActivity.class);
+            intent.putExtra("numberStatus",1);
             startActivity(intent);
         });
 
-        btn_feedback.setOnClickListener(v -> {
-            loadDialogFeedback();
+        btn_status2.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), HistoryActivity.class);
+            intent.putExtra("numberStatus",2);
+            startActivity(intent);
+        });
+        btn_status3.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), HistoryActivity.class);
+            intent.putExtra("numberStatus",3);
+            startActivity(intent);
         });
     }
 
-    private void loadDialogFeedback() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_feedback);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setGravity(Gravity.CENTER);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        EditText edt_title = dialog.findViewById(R.id.edt_title);
-        EditText edt_content = dialog.findViewById(R.id.edt_content);
-        TextView btn_send = dialog.findViewById(R.id.btn_send);
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String title, content;
-                title = edt_title.getText().toString().trim();
-                content = edt_content.getText().toString().trim();
-                if (title.isEmpty() || content.isEmpty()) {
-                    Toast.makeText(getContext(), "Tiêu đề và nội dung không được trống", Toast.LENGTH_SHORT).show();
-                } else {
-                    String uriText = "mailto:" + "khiemnxph10098@fpt.edt.vn" +
-                            "?subject=" + title +
-                            "&body=" + content;
-                    Uri uri = Uri.parse(uriText);
-                    Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                    sendIntent.setData(uri);
-                    startActivity(Intent.createChooser(sendIntent, "Send Email"));
-                    dialog.dismiss();
-                }
-            }
-        });
-        dialog.show();
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadDetails();
-    }
+
 }

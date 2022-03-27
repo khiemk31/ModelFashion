@@ -67,10 +67,12 @@ public class OrderStatusAdapter extends BaseAdapter {
         item_orderstatus_ma.setText("Mã đơn: "+listModel.get(i).getmIDHistory());
         item_orderstatus_time.setText("Ngày đặt hàng: "+listModel.get(i).getmTimeOrder());
         item_orderstatus_status.setText(listModel.get(i).getmStatus());
-        if(listModel.get(i).getmStatus().contains("Đang Chờ")){
+        if(listModel.get(i).getmStatus().contains("Chờ xác nhận")){
             item_orderstatus_status.setTextColor(Color.parseColor("#FF0000"));
         }else if(listModel.get(i).getmStatus().contains("Đang Giao")) {
             item_orderstatus_status.setTextColor(Color.parseColor("#008E06"));
+        }else if(listModel.get(i).getmStatus().contains("Chờ lấy hàng")) {
+            item_orderstatus_status.setTextColor(Color.parseColor("#ff9800"));
         }
         Glide.with(context).load(listModel.get(i).getProductHistoryList().get(0).getmImgeProduct()).into(img_subproduct0);
         tv_name_subproduct0.setText(listModel.get(i).getProductHistoryList().get(0).getmNameProduct());
