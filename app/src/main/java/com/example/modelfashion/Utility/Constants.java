@@ -15,4 +15,19 @@ public class Constants {
     public static final String KEY_PRODUCT_NAME = "KEY_PRODUCT_NAME";
     public static final String KEY_PRODUCT_PRICE = "KEY_PRODUCT_PRICE";
 
+    // user res
+    public static final String KEY_SAVE_USER = "saveUser";
+    public static final String KEY_CHECK_LOGIN = "isLogin";
+    public static final String KEY_GET_USER = "user";
+    public static final String KEY_ID = "id";
+    public static final String KEY_TAI_KHOAN = "taiKhoan";
+    public static final String KEY_MAT_KHAU = "matKhau";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_FULL_NAME = "fullName";
+    public static final String KEY_PHONE = "phone";
+    public static final String KEY_SEX = "sex";
+    public static final String KEY_BIRTHDAY = "birthdate";
+    public static final String KEY_ADDRESS = "address";
+    public static final String KEY_AVARTAR = "avatar";
+
 }
