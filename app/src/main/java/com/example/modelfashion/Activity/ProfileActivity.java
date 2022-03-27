@@ -7,19 +7,23 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,6 +32,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
+import com.example.modelfashion.Common.ProgressLoadingCommon;
+import com.example.modelfashion.Interface.ApiRetrofit;
+import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
@@ -36,21 +45,26 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.List;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
-
-
     PreferenceManager preferenceManager;
     ConstraintLayout layoutActProfileName,layoutActProfilePhone,layoutActProfileSex,layoutActProfileBirthday,layoutActProfileAddrest,layoutActProfileTenDangNhap,layoutActProfileEmail;
     RelativeLayout layoutActProfileAvatar;
     AppCompatImageView btnActProfileBack,btnActProfileCheck;
-    TextView tvActProfileSex,tvActProfileName,tvActProfilePhone,tvActProfileAddress,tvActProfileBirthday;
+    TextView tvActProfileSex,tvActProfileName,tvActProfilePhone,tvActProfileAddress,tvActProfileBirthday, tvActProfileTaiKhoan, tvActProfileEmail;
     RoundedImageView imgActProfileAvatar;
+    String id;
+    ProgressLoadingCommon progressLoadingCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +88,19 @@ public class ProfileActivity extends AppCompatActivity {
         layoutActProfileTenDangNhap=findViewById(R.id.layout_act_Profile_TenDangNhap);
         layoutActProfileEmail=findViewById(R.id.layout_act_Profile_Email);
 
+        tvActProfileTaiKhoan = findViewById(R.id.tv_act_Profile_tenDangNhap);
         tvActProfileSex = findViewById(R.id.tv_act_Profile_sex);
         tvActProfileName=findViewById(R.id.tv_act_Profile_name);
         tvActProfilePhone=findViewById(R.id.tv_act_Profile_phone);
         tvActProfileAddress=findViewById(R.id.tv_act_Profile_address);
         tvActProfileBirthday=findViewById(R.id.tv_act_Profile_birthday);
+        tvActProfileEmail = findViewById(R.id.tv_act_Profile_mail);
 
         btnActProfileBack=findViewById(R.id.btn_act_profile_back);
         btnActProfileCheck=findViewById(R.id.btn_act_profile_check);
 
         imgActProfileAvatar=findViewById(R.id.img_act_profile_avatar);
+        progressLoadingCommon = new ProgressLoadingCommon();
     }
 
 //    kiểm tra dữ liệu có thay đổi không
@@ -91,18 +108,69 @@ public class ProfileActivity extends AppCompatActivity {
         btnActProfileCheck.setVisibility(View.VISIBLE);
 
         btnActProfileCheck.setOnClickListener(v -> {
-            startActivity( new Intent(this,MainActivity.class));
+            editUser();
+        });
+    }
+
+    void  editUser() {
+        User user = new User(id,
+                tvActProfileTaiKhoan.getText().toString(),
+                "",
+                tvActProfileEmail.getText().toString(),
+                tvActProfileName.getText().toString(),
+                tvActProfilePhone.getText().toString(),
+                tvActProfileSex.getText().toString(),
+                tvActProfileBirthday.getText().toString(),
+                tvActProfileAddress.getText().toString(),
+                "",
+                "");
+
+        ApiRetrofit.apiRetrofit.editUser(user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() == 200) {
+                    progressLoadingCommon.showProgressLoading(ProfileActivity.this);
+                    Toast.makeText(ProfileActivity.this, "Thêm thông tin thành công", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                } else {
+                    Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-
         preferenceManager.putString(Constants.KEY_PROFILE_SEX, "0");
         putTVSex(preferenceManager.getString(Constants.KEY_PROFILE_SEX));
-
-
         profileAnimation();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+        if (sharedPreferences.contains("user")) {
+            String userData = sharedPreferences.getString("user", "");
+
+            try {
+                JSONObject obj = new JSONObject(userData);
+                id = obj.getString(Constants.KEY_ID);
+                tvActProfileTaiKhoan.setText(obj.getString(Constants.KEY_TAI_KHOAN));
+                tvActProfileSex.setText(obj.getString(Constants.KEY_SEX));
+                tvActProfileName.setText(obj.getString(Constants.KEY_FULL_NAME));
+                tvActProfilePhone.setText(obj.getString(Constants.KEY_PHONE));
+                tvActProfileAddress.setText(obj.getString(Constants.KEY_ADDRESS));
+                tvActProfileBirthday.setText(obj.getString(Constants.KEY_BIRTHDAY));
+                tvActProfileEmail.setText(obj.getString(Constants.KEY_EMAIL));
+
+                Log.d("My App", obj.toString());
+
+            } catch (Throwable t) {
+                Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
+            }
+        }
     }
 
     // check thông tin giới tính
@@ -139,7 +207,9 @@ public class ProfileActivity extends AppCompatActivity {
         layoutActProfileAddrest.setOnClickListener(v -> {
             changeProfile(3);
         });
+
     }
+
 
     //dialog thay đổi tên, số điện thoại, địa chỉ
     private void changeProfile(int check) {

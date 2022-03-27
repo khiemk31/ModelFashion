@@ -7,20 +7,34 @@
     android:background="#F4F4F6"
     android:orientation="vertical"
     tools:context=".Fragment.MainFragment">
-<SearchView
-    android:id="@+id/search_bar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:iconifiedByDefault="false"
-    android:background="@drawable/background_searchview"
-    android:layout_marginTop="10dp"
-    android:queryHint="Tìm Kiếm"
-    android:layout_marginHorizontal="10dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    />
+
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_searchview"
+            android:iconifiedByDefault="false"
+            android:queryHint="Tìm Kiếm" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/product01" />
+    </LinearLayout>
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -39,9 +53,9 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/vp_sale">
 
                 <androidx.viewpager2.widget.ViewPager2
