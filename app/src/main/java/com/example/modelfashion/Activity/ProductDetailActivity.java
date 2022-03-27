@@ -233,6 +233,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadImageUrl(String url, ImageView img) {
-        Glide.with(this).load(url).placeholder(R.drawable.logo_icon).into(img);
+        Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);
     }
 }

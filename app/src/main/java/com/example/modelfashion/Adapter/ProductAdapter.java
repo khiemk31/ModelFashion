@@ -17,6 +17,7 @@ import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
@@ -49,10 +50,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.imgAddToCart.setOnClickListener(view -> {
             onItemClick.imgAddToCartClick(i, arrProduct.get(i));
         });
-
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        String money_format = formatter.format(Integer.parseInt(arrProduct.get(i).getPrice()));
         Glide.with(context).load(arrProduct.get(i).getPhotos().get(0)).placeholder(R.drawable.test_img2).into(viewHolder.img);
         viewHolder.tvProductName.setText(arrProduct.get(i).getProduct_name());
-        viewHolder.tvPrice.setText(arrProduct.get(i).getPrice());
+        viewHolder.tvPrice.setText(money_format+" VNĐ");
     }
 
     @Override

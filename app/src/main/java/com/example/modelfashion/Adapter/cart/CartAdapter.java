@@ -18,6 +18,7 @@ import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -56,20 +57,24 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
-     AtomicInteger minteger= new AtomicInteger(1);
-        holder.nameProduct.setText(productArrayList.get(position).getProduct_name());
-        holder.priceProduct.setText(productArrayList.get(position).getPrice());
-        holder.sizeProduct.setText(arrSize.get(position).getSize());
+        AtomicInteger minteger= new AtomicInteger(1);
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        String money_format = formatter.format(Integer.parseInt(productArrayList.get(position).getPrice()));
+        holder.nameProduct.setText("Sản phẩm: "+productArrayList.get(position).getProduct_name());
+        holder.priceProduct.setText("Giá: "+money_format+" VNĐ");
+        holder.sizeProduct.setText("Size: "+arrSize.get(position).getSize());
         Glide.with(context).load(productArrayList.get(position).getPhotos().get(2)).into(holder.imgCart);
         holder.btnIncrease.setOnClickListener(view -> {
-        minteger.set(minteger.get() + 1);
-            holder.amount.setText(""+minteger);
+            minteger.set(minteger.get() + 1);
+                holder.amount.setText(""+minteger);
         });
         holder.btnDecrease.setOnClickListener(view -> {
-            minteger.set(minteger.get() - 1);
-            holder.amount.setText(""+minteger);
+            if(minteger.get() > 1){
+                minteger.set(minteger.get() - 1);
+                holder.amount.setText(""+minteger);
+            }
         });
-            holder.amount.setText(""+minteger);
+        holder.amount.setText(""+minteger);
     }
 
 

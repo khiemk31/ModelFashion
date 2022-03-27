@@ -21,8 +21,8 @@ public interface ApiInterface {
     @GET
     Single<CategoryResponse> getCategory(@Url String url);
 
-    @GET("/api/products/categorys/{id}")
-    Single<ProductResponse> getProductByCategory(@Path("id") String id);
+    @GET
+    Single<ProductResponse> getProductByCategory(@Url String url);
 
     @GET("get_all_products.php")
     Single<ArrayList<MyProduct>> getAllProduct();

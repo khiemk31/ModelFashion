@@ -70,7 +70,13 @@ public interface ApiRetrofit {
     @GET("FashionShop/get_amount_cart.php")
     Call<String> GetAmountCart(@Query("product_name") JSONArray product_name);
 
+
     @POST("insert_user.php")
     Call<User> editUser(@Body User user);
 
+
+    @FormUrlEncoded
+    @POST("FashionShop/insert_payment.php")
+    Call<String> InsertPayment(@Field("user_id") String user_id, @Field("amount") String amount,
+                               @Field("date_created") String date_created, @Field("arr_sizes") String arr_sizes);
 }
