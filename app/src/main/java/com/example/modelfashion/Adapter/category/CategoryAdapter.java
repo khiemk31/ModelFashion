@@ -19,21 +19,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public CategoryAdapter() {
     }
 
-    private List<Category> listCategory = new ArrayList<>();;
+    private List<String> listCategory = new ArrayList<>();;
     private ItemClickListener mClickListener;
     private int index;
 
-    public void setListCategory(List<Category> list) {
+    public void setListCategory(List<String> list) {
         this.listCategory.clear();
         this.listCategory = list;
         notifyDataSetChanged();
     }
 
-    public List<Category> getListCategory() {
+    public List<String> getListCategory() {
         return this.listCategory;
     }
 
-    public Category getCategory(int position) {
+    public String getCategory(int position) {
         return listCategory.get(position);
     }
 
@@ -46,8 +46,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Category category = listCategory.get(position);
-        holder.myTextView.setText(category.getTitle());
+        String category = listCategory.get(position);
+        holder.myTextView.setText(category);
         if (position == index) {
             holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.grey_active));
         }else {

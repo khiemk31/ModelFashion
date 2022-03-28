@@ -99,5 +99,20 @@ public class MyProduct {
     public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
     }
+
+    @Override
+    public String toString() {
+        return "MyProduct{" +
+                "id='" + id + '\'' +
+                ", product_name='" + product_name + '\'' +
+                ", description='" + description + '\'' +
+                ", price='" + price + '\'' +
+                ", cost='" + cost + '\'' +
+                ", type='" + type + '\'' +
+                ", subtype='" + subtype + '\'' +
+                ", sizes=" + sizes +
+                ", photos=" + photos +
+                '}';
+    }
 }
 
