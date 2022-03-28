@@ -13,7 +13,6 @@ public class Constants {
     public static final String KEY_PRODUCT_ID = "KEY_PRODUCT_ID";
     public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
     public static final String KEY_PRODUCT_NAME = "KEY_PRODUCT_NAME";
-    public static final String KEY_PRODUCT_PRICE = "KEY_PRODUCT_PRICE";
 
     // user res
     public static final String KEY_SAVE_USER = "saveUser";

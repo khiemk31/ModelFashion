@@ -37,4 +37,10 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Single<MyProduct> getProductById(String id, String name){
+        return apiInterface.getProductById(id, name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

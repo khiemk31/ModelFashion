@@ -1,7 +1,7 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_PRICE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -145,7 +145,7 @@ public class MainFragment extends Fragment {
             public void imgClick(int position, MyProduct product) {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
-                intent.putExtra(KEY_PRODUCT_PRICE, product.getPrice());
+                intent.putExtra(KEY_PRODUCT_ID, product.getId());
                 startActivity(intent);
             }
 

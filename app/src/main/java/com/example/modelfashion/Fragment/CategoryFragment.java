@@ -28,7 +28,9 @@ import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
@@ -138,6 +140,21 @@ public class CategoryFragment extends Fragment {
                 }, throwable -> {
                     Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
+
+        compositeDisposable.add(repository.getAllProduct().doOnSubscribe(disposable -> {
+            progressBar.setVisibility(View.VISIBLE);
+        }).subscribe(myProducts -> {
+            progressBar.setVisibility(View.GONE);
+            HashMap<String, String> hmType = new HashMap<>();
+            for (int i = 0; i < myProducts.size(); i++) {
+                hmType.put(myProducts.get(i).getType(), myProducts.get(i).getType());
+            }
+            Set<String> key = hmType.keySet();
+            List<String> arrProductType = new ArrayList<>(key);
+//            categoryAdapter.setListCategory(arrProductType);
+        }, throwable -> {
+
+        }));
     }
 
     private List<Category> listCategory1() {
