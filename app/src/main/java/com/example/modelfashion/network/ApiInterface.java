@@ -44,4 +44,9 @@ public interface ApiInterface {
             @Query("product_name") String productName
     );
 
+    @GET("get_all_products_by_type.php")
+    Single<ArrayList<MyProduct>> getProductByType(
+            @Query("type") String type
+    );
+
 }

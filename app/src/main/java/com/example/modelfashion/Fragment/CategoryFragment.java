@@ -1,6 +1,7 @@
 package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
 import com.example.modelfashion.Model.response.category.Category;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductPreview;
 import com.example.modelfashion.Model.response.product.ProductResponse;
 import com.example.modelfashion.R;
@@ -67,17 +70,18 @@ public class CategoryFragment extends Fragment {
         categoryAdapter.setClickListener((view, position) -> {
             currentCategory = position;
             categoryAdapter.highLightSelectedItem(position);
-            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
+            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
         });
 
         clothesAdapter.setClickListener((position, item) -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
             intent.putExtra(KEY_PRODUCT_ID, item.getId());
+            intent.putExtra(KEY_PRODUCT_NAME, item.getProduct_name());
             startActivity(intent);
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
+            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
             getCategory(repository);
             refreshLayout.setRefreshing(false);
         });
@@ -99,7 +103,6 @@ public class CategoryFragment extends Fragment {
 
         rcvClothes = view.findViewById(R.id.rcv_clothes);
         clothesAdapter = new ClothesAdapter();
-        clothesAdapter.setListProduct(listProduct());
         rcvClothes.setAdapter(clothesAdapter);
         rcvClothes.addItemDecoration(new SpacesItemDecoration(8));
 
@@ -107,9 +110,8 @@ public class CategoryFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refresh_layout);
     }
 
-    private void getProductByCategory(Repository repository, String id) {
-        Single<ProductResponse> productByCategory = repository.getProductByCategory(id);
-        compositeDisposable.add(productByCategory.doOnSubscribe(disposable -> {
+    private void getProductByCategory(Repository repository, String type) {
+        compositeDisposable.add(repository.getProductByType(type).doOnSubscribe(disposable -> {
             // show loading
             progressBar.setVisibility(View.VISIBLE);
         })
@@ -118,28 +120,28 @@ public class CategoryFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 })
                 .subscribe(productResponse -> {
-                    clothesAdapter.setListProduct(productResponse.getData().getResults());
+                    clothesAdapter.setListProduct(productResponse);
                 }, throwable -> {
                     Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
     }
 
     private void getCategory(Repository repository) {
-        Single<CategoryResponse> categoryResponseSingle = repository.getCategory();
-        compositeDisposable.add(categoryResponseSingle.doOnSubscribe(disposable -> {
-            // show loading
-            progressBar.setVisibility(View.VISIBLE);
-        })
-                .doFinally(() -> {
-                    // hide loading
-                    progressBar.setVisibility(View.GONE);
-                })
-                .subscribe(catogoryResponse -> {
-                    categoryAdapter.setListCategory(catogoryResponse.getData().getResults());
-                    getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
-                }, throwable -> {
-                    Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
-                }));
+//        Single<CategoryResponse> categoryResponseSingle = repository.getCategory();
+//        compositeDisposable.add(categoryResponseSingle.doOnSubscribe(disposable -> {
+//            // show loading
+//            progressBar.setVisibility(View.VISIBLE);
+//        })
+//                .doFinally(() -> {
+//                    // hide loading
+//                    progressBar.setVisibility(View.GONE);
+//                })
+//                .subscribe(catogoryResponse -> {
+//                    categoryAdapter.setListCategory(catogoryResponse.getData().getResults());
+//                    getProductByCategory(repository, categoryAdapter.getCategory(currentCategory).getId());
+//                }, throwable -> {
+//                    Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+//                }));
 
         compositeDisposable.add(repository.getAllProduct().doOnSubscribe(disposable -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -151,34 +153,25 @@ public class CategoryFragment extends Fragment {
             }
             Set<String> key = hmType.keySet();
             List<String> arrProductType = new ArrayList<>(key);
-//            categoryAdapter.setListCategory(arrProductType);
+            categoryAdapter.setListCategory(arrProductType);
+
+            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
         }, throwable -> {
 
         }));
     }
 
-    private List<Category> listCategory1() {
-        ArrayList<Category> list = new ArrayList();
-        list.add(new Category("1", "Ba lô", 30));
-        list.add(new Category("2", "Quần", 30));
-        list.add(new Category("3", "Áo", 30));
-        list.add(new Category("4", "Giày", 30));
-        list.add(new Category("5", "Đồ bộ", 30));
+    private List<String> listCategory1() {
+        ArrayList<String> list = new ArrayList();
+        list.add("Ba lô");
+        list.add("Quần");
+        list.add( "Áo");
+        list.add( "Giày");
+        list.add( "Đồ bộ");
         return list;
     }
 
-    private List<ProductPreview> listProduct() {
-        ArrayList<ProductPreview> list = new ArrayList();
-        list.add(new ProductPreview("1", "KIDO SHIRT - BLACK", 21321.0, "", "https://zunezx.com/upload/image/cache/data/banner/Tee/47CC5493-74D4-4164-8454-67A648B99FEA-9d1-crop-400-400.jpeg", "S", 10, 6));
-        list.add(new ProductPreview("2", "TOSHIRO JACKET", 21321.0, "", "https://zunezx.com/upload/image/cache/data/banner/---bAnnEr-tU-chE/2438672C-DE86-413E-8DFA-8B254077B672-0ac-crop-400-400.jpeg", "S", 20, 1));
-        list.add(new ProductPreview("3", "GD - BLACK", 21321.0, "", "", "M", 0, 30));
-        list.add(new ProductPreview("4", "GD - WHITE", 21321.0, "", "", "M", 0, 30));
-        list.add(new ProductPreview("5", "GD - BLACK", 21321.0, "", "", "M", 0, 30));
-        list.add(new ProductPreview("6", "Quần 2", 21321.0, "", "", "M", 0, 30));
-        list.add(new ProductPreview("7", "Quần 3", 21321.0, "", "", "M", 0, 30));
-        list.add(new ProductPreview("8", "Ba lô 1", 21321.0, "", "", "M", 0, 30));
-        return list;
-    }
+
 
     @Override
     public void onDestroy() {

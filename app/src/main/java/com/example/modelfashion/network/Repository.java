@@ -43,4 +43,10 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Single<ArrayList<MyProduct>> getProductByType(String type){
+        return apiInterface.getProductByType(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }
