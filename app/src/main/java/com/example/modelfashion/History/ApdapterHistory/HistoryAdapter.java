@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,20 +20,27 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.History.ViewHistory.DetailHistoryActivity;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
+import com.example.modelfashion.Model.MHistory.BillModel;
 import com.example.modelfashion.Model.MHistory.ModelHistory;
 import com.example.modelfashion.Model.MHistory.ProductHistory;
+import com.example.modelfashion.Model.MHistory.SubProduct;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class HistoryAdapter extends BaseAdapter {
-    List<ModelHistory> listModel;
+    ArrayList<BillModel> listModel;
+    ArrayList<SubProduct> subProducts;
     Context context;
+    ArrayList<MyProduct> myProducts = new ArrayList<>();
 
-    public HistoryAdapter(Context context,List<ModelHistory> listModel) {
+    public HistoryAdapter(Context context,ArrayList<BillModel> listModel,ArrayList<SubProduct> subProducts) {
+        this.subProducts = subProducts;
         this.listModel = listModel;
         this.context = context;
 
@@ -59,7 +67,8 @@ public class HistoryAdapter extends BaseAdapter {
         Locale locale = new Locale("vi","VN");
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
         numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-        String price0 = numberFormat.format(Double.parseDouble(listModel.get(i).getProductHistoryList().get(0).getmPriceProduct()));
+
+
         ImageView img_subproduct0 = view.findViewById(R.id.img_subproduct0);
         TextView tv_name_subproduct0 = view.findViewById(R.id.tv_name_subproduct0);
         TextView tv_sumproduct0 = view.findViewById(R.id.tv_sumproduct0);
@@ -72,15 +81,37 @@ public class HistoryAdapter extends BaseAdapter {
         TextView item_history_time = view.findViewById(R.id.item_history_time);
         TextView tv_feedback = view.findViewById(R.id.tv_feedback);
         LinearLayout ll_item_history = view.findViewById(R.id.ll_item_history);
-        item_history_ma.setText("Mã đơn: "+listModel.get(i).getmIDHistory());
-        item_history_time.setText("Ngày nhận: "+listModel.get(i).getmTimeOrder());
-        Glide.with(context).load(listModel.get(i).getProductHistoryList().get(0).getmImgeProduct()).into(img_subproduct0);
-        tv_name_subproduct0.setText(listModel.get(i).getProductHistoryList().get(0).getmNameProduct());
-        tv_sumproduct0.setText("x"+listModel.get(i).getProductHistoryList().get(0).getmSumProduct());
-        tv_size_subproduct0.setText(listModel.get(i).getProductHistoryList().get(0).getmSizeProduct());
-        tv_price0.setText(price0);
-        tv_sumSP.setText(String.valueOf(listModel.get(i).getProductHistoryList().size())+" Sản phẩm");
-        tv_sumPrice.setText("Tổng: "+sumPrice(listModel.get(i).getProductHistoryList()));
+        item_history_ma.setText("Mã đơn: "+listModel.get(i).getBill_id());
+        item_history_time.setText("Ngày mua: "+listModel.get(i).getDate_created());
+        try {
+            Glide.with(context).load(subProducts.get(i).getMyProducts().get(0).getPhotos().get(0)).into(img_subproduct0);
+
+        }catch (Exception e){
+
+        }
+        //tv_name_subproduct0.setText(listModel.get(i).getBill_detail().get(0).getProduct_name());
+        try {
+            tv_name_subproduct0.setText(subProducts.get(i).getMyProducts().get(0).getProduct_name());
+        }catch (Exception e){}
+
+
+        tv_sumproduct0.setText("x"+listModel.get(i).getBill_detail().get(0).getQuantity());
+        tv_size_subproduct0.setText(listModel.get(i).getBill_detail().get(0).getProduct_size_id());
+        try {
+            for (int index = 0;index<subProducts.size();index++){
+                if(subProducts.get(index).getId().matches(listModel.get(i).getBill_id())){
+                    myProducts = subProducts.get(index).getMyProducts();
+                    break;
+                }
+
+            }
+            String price0 = numberFormat.format(Double.parseDouble(myProducts.get(0).getPrice()));
+            tv_price0.setText(price0);
+        }catch (Exception e){}
+
+        tv_sumSP.setText(String.valueOf(listModel.get(i).getBill_detail().size())+" Sản phẩm");
+        String SumPrice = numberFormat.format(Double.parseDouble(listModel.get(i).getAmount()));
+        tv_sumPrice.setText("Tổng: "+SumPrice);
         tv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +125,7 @@ public class HistoryAdapter extends BaseAdapter {
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadDialogFeedback(context,listModel.get(i).getmIDHistory());
+                loadDialogFeedback(context,listModel.get(i).getBill_id());
             }
         });
         return view;
