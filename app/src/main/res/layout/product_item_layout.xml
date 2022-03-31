@@ -9,13 +9,6 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Product name"
-        android:fontFamily="@font/nunito_variablefont_wght"
-        android:paddingLeft="5dp"
-        android:textColor="@color/black"/>
-    <RelativeLayout
-        android:layout_width="152dp"
-        android:layout_height="wrap_content">
         android:orientation="vertical">
 
         <ImageView
@@ -30,19 +23,6 @@
             android:id="@+id/tv_my_product_name"
             android:layout_width="152dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/nunito_variablefont_wght"
-            android:paddingLeft="5dp"
-            android:text="800.000 đ"
-            android:textColor="@color/black" />
-        <ImageButton
-            android:id="@+id/btn_add_to_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_add"
-            android:backgroundTint="@color/teal_200"/>
             android:fontFamily="@font/nunito_variablefont_wght"
             android:paddingLeft="5dp"
             android:text="Product name"
@@ -51,6 +31,7 @@
         <RelativeLayout
             android:layout_width="152dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/tv_my_product_price"
                 android:layout_width="152dp"
