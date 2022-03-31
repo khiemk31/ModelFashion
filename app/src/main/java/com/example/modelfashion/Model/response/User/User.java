@@ -29,12 +29,12 @@ public class User {
         this.avatar = avatar;
     }
 
-    public User() {
+    public User(String s, String s1, String s2, String s3, String s4, String s5, String s6) {
 
     }
     @Override
     public String toString() {
-        return "User{" +
+        return "{"+
                 "id='" + id + '\'' +
                 ", taiKhoan='" + taiKhoan + '\'' +
                 ", matKhau='" + matKhau + '\'' +

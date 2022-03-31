@@ -15,10 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
+import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
+import com.google.gson.Gson;
+
 import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,6 +90,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
+                    progressLoadingCommon.showProgressLoading(SignInActivity.this);
                     checkLogin();
                 }
             }
@@ -104,7 +109,6 @@ public class SignInActivity extends AppCompatActivity {
                 .enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        progressLoadingCommon.showProgressLoading(SignInActivity.this);
                         if (response.code() == 200) {
                             if (cbSaveValue.isChecked()) {
                                 Boolean aBoolean = cbSaveValue.isChecked();
@@ -116,6 +120,13 @@ public class SignInActivity extends AppCompatActivity {
                             } else {
                                 sharedPreferences.edit().clear().apply();
                             }
+
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER,MODE_MULTI_PROCESS);
+                            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+                            prefsEditor.putString(Constants.KEY_GET_USER, response.body().toString());
+                            prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                            prefsEditor.apply();
+
                             Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         } else {

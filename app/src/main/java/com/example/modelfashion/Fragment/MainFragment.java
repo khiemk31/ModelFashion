@@ -2,50 +2,34 @@ package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_PRICE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
-import com.example.modelfashion.Adapter.ViewPagerMainFmAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Model.ItemSaleMain;
-import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.product.ProductResponse;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
-import com.example.modelfashion.customview.InnerTabLayout;
-import com.example.modelfashion.customview.SearchBar;
 import com.example.modelfashion.network.Repository;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Single;
@@ -81,7 +65,7 @@ public class MainFragment extends Fragment {
     };
 
     public MainFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -97,12 +81,11 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         refreshLayout = view.findViewById(R.id.refresh_layout);
-        searchView = view.findViewById(R.id.search_bar);
+        searchView = view.findViewById(R.id.search_view);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
-
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -119,12 +102,28 @@ public class MainFragment extends Fragment {
                 mHandler.postDelayed(mRunable, 2000);
             }
         });
-
-//        searchBar.onSearchBarClick(contentSearch -> {
-//            // TODO Search
-//        });
-
         initData();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                ArrayList<Product> filteredProduct =new ArrayList<Product>( );
+//                for (Product product: productListAdapter)
+//                return false;
+//            }
+        });
+
+
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.VISIBLE);
@@ -146,7 +145,7 @@ public class MainFragment extends Fragment {
             public void imgClick(int position, MyProduct product) {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
-                intent.putExtra(KEY_PRODUCT_PRICE, product.getPrice());
+                intent.putExtra(KEY_PRODUCT_ID, product.getId());
                 startActivity(intent);
             }
 
@@ -157,32 +156,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void initRcvProduct() {
-        ArrayList<Product> arrProduct = new ArrayList<>();
-        ArrayList<String> arrProductType = new ArrayList<String>(Arrays.asList("Áo", "Quần", "Ba Lô"));
-        arrProduct.add(new Product(1, "Áo 1", "", "100.000 đ", "", "Áo", 0));
-        arrProduct.add(new Product(2, "Áo 2", "", "200.000 đ", "", "Áo", 0));
-        arrProduct.add(new Product(3, "Quần 1", "", "100.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(4, "Quần 2", "", "200.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(5, "Quần 3", "", "300.000 đ", "", "Quần", 0));
-        arrProduct.add(new Product(6, "Ba lô 1", "", "100.000 đ", "", "Ba Lô", 0));
-//        ProductListAdapter productListAdapter = new ProductListAdapter(requireContext(), arrProductType, arrProduct);
-//        rcvProduct.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-//        rcvProduct.setAdapter(productListAdapter);
-//        productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
-//            @Override
-//            public void imgClick(int position, MyProduct product) {
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_ID, product.getId());
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void imgAddToCartClick(int position, MyProduct product) {
-//                // TODO add to cart
-//            }
-//        });
-    }
+
 
     private void getAllProduct(Repository repository) {
         Single<ArrayList<MyProduct>> products = repository.getAllProduct();
@@ -198,7 +172,7 @@ public class MainFragment extends Fragment {
 
                     HashMap<String, String> hmType = new HashMap<>();
                     for (int i = 0; i < it.size(); i++) {
-                        hmType.put(it.get(i).getType(),it.get(i).getType());
+                        hmType.put(it.get(i).getType(), it.get(i).getType());
                     }
                     Set<String> key = hmType.keySet();
                     ArrayList<String> arrProductType = new ArrayList<>(key);
@@ -210,6 +184,8 @@ public class MainFragment extends Fragment {
                     Log.d(Constants.ERROR_MESSAGE, throwable.toString());
                 }));
     }
+
+
 
     @Override
     public void onDestroy() {

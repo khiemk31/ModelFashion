@@ -2,32 +2,33 @@ package com.example.modelfashion.Activity;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_PRICE;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.network.Repository;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,21 +40,26 @@ public class ProductDetailActivity extends AppCompatActivity {
             btn_mua_ngay, btn_them_vao_gio_hang;
     private ViewPager2 viewPager;
     private ViewPagerDetailProductAdapter adapter;
+    private Repository repository;
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private ProgressBar progressBar;
+
     ArrayList<Sizes> arr_size = new ArrayList<>();
     String size_id;
     String user_id = "1";
-    String price = "";
-    String product_name = "";
+    String productId = "";
+    String productName = "";
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         Intent intent = getIntent();
-        product_name = intent.getStringExtra(KEY_PRODUCT_NAME);
-        price = intent.getStringExtra(KEY_PRODUCT_PRICE);
+        productName = intent.getStringExtra(KEY_PRODUCT_NAME);
+        productId = intent.getStringExtra(KEY_PRODUCT_ID);
         // TODO use id to call detail product api
-        ApiRetrofit.apiRetrofit.GetProductsSize(product_name).enqueue(new Callback<ArrayList<Sizes>>() {
+        ApiRetrofit.apiRetrofit.GetProductsSize(productName).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
             public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
                 arr_size = response.body();
@@ -65,13 +71,31 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             }
         });
+        repository = new Repository(getApplicationContext());
+
         initView();
         initData();
         initListener();
     }
 
     private void initData() {
+        disposable.add(
+                repository.getProductById(productId, productName).doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).subscribe(myProduct -> {
+                    progressBar.setVisibility(View.GONE);
+                    setData(myProduct);
 
+                }, throwable -> {
+
+                }));
+    }
+
+    private void setData(MyProduct myProduct) {
+        adapter.setArrItem(myProduct.getPhotos());
+        tv_product_name.setText(myProduct.getProduct_name());
+        tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
+        Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
     }
 
     private int currentCoverImage = 0;
@@ -106,22 +130,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
             size_id = arr_size.get(0).getId();
-            Toast.makeText(this, "Đã chọn size "+arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size " + arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
             size_id = arr_size.get(1).getId();
-            Toast.makeText(this, "Đã chọn size "+arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size " + arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
             size_id = arr_size.get(2).getId();
-            Toast.makeText(this, "Đã chọn size "+arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size " + arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
             size_id = arr_size.get(3).getId();
-            Toast.makeText(this, "Đã chọn size "+arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã chọn size " + arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
         });
 
         tv_price.setText("650,000 VND");
@@ -132,26 +156,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         btn_mua_ngay.setOnClickListener(view -> {
             // TODO BUY
             String date = LocalDate.now().toString();
-            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id,"1").enqueue(new Callback<String>() {
+            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    if(response.body().equals("ok")){
-                        ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id,date,price,size_id).enqueue(new Callback<String>() {
+                    if (response.body().equals("ok")) {
+                        ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id, date, productId, size_id).enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
-                                Toast.makeText(ProductDetailActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductDetailActivity.this, "" + response.body(), Toast.LENGTH_SHORT).show();
                             }
+
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
 
                             }
                         });
-                    }else if(response.body().equals("fail")){
+                    } else if (response.body().equals("fail")) {
                         Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
 
@@ -160,21 +186,21 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
-            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id,"1").enqueue(new Callback<String>() {
+            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    if(response.body().equals("ok")){
-                        ApiRetrofit.apiRetrofit.InsertCart(user_id,size_id,product_name,"1").enqueue(new Callback<String>() {
+                    if (response.body().equals("ok")) {
+                        ApiRetrofit.apiRetrofit.InsertCart(user_id, size_id, productName, "1").enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.body().equals("duplicated")){
+                                if (response.body().equals("duplicated")) {
                                     Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    if(response.body().equals("ok")){
+                                } else {
+                                    if (response.body().equals("ok")) {
                                         Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
-                                    }else {
+                                    } else {
                                         Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
-                                        Log.e("err",response.body());
+                                        Log.e("err", response.body());
                                     }
                                 }
                             }
@@ -184,9 +210,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                             }
                         });
-                    }else if(response.body().equals("fail")){
+                    } else if (response.body().equals("fail")) {
                         Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -200,6 +226,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        progressBar = findViewById(R.id.progress_bar);
         viewPager = findViewById(R.id.view_pager);
         img_back = findViewById(R.id.img_back);
         img_cart = findViewById(R.id.img_cart);
@@ -219,7 +246,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         btn_them_vao_gio_hang = findViewById(R.id.btn_them_vao_gio_hang);
 
         adapter = new ViewPagerDetailProductAdapter();
-        adapter.setArrItem(listDetailImage());
+
         viewPager.setAdapter(adapter);
     }
 
@@ -234,5 +261,11 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void loadImageUrl(String url, ImageView img) {
         Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.clear();
     }
 }

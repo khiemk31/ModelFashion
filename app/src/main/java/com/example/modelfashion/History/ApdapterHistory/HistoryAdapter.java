@@ -121,7 +121,7 @@ public class HistoryAdapter extends BaseAdapter {
         EditText edt_title = dialog.findViewById(R.id.edt_title);
         EditText edt_content = dialog.findViewById(R.id.edt_content);
         TextView btn_send = dialog.findViewById(R.id.btn_send);
-        edt_title.setText("Feedback đơn hàng "+maDH);
+        edt_title.setText("Phản hồi đơn hàng "+maDH);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

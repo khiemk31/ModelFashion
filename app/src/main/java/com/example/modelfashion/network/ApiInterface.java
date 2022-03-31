@@ -14,6 +14,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface ApiInterface {
@@ -29,11 +30,23 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("insert_user.php")
-    Call<String> insertUser (@Field("taikhoan") String taikhoan,
-                             @Field("matkhau") String matkhau);
+    Call<String> insertUser(@Field("taikhoan") String taikhoan,
+                            @Field("matkhau") String matkhau);
 
     @FormUrlEncoded
     @POST("check_login_user.php")
-    Call<User> checkLogin (@Field("taikhoan") String taikhoan,
-                           @Field("matkhau") String matkhau);
+    Call<User> checkLogin(@Field("taikhoan") String taikhoan,
+                          @Field("matkhau") String matkhau);
+
+    @GET("get_product_by_id.php")
+    Single<MyProduct> getProductById(
+            @Query("product_id") String productId,
+            @Query("product_name") String productName
+    );
+
+    @GET("get_all_products_by_type.php")
+    Single<ArrayList<MyProduct>> getProductByType(
+            @Query("type") String type
+    );
+
 }
