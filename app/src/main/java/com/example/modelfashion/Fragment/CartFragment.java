@@ -159,14 +159,14 @@ public class CartFragment extends Fragment {
                 if(response.body().equalsIgnoreCase("ok")){
                     Toast.makeText(getContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getContext(), "Lỗi"+response.body(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
                 }
                 check_load_successful = true;
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.e("error",t.toString());
+
             }
         });
     }
