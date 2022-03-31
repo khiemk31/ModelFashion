@@ -5,11 +5,6 @@ import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
-import com.example.modelfashion.Model.response.category.Category;
-import com.example.modelfashion.Model.response.category.CategoryResponse;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.product.ProductPreview;
-import com.example.modelfashion.Model.response.product.ProductResponse;
+import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.R;
-import com.example.modelfashion.customview.SearchBar;
 import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
@@ -35,11 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class CategoryFragment extends Fragment {
-    SearchBar searchBar;
+    SearchView searchView;
     private CategoryAdapter categoryAdapter;
     private ClothesAdapter clothesAdapter;
     private RecyclerView rcvCategory, rcvClothes;
@@ -54,17 +48,41 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         initView(view);
+
+
+
         initData();
         initListener();
         return view;
     }
 
     private void initListener() {
-        searchBar.onSearchBarClick(content -> {
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                ArrayList<Product> filteredProduct = new ArrayList<Product>();
+                for (Product product : listProduct) {
+                    if (product.getProductName().toLowerCase().contains(s.toLowerCase())) {
+                        filteredProduct.add(product);
+                    }
+                }
+                for (Product product:filteredProduct){
+                    Log.d("data", "onQueryTextChange: "+product.getProductName());
+                }
+
+                return false;
+            }
         });
 
         categoryAdapter.setClickListener((view, position) -> {
@@ -93,8 +111,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void initView(View view) {
-        searchBar = view.findViewById(R.id.search_bar);
-
+        searchView = view.findViewById(R.id.search_view);
         categoryAdapter = new CategoryAdapter();
         categoryAdapter.setListCategory(listCategory1());
         rcvCategory = view.findViewById(R.id.rcv_category);

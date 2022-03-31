@@ -55,25 +55,20 @@
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/drawable/transition_background_drawable_person.xml" value="0.1125" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_history.xml" value="0.1" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.136" />
-<<<<<<< HEAD
-=======
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_order_status.xml" value="0.1539855072463768" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_product_detail.xml" value="0.11851851851851852" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.10104166666666667" />
->>>>>>> 65108efda4f2ba36c0b35346c77072505bf533b7
-        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.10104166666666667" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.4455611390284757" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_sign_up.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/dialog_feedback.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_cart.xml" value="0.1" />
-        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_category.xml" value="0.1" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_category.xml" value="0.2" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_category_men.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_category_women.xml" value="0.10104166666666667" />
-        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_main.xml" value="0.2747524752475248" />
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_main.xml" value="0.4" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_men_page.xml" value="0.10104166666666667" />
-        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.12" />
-<<<<<<< HEAD
-=======
+        <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/fragment_women_page.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/item_cart.xml" value="0.1" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/item_category_left_list.xml" value="0.264" />
@@ -90,48 +85,24 @@
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/rv_product_items_layout.xml" value="0.22826086956521738" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/sale_item_main.xml" value="0.22826086956521738" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/layout/view_search.xml" value="0.22826086956521738" />
->>>>>>> 65108efda4f2ba36c0b35346c77072505bf533b7
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/menu/menu_navigation.xml" value="0.10104166666666667" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1425" />
         <entry key="..\:/DATN/ModelFashion/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1425" />
         <entry key="..\:/DATN/ModelFashionShop/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_btn_out.xml" value="0.1215" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_btn_product_detail_buy.xml" value="0.1815" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_detail_history.xml" value="0.2361111111111111" />
-<<<<<<< HEAD
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bg_top_filter.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_filter_history_cancel.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_filter_history_ok.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_filter_history_select.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_item_filter_history.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_item_history.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/cart_profile.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/ic_back_detail_history.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/ic_cart.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/ic_next_history.xml" value="0.1815" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/ic_next_profile.xml" value="0.1815" />
-=======
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_bg_feedback.xml" value="0.2025" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_btn_feedback.xml" value="0.2025" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_item_history.xml" value="0.1735" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/drawable/bt_toolbar_history.xml" value="0.1735" />
->>>>>>> 65108efda4f2ba36c0b35346c77072505bf533b7
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_detail_history.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_history.xml" value="0.264" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_main.xml" value="0.12563323201621074" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_order_status_detail.xml" value="0.11614583333333334" />
-<<<<<<< HEAD
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.14356884057971014" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/dialog_feedback.xml" value="0.14356884057971014" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/dialog_filter_history.xml" value="0.2" />
-        <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
-=======
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_profile.xml" value="0.11614583333333334" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/activity_sign_in.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/dialog_feedback.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/fragment_profile.xml" value="0.19429347826086957" />
->>>>>>> 65108efda4f2ba36c0b35346c77072505bf533b7
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_history.xml" value="0.16621376811594202" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_orderstatus.xml" value="0.19429347826086957" />
         <entry key="..\:/MyData/Ky_7/ModelFashion/app/src/main/res/layout/item_subproducts.xml" value="0.2" />

@@ -23,6 +23,7 @@ import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Model.ItemSaleMain;
+import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
@@ -40,12 +41,11 @@ import me.relex.circleindicator.CircleIndicator3;
 public class MainFragment extends Fragment {
     private ViewPager2 vpSaleMain;
     private CircleIndicator3 ciSale;
-    private SearchView searchView;
     private RecyclerView rcvProduct;
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
-
+    ArrayList<Product> listProduct = new ArrayList<>();
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -78,10 +78,8 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         refreshLayout = view.findViewById(R.id.refresh_layout);
-        searchView = view.findViewById(R.id.search_view);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
@@ -104,24 +102,7 @@ public class MainFragment extends Fragment {
         });
         initData();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//                ArrayList<Product> filteredProduct =new ArrayList<Product>( );
-//                for (Product product: productListAdapter)
-//                return false;
-//            }
-        });
 
 
         refreshLayout.setOnRefreshListener(() -> {
@@ -129,7 +110,6 @@ public class MainFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             getAllProduct(repository);
         });
-
         return view;
     }
 
@@ -155,7 +135,6 @@ public class MainFragment extends Fragment {
             }
         });
     }
-
 
 
     private void getAllProduct(Repository repository) {
@@ -184,7 +163,6 @@ public class MainFragment extends Fragment {
                     Log.d(Constants.ERROR_MESSAGE, throwable.toString());
                 }));
     }
-
 
 
     @Override
