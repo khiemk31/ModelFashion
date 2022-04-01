@@ -1,8 +1,11 @@
 package com.example.modelfashion.customview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,38 +33,55 @@ public class SearchBar extends ConstraintLayout {
         View view = inflate(getContext(), R.layout.view_search, this);
 
         // get attributes
-        TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.MySearchView);
+        @SuppressLint("CustomViewStyleable") TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.MySearchView);
         Drawable rightIcon = attributes.getDrawable(R.styleable.MySearchView_right_drawable);
         String rightIconString = attributes.getString(R.styleable.MySearchView_right_drawable);
 
         // init view
-        ImageView icRight = view.findViewById(R.id.img_right_ic_search_view);
         EditText edt = view.findViewById(R.id.edt_search_view);
+        ImageView imgClear = view.findViewById(R.id.img_clear_text);
 
-
-        if (rightIcon != null) {
-            icRight.setImageDrawable(rightIcon);
-        }
-        if (rightIconString.equals("none")) {
-            icRight.setVisibility(GONE);
-        }
-
-        icRight.setOnClickListener(view1 -> {
-            searchListener.onSearchClick(edt.getText().toString());
+        imgClear.setOnClickListener(view1 -> {
+            edt.setText("");
+            imgClear.setVisibility(GONE);
+            searchListener.onClearClick();
         });
 
+        edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().isEmpty()) {
+                    imgClear.setVisibility(GONE);
+                } else {
+                    imgClear.setVisibility(VISIBLE);
+                }
+                searchListener.afterTextChanged(editable.toString());
+            }
+        });
 
         attributes.recycle();
     }
 
     private SearchListener searchListener;
 
-    public void onSearchBarClick(SearchListener searchListener){
+    public void onSearchBarClick(SearchListener searchListener) {
         this.searchListener = searchListener;
     }
 
-    public interface SearchListener{
-        void onSearchClick(String contentSearch);
+    public interface SearchListener {
+        void onClearClick();
+
+        void afterTextChanged(String content);
     }
 
 }
