@@ -25,6 +25,7 @@ import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 import com.example.modelfashion.network.Repository;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -45,8 +46,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     ArrayList<Sizes> arr_size = new ArrayList<>();
-    String size_id;
-    String user_id = "1";
+    String size_id, price;
+    String user_id = "";
     String productId = "";
     String productName = "";
 
@@ -56,8 +57,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         Intent intent = getIntent();
+        user_id = intent.getStringExtra("user_id");
         productName = intent.getStringExtra(KEY_PRODUCT_NAME);
         productId = intent.getStringExtra(KEY_PRODUCT_ID);
+        Log.e("t1", user_id+" ");
         // TODO use id to call detail product api
         ApiRetrofit.apiRetrofit.GetProductsSize(productName).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
@@ -92,9 +95,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void setData(MyProduct myProduct) {
+        DecimalFormat format = new DecimalFormat("###,###,###");
         adapter.setArrItem(myProduct.getPhotos());
+        price = myProduct.getPrice();
         tv_product_name.setText(myProduct.getProduct_name());
+        tv_price.setText(format.format(Integer.parseInt(myProduct.getPrice()))+" VNĐ");
         tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
+
         Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
     }
 
@@ -155,73 +162,81 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         btn_mua_ngay.setOnClickListener(view -> {
             // TODO BUY
-            String date = LocalDate.now().toString();
-            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    if (response.body().equals("ok")) {
-                        ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id, date, productId, size_id).enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                Toast.makeText(ProductDetailActivity.this, "" + response.body(), Toast.LENGTH_SHORT).show();
-                            }
+            if(user_id.equalsIgnoreCase("null")){
+                Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                String date = LocalDate.now().toString();
+                ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.body().equals("ok")) {
+                            ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id, date, price, size_id).enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    Toast.makeText(ProductDetailActivity.this, "" + response.body(), Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
 
-                            }
-                        });
-                    } else if (response.body().equals("fail")) {
-                        Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else if (response.body().equals("fail")) {
+                            Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
 
-                }
-            });
+                    }
+                });
+            }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
-            ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    if (response.body().equals("ok")) {
-                        ApiRetrofit.apiRetrofit.InsertCart(user_id, size_id, productName, "1").enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if (response.body().equals("duplicated")) {
-                                    Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (response.body().equals("ok")) {
-                                        Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
+            if(user_id.equalsIgnoreCase("null")){
+                Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.body().equals("ok")) {
+                            ApiRetrofit.apiRetrofit.InsertCart(user_id, size_id, productName, "1").enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    if (response.body().equals("duplicated")) {
+                                        Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
-                                        Log.e("err", response.body());
+                                        if (response.body().equals("ok")) {
+                                            Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                            Log.e("err", response.body());
+                                        }
                                     }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
 
-                            }
-                        });
-                    } else if (response.body().equals("fail")) {
-                        Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else if (response.body().equals("fail")) {
+                            Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
 
-                }
-            });
+                    }
+                });
+            }
         });
     }
 
@@ -250,14 +265,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private ArrayList<String> listDetailImage() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/42BA878D-053A-4FA1-9444-1865E38690C4-a69-crop-550-550.jpeg");
-        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/CBF4903A-0C16-4F81-AEC5-4000A1D11120-470-crop-550-550.jpeg");
-        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/33DC813B-A4BF-4F91-8ADA-F2B0C85A225A-1e8-crop-550-550.jpeg");
-        arrayList.add("https://zunezx.com/upload/image/data/banner/Tee/05D3F876-B270-4916-9FF0-FE48332E1DB3-da9.jpeg");
-        return arrayList;
-    }
+//    private ArrayList<String> listDetailImage() {
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/42BA878D-053A-4FA1-9444-1865E38690C4-a69-crop-550-550.jpeg");
+//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/CBF4903A-0C16-4F81-AEC5-4000A1D11120-470-crop-550-550.jpeg");
+//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/33DC813B-A4BF-4F91-8ADA-F2B0C85A225A-1e8-crop-550-550.jpeg");
+//        arrayList.add("https://zunezx.com/upload/image/data/banner/Tee/05D3F876-B270-4916-9FF0-FE48332E1DB3-da9.jpeg");
+//        return arrayList;
+//    }
 
     private void loadImageUrl(String url, ImageView img) {
         Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
@@ -19,10 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
+import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
+import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
@@ -35,6 +39,9 @@ import java.util.Set;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import me.relex.circleindicator.CircleIndicator3;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainFragment extends Fragment {
@@ -45,6 +52,8 @@ public class MainFragment extends Fragment {
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
+    private ImageView avatar;
+    private String user_id;
 
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
 
@@ -86,6 +95,11 @@ public class MainFragment extends Fragment {
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
+        avatar = view.findViewById(R.id.imageView3);
+
+        Bundle info = getArguments();
+        user_id = info.getString("user_id");
+        setUserAvatar(user_id);
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -146,6 +160,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
                 intent.putExtra(KEY_PRODUCT_ID, product.getId());
+                intent.putExtra("user_id",user_id);
                 startActivity(intent);
             }
 
@@ -156,7 +171,22 @@ public class MainFragment extends Fragment {
         });
     }
 
+    private void setUserAvatar(String user_id){
+        if(!user_id.equalsIgnoreCase("null")){
+            ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    User user = response.body();
+                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
+                }
 
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+        }
+    }
 
     private void getAllProduct(Repository repository) {
         Single<ArrayList<MyProduct>> products = repository.getAllProduct();

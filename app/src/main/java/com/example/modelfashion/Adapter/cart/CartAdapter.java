@@ -1,5 +1,6 @@
 package com.example.modelfashion.Adapter.cart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +27,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     private ArrayList<MyProduct> productArrayList;
     private ArrayList<Sizes> arrSize;
     private Context context;
+    private CartOnClick cartOnClick;
     public CartAdapter(ArrayList<MyProduct> productArrayList, ArrayList<Sizes> arrSize, Context context) {
         this.productArrayList = productArrayList;
         this.arrSize = arrSize;
         this.context =context;
     }
 
+    public void setOnClick(CartOnClick cartOnClick){
+        this.cartOnClick = cartOnClick;
+    }
+
     public class ViewHoder extends RecyclerView.ViewHolder {
-        private TextView nameProduct, priceProduct, sizeProduct, amount;
+        private TextView nameProduct, priceProduct, sizeProduct, amount, delete;
         private Button btnIncrease, btnDecrease;
         private ImageView imgCart;
         public ViewHoder(@NonNull View itemView) {
@@ -45,6 +51,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             amount = itemView.findViewById(R.id.tv_amount);
             btnIncrease = itemView.findViewById(R.id.btn_increase);
             btnDecrease = itemView.findViewById(R.id.btn_decrease);
+            delete = itemView.findViewById(R.id.tv_delete);
         }
     }
 
@@ -56,7 +63,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHoder holder, @SuppressLint("RecyclerView") int position) {
         AtomicInteger minteger= new AtomicInteger(1);
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         String money_format = formatter.format(Integer.parseInt(productArrayList.get(position).getPrice()));
@@ -64,6 +71,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         holder.priceProduct.setText("Giá: "+money_format+" VNĐ");
         holder.sizeProduct.setText("Size: "+arrSize.get(position).getSize());
         Glide.with(context).load(productArrayList.get(position).getPhotos().get(2)).into(holder.imgCart);
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cartOnClick.OnClick(position, arrSize.get(position).getId());
+            }
+        });
         holder.btnIncrease.setOnClickListener(view -> {
             minteger.set(minteger.get() + 1);
                 holder.amount.setText(""+minteger);
@@ -84,5 +97,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         return productArrayList.size();
     }
 
+    public interface CartOnClick{
+        void OnClick(int position, String size_id);
+    }
 
 }
