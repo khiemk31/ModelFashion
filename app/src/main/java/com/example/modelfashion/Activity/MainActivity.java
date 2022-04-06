@@ -102,4 +102,10 @@ public class MainActivity extends AppCompatActivity {
     public void hideBottomNavigation(){
         navigationView.setVisibility(View.GONE);
     }
+
+    public void moveToFragmentProfile(){
+        FragmentProfile fragmentProfile = new FragmentProfile();
+        replaceFragment(fragmentProfile);
+        navigationView.setSelectedItemId(R.id.main_item_profile);
+    }
 }
