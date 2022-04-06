@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-
+                    progressLoadingCommon.showProgressLoading(SignUpActivity.this);
                     insertUser();
                 }
             }
@@ -88,19 +88,21 @@ public class SignUpActivity extends AppCompatActivity {
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        progressLoadingCommon.showProgressLoading(SignUpActivity.this);
+
                         if (response.code() == 200) {
                             //progressLoadingCommon.hideProgressLoading(SignUpActivity.this);
                             Toast.makeText(SignUpActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
                             Log.e("123", String.valueOf(response));
                             onBackPressed();
                         }else {
+
                             Toast.makeText(SignUpActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+
                         Toast.makeText(SignUpActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });

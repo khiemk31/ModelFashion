@@ -1,26 +1,17 @@
 package com.example.modelfashion.Fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
@@ -30,22 +21,18 @@ import com.example.modelfashion.Activity.SignIn.SignUpActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.Model.response.User.User;
-import com.example.modelfashion.OrderStatus.ViewOrderStatus.OrderStatusActivity;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
-import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONObject;
-
-import bolts.Bolts;
 
 
 public class FragmentProfile extends Fragment {
     PreferenceManager preferenceManager;
     TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_history, btn_logout, tv_signUp;
-    LinearLayout btn_status,btn_status2,btn_status3;
+    LinearLayout btn_status, btn_status2, btn_status3;
     RoundedImageView img;
     TextView btn_feedback;
     LinearLayout ll_login;
@@ -69,7 +56,6 @@ public class FragmentProfile extends Fragment {
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
-
         Bundle info = getArguments();
         user_id = info.getString("user_id");
         preferenceManager = new PreferenceManager(getContext());
@@ -173,7 +159,6 @@ public class FragmentProfile extends Fragment {
             startActivity(intent);
         });
     }
-
 
 
 }

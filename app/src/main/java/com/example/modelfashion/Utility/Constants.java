@@ -29,4 +29,8 @@ public class Constants {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_AVARTAR = "avatar";
 
+    // login
+    public static final String KEY_SAVE_USER_INFO = "KEY_SAVE_USER_INFO";
+    public static final String KEY_SAVE_PASSWORD_INFO = "KEY_SAVE_PASSWORD_INFO";
+    public static final String KEY_SAVE_CHECK_BOX = "KEY_SAVE_CHECK_BOX";
 }

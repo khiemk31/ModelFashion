@@ -129,4 +129,17 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    public void showBottomNavigation(){
+        navigationView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomNavigation(){
+        navigationView.setVisibility(View.GONE);
+    }
+
+    public void moveToFragmentProfile(){
+        FragmentProfile fragmentProfile = new FragmentProfile();
+        replaceFragment(fragmentProfile);
+        navigationView.setSelectedItemId(R.id.main_item_profile);
+    }
 }

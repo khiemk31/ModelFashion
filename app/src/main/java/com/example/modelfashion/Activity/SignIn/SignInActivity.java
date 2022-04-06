@@ -140,6 +140,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
+                        Log.e("DangNhap",t.toString());
                         Toast.makeText(SignInActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
