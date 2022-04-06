@@ -11,15 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Model.ItemSaleMain;
@@ -27,10 +31,15 @@ import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.Repository;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 
 import io.reactivex.Single;
@@ -47,6 +56,9 @@ public class MainFragment extends Fragment {
     private SwipeRefreshLayout refreshLayout;
     ArrayList<Product> listProduct = new ArrayList<>();
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
+    private TextView tvCurrentDate, tvGreeting;
+    private ImageView imgUserAvatar;
+    private PreferenceManager preferenceManager;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -84,6 +96,11 @@ public class MainFragment extends Fragment {
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
+        tvCurrentDate = view.findViewById(R.id.tv_current_date);
+        tvGreeting = view.findViewById(R.id.tv_greeting);
+        imgUserAvatar = view.findViewById(R.id.img_user_avatar);
+        preferenceManager = new PreferenceManager(requireContext());
+
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -102,8 +119,8 @@ public class MainFragment extends Fragment {
         });
         initData();
 
-
-
+        initHeader();
+        initClickProfileAvatar();
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
@@ -111,6 +128,30 @@ public class MainFragment extends Fragment {
             getAllProduct(repository);
         });
         return view;
+    }
+
+    private void initClickProfileAvatar() {
+        imgUserAvatar.setOnClickListener(view -> {
+            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
+                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
+            } else {
+                startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
+            }
+        });
+
+    }
+
+    private void initHeader() {
+        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+        Calendar cal = Calendar.getInstance(Locale.US);
+        tvCurrentDate.setText(dateFormat.format(cal.getTime()));
+
+        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+            tvGreeting.setText("Good morning");
+        } else {
+            tvGreeting.setText("Good afternoon");
+        }
+        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
     }
 
     private void initData() {

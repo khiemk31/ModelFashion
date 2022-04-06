@@ -8,6 +8,7 @@ import com.example.modelfashion.Model.response.product.ProductResponse;
 import java.util.ArrayList;
 
 import io.reactivex.Single;
+import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -48,5 +49,9 @@ public interface ApiInterface {
     Single<ArrayList<MyProduct>> getProductByType(
             @Query("type") String type
     );
+
+    @POST("check_login_user.php")
+    Single<Unit> login(@Query("taikhoan") String tk,
+                       @Query("matkhau") String mk);
 
 }

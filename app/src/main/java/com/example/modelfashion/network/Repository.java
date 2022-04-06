@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 
 public final class Repository {
     private ApiInterface apiInterface;
@@ -49,4 +50,9 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Single<Unit> login(String tk, String mk){
+        return apiInterface.login(tk, mk)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
