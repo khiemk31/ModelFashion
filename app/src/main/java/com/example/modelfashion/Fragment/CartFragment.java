@@ -1,4 +1,5 @@
 package com.example.modelfashion.Fragment;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.Product;
@@ -72,7 +75,6 @@ public class CartFragment extends Fragment {
                     String date = LocalDate.now().toString();
                     check_load_successful = false;
                     insertBill(user_id, total_money, date, arr_json);
-
                 }
             }
         });
@@ -92,17 +94,18 @@ public class CartFragment extends Fragment {
                 JSONArray json_size_id = new JSONArray(arr_size_id);
                 getProductInfo(json_product_name, json_size_id);
                 getAmountCart(json_product_name);
+                Log.e("cart", arrCart.size()+"");
             }
 
             @Override
             public void onFailure(Call<ArrayList<CartProduct>> call, Throwable t) {
-
+                Log.e("loaderr",t.toString());
             }
         });
     }
 
     private void getProductInfo(JSONArray arr_product_name, JSONArray arr_size_id) {
-        ApiRetrofit.apiRetrofit.GetProductByName(arr_product_name).enqueue(new Callback<ArrayList<MyProduct>>() {
+        ApiRetrofit.apiRetrofit.GetProductByName(arr_product_name, user_id).enqueue(new Callback<ArrayList<MyProduct>>() {
             @Override
             public void onResponse(Call<ArrayList<MyProduct>> call, Response<ArrayList<MyProduct>> response) {
                 arrProduct = response.body();
@@ -111,13 +114,13 @@ public class CartFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<MyProduct>> call, Throwable t) {
-
+                Log.e("loaderr",t.toString());
             }
         });
     }
 
     private void getSizeInfo(JSONArray arr_size_id) {
-        ApiRetrofit.apiRetrofit.GetSizeById(arr_size_id).enqueue(new Callback<ArrayList<Sizes>>() {
+        ApiRetrofit.apiRetrofit.GetSizeById(arr_size_id, user_id).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
             public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
                 arrSize = response.body();
@@ -126,13 +129,13 @@ public class CartFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<Sizes>> call, Throwable t) {
-
+                Log.e("loaderr",t.toString());
             }
         });
     }
 
     private void getAmountCart(JSONArray arr_product_name) {
-        ApiRetrofit.apiRetrofit.GetAmountCart(arr_product_name).enqueue(new Callback<String>() {
+        ApiRetrofit.apiRetrofit.GetAmountCart(arr_product_name, user_id).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(arr_product_name.length()>0){
@@ -144,10 +147,9 @@ public class CartFragment extends Fragment {
                 }
                 tvTotal.setText("Tổng tiền: " + response.body() + " VNĐ");
             }
-
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                    Log.e("loaderr",t.toString());
             }
         });
     }
@@ -157,16 +159,18 @@ public class CartFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.body().equalsIgnoreCase("ok")){
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
                     Toast.makeText(getContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi"+response.body(), Toast.LENGTH_SHORT).show();
                 }
                 check_load_successful = true;
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                Log.e("loaderr",t.toString());
             }
         });
     }
@@ -174,6 +178,29 @@ public class CartFragment extends Fragment {
         CartAdapter adapter = new CartAdapter(arrProduct, arrSize, getContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        adapter.setOnClick(new CartAdapter.CartOnClick() {
+            @Override
+            public void OnClick(int position, String size_id) {
+                arrProduct.remove(position);
+                arrSize.remove(position);
+                ApiRetrofit.apiRetrofit.DeleteProductFromCart(user_id,size_id).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if(response.body().equalsIgnoreCase("ok")){
+                            getCart();
+                        }else {
+                            Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
 }

@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Model.response.User.User;
@@ -128,7 +130,9 @@ public class SignInActivity extends AppCompatActivity {
                             prefsEditor.apply();
 
                             Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+//                            onBackPressed();
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            startActivity(intent);
                         } else {
                             Toast.makeText(SignInActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                         }

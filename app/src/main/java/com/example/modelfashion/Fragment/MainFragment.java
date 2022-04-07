@@ -21,13 +21,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
+import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
-import com.example.modelfashion.Model.Product;
+import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
@@ -45,6 +45,9 @@ import java.util.Set;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import me.relex.circleindicator.CircleIndicator3;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainFragment extends Fragment {
@@ -54,7 +57,8 @@ public class MainFragment extends Fragment {
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
-    ArrayList<Product> listProduct = new ArrayList<>();
+    private ImageView avatar;
+    private String user_id;
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
     private TextView tvCurrentDate, tvGreeting;
     private ImageView imgUserAvatar;
@@ -96,6 +100,12 @@ public class MainFragment extends Fragment {
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
+        avatar = view.findViewById(R.id.img_user_avatar);
+
+        Bundle info = getArguments();
+        user_id = info.getString("user_id");
+        setUserAvatar(user_id);
+
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);
         imgUserAvatar = view.findViewById(R.id.img_user_avatar);
@@ -120,7 +130,7 @@ public class MainFragment extends Fragment {
         initData();
 
         initHeader();
-        initClickProfileAvatar();
+//        initClickProfileAvatar();
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
@@ -130,16 +140,16 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void initClickProfileAvatar() {
-        imgUserAvatar.setOnClickListener(view -> {
-            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
-                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
-            } else {
-                startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
-            }
-        });
-
-    }
+//    private void initClickProfileAvatar() {
+//        imgUserAvatar.setOnClickListener(view -> {
+//            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
+//                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
+//            } else {
+//                startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
+//            }
+//        });
+//
+//    }
 
     private void initHeader() {
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
@@ -167,6 +177,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
                 intent.putExtra(KEY_PRODUCT_ID, product.getId());
+                intent.putExtra("user_id",user_id);
                 startActivity(intent);
             }
 
@@ -177,7 +188,21 @@ public class MainFragment extends Fragment {
         });
     }
 
+    private void setUserAvatar(String user_id){
+        if(!user_id.equalsIgnoreCase("null")){
+            ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    User user = response.body();
+                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
 
+                }
+            });
+        }
+    }
     private void getAllProduct(Repository repository) {
         Single<ArrayList<MyProduct>> products = repository.getAllProduct();
         compositeDisposable.add(products.doOnSubscribe(disposable -> {

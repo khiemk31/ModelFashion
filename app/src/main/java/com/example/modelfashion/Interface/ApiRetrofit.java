@@ -1,6 +1,8 @@
 package com.example.modelfashion.Interface;
 
 import com.example.modelfashion.Model.response.User.User;
+import com.example.modelfashion.Model.response.bill.Bill;
+import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
@@ -62,21 +64,35 @@ public interface ApiRetrofit {
     Call<ArrayList<CartProduct>> GetCartProduct(@Query("user_id") String user_id);
 
     @GET("FashionShop/get_product_by_name.php")
-    Call<ArrayList<MyProduct>> GetProductByName(@Query("product_name") JSONArray product_name);
+    Call<ArrayList<MyProduct>> GetProductByName(@Query("product_name") JSONArray product_name, @Query("user_id") String user_id);
 
     @GET("FashionShop/get_sizes_by_id.php")
-    Call<ArrayList<Sizes>> GetSizeById(@Query("sizes_id") JSONArray sizes_id);
+    Call<ArrayList<Sizes>> GetSizeById(@Query("sizes_id") JSONArray sizes_id, @Query("user_id") String user_id);
 
     @GET("FashionShop/get_amount_cart.php")
-    Call<String> GetAmountCart(@Query("product_name") JSONArray product_name);
-
+    Call<String> GetAmountCart(@Query("product_name") JSONArray product_name, @Query("user_id") String user_id);
 
     @POST("insert_user.php")
     Call<User> editUser(@Body User user);
-
 
     @FormUrlEncoded
     @POST("FashionShop/insert_payment.php")
     Call<String> InsertPayment(@Field("user_id") String user_id, @Field("amount") String amount,
                                @Field("date_created") String date_created, @Field("arr_sizes") String arr_sizes);
+
+    @GET("FashionShop/get_bill_by_user_id.php")
+    Call<ArrayList<Bill>> GetBillByUserId(@Query("user_id") String user_id, @Query("status") String status);
+
+    @GET("FashionShop/get_all_product_by_detail_id.php")
+    Call<ArrayList<MyProduct>> GetProductByDetailId(@Query("detail_id") JSONArray detail_id);
+
+    @GET("FashionShop/get_user_by_id.php")
+    Call<User> GetUserById(@Query("user_id") String user_id);
+
+    @GET("FashionShop/get_bill_detail_in_bill.php")
+    Call<ArrayList<BillDetail>> GetBillDetailInBill(@Query("bill_id") String bill_id);
+
+    @FormUrlEncoded
+    @POST("FashionShop/delete_product_from_cart_by_size_id.php")
+    Call<String> DeleteProductFromCart(@Field("user_id") String user_id, @Field("size_id") String size_id);
 }
