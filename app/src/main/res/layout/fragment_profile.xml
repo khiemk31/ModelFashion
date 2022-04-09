@@ -385,6 +385,7 @@
                 android:background="#8E97FD" />
 
             <RelativeLayout
+                android:id="@+id/rl_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
