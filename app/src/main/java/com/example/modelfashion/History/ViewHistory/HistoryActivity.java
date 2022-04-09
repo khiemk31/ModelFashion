@@ -53,7 +53,7 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
     private int numberStatus = 4;
-    private String user_id ;
+    private String user_id = "1" ;
 
 
     @Override
@@ -66,7 +66,7 @@ public class HistoryActivity extends AppCompatActivity {
         tv_status_history = findViewById(R.id.tv_status_history);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
-        user_id = intent.getStringExtra("user_id");
+       // user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
        // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +103,8 @@ public class HistoryActivity extends AppCompatActivity {
                     break;
             case 4: status = "Đã giao";
                     break;
+            case 5: status = "Đã hủy";
+                break;
 
         }
         ApiRetrofit.apiRetrofit.GetBillByUserId(user_id, status).enqueue(new Callback<ArrayList<Bill>>() {
@@ -193,41 +195,49 @@ public class HistoryActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        TextView status1,status2,status3,status4;
+        TextView status1,status2,status3,status4,status5;
         status1 = dialog.findViewById(R.id.status1);
         status2 = dialog.findViewById(R.id.status2);
         status3 = dialog.findViewById(R.id.status3);
         status4 = dialog.findViewById(R.id.status4);
+        status5 = dialog.findViewById(R.id.status5);
         TextView filter_history_cancel,filter_history_ok;
         filter_history_cancel = dialog.findViewById(R.id.filter_history_cancel);
         filter_history_ok = dialog.findViewById(R.id.filter_history_ok);
-        loadThemeFilterStatus(numberStatus,status1,status2,status3,status4);
+        loadThemeFilterStatus(numberStatus,status1,status2,status3,status4,status5);
         status1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filter_number = 1;
-                loadThemeFilterStatus(1,status1,status2,status3,status4);
+                loadThemeFilterStatus(1,status1,status2,status3,status4,status5);
             }
         });
         status2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filter_number = 2;
-                loadThemeFilterStatus(2,status1,status2,status3,status4);
+                loadThemeFilterStatus(2,status1,status2,status3,status4,status5);
             }
         });
         status3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filter_number = 3;
-                loadThemeFilterStatus(3,status1,status2,status3,status4);
+                loadThemeFilterStatus(3,status1,status2,status3,status4,status5);
             }
         });
         status4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filter_number = 4;
-                loadThemeFilterStatus(4,status1,status2,status3,status4);
+                loadThemeFilterStatus(4,status1,status2,status3,status4,status5);
+            }
+        });
+        status5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filter_number = 5;
+                loadThemeFilterStatus(5,status1,status2,status3,status4,status5);
             }
         });
         filter_history_cancel.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +251,7 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 numberStatus = filter_number;
-                loadThemeFilterStatus(numberStatus,status1,status2,status3,status4);
+                loadThemeFilterStatus(numberStatus,status1,status2,status3,status4,status5);
                 loadTitleStatus(numberStatus);
                 loadData(numberStatus);
                 dialog.dismiss();
@@ -267,8 +277,12 @@ public class HistoryActivity extends AppCompatActivity {
             tv_status_history.setText("Đã giao");
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
+        else if (i == 5){
+            tv_status_history.setText("Đã hủy");
+            tv_status_history.setTextColor(Color.parseColor("#FF0000"));
+        }
     }
-    private void loadThemeFilterStatus(int i,TextView st1,TextView st2,TextView st3,TextView st4){
+    private void loadThemeFilterStatus(int i,TextView st1,TextView st2,TextView st3,TextView st4,TextView st5){
         if (i == 1){
             st1.setTextColor(Color.parseColor("#FFFFFF"));
             st1.setBackground(getDrawable(R.drawable.bt_filter_history_select));
@@ -278,6 +292,8 @@ public class HistoryActivity extends AppCompatActivity {
             st3.setBackground(getDrawable(R.drawable.bt_item_filter_history));
             st4.setTextColor(Color.parseColor("#000000"));
             st4.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st5.setTextColor(Color.parseColor("#000000"));
+            st5.setBackground(getDrawable(R.drawable.bt_item_filter_history));
         }else if (i == 2){
             st2.setTextColor(Color.parseColor("#FFFFFF"));
             st2.setBackground(getDrawable(R.drawable.bt_filter_history_select));
@@ -287,6 +303,8 @@ public class HistoryActivity extends AppCompatActivity {
             st3.setBackground(getDrawable(R.drawable.bt_item_filter_history));
             st4.setTextColor(Color.parseColor("#000000"));
             st4.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st5.setTextColor(Color.parseColor("#000000"));
+            st5.setBackground(getDrawable(R.drawable.bt_item_filter_history));
         }
         else if (i == 3){
             st3.setTextColor(Color.parseColor("#FFFFFF"));
@@ -297,6 +315,8 @@ public class HistoryActivity extends AppCompatActivity {
             st2.setBackground(getDrawable(R.drawable.bt_item_filter_history));
             st4.setTextColor(Color.parseColor("#000000"));
             st4.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st5.setTextColor(Color.parseColor("#000000"));
+            st5.setBackground(getDrawable(R.drawable.bt_item_filter_history));
         }
         else if (i == 4){
             st4.setTextColor(Color.parseColor("#FFFFFF"));
@@ -307,6 +327,20 @@ public class HistoryActivity extends AppCompatActivity {
             st2.setBackground(getDrawable(R.drawable.bt_item_filter_history));
             st3.setTextColor(Color.parseColor("#000000"));
             st3.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st5.setTextColor(Color.parseColor("#000000"));
+            st5.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+        }
+        else if (i == 5){
+            st5.setTextColor(Color.parseColor("#FFFFFF"));
+            st5.setBackground(getDrawable(R.drawable.bt_filter_history_select));
+            st1.setTextColor(Color.parseColor("#000000"));
+            st1.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st2.setTextColor(Color.parseColor("#000000"));
+            st2.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st3.setTextColor(Color.parseColor("#000000"));
+            st3.setBackground(getDrawable(R.drawable.bt_item_filter_history));
+            st4.setTextColor(Color.parseColor("#000000"));
+            st4.setBackground(getDrawable(R.drawable.bt_item_filter_history));
         }
 
 
