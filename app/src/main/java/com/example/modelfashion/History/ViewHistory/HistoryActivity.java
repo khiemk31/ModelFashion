@@ -111,6 +111,7 @@ public class HistoryActivity extends AppCompatActivity {
                 arr_bill = response.body();
                 for(int i = 0; i < arr_bill.size(); i++){
                     arr_detail_id.add(arr_bill.get(i).getBillDetail().get(0).getDetailId());
+                    Log.e("check2",arr_bill.get(i).getBillDetail().get(0).getDetailId());
                 }
                 SetData(arr_detail_id);
             }
@@ -136,6 +137,9 @@ public class HistoryActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<MyProduct>> call, Response<ArrayList<MyProduct>> response) {
                 arr_my_product = response.body();
                 Log.e("Checkresponse",arr_my_product.size()+""+arr_bill.size());
+                for (int i = 0; i< arr_my_product.size(); i++){
+                    Log.e("check3",i+""+arr_my_product.get(i).getId());
+                }
                 HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, arr_bill, arr_my_product, user_id);
                 lv_history.setAdapter(historyAdapter);
             }
