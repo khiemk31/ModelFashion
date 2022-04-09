@@ -54,6 +54,7 @@ public class HistoryActivity extends AppCompatActivity {
     private TextView tv_status_history;
     private int numberStatus = 4;
     private String user_id = "1" ;
+    private TextView tv_empty;
 
 
     @Override
@@ -64,6 +65,7 @@ public class HistoryActivity extends AppCompatActivity {
         img_history_back = findViewById(R.id.img_history_back);
         rl_filter_history = findViewById(R.id.rl_filter_history);
         tv_status_history = findViewById(R.id.tv_status_history);
+        tv_empty = findViewById(R.id.tv_empty);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
        // user_id = intent.getStringExtra("user_id");
@@ -144,6 +146,11 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, arr_bill, arr_my_product, user_id);
                 lv_history.setAdapter(historyAdapter);
+                if(arr_bill.size() > 0){
+                    tv_empty.setVisibility(View.GONE);
+                }else {
+                    tv_empty.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
