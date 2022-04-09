@@ -160,9 +160,9 @@ public class MainFragment extends Fragment {
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
         if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-            tvGreeting.setText("Good morning");
+            tvGreeting.setText("Chào buổi sáng");
         } else {
-            tvGreeting.setText("Good afternoon");
+            tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
     }

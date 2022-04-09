@@ -1,6 +1,8 @@
 package com.example.modelfashion.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ public class FragmentProfile extends Fragment {
     Boolean isLogin;
     ProgressLoadingCommon progressLoadingCommon;
     String user_id;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,16 +121,7 @@ public class FragmentProfile extends Fragment {
         });
 
         btn_logout.setOnClickListener(v -> {
-//            progressLoadingCommon.showProgressLoading(getActivity());
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-            sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
-            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-            prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
-            prefsEditor.apply();
-            img.setImageResource(R.drawable.bg_gradient_blue);
-            loadDetails();
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
+            openDialog();
         });
         btn_profile.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ProfileActivity.class);
@@ -135,30 +129,62 @@ public class FragmentProfile extends Fragment {
         });
         btn_history.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",4);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 4);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
         btn_status.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",1);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 1);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
 
         btn_status2.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",2);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 2);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
         btn_status3.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",3);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 3);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
     }
 
+    private void openDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Set Title and Message:
+        builder.setTitle("Đăng xuất")
+                .setMessage("Bạn có muốn đăng xuất không?");
+
+        //
+        builder.setCancelable(true);
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                builder.create().dismiss();
+            }
+        });
+        // Create "Positive" button with OnClickListener.
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //progressLoadingCommon.showProgressLoading(getActivity());
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+                sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
+                SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+                prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
+                prefsEditor.apply();
+                img.setImageResource(R.drawable.bg_gradient_blue);
+                loadDetails();
+            }
+        });
+        // Create AlertDialog:
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }
+
