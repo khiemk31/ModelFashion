@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
@@ -154,6 +155,11 @@ public class FragmentProfile extends Fragment {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
             intent.putExtra("numberStatus",3);
             intent.putExtra("user_id",user_id);
+            startActivity(intent);
+        });
+        btn_cart.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            intent.putExtra("use_id",user_id);
             startActivity(intent);
         });
     }

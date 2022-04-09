@@ -63,7 +63,10 @@ public class CartFragment extends Fragment {
         tvTotal = initView.findViewById(R.id.total_money);
         btn_payment = initView.findViewById(R.id.btn_payment);
         Bundle info = getArguments();
-        user_id = info.getString("user_id");
+        try {
+            user_id = info.getString("user_id");
+        }catch (Exception e){}
+
         getCart();
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
