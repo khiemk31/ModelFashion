@@ -124,7 +124,6 @@ public class CategoryFragment extends Fragment {
         searchBar = view.findViewById(R.id.search_bar);
 //        searchView = view.findViewById(R.id.search_view);
         categoryAdapter = new CategoryAdapter();
-        categoryAdapter.setListCategory(listCategory1());
         rcvCategory = view.findViewById(R.id.rcv_category);
         rcvCategory.setAdapter(categoryAdapter);
         categoryAdapter.highLightSelectedItem(currentCategory);
@@ -200,15 +199,7 @@ public class CategoryFragment extends Fragment {
         }));
     }
 
-    private List<String> listCategory1() {
-        ArrayList<String> list = new ArrayList();
-        list.add("Ba lô");
-        list.add("Quần");
-        list.add("Áo");
-        list.add("Giày");
-        list.add("Đồ bộ");
-        return list;
-    }
+
 
 
     @Override
