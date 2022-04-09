@@ -104,7 +104,10 @@ public class MainFragment extends Fragment {
 
         Bundle info = getArguments();
         user_id = info.getString("user_id");
-        setUserAvatar(user_id);
+        try {
+            setUserAvatar(user_id);
+        }catch (Exception e){}
+
 
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);

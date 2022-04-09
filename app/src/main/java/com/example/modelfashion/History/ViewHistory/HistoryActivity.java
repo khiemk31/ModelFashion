@@ -21,11 +21,20 @@ import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
+
 import com.example.modelfashion.R;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +53,8 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
     private int numberStatus = 4;
-    private String user_id;
+    private String user_id ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity {
         numberStatus = intent.getIntExtra("numberStatus",4);
         user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
-        Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,23 +81,29 @@ public class HistoryActivity extends AppCompatActivity {
                 showDialogFilter();
             }
         });
+
 //        listModelHistory = new ArrayList<>();
 //        listModelHistoryNew = new ArrayList<>();
 //        listProduct = new ArrayList<>();
 //        fakeData();
         loadData(numberStatus);
+
     }
+
+
     private void loadData(int i){
+
         String status = "";
         switch (i) {
             case 1: status = "Đang chờ";
                     break;
-            case 2: status = "Đã giao";
+            case 2: status = "Hoàn thành";
                     break;
             case 3: status = "Đang giao";
                     break;
-            case 4: status = "all";
+            case 4: status = "Đã giao";
                     break;
+
         }
         ApiRetrofit.apiRetrofit.GetBillByUserId(user_id, status).enqueue(new Callback<ArrayList<Bill>>() {
             @Override
@@ -244,7 +260,7 @@ public class HistoryActivity extends AppCompatActivity {
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
         else if (i == 4){
-            tv_status_history.setText("Lịch sử");
+            tv_status_history.setText("Đã giao");
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
     }
