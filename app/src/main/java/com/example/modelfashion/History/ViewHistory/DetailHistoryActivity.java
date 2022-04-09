@@ -45,7 +45,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
 //    List<ProductHistory> list;
     ListView lv_detail_history;
     ImageView back_detail_history;
-    String bill_id, user_id, date_shipped, amount;
+    String bill_id, user_id, date_shipped, amount,status;
     ArrayList<BillDetail> arr_bill_detail = new ArrayList<>();
     ArrayList<MyProduct> arr_my_product = new ArrayList<>();
 
@@ -76,6 +76,12 @@ public class DetailHistoryActivity extends AppCompatActivity {
         user_id = intent.getStringExtra("user_id");
         date_shipped = intent.getStringExtra("date");
         amount = intent.getStringExtra("amount");
+        status = intent.getStringExtra("status");
+        if(status.matches("Đã giao")){
+            title_date_detail_history.setText("Ngày nhận hàng:");
+        }else {
+            title_date_detail_history.setText("Ngày mua hàng:");
+        }
         //Set data bill detail
         GetBillDetail(bill_id);
         tv_dh_detail_history.setText("HD "+bill_id);

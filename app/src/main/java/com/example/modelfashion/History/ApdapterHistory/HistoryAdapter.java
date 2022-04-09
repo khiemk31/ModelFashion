@@ -100,8 +100,8 @@ public class HistoryAdapter extends BaseAdapter {
 //        tv_sumSP.setText(String.valueOf(listModel.get(i).getProductHistoryList().size())+" Sản phẩm");
 //        tv_sumPrice.setText("Tổng: "+sumPrice(listModel.get(i).getProductHistoryList()));
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        item_history_ma.setText("Mã đơn: HD"+ arr_bill.get(i).getBillId());
-        item_history_time.setText("Ngày nhận: "+ arr_bill.get(i).getDateShipped());
+        item_history_ma.setText("Mã đơn: DH"+ arr_bill.get(i).getBillId());
+
         Glide.with(context).load(arr_my_product.get(i).getPhotos().get(0)).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
         tv_name_subproduct0.setText(arr_my_product.get(i).getProduct_name());
@@ -119,13 +119,16 @@ public class HistoryAdapter extends BaseAdapter {
                 intent.putExtra("user_id", user_id);
                 intent.putExtra("date", arr_bill.get(i).getDateShipped());
                 intent.putExtra("amount", arr_bill.get(i).getAmount());
+                intent.putExtra("status", arr_bill.get(i).getStatus());
                 context.startActivity(intent);
             }
         });
         if(arr_bill.get(i).getStatus().matches("Đã giao")){
+            item_history_time.setText("Ngày nhận: "+ arr_bill.get(i).getDateShipped());
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
         }else {
+            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getDateCreated());
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
 
@@ -133,8 +136,11 @@ public class HistoryAdapter extends BaseAdapter {
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            loadDialogFeedback(context,"HD "+arr_bill.get(i).getBillId());
+                if(arr_bill.get(i).getStatus().matches("Đã giao")) {
+                    loadDialogFeedback(context, "DH " + arr_bill.get(i).getBillId());
+                }else {
+                    showDialogCancelOrder();
+                }
 
             }
         });
@@ -171,7 +177,7 @@ public class HistoryAdapter extends BaseAdapter {
                 if (content.isEmpty() ){
                     Toast.makeText(context,"Bạn chưa nhập nội dung",Toast.LENGTH_SHORT).show();
                 }else {
-                    String uriText = "mailto:" + "khiemnxph10098@fpt.edt.vn" +
+                    String uriText = "mailto:" + context.getString(R.string.email) +
                             "?subject=" +"Feedback đơn hàng " +maDH +
                             "&body=" + content;
                     Uri uri = Uri.parse(uriText);
@@ -185,5 +191,80 @@ public class HistoryAdapter extends BaseAdapter {
         });
         dialog.show();
     }
-    
+    private void showDialogCancelOrder(){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_cancel_order);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_cancel = dialog.findViewById(R.id.tv_cancel);
+        TextView tv_hotline,tv_email,tv_zalo;
+        ImageView img_coppy_hotline,img_email,img_coppy_zalo,img_page;
+        tv_hotline = dialog.findViewById(R.id.tv_hotline);
+        tv_email = dialog.findViewById(R.id.tv_email);
+        tv_zalo = dialog.findViewById(R.id.tv_zalo);
+        img_coppy_hotline = dialog.findViewById(R.id.img_coppy_hotline);
+        img_email = dialog.findViewById(R.id.img_email);
+        img_coppy_zalo = dialog.findViewById(R.id.img_coppy_zalo);
+        img_page = dialog.findViewById(R.id.img_page);
+        tv_hotline.setText("Hotline   : "+context.getString(R.string.hotline));
+        tv_email.setText("Email      : "+context.getString(R.string.email));
+        tv_zalo.setText("Zalo        : "+context.getString(R.string.zalo));
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        img_coppy_hotline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setClipboard(context,context.getString(R.string.hotline));
+                Toast.makeText(context,"copy hotline successfully",Toast.LENGTH_SHORT).show();
+            }
+        });
+        img_coppy_zalo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setClipboard(context,context.getString(R.string.zalo));
+                Toast.makeText(context,"copy zalo successfully",Toast.LENGTH_SHORT).show();
+            }
+        });
+        img_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String uriText = "mailto:" + context.getString(R.string.email) +
+                        "?subject=" +"" +
+                        "&body=" + "";
+                Uri uri = Uri.parse(uriText);
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(uri);
+                context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
+                dialog.dismiss();
+            }
+        });
+        img_page.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String link = context.getString(R.string.linkpage);
+                Intent intentPrivacy = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                context.startActivity(intentPrivacy);
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private void setClipboard(Context context, String text) {
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(text);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+            clipboard.setPrimaryClip(clip);
+        }
+    }
+
 }
