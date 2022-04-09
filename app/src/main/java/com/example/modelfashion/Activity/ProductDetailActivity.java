@@ -7,22 +7,29 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.network.Repository;
 
 import java.text.DecimalFormat;
@@ -217,7 +224,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
             if(user_id.equalsIgnoreCase("null")){
-                Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+                showDialogLogIn();
+               // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
             } else {
                 ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
                     @Override
@@ -304,5 +312,31 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         disposable.clear();
+    }
+
+    private void showDialogLogIn(){
+        Dialog dialog = new Dialog(ProductDetailActivity.this);
+        dialog.setContentView(R.layout.dialog_quest_login);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_login,tv_no_login;
+        tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
+        tv_no_login = dialog.findViewById(R.id.tv_no_login);
+        tv_no_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tv_yes_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               startActivity(new Intent(ProductDetailActivity.this, SignInActivity.class));
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.MainActivity;
+import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
@@ -129,8 +130,13 @@ public class FragmentProfile extends Fragment {
             showDialogLogout();
         });
         btn_profile.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), ProfileActivity.class);
-            startActivity(intent);
+            if(user_id.equalsIgnoreCase("null")){
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
         });
         btn_history.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
@@ -191,6 +197,31 @@ public class FragmentProfile extends Fragment {
                 loadDetails();
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+    private void showDialogLogIn(){
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_quest_login);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_login,tv_no_login;
+        tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
+        tv_no_login = dialog.findViewById(R.id.tv_no_login);
+        tv_no_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tv_yes_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), SignInActivity.class));
                 dialog.dismiss();
             }
         });
