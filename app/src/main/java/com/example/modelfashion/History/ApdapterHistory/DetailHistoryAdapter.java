@@ -10,25 +10,35 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Model.MHistory.ProductHistory;
+import com.example.modelfashion.Model.response.bill.BillDetail;
+import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class DetailHistoryAdapter extends BaseAdapter {
     Context context;
-    List<ProductHistory> productHistoryList;
-
-    public DetailHistoryAdapter(Context context, List<ProductHistory> productHistoryList) {
+    ArrayList<BillDetail> arr_bill_detail;
+    ArrayList<MyProduct> arr_product;
+//    List<ProductHistory> productHistoryList;
+//
+//    public DetailHistoryAdapter(Context context, List<ProductHistory> productHistoryList) {
+//        this.context = context;
+//        this.productHistoryList = productHistoryList;
+//    }
+    public DetailHistoryAdapter(Context context, ArrayList<BillDetail> arr_bill_detail, ArrayList<MyProduct> arr_product){
         this.context = context;
-        this.productHistoryList = productHistoryList;
+        this.arr_bill_detail = arr_bill_detail;
+        this.arr_product = arr_product;
     }
-
     @Override
     public int getCount() {
-        return productHistoryList.size();
+        return arr_bill_detail.size();
     }
 
     @Override
@@ -49,16 +59,23 @@ public class DetailHistoryAdapter extends BaseAdapter {
         TextView tv_price = view.findViewById(R.id.tv_price);
         TextView tv_size_subproduct = view.findViewById(R.id.tv_size_subproduct);
         TextView tv_sumproduct = view.findViewById(R.id.tv_sumproduct);
-        ProductHistory productHistory = productHistoryList.get(i);
-        tv_name_subproduct.setText(productHistory.getmNameProduct());
-        Locale locale = new Locale("vi","VN");
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
-        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-        String money = numberFormat.format(Double.parseDouble(productHistory.getmPriceProduct()));
-        tv_price.setText(money);
-        tv_size_subproduct.setText(productHistory.getmSizeProduct());
-        tv_sumproduct.setText("x"+productHistory.getmSumProduct());
-        Glide.with(context).load(productHistory.getmImgeProduct()).into(img_subproduct);
+        DecimalFormat format = new DecimalFormat("###,###,###");
+        //Set data
+        Glide.with(context).load(arr_product.get(i).getPhotos().get(0)).into(img_subproduct);
+        tv_name_subproduct.setText(arr_product.get(i).getProduct_name());
+        tv_price.setText(format.format(Integer.parseInt(arr_product.get(i).getPrice())*Integer.parseInt(arr_bill_detail.get(i).getQuantity()))+" VNĐ");
+        tv_size_subproduct.setText(arr_bill_detail.get(i).getSize());
+        tv_sumproduct.setText("Số lượng: "+arr_bill_detail.get(i).getQuantity());
+//        ProductHistory productHistory = productHistoryList.get(i);
+//        tv_name_subproduct.setText(productHistory.getmNameProduct());
+//        Locale locale = new Locale("vi","VN");
+//        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
+//        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
+//        String money = numberFormat.format(Double.parseDouble(productHistory.getmPriceProduct()));
+//        tv_price.setText(money);
+//        tv_size_subproduct.setText(productHistory.getmSizeProduct());
+//        tv_sumproduct.setText("x"+productHistory.getmSumProduct());
+//        Glide.with(context).load(productHistory.getmImgeProduct()).into(img_subproduct);
         return view;
     }
 }
