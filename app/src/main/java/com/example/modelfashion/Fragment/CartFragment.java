@@ -148,9 +148,12 @@ public class CartFragment extends Fragment {
                     total_money = response.body();
                     check_load_successful = response.isSuccessful();
                 }
-                DecimalFormat formatter = new DecimalFormat("###,###,###");
-                String money_format = formatter.format(Integer.parseInt(response.body()));
-                tvTotal.setText("Tổng tiền: "+money_format+" VNĐ");
+                try {
+                    DecimalFormat formatter = new DecimalFormat("###,###,###");
+                    String money_format = formatter.format(Integer.parseInt(response.body()));
+                    tvTotal.setText("Tổng tiền: "+money_format+" VNĐ");
+                }catch (Exception e){}
+
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
