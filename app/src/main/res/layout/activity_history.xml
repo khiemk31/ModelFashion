@@ -70,7 +70,14 @@
 
     </RelativeLayout>
 
-
+    <TextView
+        android:layout_below="@+id/rl_status_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Trống"
+        android:textSize="20dp"
+        android:textColor="@color/white"/>
 
     <ListView
         android:id="@+id/lv_history"
@@ -78,7 +85,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_status_history"
         android:divider="@null"
+        android:background="#00000000"
         android:dividerHeight="10dp"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:visibility="visible"/>
 
 </RelativeLayout>

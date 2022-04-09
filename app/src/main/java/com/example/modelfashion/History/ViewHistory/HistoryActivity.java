@@ -53,7 +53,7 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
     private int numberStatus = 4;
-    private String user_id;
+    private String user_id = "1";
 
 
     @Override
@@ -66,9 +66,9 @@ public class HistoryActivity extends AppCompatActivity {
         tv_status_history = findViewById(R.id.tv_status_history);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
-        user_id = intent.getStringExtra("user_id");
+       // user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
-        Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,11 +97,11 @@ public class HistoryActivity extends AppCompatActivity {
         switch (i) {
             case 1: status = "Đang chờ";
                     break;
-            case 2: status = "Đã giao";
+            case 2: status = "Hoàn thành";
                     break;
             case 3: status = "Đang giao";
                     break;
-            case 4: status = "all";
+            case 4: status = "Đã giao";
                     break;
 
         }
@@ -260,7 +260,7 @@ public class HistoryActivity extends AppCompatActivity {
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
         else if (i == 4){
-            tv_status_history.setText("Lịch sử");
+            tv_status_history.setText("Đã giao");
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
     }

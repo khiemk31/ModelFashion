@@ -122,11 +122,19 @@ public class HistoryAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
+        if(arr_bill.get(i).getStatus().matches("Đã giao")){
+            tv_feedback.setVisibility(View.VISIBLE);
+            tv_feedback.setText("Phản hồi");
+        }else {
+            tv_feedback.setVisibility(View.VISIBLE);
+            tv_feedback.setText("Hủy đơn");
+
+        }
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
+            loadDialogFeedback(context,"HD "+arr_bill.get(i).getBillId());
 
             }
         });
@@ -177,4 +185,5 @@ public class HistoryAdapter extends BaseAdapter {
         });
         dialog.show();
     }
+    
 }
