@@ -114,9 +114,9 @@ public class MainFragment extends Fragment {
         imgUserAvatar = view.findViewById(R.id.img_user_avatar);
         preferenceManager = new PreferenceManager(requireContext());
 
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
+        arrItem.add(new ItemSaleMain(R.drawable.banner1));
+        arrItem.add(new ItemSaleMain(R.drawable.banner2));
+        arrItem.add(new ItemSaleMain(R.drawable.banner3));
         VpSaleMainFmAdapter vpSaleMainFmAdapter = new VpSaleMainFmAdapter(arrItem);
         vpSaleMain.setAdapter(vpSaleMainFmAdapter);
 
@@ -160,9 +160,9 @@ public class MainFragment extends Fragment {
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
         if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-            tvGreeting.setText("Good morning");
+            tvGreeting.setText("Chào buổi sáng");
         } else {
-            tvGreeting.setText("Good afternoon");
+            tvGreeting.setText("Chào buổi chiều");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
     }
