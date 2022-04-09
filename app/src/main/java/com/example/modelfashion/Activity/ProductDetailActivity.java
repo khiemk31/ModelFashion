@@ -113,6 +113,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             finish();
         });
         img_cart.setOnClickListener(view -> {
+            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+            intent.putExtra("use_id",user_id);
+            startActivity(intent);
             // TODO CART
         });
         img_prev.setOnClickListener(view -> {
@@ -137,22 +140,38 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
             size_id = arr_size.get(0).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s_red).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+           // Toast.makeText(this, "Đã chọn size " + arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
             size_id = arr_size.get(1).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m_red).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+            //Toast.makeText(this, "Đã chọn size " + arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
             size_id = arr_size.get(2).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l_red).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+            //Toast.makeText(this, "Đã chọn size " + arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
             size_id = arr_size.get(3).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl_z).into(img_size_xl);
+            //Toast.makeText(this, "Đã chọn size " + arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
         });
 
         tv_price.setText("650,000 VND");
@@ -211,6 +230,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                                         Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
                                     } else {
                                         if (response.body().equals("ok")) {
+                                            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                                            intent.putExtra("use_id",user_id);
+                                            startActivity(intent);
                                             Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
