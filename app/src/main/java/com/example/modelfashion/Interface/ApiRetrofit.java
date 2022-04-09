@@ -1,5 +1,6 @@
 package com.example.modelfashion.Interface;
 
+import com.example.modelfashion.Model.MHistory.BillModel;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.bill.BillDetail;
@@ -81,6 +82,7 @@ public interface ApiRetrofit {
     Call<String> InsertPayment(@Field("user_id") String user_id, @Field("amount") String amount,
                                @Field("date_created") String date_created, @Field("arr_sizes") String arr_sizes);
 
+
     @GET("FashionShop/get_bill_by_user_id.php")
     Call<ArrayList<Bill>> GetBillByUserId(@Query("user_id") String user_id, @Query("status") String status);
 
@@ -96,6 +98,7 @@ public interface ApiRetrofit {
     @FormUrlEncoded
     @POST("FashionShop/delete_product_from_cart_by_size_id.php")
     Call<String> DeleteProductFromCart(@Field("user_id") String user_id, @Field("size_id") String size_id);
+
 
     @FormUrlEncoded
     @POST("FashionShop/update_user_info.php")
