@@ -40,18 +40,24 @@ import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.RealPathUtil;
 import com.example.modelfashion.databinding.ActivityProfileBinding;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,7 +71,10 @@ public class ProfileActivity extends AppCompatActivity {
     RoundedImageView imgActProfileAvatar;
     String id;
     ProgressLoadingCommon progressLoadingCommon;
-
+    SharedPreferences sharedPreferences;
+    JSONObject obj;
+    String realPath ="";
+    String avatarPath = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +85,46 @@ public class ProfileActivity extends AppCompatActivity {
         viewHolder();
         loadDetails();
         setListener();
+        try {
+            avatarPath = obj.getString(Constants.KEY_AVARTAR);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        uploadUser();
     }
+
+//    private void uploadUser(){
+//        User user = new User(id,
+//                tvActProfileTaiKhoan.getText().toString(),
+//                "",
+//                tvActProfileEmail.getText().toString(),
+//                tvActProfileName.getText().toString(),
+//                tvActProfilePhone.getText().toString(),
+//                tvActProfileSex.getText().toString(),
+//                tvActProfileBirthday.getText().toString(),
+//                tvActProfileAddress.getText().toString(),
+//                "",
+//                "");
+//        try {
+//            JSONObject jsonUser = new JSONObject(user.toString());
+//            ApiRetrofit.apiRetrofit.UpdateUserInfo(jsonUser).enqueue(new Callback<User>() {
+//                @Override
+//                public void onResponse(Call<User> call, Response<User> response) {
+//                    User user1 = response.body();
+//                    Log.e("check",user1.getId()+" "+user1.getTaiKhoan()+" "+user1.getMatKhau());
+//                    Log.e("check",jsonUser.toString());
+//                }
+//
+//                @Override
+//                public void onFailure(Call<User> call, Throwable t) {
+//
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        Log.e("check",123+"");
+//    }
 
     private void viewHolder() {
         layoutActProfileAvatar=findViewById(R.id.layout_act_profile_avatar);
@@ -124,7 +172,6 @@ public class ProfileActivity extends AppCompatActivity {
                 tvActProfileAddress.getText().toString(),
                 "",
                 "");
-
         ApiRetrofit.apiRetrofit.editUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -150,12 +197,11 @@ public class ProfileActivity extends AppCompatActivity {
         putTVSex(preferenceManager.getString(Constants.KEY_PROFILE_SEX));
         profileAnimation();
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+        sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
         if (sharedPreferences.contains("user")) {
             String userData = sharedPreferences.getString("user", "");
-
             try {
-                JSONObject obj = new JSONObject(userData);
+                obj = new JSONObject(userData);
                 id = obj.getString(Constants.KEY_ID);
                 tvActProfileTaiKhoan.setText(obj.getString(Constants.KEY_TAI_KHOAN));
                 tvActProfileSex.setText(obj.getString(Constants.KEY_SEX));
@@ -164,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
                 tvActProfileAddress.setText(obj.getString(Constants.KEY_ADDRESS));
                 tvActProfileBirthday.setText(obj.getString(Constants.KEY_BIRTHDAY));
                 tvActProfileEmail.setText(obj.getString(Constants.KEY_EMAIL));
-
+                Glide.with(ProfileActivity.this).load(obj.getString(Constants.KEY_AVARTAR)).into(imgActProfileAvatar);
                 Log.d("My App", obj.toString());
 
             } catch (Throwable t) {
@@ -188,6 +234,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void setListener() {
         layoutActProfileAvatar.setOnClickListener(v -> {
             RequestPermissions();
+
         });
         btnActProfileBack.setOnClickListener(v -> {
             onBackPressed();
@@ -243,7 +290,6 @@ public class ProfileActivity extends AppCompatActivity {
             });
         } else if (check == 2) {
             edt.setInputType(InputType.TYPE_CLASS_PHONE);
-
             tvTitle.setText("THAY ĐỔI SỐ ĐIỆN THOẠI");
             edt.setText(tvActProfilePhone.getText().toString());
             tvOK.setOnClickListener(v -> {
@@ -480,10 +526,69 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onImageSelected(Uri uri) {
                         // here is selected image uri
+                        realPath = RealPathUtil.getRealPath(ProfileActivity.this,uri);
+                        try {
+                            UploadUserAvatar(realPath);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         imgActProfileAvatar.setImageURI(uri);
                         checkChange();
                     }
                 });
 
+    }
+    private void UploadUserAvatar(String realPath) throws JSONException {
+        String user_id = obj.getString(Constants.KEY_ID);
+        String base_url = "https://cuongb2k53lvt.000webhostapp.com/FashionShop/user_avatar/";
+        File file = new File(realPath);
+        String file_path = file.getAbsolutePath();
+        String[] tenFile = file_path.split("\\.");
+        file_path = tenFile[0]+System.currentTimeMillis()+"."+tenFile[1];
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file",file_path,requestBody);
+        ApiRetrofit.apiRetrofit.uploadAvatar(body).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response != null){
+                    String namefolder = avatarPath;
+                    Log.e("check", avatarPath);
+                    namefolder = namefolder.substring(namefolder.lastIndexOf("/"));
+                    UpdateAvatarUser(user_id,base_url+response.body().trim(),namefolder);
+                    avatarPath = base_url+response.body().trim();
+                    try {
+                        obj.put(Constants.KEY_AVARTAR,avatarPath);
+                        SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+                        SharedPreferences.Editor editor = sharedPreferences1.edit();
+                        editor.putString(Constants.KEY_GET_USER,obj.toString());
+                        editor.apply();
+                        Log.e("check",avatarPath+obj.getString(Constants.KEY_AVARTAR));
+                        Log.e("check1", sharedPreferences1.getString(Constants.KEY_GET_USER,""));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    editor.apply();
+                    Log.e("check",namefolder);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+    private void UpdateAvatarUser(String user_id, String new_avatar, String old_avatar){
+        ApiRetrofit.apiRetrofit.UpdateAvatar(user_id,new_avatar,old_avatar).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 }

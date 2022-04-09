@@ -96,7 +96,7 @@ public class FragmentProfile extends Fragment {
                             .load(obj.get(Constants.KEY_AVARTAR))
                             .into(img);
 
-                    Log.d("My App", obj.toString());
+                    Log.d("My App", obj.toString()+obj.get(Constants.KEY_AVARTAR));
 
                 } catch (Throwable t) {
                     Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
