@@ -45,7 +45,8 @@ public class DetailHistoryActivity extends AppCompatActivity {
 //    List<ProductHistory> list;
     ListView lv_detail_history;
     ImageView back_detail_history;
-    String bill_id, user_id, date_shipped, amount,status;
+    String bill_id, date_shipped, amount,status;
+    public static String user_id;
     ArrayList<BillDetail> arr_bill_detail = new ArrayList<>();
     ArrayList<MyProduct> arr_my_product = new ArrayList<>();
 
@@ -84,7 +85,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         }
         //Set data bill detail
         GetBillDetail(bill_id);
-        tv_dh_detail_history.setText("HD "+bill_id);
+        tv_dh_detail_history.setText("DH "+bill_id);
         date_detail_history.setText(date_shipped);
         summoney_detail_history.setText(format.format(Integer.parseInt(amount))+" VNĐ");
         SetUserData();
