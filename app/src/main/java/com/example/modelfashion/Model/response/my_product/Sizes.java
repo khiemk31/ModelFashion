@@ -47,4 +47,11 @@ public class Sizes {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Sizes{" +
+                "size='" + size + '\'' +
+                ", quantity='" + quantity + '\'' +
+                '}';
+    }
 }
