@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     String user_id = "";
     String productId = "";
     String productName = "";
+    private MyProduct myProduct = new MyProduct();
+    private ArrayList<ImageView> listImgSize = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,7 +63,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         user_id = intent.getStringExtra("user_id");
         productName = intent.getStringExtra(KEY_PRODUCT_NAME);
         productId = intent.getStringExtra(KEY_PRODUCT_ID);
-        Log.e("t1", user_id+" ");
+        Log.e("t1", user_id + " ");
         // TODO use id to call detail product api
         ApiRetrofit.apiRetrofit.GetProductsSize(productName).enqueue(new Callback<ArrayList<Sizes>>() {
             @Override
@@ -81,11 +84,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         initListener();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         disposable.add(
                 repository.getProductById(productId, productName).doOnSubscribe(disposable -> {
                     progressBar.setVisibility(View.VISIBLE);
                 }).subscribe(myProduct -> {
+                    this.myProduct = myProduct;
                     progressBar.setVisibility(View.GONE);
                     setData(myProduct);
 
@@ -94,15 +99,24 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setData(MyProduct myProduct) {
         DecimalFormat format = new DecimalFormat("###,###,###");
         adapter.setArrItem(myProduct.getPhotos());
         price = myProduct.getPrice();
         tv_product_name.setText(myProduct.getProduct_name());
-        tv_price.setText(format.format(Integer.parseInt(myProduct.getPrice()))+" VNĐ");
+        tv_price.setText(format.format(Integer.parseInt(myProduct.getPrice())) + " VNĐ");
         tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
 
         Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
+        if (Integer.parseInt(myProduct.getSizes().get(0).getQuantity()) == 0)
+            img_size_s.setVisibility(View.GONE);
+        if (Integer.parseInt(myProduct.getSizes().get(1).getQuantity()) == 0)
+            img_size_m.setVisibility(View.GONE);
+        if (Integer.parseInt(myProduct.getSizes().get(2).getQuantity()) == 0)
+            img_size_l.setVisibility(View.GONE);
+        if (Integer.parseInt(myProduct.getSizes().get(3).getQuantity()) == 0)
+            img_size_xl.setVisibility(View.GONE);
     }
 
     private int currentCoverImage = 0;
@@ -137,22 +151,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
             size_id = arr_size.get(0).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(0).getSize(), Toast.LENGTH_SHORT).show();
+            checkSize(1);
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
             size_id = arr_size.get(1).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(1).getSize(), Toast.LENGTH_SHORT).show();
+            checkSize(2);
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
             size_id = arr_size.get(2).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(2).getSize(), Toast.LENGTH_SHORT).show();
+            checkSize(3);
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
             size_id = arr_size.get(3).getId();
-            Toast.makeText(this, "Đã chọn size " + arr_size.get(3).getSize(), Toast.LENGTH_SHORT).show();
+            checkSize(4);
         });
 
         tv_price.setText("650,000 VND");
@@ -162,7 +176,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         btn_mua_ngay.setOnClickListener(view -> {
             // TODO BUY
-            if(user_id.equalsIgnoreCase("null")){
+            if (user_id.equalsIgnoreCase("null")) {
                 Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
             } else {
                 String date = LocalDate.now().toString();
@@ -197,7 +211,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
-            if(user_id.equalsIgnoreCase("null")){
+            if (user_id.equalsIgnoreCase("null")) {
                 Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
             } else {
                 ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
@@ -252,6 +266,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_m = findViewById(R.id.img_size_m);
         img_size_l = findViewById(R.id.img_size_l);
         img_size_xl = findViewById(R.id.img_size_xl);
+        listImgSize.add(img_size_s);
+        listImgSize.add(img_size_m);
+        listImgSize.add(img_size_l);
+        listImgSize.add(img_size_xl);
 
         tv_price = findViewById(R.id.tv_price);
         tv_product_name = findViewById(R.id.tv_product_name);
@@ -265,17 +283,44 @@ public class ProductDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-//    private ArrayList<String> listDetailImage() {
-//        ArrayList<String> arrayList = new ArrayList<>();
-//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/42BA878D-053A-4FA1-9444-1865E38690C4-a69-crop-550-550.jpeg");
-//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/CBF4903A-0C16-4F81-AEC5-4000A1D11120-470-crop-550-550.jpeg");
-//        arrayList.add("https://zunezx.com/upload/image/cache/data/banner/Tee/33DC813B-A4BF-4F91-8ADA-F2B0C85A225A-1e8-crop-550-550.jpeg");
-//        arrayList.add("https://zunezx.com/upload/image/data/banner/Tee/05D3F876-B270-4916-9FF0-FE48332E1DB3-da9.jpeg");
-//        return arrayList;
-//    }
 
     private void loadImageUrl(String url, ImageView img) {
         Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);
+    }
+
+    private void checkSize(int position) {
+        switch (position) {
+            case 1: {
+                img_size_s.setImageResource(R.drawable.ic_size_s_selected);
+                img_size_m.setImageResource(R.drawable.ic_size_m);
+                img_size_l.setImageResource(R.drawable.ic_size_l);
+                img_size_xl.setImageResource(R.drawable.ic_size_xl);
+                break;
+            }
+            case 2: {
+                img_size_s.setImageResource(R.drawable.ic_size_s);
+                img_size_m.setImageResource(R.drawable.ic_size_m_selected);
+                img_size_l.setImageResource(R.drawable.ic_size_l);
+                img_size_xl.setImageResource(R.drawable.ic_size_xl);
+                break;
+            }
+            case 3: {
+                img_size_s.setImageResource(R.drawable.ic_size_s);
+                img_size_m.setImageResource(R.drawable.ic_size_m);
+                img_size_l.setImageResource(R.drawable.ic_size_l_selected);
+                img_size_xl.setImageResource(R.drawable.ic_size_xl);
+                break;
+            }
+            case 4: {
+                img_size_s.setImageResource(R.drawable.ic_size_s);
+                img_size_m.setImageResource(R.drawable.ic_size_m);
+                img_size_l.setImageResource(R.drawable.ic_size_l);
+                img_size_xl.setImageResource(R.drawable.ic_size_xl_selected);
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     @Override
