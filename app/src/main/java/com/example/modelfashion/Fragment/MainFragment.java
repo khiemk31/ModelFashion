@@ -163,6 +163,7 @@ public class MainFragment extends Fragment {
             tvGreeting.setText("Chào buổi sáng");
         } else {
             tvGreeting.setText("Chào buổi chiều");
+            tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
     }

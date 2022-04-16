@@ -112,7 +112,6 @@ public class CategoryFragment extends Fragment {
 //            }
 //        });
 
-
     }
 
     private void initData() {

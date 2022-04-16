@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.MainActivity;
-import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
@@ -45,6 +44,7 @@ public class FragmentProfile extends Fragment {
     ProgressLoadingCommon progressLoadingCommon;
     String user_id;
     RelativeLayout rl_logout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,27 +140,27 @@ public class FragmentProfile extends Fragment {
         });
         btn_history.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",4);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 4);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
         btn_status.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",1);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 1);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
 
         btn_status2.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",2);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 2);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
         btn_status3.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus",3);
-            intent.putExtra("user_id",user_id);
+            intent.putExtra("numberStatus", 3);
+            intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
         btn_cart.setOnClickListener(v ->{
@@ -225,9 +225,7 @@ public class FragmentProfile extends Fragment {
                 dialog.dismiss();
             }
         });
-
         dialog.show();
     }
-
-
 }
+
