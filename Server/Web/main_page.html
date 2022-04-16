@@ -20,13 +20,6 @@
     <title>home</title>
 </head>
 
-<!-- <div class="topnav">
-    <a class="active" href="main_page.html">Trang chủ</a>
-    <a href="user_page.php">Người dùng</a>
-    <a href="product_page.html">Sản phẩm</a>
-    <a href="login_admin.html" id="logout">Đăng xuất</a>
-</div> -->
-
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         <!-- header -->
@@ -68,7 +61,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="user_page.php">
+                                        <a href="list_user.html">
                                             <i class="metismenu-icon"></i>
                                             Danh sách người dùng
                                         </a>
@@ -89,7 +82,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="list_product_page.php">
+                                        <a href="list_product.html">
                                             <i class="metismenu-icon"></i>
                                             Danh sách sản phẩm
                                         </a>
@@ -119,8 +112,8 @@
                 <div class="app-main__inner">
                     <!-- code here -->
                     <div class="pb-20">
-                        <div class="row">
-                            <div class="col-md-6 col-xl-4">
+                        <div class="">
+                            <div class="">
                                 <div class="card mb-3 widget-content bg-midnight-bloom">
                                     <div class="widget-content-wrapper text-white">
                                         <div class="widget-content-left">
@@ -132,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-4">
+                            <div class="">
                                 <div class="card mb-3 widget-content bg-arielle-smile">
                                     <div class="widget-content-wrapper text-white">
                                         <div class="widget-content-left">
@@ -144,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-4">
+                            <div class="">
                                 <div class="card mb-3 widget-content bg-grow-early">
                                     <div class="widget-content-wrapper text-white">
                                         <div class="widget-content-left">
@@ -156,37 +149,34 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="main-card mb-3 card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Pie Chart</h5>
-                                        <canvas id="chart-area"></canvas>
-                                    </div>
-                                </div>
-                                <div class="main-card mb-3 card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Radar Chart</h5>
-                                        <canvas id="radar-chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="main-card mb-3 card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Doughnut</h5>
-                                        <canvas id="doughnut-chart"></canvas>
-                                    </div>
-                                </div>
-                                <div class="main-card mb-3 card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Polar Chart</h5>
-                                        <canvas id="polar-chart"></canvas>
+                            <div class="">
+                                <div class="card mb-3 widget-content bg-gradient-to-r from-[purple] to-[cyan]">
+                                    <div class="widget-content-wrapper text-white">
+                                        <div class="widget-content-left flex">
+                                            <div class="widget-heading mr-2">Số hàng đã bán trong</div>
+                                            <select name="list" id="listDate" class="bg-slate-200 text-slate-600">
+                                                <option value="1">tháng 1</option>
+                                                <option value="2">tháng 2</option>
+                                                <option value="3">tháng 3</option>
+                                                <option value="4">tháng 4</option>
+                                                <option value="5">tháng 5</option>
+                                                <option value="6">tháng 6</option>
+                                                <option value="7">tháng 7</option>
+                                                <option value="8">tháng 8</option>
+                                                <option value="9">tháng 9</option>
+                                                <option value="10">tháng 10</option>
+                                                <option value="11">tháng 11</option>
+                                                <option value="12">tháng 12</option>
+                                              </select>
+                                        </div>
+                                        <div class="widget-content-right">
+                                            <div class="widget-numbers text-white"><span>20</span></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
