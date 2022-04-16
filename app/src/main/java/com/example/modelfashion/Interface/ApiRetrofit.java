@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -97,5 +98,15 @@ public interface ApiRetrofit {
     @FormUrlEncoded
     @POST("FashionShop/delete_product_from_cart_by_size_id.php")
     Call<String> DeleteProductFromCart(@Field("user_id") String user_id, @Field("size_id") String size_id);
+
+
+    @FormUrlEncoded
+    @POST("FashionShop/update_user_info.php")
+    Call<User> UpdateUserInfo(@Field("user")JSONObject user);
+
+    @FormUrlEncoded
+    @POST("FashionShop/update_avatar_user.php")
+    Call<String> UpdateAvatar(@Field("user_id") String user_id, @Field("new_avatar") String new_avatar, @Field("old_avatar") String old_avatar);
+
 
 }

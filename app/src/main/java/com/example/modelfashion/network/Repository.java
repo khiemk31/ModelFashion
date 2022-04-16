@@ -34,7 +34,7 @@ public final class Repository {
 
     public Single<ArrayList<MyProduct>> getAllProduct() {
         return apiInterface.getAllProduct()
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io()) 
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
