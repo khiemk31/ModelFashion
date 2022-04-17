@@ -103,7 +103,6 @@ public class HistoryActivity extends AppCompatActivity {
                     break;
             case 4: status = "Đã giao";
                     break;
-
         }
         ApiRetrofit.apiRetrofit.GetBillByUserId(user_id, status).enqueue(new Callback<ArrayList<Bill>>() {
             @Override

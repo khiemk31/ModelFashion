@@ -90,6 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+//        editUser();
 //        uploadUser();
     }
 
@@ -155,40 +156,48 @@ public class ProfileActivity extends AppCompatActivity {
     private void checkChange(){
         btnActProfileCheck.setVisibility(View.VISIBLE);
 
-        btnActProfileCheck.setOnClickListener(v -> {
-            editUser();
-        });
+//        btnActProfileCheck.setOnClickListener(v -> {
+//            editUser();
+//        });
     }
 
-    void  editUser() {
-        User user = new User(id,
-                tvActProfileTaiKhoan.getText().toString(),
-                "",
-                tvActProfileEmail.getText().toString(),
-                tvActProfileName.getText().toString(),
-                tvActProfilePhone.getText().toString(),
-                tvActProfileSex.getText().toString(),
-                tvActProfileBirthday.getText().toString(),
-                tvActProfileAddress.getText().toString(),
-                "",
-                "");
-        ApiRetrofit.apiRetrofit.editUser(user).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
-                    progressLoadingCommon.showProgressLoading(ProfileActivity.this);
-                    Toast.makeText(ProfileActivity.this, "Thêm thông tin thành công", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                } else {
-                    Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
+//    void  editUser() {
+//        User user = new User(id,
+//                tvActProfileTaiKhoan.getText().toString(),
+//                "",
+//                tvActProfileEmail.getText().toString(),
+//                tvActProfileName.getText().toString(),
+//                tvActProfilePhone.getText().toString(),
+//                tvActProfileSex.getText().toString(),
+//                tvActProfileBirthday.getText().toString(),
+//                tvActProfileAddress.getText().toString(),
+//                "",
+//                "");
+//
+//        try {
+//            JSONObject jsonUser = new JSONObject(user.toString());
+//            Log.e("jsonUser", String.valueOf(jsonUser));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(ProfileActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        ApiRetrofit.apiRetrofit.editUser(user).enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                if (response.code() == 200) {
+//                    progressLoadingCommon.showProgressLoading(ProfileActivity.this);
+//                    Toast.makeText(ProfileActivity.this, "Thêm thông tin thành công", Toast.LENGTH_SHORT).show();
+//                    onBackPressed();
+//                } else {
+//                    Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<User> call, Throwable t) {
+//                Toast.makeText(ProfileActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     //load dữ liệu lên màn hình
@@ -234,7 +243,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void setListener() {
         layoutActProfileAvatar.setOnClickListener(v -> {
             RequestPermissions();
-
         });
         btnActProfileBack.setOnClickListener(v -> {
             onBackPressed();
