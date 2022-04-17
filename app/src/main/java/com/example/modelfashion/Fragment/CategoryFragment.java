@@ -100,13 +100,13 @@ public class CategoryFragment extends Fragment {
             refreshLayout.setRefreshing(false);
         });
 
-        KeyboardUtils.addKeyboardToggleListener(getActivity(), isVisible -> {
-            if (!isVisible){
-                ((MainActivity) requireActivity()).showBottomNavigation();
-            }else {
-                ((MainActivity) requireActivity()).hideBottomNavigation();
-            }
-        });
+//        KeyboardUtils.addKeyboardToggleListener(getActivity(), isVisible -> {
+//            if (!isVisible){
+//                ((MainActivity) requireActivity()).showBottomNavigation();
+//            }else {
+//                ((MainActivity) requireActivity()).hideBottomNavigation();
+//            }
+//        });
     }
 
     private void initData() {

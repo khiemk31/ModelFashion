@@ -2,6 +2,8 @@ package com.example.modelfashion.Activity.SignIn;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText edtAccountSu, edtPassword, edtConfirmPassword;
     Button btnSignUp;
     CheckBox cbRules;
-    TextView tvSignIn;
+    TextView tvSignIn, tvRules;
     ApiInterface apiInterface;
     ProgressLoadingCommon progressLoadingCommon;
 
@@ -54,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
         tvSignIn = findViewById(R.id.tvSignIn);
         apiInterface = ApiClient.provideApiInterface(SignUpActivity.this);
         progressLoadingCommon = new ProgressLoadingCommon();
+        tvRules = findViewById(R.id.tvRules);
     }
 
     // bắt sự kiện
@@ -79,6 +82,13 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+            }
+        });
+
+        tvRules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
             }
         });
     }
@@ -137,6 +147,28 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void openDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+
+        // Set Title and Message:
+        builder.setTitle("Chính sách bảo mật.").setMessage("Chúng tôi thu thập, lưu trữ và xử lý thông tin của bạn cho quá trình mua hàng, cho những thông báo sau này và để cung cấp dịch vụ. Chúng tôi không giới hạn thông tin cá nhân: danh hiệu, tên, giới tính, ngày sinh, email, địa chỉ, địa chỉ giao hàng, số điện thoại, fax, chi tiết thanh toán, chi tiết thanh toán bằng thẻ hoặc chi tiết tài khoản ngân hàng.\n" +
+                "\n" +
+                "Chúng tôi sẽ dùng thông tin bạn đã cung cấp để xử lý đơn đặt hàng, cung cấp các dịch vụ và thông tin yêu cầu thông qua trang web và theo yêu cầu của bạn. Chúng tôi có thể chuyển tên và địa chỉ cho bên thứ ba để họ giao hàng cho bạn (ví dụ cho bên chuyển phát nhanh hoặc nhà cung cấp).");
+
+        //
+        builder.setCancelable(true);
+
+        // Create "Positive" button with OnClickListener.
+        builder.setPositiveButton("Đóng", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                builder.create().dismiss();
+            }
+        });
+        // Create AlertDialog:
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     //chặn back

@@ -104,7 +104,10 @@ public class MainFragment extends Fragment {
 
         Bundle info = getArguments();
         user_id = info.getString("user_id");
-        setUserAvatar(user_id);
+        try {
+            setUserAvatar(user_id);
+        }catch (Exception e){}
+
 
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);
@@ -157,9 +160,9 @@ public class MainFragment extends Fragment {
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
         if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-            tvGreeting.setText("Good morning");
+            tvGreeting.setText("Chào buổi sáng");
         } else {
-            tvGreeting.setText("Good afternoon");
+            tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
     }
