@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -20,13 +21,21 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
+import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FragmentProfile extends Fragment {
@@ -39,6 +48,7 @@ public class FragmentProfile extends Fragment {
     Boolean isLogin;
     ProgressLoadingCommon progressLoadingCommon;
     String user_id;
+    String token;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,7 +71,14 @@ public class FragmentProfile extends Fragment {
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
-
+        btn_logout.setEnabled(false);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                token = task.getResult();
+                btn_logout.setEnabled(true);
+            }
+        });
         return view;
     }
 
@@ -119,15 +136,12 @@ public class FragmentProfile extends Fragment {
 
         btn_logout.setOnClickListener(v -> {
 //            progressLoadingCommon.showProgressLoading(getActivity());
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-            sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
-            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-            prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
-            prefsEditor.apply();
-            img.setImageResource(R.drawable.bg_gradient_blue);
-            loadDetails();
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
+            FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    DeleteToken(user_id);
+                }
+            });
         });
         btn_profile.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ProfileActivity.class);
@@ -159,6 +173,28 @@ public class FragmentProfile extends Fragment {
             startActivity(intent);
         });
     }
+    private void DeleteToken(String user_id){
+        ApiRetrofit.apiRetrofit.DeleteFcmToken(user_id,token).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.e("fcm", "Delete token status : "+response.body()+" user_id: "+user_id+" token: "+token);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+                sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
+                SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+                prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
+                prefsEditor.apply();
+                img.setImageResource(R.drawable.bg_gradient_blue);
+                loadDetails();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+    }
 
 }

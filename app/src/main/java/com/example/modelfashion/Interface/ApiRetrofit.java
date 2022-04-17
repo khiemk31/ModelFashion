@@ -98,12 +98,18 @@ public interface ApiRetrofit {
     Call<String> DeleteProductFromCart(@Field("user_id") String user_id, @Field("size_id") String size_id);
 
     @FormUrlEncoded
-    @POST("FashionShop/update_user_info.php")
-    Call<User> UpdateUserInfo(@Field("user")JSONObject user);
-
-    @FormUrlEncoded
     @POST("FashionShop/update_avatar_user.php")
     Call<String> UpdateAvatar(@Field("user_id") String user_id, @Field("new_avatar") String new_avatar, @Field("old_avatar") String old_avatar);
 
+    @FormUrlEncoded
+    @POST("FashionShop/change_cart_quantity.php")
+    Call<String> ChangeCartQuantity(@Field("user_id") String user_id, @Field("quantity") String quantity, @Field("size_id") String size_id);
 
+    @FormUrlEncoded
+    @POST("FashionShop/insert_fcm_token.php")
+    Call<String> InsertFcmToken(@Field("user_id") String user_id, @Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("FashionShop/delete_fcm_token.php")
+    Call<String> DeleteFcmToken(@Field("user_id") String user_id, @Field("token") String token);
 }

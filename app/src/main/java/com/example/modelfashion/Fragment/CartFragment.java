@@ -23,6 +23,7 @@ import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.google.android.gms.common.api.Api;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import java.text.DecimalFormat;
@@ -44,8 +45,7 @@ public class CartFragment extends Fragment {
     private TextView tvTotal;
     private Button btn_payment;
     private Boolean check_load_successful = false;
-
-
+    private JSONArray json_product_name, json_size_id;
 
     public CartFragment() {
     }
@@ -90,8 +90,8 @@ public class CartFragment extends Fragment {
                     arr_product_name.add(arrCart.get(i).getProductName());
                     arr_size_id.add(arrCart.get(i).getSizeId());
                 }
-                JSONArray json_product_name = new JSONArray(arr_product_name);
-                JSONArray json_size_id = new JSONArray(arr_size_id);
+                json_product_name = new JSONArray(arr_product_name);
+                json_size_id = new JSONArray(arr_size_id);
                 getProductInfo(json_product_name, json_size_id);
                 getAmountCart(json_product_name);
                 Log.e("cart", arrCart.size()+"");
@@ -163,7 +163,8 @@ public class CartFragment extends Fragment {
                     startActivity(intent);
                     Toast.makeText(getContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getContext(), "Lỗi"+response.body(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), response.body()+" không đủ trong kho!", Toast.LENGTH_SHORT).show();
+                    Log.e("size", response.body());
                 }
                 check_load_successful = true;
             }
@@ -186,11 +187,13 @@ public class CartFragment extends Fragment {
                 ApiRetrofit.apiRetrofit.DeleteProductFromCart(user_id,size_id).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+                        btn_payment.setEnabled(false);
                         if(response.body().equalsIgnoreCase("ok")){
                             getCart();
                         }else {
                             Toast.makeText(getContext(), "Lỗi", Toast.LENGTH_SHORT).show();
                         }
+                        btn_payment.setEnabled(true);
                     }
 
                     @Override
@@ -199,6 +202,43 @@ public class CartFragment extends Fragment {
                     }
                 });
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void ChangeQuantity(String size_id, String quantity, Button btn) {
+                ApiRetrofit.apiRetrofit.ChangeCartQuantity(user_id,quantity,size_id).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        //Event khi doi sl thanh cong
+                        btn.setEnabled(false);
+                        if(response.body().equalsIgnoreCase("ok")){
+                            getAmountCart(json_product_name);
+                            JSONArray arr_json_size_id = new JSONArray(arr_size_id);
+                            ApiRetrofit.apiRetrofit.GetSizeById(arr_json_size_id, user_id).enqueue(new Callback<ArrayList<Sizes>>() {
+                                @Override
+                                public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
+                                    btn_payment.setEnabled(false);
+                                    arrSize = response.body();
+                                    btn_payment.setEnabled(true);
+                                }
+
+                                @Override
+                                public void onFailure(Call<ArrayList<Sizes>> call, Throwable t) {
+                                    Log.e("loaderr",t.toString());
+                                }
+                            });
+                        }else{
+
+                        }
+                        btn.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+
             }
         });
     }

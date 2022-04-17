@@ -64,7 +64,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, @SuppressLint("RecyclerView") int position) {
-        AtomicInteger minteger= new AtomicInteger(1);
+        AtomicInteger minteger= new AtomicInteger(Integer.parseInt(arrSize.get(position).getQuantity()));
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         String money_format = formatter.format(Integer.parseInt(productArrayList.get(position).getPrice()));
         holder.nameProduct.setText("Sản phẩm: "+productArrayList.get(position).getProduct_name());
@@ -80,11 +80,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         holder.btnIncrease.setOnClickListener(view -> {
             minteger.set(minteger.get() + 1);
                 holder.amount.setText(""+minteger);
+                cartOnClick.ChangeQuantity(arrSize.get(position).getId(), holder.amount.getText().toString(), holder.btnIncrease);
         });
         holder.btnDecrease.setOnClickListener(view -> {
             if(minteger.get() > 1){
                 minteger.set(minteger.get() - 1);
                 holder.amount.setText(""+minteger);
+                cartOnClick.ChangeQuantity(arrSize.get(position).getId(), holder.amount.getText().toString(), holder.btnDecrease);
             }
         });
         holder.amount.setText(""+minteger);
@@ -99,6 +101,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     public interface CartOnClick{
         void OnClick(int position, String size_id);
+        void ChangeQuantity(String size_id, String quantity, Button btn);
     }
-
 }

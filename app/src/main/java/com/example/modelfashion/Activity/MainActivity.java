@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -28,11 +31,15 @@ import com.example.modelfashion.Fragment.MainFragment;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String CHANNEL_ID = "100";
     String user_id;
     Boolean isLogin;
     Bundle info;
@@ -74,6 +81,32 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        createNotificationChannel();
+        getToken();
+    }
+
+    private void getToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Log.e("fcm","Fail");
+                }
+                Log.e("fcm",task.getResult());
+            }
+        });
+    }
+
+    private void createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "firebaseNotification";
+            String description = "Receive firebase notification";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void getUserData(){
