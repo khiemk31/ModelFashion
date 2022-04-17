@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -33,14 +34,16 @@ import org.json.JSONObject;
 
 public class FragmentProfile extends Fragment {
     PreferenceManager preferenceManager;
-    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_history, btn_logout, tv_signUp;
+    TextView tv_name, tv_user, tv_login, btn_history, tv_signUp;
     LinearLayout btn_status, btn_status2, btn_status3;
     RoundedImageView img;
     TextView btn_feedback;
-    LinearLayout ll_login;
+    LinearLayout layout_btn, layout_name;
     Boolean isLogin;
     ProgressLoadingCommon progressLoadingCommon;
     String user_id;
+    RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +54,9 @@ public class FragmentProfile extends Fragment {
         tv_user = view.findViewById(R.id.tv_frag_Profile_user);
         tv_login = view.findViewById(R.id.tv_frag_Profile_Login);
         tv_signUp = view.findViewById(R.id.tv_frag_Profile_Sign_Up);
-        ll_login = view.findViewById(R.id.ll_login);
+        layout_btn = view.findViewById(R.id.layout_btn);
+        layout_name = view.findViewById(R.id.layout_name);
+        layout_status_order = view.findViewById(R.id.layout_status_order);
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
@@ -78,9 +83,12 @@ public class FragmentProfile extends Fragment {
             prefsEditor.putString("user", user.toString());
             prefsEditor.apply();
 
-            tv_user.setVisibility(View.GONE);
-            tv_name.setVisibility(View.GONE);
-            ll_login.setVisibility(View.VISIBLE);
+            layout_btn.setVisibility(View.VISIBLE);
+            img.setVisibility(View.GONE);
+            layout_name.setVisibility(View.GONE);
+            layout_status_order.setVisibility(View.GONE);
+            btn_profile.setVisibility(View.GONE);
+            btn_cart.setVisibility(View.GONE);
             btn_logout.setVisibility(View.GONE);
         } else {
             if (sharedPreferences.contains(Constants.KEY_GET_USER)) {
@@ -89,9 +97,12 @@ public class FragmentProfile extends Fragment {
                 try {
                     JSONObject obj = new JSONObject(userData);
 
-                    tv_user.setVisibility(View.VISIBLE);
-                    tv_name.setVisibility(View.GONE);
-                    ll_login.setVisibility(View.GONE);
+                    layout_btn.setVisibility(View.GONE);
+                    img.setVisibility(View.VISIBLE);
+                    layout_name.setVisibility(View.VISIBLE);
+                    layout_status_order.setVisibility(View.VISIBLE);
+                    btn_profile.setVisibility(View.VISIBLE);
+                    btn_cart.setVisibility(View.VISIBLE);
                     btn_logout.setVisibility(View.VISIBLE);
 
                     tv_user.setText(obj.getString(Constants.KEY_TAI_KHOAN));
@@ -99,7 +110,7 @@ public class FragmentProfile extends Fragment {
                             .load(obj.get(Constants.KEY_AVARTAR))
                             .into(img);
 
-                    Log.d("My App", obj.toString()+obj.get(Constants.KEY_AVARTAR));
+                    Log.d("My App", obj.toString() + obj.get(Constants.KEY_AVARTAR));
 
                 } catch (Throwable t) {
                     Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
@@ -110,6 +121,14 @@ public class FragmentProfile extends Fragment {
 
     //thêm chức năng vào các nút bấm
     private void setListener() {
+        layout_name.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        });
+        img.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        });
         tv_login.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SignInActivity.class);
             startActivity(intent);
@@ -185,6 +204,7 @@ public class FragmentProfile extends Fragment {
         // Create AlertDialog:
         AlertDialog alert = builder.create();
         alert.show();
+        preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, false);
     }
 }
 

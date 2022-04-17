@@ -136,4 +136,5 @@ public class User {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
 }

@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -42,6 +44,9 @@ import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.RealPathUtil;
 import com.example.modelfashion.databinding.ActivityProfileBinding;
+import com.example.modelfashion.network.ApiClient;
+import com.example.modelfashion.network.ApiInterface;
+import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -75,11 +80,13 @@ public class ProfileActivity extends AppCompatActivity {
     JSONObject obj;
     String realPath ="";
     String avatarPath = "";
+    ApiInterface apiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        apiInterface = ApiClient.provideApiInterface(ProfileActivity.this);
         preferenceManager = new PreferenceManager(getApplicationContext());
 
         viewHolder();
@@ -90,41 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        uploadUser();
     }
-
-//    private void uploadUser(){
-//        User user = new User(id,
-//                tvActProfileTaiKhoan.getText().toString(),
-//                "",
-//                tvActProfileEmail.getText().toString(),
-//                tvActProfileName.getText().toString(),
-//                tvActProfilePhone.getText().toString(),
-//                tvActProfileSex.getText().toString(),
-//                tvActProfileBirthday.getText().toString(),
-//                tvActProfileAddress.getText().toString(),
-//                "",
-//                "");
-//        try {
-//            JSONObject jsonUser = new JSONObject(user.toString());
-//            ApiRetrofit.apiRetrofit.UpdateUserInfo(jsonUser).enqueue(new Callback<User>() {
-//                @Override
-//                public void onResponse(Call<User> call, Response<User> response) {
-//                    User user1 = response.body();
-//                    Log.e("check",user1.getId()+" "+user1.getTaiKhoan()+" "+user1.getMatKhau());
-//                    Log.e("check",jsonUser.toString());
-//                }
-//
-//                @Override
-//                public void onFailure(Call<User> call, Throwable t) {
-//
-//                }
-//            });
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        Log.e("check",123+"");
-//    }
 
     private void viewHolder() {
         layoutActProfileAvatar=findViewById(R.id.layout_act_profile_avatar);
@@ -254,7 +227,30 @@ public class ProfileActivity extends AppCompatActivity {
         layoutActProfileAddrest.setOnClickListener(v -> {
             changeProfile(3);
         });
+        btnActProfileCheck.setOnClickListener(v -> {
+            User user = new User("22","hongluc","123456789","email@gmail.com","hồng lực","1297836478","Nam","1990-11-24","địa chỉ","","");
+            try {
+                JSONObject value = new JSONObject(user.toString());
+                Log.e("luclh",value.toString());
 
+                apiInterface.UpdateUser(value).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.e("luclh",response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.e("luclh",t.toString());
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        });
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Debug;
+import android.preference.PreferenceFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -21,6 +22,7 @@ import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.google.gson.Gson;
@@ -38,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     TextView tvSignUp;
     CheckBox cbSaveValue;
     SharedPreferences sharedPreferences;
+    PreferenceManager preferenceManager;
     ApiInterface apiInterface;
     ProgressLoadingCommon progressLoadingCommon;
 
@@ -45,6 +48,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        preferenceManager = new PreferenceManager(getApplicationContext());
         viewHolder();
         setListener();
         getPreferencesData();
@@ -115,9 +119,9 @@ public class SignInActivity extends AppCompatActivity {
                             if (cbSaveValue.isChecked()) {
                                 Boolean aBoolean = cbSaveValue.isChecked();
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("account", edtAccount.getText().toString());
-                                editor.putString("password", edtPassword.getText().toString());
-                                editor.putBoolean("checkbox", aBoolean);
+                                editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
+                                editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
+                                editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
                                 editor.apply();
                             } else {
                                 sharedPreferences.edit().clear().apply();
@@ -129,6 +133,8 @@ public class SignInActivity extends AppCompatActivity {
                             prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
                             prefsEditor.apply();
 
+                            //lưu trạng thái đã đăng nhập.
+                            preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS,true);
                             Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 //                            onBackPressed();
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -154,16 +160,16 @@ public class SignInActivity extends AppCompatActivity {
 
     public void getPreferencesData() {
         SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        if (sharedPreferences.contains("account")) {
-            String user = sharedPreferences.getString("account", "not found.");
+        if (sharedPreferences.contains(Constants.KEY_SAVE_USER_INFO)) {
+            String user = sharedPreferences.getString(Constants.KEY_SAVE_USER_INFO, "not found.");
             edtAccount.setText(user);
         }
-        if (sharedPreferences.contains("password")) {
-            String pass = sharedPreferences.getString("password", "not found.");
+        if (sharedPreferences.contains(Constants.KEY_SAVE_PASSWORD_INFO)) {
+            String pass = sharedPreferences.getString(Constants.KEY_SAVE_PASSWORD_INFO, "not found.");
             edtPassword.setText(pass);
         }
-        if (sharedPreferences.contains("checkbox")) {
-            Boolean check = sharedPreferences.getBoolean("checkbox", false);
+        if (sharedPreferences.contains(Constants.KEY_SAVE_CHECK_BOX)) {
+            Boolean check = sharedPreferences.getBoolean(Constants.KEY_SAVE_CHECK_BOX, false);
             cbSaveValue.setChecked(check);
         }
     }

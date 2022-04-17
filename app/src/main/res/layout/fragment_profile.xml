@@ -43,6 +43,7 @@
                     android:layout_height="100dp"
                     android:layout_marginLeft="20dp"
                     android:scaleType="centerCrop"
+                    android:background="@drawable/bg_information_line"
                     android:src="@drawable/bg_gradient_blue"
                     app:riv_corner_radius="50dp" />
 
@@ -53,9 +54,9 @@
                     android:paddingHorizontal="20dp">
 
                     <LinearLayout
+                        android:id="@+id/layout_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_above="@+id/ll_login"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -64,11 +65,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"
-                            android:text="Tên người dùng"
                             android:textColor="@color/white"
                             android:textSize="27dp"
-                            android:textStyle="bold"
-                            android:visibility="visible" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tv_frag_Profile_user"
@@ -76,19 +75,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:gravity="left"
-                            android:text="User name"
                             android:textColor="@color/grey_active"
                             android:textSize="20dp"
                             android:textStyle="bold"
-                            android:layout_marginBottom="35dp"
-                            android:visibility="visible" />
+                            android:layout_marginBottom="35dp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_login"
+                        android:id="@+id/layout_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -102,9 +99,8 @@
                             android:paddingVertical="5dp"
                             android:text="Đăng nhập"
                             android:textColor="@color/text"
-                            android:textSize="17dp"
-                            android:textStyle="normal"
-                            android:visibility="visible" />
+                            android:textSize="20dp"
+                            android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/tv_frag_Profile_Sign_Up"
@@ -117,9 +113,8 @@
                             android:paddingVertical="5dp"
                             android:text="Đăng ký"
                             android:textColor="@color/text"
-                            android:textSize="17dp"
-                            android:textStyle="normal"
-                            android:visibility="visible" />
+                            android:textSize="20dp"
+                            android:textStyle="normal" />
                     </LinearLayout>
 
 
@@ -137,6 +132,7 @@
             android:background="#8E97FD" />
 
         <RelativeLayout
+            android:id="@+id/layout_status_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -289,6 +285,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/btn_frag_Profile_Profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -306,7 +303,6 @@
                 android:src="@drawable/user" />
 
             <TextView
-                android:id="@+id/btn_frag_Profile_Profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
@@ -331,6 +327,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/btn_frag_Profile_cart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -348,7 +345,6 @@
                 android:src="@drawable/cart_profile" />
 
             <TextView
-                android:id="@+id/btn_frag_Profile_cart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
@@ -385,6 +381,7 @@
                 android:background="#8E97FD" />
 
             <RelativeLayout
+                android:id="@+id/btn_frag_Profile_Logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -402,7 +399,6 @@
                     android:src="@drawable/logout_profile" />
 
                 <TextView
-                    android:id="@+id/btn_frag_Profile_Logout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
