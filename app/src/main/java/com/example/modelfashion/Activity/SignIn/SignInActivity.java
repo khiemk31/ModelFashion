@@ -35,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     ImageView btn_back;
     EditText edtAccount, edtPassword;
     Button btnLogin;
-    TextView tvSignUp;
+    TextView tvSignUp, tvForgotPassword;
     CheckBox cbSaveValue;
     SharedPreferences sharedPreferences;
     ApiInterface apiInterface;
@@ -61,6 +61,7 @@ public class SignInActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
         apiInterface = ApiClient.provideApiInterface(SignInActivity.this);
         progressLoadingCommon = new ProgressLoadingCommon();
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
     }
 
     private Boolean validate() {
@@ -102,6 +103,13 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            }
+        });
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
             }
         });
     }
