@@ -2,6 +2,7 @@ package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +23,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
+import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
@@ -31,6 +35,7 @@ import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.KeyboardUtils;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.Repository;
 
@@ -61,7 +66,6 @@ public class MainFragment extends Fragment {
     private String user_id;
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
     private TextView tvCurrentDate, tvGreeting;
-    private ImageView imgUserAvatar;
     private PreferenceManager preferenceManager;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -104,14 +108,14 @@ public class MainFragment extends Fragment {
 
         Bundle info = getArguments();
         user_id = info.getString("user_id");
-        try {
-            setUserAvatar(user_id);
-        }catch (Exception e){}
+//        try {
+//            setUserAvatar(user_id);
+//        } catch (Exception e) {
+//        }
 
 
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);
-        imgUserAvatar = view.findViewById(R.id.img_user_avatar);
         preferenceManager = new PreferenceManager(requireContext());
 
         arrItem.add(new ItemSaleMain(R.drawable.test_img));
@@ -143,19 +147,19 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-//    private void initClickProfileAvatar() {
-//        imgUserAvatar.setOnClickListener(view -> {
-//            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
-//                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
-//            } else {
-//                startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
-//            }
-//        });
-//
-//    }
+    private void initClickProfileAvatar() {
+        avatar.setOnClickListener(view -> {
+            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
+                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
+            } else {
+                startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
+            }
+        });
+
+    }
 
     private void initHeader() {
-        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy");
         Calendar cal = Calendar.getInstance(Locale.US);
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
@@ -164,7 +168,7 @@ public class MainFragment extends Fragment {
         } else {
             tvGreeting.setText("Chào buổi tối");
         }
-        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(imgUserAvatar);
+        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
     }
 
     private void initData() {
@@ -180,7 +184,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
                 intent.putExtra(KEY_PRODUCT_ID, product.getId());
-                intent.putExtra("user_id",user_id);
+                intent.putExtra("user_id", user_id);
                 startActivity(intent);
             }
 
@@ -188,11 +192,18 @@ public class MainFragment extends Fragment {
             public void imgAddToCartClick(int position, MyProduct product) {
                 // TODO add to cart
             }
+
+            @Override
+            public void imgWatchAll(int position, String type) {
+                Intent intent = new Intent(requireContext(), SeeAllActivity.class);
+                intent.putExtra(KEY_PRODUCT_TYPE, type);
+                startActivity(intent);
+            }
         });
     }
 
-    private void setUserAvatar(String user_id){
-        if(!user_id.equalsIgnoreCase("null")){
+    private void setUserAvatar(String user_id) {
+        if (!user_id.equalsIgnoreCase("null")) {
             ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
@@ -206,6 +217,7 @@ public class MainFragment extends Fragment {
             });
         }
     }
+
     private void getAllProduct(Repository repository) {
         Single<ArrayList<MyProduct>> products = repository.getAllProduct();
         compositeDisposable.add(products.doOnSubscribe(disposable -> {
