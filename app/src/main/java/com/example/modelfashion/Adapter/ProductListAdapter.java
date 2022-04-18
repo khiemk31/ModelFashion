@@ -68,6 +68,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 onItemClick.imgAddToCartClick(position, product);
             }
         });
+
+        viewHolder.tv_xem_tat_ca.setOnClickListener(view -> {
+            onItemClick.imgWatchAll(i, arrProductType.get(i));
+        });
     }
 
     @Override
@@ -97,5 +101,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public interface OnItemClickListener{
         void imgClick(int position, MyProduct product);
         void imgAddToCartClick(int position, MyProduct product);
+        void imgWatchAll(int position, String type);
     }
 }
