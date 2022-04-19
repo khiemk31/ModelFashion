@@ -25,7 +25,7 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
                 android:background="@drawable/bg_gradient_blue" />
 
 
@@ -45,7 +45,7 @@
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_information_line"
                     android:src="@drawable/bg_gradient_blue"
-                    app:riv_corner_radius="50dp" />
+                    app:riv_corner_radius="25dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -77,8 +77,7 @@
                             android:gravity="left"
                             android:textColor="@color/grey_active"
                             android:textSize="20dp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="35dp" />
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout

@@ -121,6 +121,20 @@ public class SignInActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
                                 editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
+
+                                preferenceManager.putString(Constants.KEY_ID, response.body().getId());
+                                preferenceManager.putString(Constants.KEY_TAI_KHOAN, response.body().getTaiKhoan());
+                                preferenceManager.putString(Constants.KEY_MAT_KHAU, response.body().getMatKhau());
+                                preferenceManager.putString(Constants.KEY_EMAIL, response.body().getEmail());
+                                preferenceManager.putString(Constants.KEY_FULL_NAME, response.body().getFullName());
+                                preferenceManager.putString(Constants.KEY_SEX, response.body().getSex());
+                                preferenceManager.putString(Constants.KEY_BIRTHDAY, response.body().getBirthdate());
+                                preferenceManager.putString(Constants.KEY_ADDRESS, response.body().getAddress());
+                                preferenceManager.putString(Constants.KEY_AVARTAR, response.body().getAvatar());
+                                preferenceManager.putString(Constants.KEY_FUND, response.body().getFund());
+                                preferenceManager.putString(Constants.KEY_PHONE, response.body().getPhone());
+                                preferenceManager.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
+
                                 editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
                                 editor.apply();
                             } else {
@@ -131,6 +145,7 @@ public class SignInActivity extends AppCompatActivity {
                             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
                             prefsEditor.putString(Constants.KEY_GET_USER, response.body().toString());
                             prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                            preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
                             prefsEditor.apply();
 
                             //lưu trạng thái đã đăng nhập.

@@ -37,10 +37,8 @@ public class FragmentProfile extends Fragment {
     TextView tv_name, tv_user, tv_login, btn_history, tv_signUp;
     LinearLayout btn_status, btn_status2, btn_status3;
     RoundedImageView img;
-    TextView btn_feedback;
     LinearLayout layout_btn, layout_name;
     Boolean isLogin;
-    ProgressLoadingCommon progressLoadingCommon;
     String user_id;
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
 
@@ -64,8 +62,6 @@ public class FragmentProfile extends Fragment {
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
-        Bundle info = getArguments();
-        user_id = info.getString("user_id");
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
@@ -75,13 +71,9 @@ public class FragmentProfile extends Fragment {
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-        isLogin = sharedPreferences.getBoolean(Constants.KEY_CHECK_LOGIN, true);
+
+        isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
         if (isLogin == false) {
-            User user = new User("", "", "", "", "", "", "");
-            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-            prefsEditor.putString("user", user.toString());
-            prefsEditor.apply();
 
             layout_btn.setVisibility(View.VISIBLE);
             img.setVisibility(View.GONE);
@@ -91,12 +83,6 @@ public class FragmentProfile extends Fragment {
             btn_cart.setVisibility(View.GONE);
             btn_logout.setVisibility(View.GONE);
         } else {
-            if (sharedPreferences.contains(Constants.KEY_GET_USER)) {
-                String userData = sharedPreferences.getString(Constants.KEY_GET_USER, "");
-
-                try {
-                    JSONObject obj = new JSONObject(userData);
-
                     layout_btn.setVisibility(View.GONE);
                     img.setVisibility(View.VISIBLE);
                     layout_name.setVisibility(View.VISIBLE);
@@ -104,18 +90,11 @@ public class FragmentProfile extends Fragment {
                     btn_profile.setVisibility(View.VISIBLE);
                     btn_cart.setVisibility(View.VISIBLE);
                     btn_logout.setVisibility(View.VISIBLE);
-
-                    tv_user.setText(obj.getString(Constants.KEY_TAI_KHOAN));
+                    tv_user.setText(preferenceManager.getString(Constants.KEY_TAI_KHOAN));
+                    tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
                     Glide.with(getActivity())
-                            .load(obj.get(Constants.KEY_AVARTAR))
+                            .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                             .into(img);
-
-                    Log.d("My App", obj.toString() + obj.get(Constants.KEY_AVARTAR));
-
-                } catch (Throwable t) {
-                    Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
-                }
-            }
         }
     }
 
@@ -194,11 +173,15 @@ public class FragmentProfile extends Fragment {
                 //progressLoadingCommon.showProgressLoading(getActivity());
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
                 sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
+                preferenceManager.clear();
+                preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN,false);
                 SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
                 prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
                 prefsEditor.apply();
                 img.setImageResource(R.drawable.bg_gradient_blue);
                 loadDetails();
+                Intent intent = new Intent(getContext(),SignInActivity.class);
+                startActivity(intent);
             }
         });
         // Create AlertDialog:

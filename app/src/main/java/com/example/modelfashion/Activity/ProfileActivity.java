@@ -3,11 +3,11 @@ package com.example.modelfashion.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.Manifest;
-import android.app.DatePickerDialog;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,8 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
-import android.util.JsonReader;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,17 +23,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.User.User;
@@ -43,21 +37,15 @@ import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.RealPathUtil;
-import com.example.modelfashion.databinding.ActivityProfileBinding;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
-import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.makeramen.roundedimageview.RoundedImageView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
-
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 import okhttp3.MediaType;
@@ -74,29 +62,18 @@ public class ProfileActivity extends AppCompatActivity {
     AppCompatImageView btnActProfileBack,btnActProfileCheck;
     TextView tvActProfileSex,tvActProfileName,tvActProfilePhone,tvActProfileAddress,tvActProfileBirthday, tvActProfileTaiKhoan, tvActProfileEmail;
     RoundedImageView imgActProfileAvatar;
-    String id;
     ProgressLoadingCommon progressLoadingCommon;
-    SharedPreferences sharedPreferences;
-    JSONObject obj;
-    String realPath ="";
-    String avatarPath = "";
     ApiInterface apiInterface;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         apiInterface = ApiClient.provideApiInterface(ProfileActivity.this);
         preferenceManager = new PreferenceManager(getApplicationContext());
-
         viewHolder();
         loadDetails();
         setListener();
-        try {
-            avatarPath = obj.getString(Constants.KEY_AVARTAR);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        profileAnimation();
     }
 
     private void viewHolder() {
@@ -124,72 +101,18 @@ public class ProfileActivity extends AppCompatActivity {
         progressLoadingCommon = new ProgressLoadingCommon();
     }
 
-//    kiểm tra dữ liệu có thay đổi không
-    private void checkChange(){
-        btnActProfileCheck.setVisibility(View.VISIBLE);
-
-        btnActProfileCheck.setOnClickListener(v -> {
-            editUser();
-        });
-    }
-
-    void  editUser() {
-        User user = new User(id,
-                tvActProfileTaiKhoan.getText().toString(),
-                "",
-                tvActProfileEmail.getText().toString(),
-                tvActProfileName.getText().toString(),
-                tvActProfilePhone.getText().toString(),
-                tvActProfileSex.getText().toString(),
-                tvActProfileBirthday.getText().toString(),
-                tvActProfileAddress.getText().toString(),
-                "",
-                "");
-        ApiRetrofit.apiRetrofit.editUser(user).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
-                    progressLoadingCommon.showProgressLoading(ProfileActivity.this);
-                    Toast.makeText(ProfileActivity.this, "Thêm thông tin thành công", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                } else {
-                    Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(ProfileActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     //load dữ liệu lên màn hình
     private void loadDetails() {
-        preferenceManager.putString(Constants.KEY_PROFILE_SEX, "0");
-        putTVSex(preferenceManager.getString(Constants.KEY_PROFILE_SEX));
-        profileAnimation();
-
-        sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-        if (sharedPreferences.contains("user")) {
-            String userData = sharedPreferences.getString("user", "");
-            try {
-                obj = new JSONObject(userData);
-                id = obj.getString(Constants.KEY_ID);
-                tvActProfileTaiKhoan.setText(obj.getString(Constants.KEY_TAI_KHOAN));
-                tvActProfileSex.setText(obj.getString(Constants.KEY_SEX));
-                tvActProfileName.setText(obj.getString(Constants.KEY_FULL_NAME));
-                tvActProfilePhone.setText(obj.getString(Constants.KEY_PHONE));
-                tvActProfileAddress.setText(obj.getString(Constants.KEY_ADDRESS));
-                tvActProfileBirthday.setText(obj.getString(Constants.KEY_BIRTHDAY));
-                tvActProfileEmail.setText(obj.getString(Constants.KEY_EMAIL));
-                Glide.with(ProfileActivity.this).load(obj.getString(Constants.KEY_AVARTAR)).into(imgActProfileAvatar);
-                Log.d("My App", obj.toString());
-
-            } catch (Throwable t) {
-                Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
-            }
-        }
+        tvActProfileTaiKhoan.setText(preferenceManager.getString(Constants.KEY_TAI_KHOAN));
+        tvActProfileName.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+        tvActProfilePhone.setText(preferenceManager.getString(Constants.KEY_PHONE));
+        tvActProfileAddress.setText(preferenceManager.getString(Constants.KEY_ADDRESS));
+        tvActProfileEmail.setText(preferenceManager.getString(Constants.KEY_EMAIL));
+        tvActProfileBirthday.setText(preferenceManager.getString(Constants.KEY_BIRTHDAY));
+        putTVSex(preferenceManager.getString(Constants.KEY_SEX));
+        Glide.with(getApplicationContext())
+                .load(preferenceManager.getString(Constants.KEY_AVARTAR))
+                .into(imgActProfileAvatar);
     }
 
     // check thông tin giới tính
@@ -228,30 +151,67 @@ public class ProfileActivity extends AppCompatActivity {
             changeProfile(3);
         });
         btnActProfileCheck.setOnClickListener(v -> {
-            User user = new User("22","hongluc","123456789","email@gmail.com","hồng lực","1297836478","Nam","1990-11-24","địa chỉ","","");
-            try {
-                JSONObject value = new JSONObject(user.toString());
-                Log.e("luclh",value.toString());
-
-                apiInterface.UpdateUser(value).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Log.e("luclh",response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.e("luclh",t.toString());
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("\nBẠN CÓ CHẮC VỚI CÁC THAY ĐỔI?\n\n")
+                    .setPositiveButton("Xác Nhận", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            confirmChange();
+                        }
+                    })
+                    .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            builder.create().dismiss();
+                        }
+                    });
+            // tạo dialog và hiển thị
+            builder.create().show();
         });
     }
+
+    //xác nhận thay đổi thông tin
+                private void confirmChange(){
+                    User user = new User(preferenceManager.getString(Constants.KEY_ID),
+                            preferenceManager.getString(Constants.KEY_TAI_KHOAN),
+                            preferenceManager.getString(Constants.KEY_MAT_KHAU),
+                            preferenceManager.getString(Constants.KEY_EMAIL),
+                            tvActProfileName.getText().toString().trim(),
+                            tvActProfilePhone.getText().toString().trim(),
+                            preferenceManager.getString(Constants.KEY_PROFILE_SEX),
+                            tvActProfileBirthday.getText().toString(),
+                            tvActProfileAddress.getText().toString().trim(),
+                            "",
+                            preferenceManager.getString(Constants.KEY_TEMP_AVARTAR));
+                    SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+                    editor.putString(Constants.KEY_GET_USER,user.toString());
+                    editor.apply();
+
+                    try {
+                        JSONObject value = new JSONObject(user.toString());
+
+                        apiInterface.UpdateUser(value).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                            }
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Log.e("luclh", t.toString() );
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    preferenceManager.putString(Constants.KEY_FULL_NAME, user.getFullName());
+                    preferenceManager.putString(Constants.KEY_SEX, user.getSex());
+                    preferenceManager.putString(Constants.KEY_BIRTHDAY, user.getBirthdate());
+                    preferenceManager.putString(Constants.KEY_ADDRESS, user.getAddress());
+                    preferenceManager.putString(Constants.KEY_AVARTAR, user.getAvatar());
+                    preferenceManager.putString(Constants.KEY_PHONE, user.getPhone());
+                    Toast.makeText(getApplicationContext(),"SỬA THÔNG TIN THÀNH CÔNG",Toast.LENGTH_SHORT).show();
+
+                    Intent intent= new Intent(ProfileActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
 
 
     //dialog thay đổi tên, số điện thoại, địa chỉ
@@ -280,9 +240,8 @@ public class ProfileActivity extends AppCompatActivity {
             edt.setText(tvActProfileName.getText().toString());
             tvOK.setOnClickListener(v -> {
                 tvActProfileName.setText(edt.getText());
-                Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
-                checkChange();
                 dialog.dismiss();
+                btnActProfileCheck.setVisibility(View.VISIBLE);
             });
         } else if (check == 2) {
             edt.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -290,20 +249,17 @@ public class ProfileActivity extends AppCompatActivity {
             edt.setText(tvActProfilePhone.getText().toString());
             tvOK.setOnClickListener(v -> {
                 tvActProfilePhone.setText(edt.getText());
-                Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
-                checkChange();
                 dialog.dismiss();
+                btnActProfileCheck.setVisibility(View.VISIBLE);
             });
 
         } else if (check == 3) {
             edt.setTextSize(15);
             tvTitle.setText("THAY ĐỔI ĐỊA CHỈ");
-            edt.setText(tvActProfileAddress.getText().toString() + "\n");
             tvOK.setOnClickListener(v -> {
                 tvActProfileAddress.setText(edt.getText());
-                Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
-                checkChange();
                 dialog.dismiss();
+                btnActProfileCheck.setVisibility(View.VISIBLE);
             });
 
         }
@@ -334,25 +290,19 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvOK = dialog.findViewById(R.id.tv_layout_dialog_changebirthday_ok);
         DatePicker datePicker = dialog.findViewById(R.id.datePicker_layout_dialog_changeBirthday);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        String[] date1 = tvActProfileBirthday.getText().toString().split("-");
+        datePicker.init(Integer.parseInt(date1[0]), Integer.parseInt(date1[1])-1, Integer.parseInt(date1[2]), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
+            }
+        });
 
         tvOK.setOnClickListener(v -> {
-            String day = String.valueOf(datePicker.getDayOfMonth());
-            String month = String.valueOf(datePicker.getMonth());
-            String year = String.valueOf(datePicker.getYear());
-
-            preferenceManager.putString(Constants.KEY_PROFILE_BIRTHDAY_DAY, day);
-            preferenceManager.putString(Constants.KEY_PROFILE_BIRTHDAY_MONTH, month);
-            preferenceManager.putString(Constants.KEY_PROFILE_BIRTHDAY_YEAR, year);
-
-            // binding.tvActProfileBirthday.setText(preferenceManager.getString(Constants.KEY_PROFILE_BIRTHDAY_DAY) +" - "+preferenceManager.getString(Constants.KEY_PROFILE_BIRTHDAY_MONTH) +" - "+ preferenceManager.getString(Constants.KEY_PROFILE_BIRTHDAY_YEAR));
-            tvActProfileBirthday.setText(day + " - " + month + " - " + year);
-
-            Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
-            checkChange();
+            int month1=datePicker.getMonth()+1;
+            tvActProfileBirthday.setText(datePicker.getYear() + "-" + month1+ "-" + datePicker.getDayOfMonth());
             dialog.dismiss();
+            btnActProfileCheck.setVisibility(View.VISIBLE);
         });
 
         tvCancel.setOnClickListener(v -> {
@@ -402,9 +352,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 
             putTVSex(preferenceManager.getString(Constants.KEY_PROFILE_SEX));
-            Toast.makeText(getApplicationContext(), "đã xong !", Toast.LENGTH_SHORT).show();
-            checkChange();
             dialog.dismiss();
+            btnActProfileCheck.setVisibility(View.VISIBLE);
         });
 
         tvCancel.setOnClickListener(v -> {
@@ -415,6 +364,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //animation
     private void profileAnimation() {
+
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
         Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
         Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
@@ -522,20 +472,18 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onImageSelected(Uri uri) {
                         // here is selected image uri
-                        realPath = RealPathUtil.getRealPath(ProfileActivity.this,uri);
                         try {
-                            UploadUserAvatar(realPath);
+                            UploadUserAvatar(RealPathUtil.getRealPath(ProfileActivity.this,uri));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         imgActProfileAvatar.setImageURI(uri);
-                        checkChange();
+                        btnActProfileCheck.setVisibility(View.VISIBLE);
                     }
                 });
 
     }
     private void UploadUserAvatar(String realPath) throws JSONException {
-        String user_id = obj.getString(Constants.KEY_ID);
         String base_url = "https://cuongb2k53lvt.000webhostapp.com/FashionShop/user_avatar/";
         File file = new File(realPath);
         String file_path = file.getAbsolutePath();
@@ -547,22 +495,16 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response != null){
-                    String namefolder = avatarPath;
-                    Log.e("check", avatarPath);
-                    namefolder = namefolder.substring(namefolder.lastIndexOf("/"));
-                    UpdateAvatarUser(user_id,base_url+response.body().trim(),namefolder);
-                    avatarPath = base_url+response.body().trim();
-                    try {
-                        obj.put(Constants.KEY_AVARTAR,avatarPath);
-                        SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-                        SharedPreferences.Editor editor = sharedPreferences1.edit();
-                        editor.putString(Constants.KEY_GET_USER,obj.toString());
-                        editor.apply();
-                        Log.e("check",avatarPath+obj.getString(Constants.KEY_AVARTAR));
-                        Log.e("check1", sharedPreferences1.getString(Constants.KEY_GET_USER,""));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    String namefolder = preferenceManager.getString(Constants.KEY_AVARTAR);
+                    if (namefolder.length()>0){
+                        namefolder = namefolder.substring(namefolder.lastIndexOf("/"));
                     }
+
+                    UpdateAvatarUser(preferenceManager.getString(Constants.KEY_ID),base_url+response.body().trim(),namefolder);
+
+                    preferenceManager.putString(Constants.KEY_TEMP_AVARTAR,base_url+response.body().trim());
+
+
 //                    editor.apply();
                     Log.e("check",namefolder);
                 }
@@ -578,7 +520,6 @@ public class ProfileActivity extends AppCompatActivity {
         ApiRetrofit.apiRetrofit.UpdateAvatar(user_id,new_avatar,old_avatar).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(ProfileActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
             }
 
             @Override
