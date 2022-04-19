@@ -77,7 +77,7 @@ public class EnterCapchaActivity extends AppCompatActivity {
     private void countDownTime() {
         CountDownTimer Timer = new CountDownTimer(90000, 1000) {
             public void onTick(long millisUntilFinished) {
-                tvCountDown.setText("" + millisUntilFinished / 1000);
+                tvCountDown.setText("Mã xác thực hết hạn trong " + millisUntilFinished / 1000 + " giây");
             }
 
             public void onFinish() {
