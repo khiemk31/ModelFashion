@@ -31,4 +31,7 @@ public class Constants {
     public static final String KEY_SAVE_USER_INFO = "KEY_SAVE_USER_INFO";
     public static final String KEY_SAVE_PASSWORD_INFO = "KEY_SAVE_PASSWORD_INFO";
     public static final String KEY_SAVE_CHECK_BOX = "KEY_SAVE_CHECK_BOX";
+
+    // main
+    public static final String KEY_PRODUCT_TYPE = "KEY_PRODUCT_TYPE";
 }

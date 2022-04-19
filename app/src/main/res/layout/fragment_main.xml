@@ -51,6 +51,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:riv_corner_radius="100dip" />
+            app:riv_corner_radius="100dip"
+            android:src="@drawable/ic_profile"
+            tools:src="@drawable/ic_profile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

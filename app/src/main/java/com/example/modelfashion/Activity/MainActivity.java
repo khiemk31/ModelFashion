@@ -28,6 +28,7 @@ import com.example.modelfashion.Fragment.MainFragment;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.KeyboardUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
@@ -72,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+
+        KeyboardUtils.addKeyboardToggleListener(this, isVisible -> {
+            if (!isVisible) {
+                showBottomNavigation();
+            } else {
+                hideBottomNavigation();
             }
         });
     }
