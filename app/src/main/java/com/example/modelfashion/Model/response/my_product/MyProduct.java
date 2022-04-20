@@ -114,5 +114,9 @@ public class MyProduct {
                 ", photos=" + photos +
                 '}';
     }
+
+    public String getPriceFormat() {
+        return price + " đ";
+    }
 }
 

@@ -27,6 +27,7 @@
             android:exported="false" />
         <activity
             android:name=".Activity.SignIn.ForgotPasswordActivity"
+            android:name=".Activity.SeeAllActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.SignIn.SignUpActivity"

@@ -22,6 +22,9 @@ import com.example.modelfashion.R;
 
 public class SearchBar extends ConstraintLayout {
 
+    private EditText edt;
+    private ImageView imgClear;
+
     public SearchBar(@NonNull Context context) {
         super(context);
 
@@ -38,8 +41,8 @@ public class SearchBar extends ConstraintLayout {
         String rightIconString = attributes.getString(R.styleable.MySearchView_right_drawable);
 
         // init view
-        EditText edt = view.findViewById(R.id.edt_search_view);
-        ImageView imgClear = view.findViewById(R.id.img_clear_text);
+         edt = view.findViewById(R.id.edt_search_view);
+         imgClear = view.findViewById(R.id.img_clear_text);
 
         imgClear.setOnClickListener(view1 -> {
             edt.setText("");
@@ -70,6 +73,11 @@ public class SearchBar extends ConstraintLayout {
         });
 
         attributes.recycle();
+    }
+
+    public void clearSearchContent(){
+        imgClear.setVisibility(GONE);
+        edt.setText("");
     }
 
     private SearchListener searchListener;

@@ -52,7 +52,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     String productId = "";
     String productName = "";
     private MyProduct myProduct = new MyProduct();
-    private ArrayList<ImageView> listImgSize = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -105,7 +104,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         adapter.setArrItem(myProduct.getPhotos());
         price = myProduct.getPrice();
         tv_product_name.setText(myProduct.getProduct_name());
-        tv_price.setText(format.format(Integer.parseInt(myProduct.getPrice())) + " VNĐ");
+        tv_price.setText(myProduct.getPriceFormat());
         tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
 
         Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
@@ -266,10 +265,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_m = findViewById(R.id.img_size_m);
         img_size_l = findViewById(R.id.img_size_l);
         img_size_xl = findViewById(R.id.img_size_xl);
-        listImgSize.add(img_size_s);
-        listImgSize.add(img_size_m);
-        listImgSize.add(img_size_l);
-        listImgSize.add(img_size_xl);
 
         tv_price = findViewById(R.id.tv_price);
         tv_product_name = findViewById(R.id.tv_product_name);
