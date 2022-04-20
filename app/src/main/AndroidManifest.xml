@@ -20,6 +20,13 @@
         android:theme="@style/Theme.ModelFashion"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.SignIn.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SignIn.EnterCapchaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SignIn.ForgotPasswordActivity"
             android:name=".Activity.SeeAllActivity"
             android:exported="false" />
         <activity
