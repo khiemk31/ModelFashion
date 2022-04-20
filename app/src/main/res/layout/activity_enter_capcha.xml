@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="16dp"
+    android:gravity="top|center"
+    android:orientation="vertical"
+    tools:context=".Activity.SignIn.EnterCapchaActivity">
+
+    <ImageView
+        android:id="@+id/imgBackToGetCapcha"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="left"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/border_around"
+        android:src="@drawable/ic_left_arrow" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="55dp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra!"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/edtCapchaFromEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/border_edit_text"
+        android:hint="Nhập mã xác nhận"
+        android:inputType="numberDecimal"
+        android:paddingHorizontal="20dp"
+        android:singleLine="true"
+        android:textColor="#0D0D0D" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGoToChangePassword"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_button_fb"
+        android:text="Tiếp tục"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvCountDownTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/red_active"
+        android:text="0:10"
+        android:textSize="16sp" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Chưa nhận được mã?"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvResentCapcha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=" Gửi lại"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</LinearLayout>

@@ -35,15 +35,17 @@ import org.json.JSONObject;
 
 public class FragmentProfile extends Fragment {
     PreferenceManager preferenceManager;
-    TextView tv_name, tv_user, tv_login, btn_profile, btn_cart, btn_history, btn_logout, tv_signUp;
+    TextView tv_name, tv_user, tv_login, btn_history, tv_signUp;
     LinearLayout btn_status, btn_status2, btn_status3;
     RoundedImageView img;
-    TextView btn_feedback;
-    LinearLayout ll_login;
+    LinearLayout layout_btn, layout_name;
     Boolean isLogin;
-    ProgressLoadingCommon progressLoadingCommon;
     String user_id;
+
     RelativeLayout rl_logout;
+
+    RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,17 +56,20 @@ public class FragmentProfile extends Fragment {
         tv_user = view.findViewById(R.id.tv_frag_Profile_user);
         tv_login = view.findViewById(R.id.tv_frag_Profile_Login);
         tv_signUp = view.findViewById(R.id.tv_frag_Profile_Sign_Up);
-        ll_login = view.findViewById(R.id.ll_login);
+        layout_btn = view.findViewById(R.id.layout_btn);
+        layout_name = view.findViewById(R.id.layout_name);
+        layout_status_order = view.findViewById(R.id.layout_status_order);
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
-        btn_logout = view.findViewById(R.id.btn_frag_Profile_Logout);
+        btn_logout = view.findViewById(R.id.rl_logout);
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
-        rl_logout = view.findViewById(R.id.rl_logout);
+
         Bundle info = getArguments();
         user_id = info.getString("user_id");
+
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
@@ -74,48 +79,37 @@ public class FragmentProfile extends Fragment {
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-        isLogin = sharedPreferences.getBoolean(Constants.KEY_CHECK_LOGIN, true);
+
+
+        isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
         if (isLogin == false) {
-            User user = new User("", "", "", "", "", "", "");
-            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-            prefsEditor.putString("user", user.toString());
-            prefsEditor.apply();
 
-            tv_user.setVisibility(View.GONE);
-            tv_name.setVisibility(View.GONE);
-            ll_login.setVisibility(View.VISIBLE);
             btn_logout.setVisibility(View.GONE);
-            rl_logout.setVisibility(View.GONE);
+            layout_btn.setVisibility(View.VISIBLE);
+            layout_name.setVisibility(View.GONE);
         } else {
-            if (sharedPreferences.contains(Constants.KEY_GET_USER)) {
-                String userData = sharedPreferences.getString(Constants.KEY_GET_USER, "");
-
-                try {
-                    JSONObject obj = new JSONObject(userData);
-
-                    tv_user.setVisibility(View.VISIBLE);
-                    tv_name.setVisibility(View.GONE);
-                    ll_login.setVisibility(View.GONE);
                     btn_logout.setVisibility(View.VISIBLE);
-                    rl_logout.setVisibility(View.VISIBLE);
-
-                    tv_user.setText(obj.getString(Constants.KEY_TAI_KHOAN));
+                    layout_btn.setVisibility(View.GONE);
+                    img.setVisibility(View.VISIBLE);
+                    layout_name.setVisibility(View.VISIBLE);
+                    tv_user.setText(preferenceManager.getString(Constants.KEY_TAI_KHOAN));
+                    tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
                     Glide.with(getActivity())
-                            .load(obj.get(Constants.KEY_AVARTAR))
+                            .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                             .into(img);
-
-                    Log.d("My App", obj.toString()+obj.get(Constants.KEY_AVARTAR));
-
-                } catch (Throwable t) {
-                    Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
-                }
-            }
         }
     }
 
     //thêm chức năng vào các nút bấm
     private void setListener() {
+        layout_name.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        });
+        img.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        });
         tv_login.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SignInActivity.class);
             startActivity(intent);
@@ -190,6 +184,8 @@ public class FragmentProfile extends Fragment {
                 //            progressLoadingCommon.showProgressLoading(getActivity());
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
                 sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
+                preferenceManager.clear();
+                preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN,false);
                 SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
                 prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
                 prefsEditor.apply();
@@ -226,6 +222,7 @@ public class FragmentProfile extends Fragment {
             }
         });
         dialog.show();
+
     }
 }
 

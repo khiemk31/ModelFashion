@@ -54,8 +54,7 @@ public class CategoryFragment extends Fragment {
     private int currentCategory = 0;
     Repository repository;
 
-    private List<MyProduct> listTemp = new ArrayList<>();
-    private List<MyProduct> listSearch = new ArrayList<>();
+    private final ArrayList<MyProduct> productArrayList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,13 +74,18 @@ public class CategoryFragment extends Fragment {
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-                listSearch.clear();
-                clothesAdapter.setListProduct(listTemp);
+                getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
             }
 
             @Override
             public void afterTextChanged(String content) {
-                fakeSearch(content);
+                ArrayList<MyProduct> listSearch = new ArrayList<>();
+                for (int i = 0; i < productArrayList.size(); i++) {
+                    if (productArrayList.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())) {
+                        listSearch.add(productArrayList.get(i));
+                    }
+                }
+                clothesAdapter.setListProduct(listSearch);
             }
         });
 
@@ -101,16 +105,9 @@ public class CategoryFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
             getCategory(repository);
+            searchBar.clearSearchContent();
             refreshLayout.setRefreshing(false);
         });
-
-//        KeyboardUtils.addKeyboardToggleListener(getActivity(), isVisible -> {
-//            if (!isVisible){
-//                ((MainActivity) requireActivity()).showBottomNavigation();
-//            }else {
-//                ((MainActivity) requireActivity()).hideBottomNavigation();
-//            }
-//        });
 
     }
 
@@ -147,33 +144,9 @@ public class CategoryFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 })
                 .subscribe(productResponse -> {
+                    productArrayList.clear();
                     clothesAdapter.setListProduct(productResponse);
-                    listTemp = productResponse;
-                }, throwable -> {
-                    Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
-                }));
-    }
-
-    private void fakeSearch(String content){
-        compositeDisposable.add(repository.getProductByType(categoryAdapter.getCategory(currentCategory)).doOnSubscribe(disposable -> {
-            // show loading
-            progressBar.setVisibility(View.VISIBLE);
-        })
-                .doFinally(() -> {
-                    // hide loading
-                    progressBar.setVisibility(View.GONE);
-                })
-                .subscribe(productResponse -> {
-                    List<MyProduct> myListSearch = new ArrayList<>();
-                    for (MyProduct product: productResponse) {
-                        if (product.getProduct_name().toLowerCase().contains(content.toLowerCase())){
-                            myListSearch.add(product);
-                        }
-                    }
-                    clothesAdapter.setListProduct(myListSearch);
-                    if (content.equals("")){
-                        getProductByCategory(repository,categoryAdapter.getCategory(currentCategory));
-                    }
+                    productArrayList.addAll(productResponse);
                 }, throwable -> {
                     Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
@@ -197,8 +170,6 @@ public class CategoryFragment extends Fragment {
 
         }));
     }
-
-
 
 
     @Override

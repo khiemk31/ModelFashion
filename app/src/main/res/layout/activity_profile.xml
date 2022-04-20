@@ -39,8 +39,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_check"
-                android:tint="@color/white"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,9 +64,10 @@
                     android:id="@+id/img_act_profile_avatar"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
+                    android:background="@drawable/bg_information_line"
                     android:scaleType="centerCrop"
                     android:src="@drawable/bg_gradient_blue"
-                    app:riv_corner_radius="50dp" />
+                    app:riv_corner_radius="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,7 +75,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="100dp"
                     android:text="Sửa"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue_grey_inactive"
                     android:textSize="25dp"
                     android:textStyle="bold" />
 
@@ -368,7 +369,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_home"
+                android:drawableLeft="@drawable/ic_home_2"
                 android:text=" Địa chỉ"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
