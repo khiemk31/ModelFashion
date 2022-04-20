@@ -161,7 +161,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
-            checkSize(1);
+
 
         });
         img_size_m.setOnClickListener(view -> {
@@ -171,7 +171,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m_red).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
-            checkSize(2);
+
 
         });
         img_size_l.setOnClickListener(view -> {
@@ -181,7 +181,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l_red).into(img_size_l);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
-            checkSize(3);
+
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
@@ -190,7 +190,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl_z).into(img_size_xl);
-            checkSize(4);
+
 
         });
 
@@ -313,40 +313,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);
     }
 
-    private void checkSize(int position) {
-        switch (position) {
-            case 1: {
-                img_size_s.setImageResource(R.drawable.ic_size_s_selected);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 2: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m_selected);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 3: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l_selected);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 4: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl_selected);
-                break;
-            }
-            default:
-                break;
-        }
-    }
 
     @Override
     protected void onDestroy() {

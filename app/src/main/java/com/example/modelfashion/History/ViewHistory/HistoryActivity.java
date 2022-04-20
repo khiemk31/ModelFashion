@@ -53,7 +53,7 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
     private int numberStatus = 4;
-    private String user_id = "1" ;
+    private String user_id = "" ;
     private TextView tv_empty;
 
 
@@ -68,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity {
         tv_empty = findViewById(R.id.tv_empty);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
-       // user_id = intent.getStringExtra("user_id");
+        user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
        // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
