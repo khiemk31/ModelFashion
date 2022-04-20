@@ -78,18 +78,10 @@ public class FragmentProfile extends Fragment {
             layout_btn.setVisibility(View.VISIBLE);
             img.setVisibility(View.GONE);
             layout_name.setVisibility(View.GONE);
-            layout_status_order.setVisibility(View.GONE);
-            btn_profile.setVisibility(View.GONE);
-            btn_cart.setVisibility(View.GONE);
-            btn_logout.setVisibility(View.GONE);
         } else {
                     layout_btn.setVisibility(View.GONE);
                     img.setVisibility(View.VISIBLE);
                     layout_name.setVisibility(View.VISIBLE);
-                    layout_status_order.setVisibility(View.VISIBLE);
-                    btn_profile.setVisibility(View.VISIBLE);
-                    btn_cart.setVisibility(View.VISIBLE);
-                    btn_logout.setVisibility(View.VISIBLE);
                     tv_user.setText(preferenceManager.getString(Constants.KEY_TAI_KHOAN));
                     tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
                     Glide.with(getActivity())
