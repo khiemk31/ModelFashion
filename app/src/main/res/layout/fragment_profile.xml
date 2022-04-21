@@ -65,6 +65,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"
+
                             android:textColor="@color/white"
                             android:textSize="27dp"
                             android:textStyle="bold" />
@@ -75,6 +76,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:gravity="left"
+
                             android:textColor="@color/grey_active"
                             android:textSize="20dp"
                             android:textStyle="bold" />
@@ -98,7 +100,7 @@
                             android:paddingVertical="5dp"
                             android:text="Đăng nhập"
                             android:textColor="@color/text"
-                            android:textSize="20dp"
+                            android:textSize="16dp"
                             android:textStyle="normal" />
 
                         <TextView
@@ -112,7 +114,7 @@
                             android:paddingVertical="5dp"
                             android:text="Đăng ký"
                             android:textColor="@color/text"
-                            android:textSize="20dp"
+                            android:textSize="16dp"
                             android:textStyle="normal" />
                     </LinearLayout>
 
@@ -380,7 +382,7 @@
                 android:background="#8E97FD" />
 
             <RelativeLayout
-                android:id="@+id/btn_frag_Profile_Logout"
+                android:id="@+id/rl_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

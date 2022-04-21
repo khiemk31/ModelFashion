@@ -19,7 +19,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:text="Product"
-            android:textSize="20sp" />
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_xem_tat_ca"
@@ -29,7 +30,7 @@
             android:fontFamily="@font/nunito_variablefont_wght"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
-            android:text="Xem Tất Cả"
+            android:text="Xem tất cả"
             android:textColor="@color/green_active" />
     </RelativeLayout>
 

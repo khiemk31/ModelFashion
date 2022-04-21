@@ -1,12 +1,12 @@
 package com.example.modelfashion.Fragment;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
@@ -40,6 +41,9 @@ public class FragmentProfile extends Fragment {
     LinearLayout layout_btn, layout_name;
     Boolean isLogin;
     String user_id;
+
+    RelativeLayout rl_logout;
+
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
 
 
@@ -58,10 +62,14 @@ public class FragmentProfile extends Fragment {
         btn_profile = view.findViewById(R.id.btn_frag_Profile_Profile);
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
-        btn_logout = view.findViewById(R.id.btn_frag_Profile_Logout);
+        btn_logout = view.findViewById(R.id.rl_logout);
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
+
+        Bundle info = getArguments();
+        user_id = info.getString("user_id");
+
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
@@ -72,13 +80,15 @@ public class FragmentProfile extends Fragment {
     //load dữ liệu lên màn hình
     private void loadDetails() {
 
+
         isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
         if (isLogin == false) {
 
+            btn_logout.setVisibility(View.GONE);
             layout_btn.setVisibility(View.VISIBLE);
-            img.setVisibility(View.GONE);
             layout_name.setVisibility(View.GONE);
         } else {
+                    btn_logout.setVisibility(View.VISIBLE);
                     layout_btn.setVisibility(View.GONE);
                     img.setVisibility(View.VISIBLE);
                     layout_name.setVisibility(View.VISIBLE);
@@ -111,11 +121,16 @@ public class FragmentProfile extends Fragment {
         });
 
         btn_logout.setOnClickListener(v -> {
-            openDialog();
+            showDialogLogout();
         });
         btn_profile.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), ProfileActivity.class);
-            startActivity(intent);
+            if(user_id.equalsIgnoreCase("null")){
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
         });
         btn_history.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), HistoryActivity.class);
@@ -142,27 +157,31 @@ public class FragmentProfile extends Fragment {
             intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
+        btn_cart.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            intent.putExtra("use_id",user_id);
+            startActivity(intent);
+        });
     }
-
-    private void openDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        // Set Title and Message:
-        builder.setTitle("Đăng xuất")
-                .setMessage("Bạn có muốn đăng xuất không?");
-
-        //
-        builder.setCancelable(true);
-        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+    private void showDialogLogout(){
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_logout);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_logout,tv_no_logout;
+        tv_yes_logout = dialog.findViewById(R.id.tv_yes_logout);
+        tv_no_logout = dialog.findViewById(R.id.tv_no_logout);
+        tv_no_logout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                builder.create().dismiss();
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
-        // Create "Positive" button with OnClickListener.
-        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                //progressLoadingCommon.showProgressLoading(getActivity());
+        tv_yes_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //            progressLoadingCommon.showProgressLoading(getActivity());
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
                 sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
                 preferenceManager.clear();
@@ -172,14 +191,38 @@ public class FragmentProfile extends Fragment {
                 prefsEditor.apply();
                 img.setImageResource(R.drawable.bg_gradient_blue);
                 loadDetails();
-                Intent intent = new Intent(getContext(),SignInActivity.class);
+                Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
+                dialog.dismiss();
             }
         });
-        // Create AlertDialog:
-        AlertDialog alert = builder.create();
-        alert.show();
-        preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, false);
+
+        dialog.show();
+    }
+    private void showDialogLogIn(){
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_quest_login);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_login,tv_no_login;
+        tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
+        tv_no_login = dialog.findViewById(R.id.tv_no_login);
+        tv_no_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tv_yes_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), SignInActivity.class));
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 }
 

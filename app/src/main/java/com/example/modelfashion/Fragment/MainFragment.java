@@ -118,9 +118,9 @@ public class MainFragment extends Fragment {
         tvGreeting = view.findViewById(R.id.tv_greeting);
         preferenceManager = new PreferenceManager(requireContext());
 
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
-        arrItem.add(new ItemSaleMain(R.drawable.test_img));
+        arrItem.add(new ItemSaleMain(R.drawable.banner1));
+        arrItem.add(new ItemSaleMain(R.drawable.banner2));
+        arrItem.add(new ItemSaleMain(R.drawable.banner3));
         VpSaleMainFmAdapter vpSaleMainFmAdapter = new VpSaleMainFmAdapter(arrItem);
         vpSaleMain.setAdapter(vpSaleMainFmAdapter);
 
@@ -166,6 +166,7 @@ public class MainFragment extends Fragment {
         if (cal.get(Calendar.AM_PM) == Calendar.AM) {
             tvGreeting.setText("Chào buổi sáng");
         } else {
+            tvGreeting.setText("Chào buổi chiều");
             tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
@@ -208,8 +209,10 @@ public class MainFragment extends Fragment {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     User user = response.body();
+                    try {
+                        Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
+                    }catch (Exception e){}
 
-                    Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
 
                 }
                 @Override

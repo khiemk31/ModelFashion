@@ -3,22 +3,25 @@ package com.example.modelfashion.Activity;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Intent;
-import android.media.Image;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
@@ -126,6 +129,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             finish();
         });
         img_cart.setOnClickListener(view -> {
+            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+            intent.putExtra("use_id", user_id);
+            startActivity(intent);
             // TODO CART
         });
         img_prev.setOnClickListener(view -> {
@@ -150,22 +156,42 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
             size_id = arr_size.get(0).getId();
-            checkSize(1);
+
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s_red).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+
+
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
             size_id = arr_size.get(1).getId();
-            checkSize(2);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m_red).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+
+
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
             size_id = arr_size.get(2).getId();
-            checkSize(3);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l_red).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl).into(img_size_xl);
+
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
             size_id = arr_size.get(3).getId();
-            checkSize(4);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
+            Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_xl_z).into(img_size_xl);
+
+
         });
 
         tv_price.setText("650,000 VND");
@@ -211,7 +237,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         btn_them_vao_gio_hang.setOnClickListener(view -> {
             // TODO ADD ON CART
             if (user_id.equalsIgnoreCase("null")) {
-                Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+                showDialogLogIn();
             } else {
                 ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
                     @Override
@@ -224,6 +250,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                                         Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
                                     } else {
                                         if (response.body().equals("ok")) {
+                                            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                                            intent.putExtra("use_id", user_id);
+                                            startActivity(intent);
                                             Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
@@ -252,6 +281,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void initView() {
         progressBar = findViewById(R.id.progress_bar);
@@ -283,44 +313,35 @@ public class ProductDetailActivity extends AppCompatActivity {
         Glide.with(this).load(url).placeholder(R.drawable.ic_logo).into(img);
     }
 
-    private void checkSize(int position) {
-        switch (position) {
-            case 1: {
-                img_size_s.setImageResource(R.drawable.ic_size_s_selected);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 2: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m_selected);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 3: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l_selected);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl);
-                break;
-            }
-            case 4: {
-                img_size_s.setImageResource(R.drawable.ic_size_s);
-                img_size_m.setImageResource(R.drawable.ic_size_m);
-                img_size_l.setImageResource(R.drawable.ic_size_l);
-                img_size_xl.setImageResource(R.drawable.ic_size_xl_selected);
-                break;
-            }
-            default:
-                break;
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         disposable.clear();
+    }
+
+    private void showDialogLogIn() {
+        Dialog dialog = new Dialog(ProductDetailActivity.this);
+        dialog.setContentView(R.layout.dialog_quest_login);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_login, tv_no_login;
+        tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
+        tv_no_login = dialog.findViewById(R.id.tv_no_login);
+        tv_no_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tv_yes_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProductDetailActivity.this, SignInActivity.class));
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

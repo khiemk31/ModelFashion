@@ -63,7 +63,10 @@ public class CartFragment extends Fragment {
         tvTotal = initView.findViewById(R.id.total_money);
         btn_payment = initView.findViewById(R.id.btn_payment);
         Bundle info = getArguments();
-        user_id = info.getString("user_id");
+        try {
+            user_id = info.getString("user_id");
+        }catch (Exception e){}
+
         getCart();
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -145,7 +148,12 @@ public class CartFragment extends Fragment {
                     total_money = response.body();
                     check_load_successful = response.isSuccessful();
                 }
-                tvTotal.setText("Tổng tiền: " + response.body() + " VNĐ");
+                try {
+                    DecimalFormat formatter = new DecimalFormat("###,###,###");
+                    String money_format = formatter.format(Integer.parseInt(response.body()));
+                    tvTotal.setText("Tổng tiền: "+money_format+" VNĐ");
+                }catch (Exception e){}
+
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {

@@ -3,12 +3,15 @@ package com.example.modelfashion.Fragment;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -59,6 +62,7 @@ public class CategoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         initView(view);
+
 
 
         initData();
@@ -127,6 +131,7 @@ public class CategoryFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progress_bar);
         refreshLayout = view.findViewById(R.id.refresh_layout);
+
     }
 
     private void getProductByCategory(Repository repository, String type) {
@@ -171,5 +176,16 @@ public class CategoryFragment extends Fragment {
     public void onDestroy() {
         compositeDisposable.dispose();
         super.onDestroy();
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isAcceptingText()){
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(),
+                    0
+            );
+        }
     }
 }

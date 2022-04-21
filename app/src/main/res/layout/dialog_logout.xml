@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:background="@drawable/bt_item_history"
+    android:padding="20dp">
+    <TextView
+        android:id="@+id/tv_title_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bạn có muốn đăng xuất không ?"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_yes_logout"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title_logout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+
+        android:background="@drawable/bt_btn_feedback"
+        android:gravity="center"
+        android:paddingVertical="5dp"
+        android:text="Có"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_no_logout"
+        android:layout_toLeftOf="@+id/tv_yes_logout"
+        android:layout_below="@+id/tv_title_logout"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/bt_btn_feedback"
+        android:paddingVertical="5dp"
+        android:text="Không"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+
+</RelativeLayout>

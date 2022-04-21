@@ -17,7 +17,7 @@
         android:lineHeight="35.16dp"
         android:text="Giỏ Hàng Của Bạn"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +48,9 @@
         android:layout_marginBottom="18dp"
         android:lineHeight="28dp"
         android:text="Tổng tiền:  VNĐ"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:textColor="#ff0000"
+        android:textSize="15sp"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/btn_payment"
         tools:layout_editor_absoluteX="16dp" />
 
