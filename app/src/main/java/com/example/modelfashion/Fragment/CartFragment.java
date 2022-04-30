@@ -89,15 +89,17 @@ public class CartFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<CartProduct>> call, Response<ArrayList<CartProduct>> response) {
                 arrCart = response.body();
-                for (int i = 0; i < arrCart.size(); i++) {
-                    arr_product_name.add(arrCart.get(i).getProductName());
-                    arr_size_id.add(arrCart.get(i).getSizeId());
+                if(arrCart!=null) {
+                    for (int i = 0; i < arrCart.size(); i++) {
+                        arr_product_name.add(arrCart.get(i).getProductName());
+                        arr_size_id.add(arrCart.get(i).getSizeId());
+                    }
+                    JSONArray json_product_name = new JSONArray(arr_product_name);
+                    JSONArray json_size_id = new JSONArray(arr_size_id);
+                    getProductInfo(json_product_name, json_size_id);
+                    getAmountCart(json_product_name);
+                    Log.e("cart", arrCart.size() + "");
                 }
-                JSONArray json_product_name = new JSONArray(arr_product_name);
-                JSONArray json_size_id = new JSONArray(arr_size_id);
-                getProductInfo(json_product_name, json_size_id);
-                getAmountCart(json_product_name);
-                Log.e("cart", arrCart.size()+"");
             }
 
             @Override

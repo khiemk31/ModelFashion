@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
+import com.example.modelfashion.Activity.NotifiActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
@@ -62,7 +63,7 @@ public class MainFragment extends Fragment {
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
-    private ImageView avatar;
+    private ImageView avatar,img_notifi;
     private String user_id;
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
     private TextView tvCurrentDate, tvGreeting;
@@ -105,6 +106,7 @@ public class MainFragment extends Fragment {
         rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
         avatar = view.findViewById(R.id.img_user_avatar);
+        img_notifi = view.findViewById(R.id.img_notifi);
 
         Bundle info = getArguments();
         user_id = info.getString("user_id");
@@ -143,6 +145,13 @@ public class MainFragment extends Fragment {
             refreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.VISIBLE);
             getAllProduct(repository);
+        });
+
+        img_notifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireContext(), NotifiActivity.class));
+            }
         });
         return view;
     }
