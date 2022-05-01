@@ -43,77 +43,86 @@
       <!-- menu left -->
       <div class="app-sidebar sidebar-shadow">
         <div class="scrollbar-sidebar">
-          <div class="app-sidebar__inner">
-            <ul class="vertical-nav-menu">
-              <li class="app-sidebar__heading">Menu</li>
-              <li>
-                <a href="main_page.html" class="mm-active">
-                  <i class="metismenu-icon pe-7s-home"></i>
-                  Trang chủ
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="metismenu-icon pe-7s-user"></i>
-                  Người dùng
-                  <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>
-                <ul>
-                  <li>
-                    <a href="list_user.html">
-                      <i class="metismenu-icon"></i>
-                      Danh sách người dùng
-                    </a>
-                  </li>
+            <div class="app-sidebar__inner">
+                <ul class="vertical-nav-menu">
+                    <li class="app-sidebar__heading">Menu</li>
+                    <li>
+                        <a href="main_page.html" class="mm-active">
+                            <i class="metismenu-icon pe-7s-home"></i>
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon pe-7s-user"></i>
+                            Người dùng
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="list_user.html">
+                                    <i class="metismenu-icon"></i>
+                                    Danh sách người dùng
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon pe-7s-box2"></i>
+                            Sản phẩm
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="insert_product.html">
+                                    <i class="metismenu-icon"></i>
+                                    Thêm sản phẩm
+                                </a>
+                            </li>
+                            <li>
+                                <a href="list_product.html">
+                                    <i class="metismenu-icon"></i>
+                                    Danh sách sản phẩm
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="invoice.html">
+                            <i class="metismenu-icon pe-7s-note2"></i>
+                            Hóa đơn chi tiết
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        </a>
+                    </li>
                 </ul>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="metismenu-icon pe-7s-box2"></i>
-                  Sản phẩm
-                  <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>
-                <ul>
-                  <li>
-                    <a href="insert_product.html">
-                      <i class="metismenu-icon"></i>
-                      Thêm sản phẩm
-                    </a>
-                  </li>
-                  <li>
-                    <a href="list_product.html">
-                      <i class="metismenu-icon"></i>
-                      Danh sách sản phẩm
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="metismenu-icon pe-7s-note2"></i>
-                  Hóa đơn chi tiết
-                  <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="metismenu-icon pe-7s-user"></i>
-                  Lịch sử mua hàng
-                  <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
+            </div>
         </div>
-      </div>
+    </div>
       <!-- content -->
       <div class="app-main__outer">
         <div class="app-main__inner">
           <!-- code here -->
           <div class="pb-20">
-            <h1 class="text-blue-400 text-[40px] leading-[55px] font-semibold mb-14">
+            <h1 class="text-blue-400 text-[40px] leading-[55px] font-semibold mb-4">
               Danh sách người dùng
             </h1>
+
+            <div class="flex items-center justify-center w-full mb-14">
+              <div class="w-full mx-auto flex max-w-md items-center rounded-lg bg-white" x-data="{ search: '' }">
+                <div class="w-full">
+                  <input type="search" class="w-full rounded-full px-4 py-1 text-gray-800 focus:outline-none" placeholder="search" x-model="search" />
+                </div>
+                <div>
+                  <button type="submit" class="flex h-12 w-12 items-center justify-center rounded-r-lg bg-blue-500 text-white" :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'" :disabled="search.length == 0">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
             <div class="table w-full p-2">
               <table class="w-full border">
                 <thead>
