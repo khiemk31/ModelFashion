@@ -17,7 +17,7 @@
     <!-- import js -->
     <script src="main.js"></script>
     <!-- title -->
-    <title>detail user</title>
+    <title>detailed invoice 123456789</title>
 </head>
 
 <body>
@@ -102,70 +102,71 @@
             </div>
             <!-- content -->
             <div class="app-main__outer">
-                <div class="app-main__inner bg-white">
+                <div class="app-main__inner">
                     <!-- code here -->
                     <div class="pb-20">
                         <h1 class="text-blue-400 text-[40px] leading-[55px] font-semibold mb-14">
-                            Chi tiết người dùng
+                            Danh sách hóa đơn chi tiết
                         </h1>
-                        <form action="">
-                            <div class="flex">
-                                <div class="w-[30%]">
-                                    <img alt="user-image" src="" alt="" width="200px" height="200px">
-                                </div>
 
-                                <div class="w-[65%]">
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Họ và tên
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
+                        <div class="flex items-center justify-center w-full mb-14">
+                            <div class="w-full mx-auto flex max-w-md items-center rounded-lg bg-white" x-data="{ search: '' }">
+                              <div class="w-full">
+                                <input type="search" class="w-full rounded-full px-4 py-1 text-gray-800 focus:outline-none" placeholder="search" x-model="search" />
+                              </div>
+                              <div>
+                                <button type="submit" class="flex h-12 w-12 items-center justify-center rounded-r-lg bg-blue-500 text-white" :class="(search.length > 0) ? 'bg-purple-500' : 'bg-gray-500 cursor-not-allowed'" :disabled="search.length == 0">
+                                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                        <div>
+                            <div class="bg-white w-full h-[100px] rounded-md px-4 py-4 flex justify-between mb-6">
+                                <div class="flex items-center">
+                                    <img src="" alt="user" class="h-auto w-[100px] rounded-full mr-4">
+                                    <div>
+                                        <p>Bùi Thành Long</p>
+                                        <p>longbtph12686@fpt.edu.vn</p>
+                                        <p>(02) 9999 9999</p>
                                     </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Ngày sinh
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
+                                </div>
+                                <div class="text-center">
+                                    <div class="flex items-center text-[14px] mb-2">
+                                        <div class="text-center">
+                                            <p>Ngày thanh toán</p>
+                                            <p>30/04/2022</p>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Giới tính
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
-                                    </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Địa chỉ
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
-                                    </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Số điện thoại
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
-                                    </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Email
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
-                                    </div>
-                                    <div class="flex items-center mb-4">
-                                        <p id="product_name" class="w-[20%] font-semibold">
-                                            Password
-                                        </p>
-                                        <input class="w-[80%] p-2" type="text">
-                                    </div>
-                                    <div class="flex justify-center">
-                                        <button type="button"
-                                            class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-md drop-shadow-md transition-all duration-700 hover:-translate-y-1 hover:bg-gradient-to-l">
-                                            Chỉnh sửa
-                                        </button>
-                                    </div>
+                                    <a href="detailed_invoice.html"
+                                        class="bg-purple-500 p-2 text-xs font-thin text-white hover:shadow-lg">View</a>
                                 </div>
                             </div>
-                        </form>
+
+                            <div class="bg-white w-full h-[100px] rounded-md px-4 py-4 flex justify-between">
+                                <div class="flex items-center">
+                                    <img src="" alt="user" class="h-auto w-[100px] rounded-full mr-4">
+                                    <div>
+                                        <p>Bùi Thành Long</p>
+                                        <p>longbtph12686@fpt.edu.vn</p>
+                                        <p>(02) 9999 9999</p>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="flex items-center text-[14px] mb-2">
+                                        <div class="text-center">
+                                            <p>Ngày thanh toán</p>
+                                            <p>30/04/2022</p>
+                                        </div>
+                                    </div>
+                                    <a href="detailed_invoice.html"
+                                        class="bg-purple-500 p-2 text-xs font-thin text-white hover:shadow-lg">View</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
