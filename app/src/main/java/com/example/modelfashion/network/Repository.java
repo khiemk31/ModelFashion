@@ -2,6 +2,8 @@ package com.example.modelfashion.network;
 
 import android.content.Context;
 
+import com.example.modelfashion.Model.request.LoginRequest;
+import com.example.modelfashion.Model.response.LoginResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductResponse;
@@ -50,8 +52,8 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<Unit> login(String tk, String mk){
-        return apiInterface.login(tk, mk)
+    public Single<LoginResponse> login(LoginRequest loginRequest){
+        return apiInterface.login(loginRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

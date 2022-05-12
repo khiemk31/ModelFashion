@@ -1,5 +1,7 @@
 package com.example.modelfashion.network;
 
+import com.example.modelfashion.Model.request.LoginRequest;
+import com.example.modelfashion.Model.response.LoginResponse;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import io.reactivex.Single;
 import kotlin.Unit;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -54,9 +57,9 @@ public interface ApiInterface {
             @Query("type") String type
     );
 
-    @POST("check_login_user.php")
-    Single<Unit> login(@Query("taikhoan") String tk,
-                       @Query("matkhau") String mk);
+    @POST("/user/login")
+    Single<LoginResponse> login(@Body LoginRequest request);
+
     @FormUrlEncoded
     @POST("update_user_info.php")
     Call<String> UpdateUser(@Field("user") JSONObject user);

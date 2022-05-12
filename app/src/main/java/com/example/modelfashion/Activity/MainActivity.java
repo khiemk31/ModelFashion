@@ -25,18 +25,24 @@ import com.example.modelfashion.Fragment.CartFragment;
 import com.example.modelfashion.Fragment.CategoryFragment;
 import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Fragment.MainFragment;
+import com.example.modelfashion.Model.request.LoginRequest;
 import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.KeyboardUtils;
+import com.example.modelfashion.network.Repository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class MainActivity extends AppCompatActivity {
     String user_id;
     Boolean isLogin;
     Bundle info;
+    CompositeDisposable disposable = new CompositeDisposable();
+
     public static BottomNavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,19 @@ public class MainActivity extends AppCompatActivity {
                 hideBottomNavigation();
             }
         });
+
+        // login tham khao
+        Repository repository = new Repository(this);
+        disposable.add(repository.login(new LoginRequest("","")) // truyen phone va password vao day
+                .doOnSubscribe(disposable -> {
+                    // hien loading
+                }).subscribe(loginResponse -> {
+                    // luu vao local
+                    // chuyen man
+                    // vv
+                }, throwable -> {
+                    // neu co loi thi debug o day nhe
+                }));
     }
 
     private void getUserData(){
@@ -150,5 +169,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentProfile fragmentProfile = new FragmentProfile();
         replaceFragment(fragmentProfile);
         navigationView.setSelectedItemId(R.id.main_item_profile);
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposable.clear();
+        super.onDestroy();
     }
 }
