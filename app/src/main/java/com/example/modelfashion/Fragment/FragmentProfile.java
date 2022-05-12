@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +21,11 @@ import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
-import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
-import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.makeramen.roundedimageview.RoundedImageView;
-
-import org.json.JSONObject;
 
 
 public class FragmentProfile extends Fragment {

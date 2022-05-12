@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,11 +31,10 @@ import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
-import com.example.modelfashion.Model.response.User.User;
+import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
-import com.example.modelfashion.Utility.KeyboardUtils;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.Repository;
 

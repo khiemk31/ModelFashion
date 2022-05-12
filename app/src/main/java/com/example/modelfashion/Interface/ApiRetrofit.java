@@ -1,7 +1,6 @@
 package com.example.modelfashion.Interface;
 
-import com.example.modelfashion.Model.MHistory.BillModel;
-import com.example.modelfashion.Model.response.User.User;
+import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
@@ -31,7 +30,7 @@ import retrofit2.http.Query;
 
 public interface ApiRetrofit {
     Gson gson = new GsonBuilder().setLenient().create();
-    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("https://cuongb2k53lvt.000webhostapp.com/")
+    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("https://model-fashion.herokuapp.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -73,9 +72,6 @@ public interface ApiRetrofit {
 
     @GET("FashionShop/get_amount_cart.php")
     Call<String> GetAmountCart(@Query("product_name") JSONArray product_name, @Query("user_id") String user_id);
-
-    @POST("insert_user.php")
-    Call<User> editUser(@Body User user);
 
     @FormUrlEncoded
     @POST("FashionShop/insert_payment.php")

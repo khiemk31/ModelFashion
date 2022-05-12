@@ -6,10 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -32,7 +29,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Interface.ApiRetrofit;
-import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
@@ -43,7 +39,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.makeramen.roundedimageview.RoundedImageView;
 import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.io.File;
 import java.util.List;
 import gun0912.tedbottompicker.TedBottomPicker;
@@ -155,7 +151,7 @@ public class ProfileActivity extends AppCompatActivity {
             builder.setMessage("\nBẠN CÓ CHẮC VỚI CÁC THAY ĐỔI?\n\n")
                     .setPositiveButton("Xác Nhận", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            confirmChange();
+                            //confirmChange();
                         }
                     })
                     .setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -169,49 +165,49 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     //xác nhận thay đổi thông tin
-                private void confirmChange(){
-                    User user = new User(preferenceManager.getString(Constants.KEY_ID),
-                            preferenceManager.getString(Constants.KEY_TAI_KHOAN),
-                            preferenceManager.getString(Constants.KEY_MAT_KHAU),
-                            preferenceManager.getString(Constants.KEY_EMAIL),
-                            tvActProfileName.getText().toString().trim(),
-                            tvActProfilePhone.getText().toString().trim(),
-                            preferenceManager.getString(Constants.KEY_PROFILE_SEX),
-                            tvActProfileBirthday.getText().toString(),
-                            tvActProfileAddress.getText().toString().trim(),
-                            "",
-                            preferenceManager.getString(Constants.KEY_TEMP_AVARTAR));
-                    SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-                    SharedPreferences.Editor editor = sharedPreferences1.edit();
-                    editor.putString(Constants.KEY_GET_USER,user.toString());
-                    editor.apply();
-
-                    try {
-                        JSONObject value = new JSONObject(user.toString());
-
-                        apiInterface.UpdateUser(value).enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                            }
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Log.e("luclh", t.toString() );
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    preferenceManager.putString(Constants.KEY_FULL_NAME, user.getFullName());
-                    preferenceManager.putString(Constants.KEY_SEX, user.getSex());
-                    preferenceManager.putString(Constants.KEY_BIRTHDAY, user.getBirthdate());
-                    preferenceManager.putString(Constants.KEY_ADDRESS, user.getAddress());
-                    preferenceManager.putString(Constants.KEY_AVARTAR, user.getAvatar());
-                    preferenceManager.putString(Constants.KEY_PHONE, user.getPhone());
-                    Toast.makeText(getApplicationContext(),"SỬA THÔNG TIN THÀNH CÔNG",Toast.LENGTH_SHORT).show();
-
-                    Intent intent= new Intent(ProfileActivity.this,MainActivity.class);
-                    startActivity(intent);
-                }
+//                private void confirmChange(){
+//                    User user = new User(preferenceManager.getString(Constants.KEY_ID),
+//                            preferenceManager.getString(Constants.KEY_TAI_KHOAN),
+//                            preferenceManager.getString(Constants.KEY_MAT_KHAU),
+//                            preferenceManager.getString(Constants.KEY_EMAIL),
+//                            tvActProfileName.getText().toString().trim(),
+//                            tvActProfilePhone.getText().toString().trim(),
+//                            preferenceManager.getString(Constants.KEY_PROFILE_SEX),
+//                            tvActProfileBirthday.getText().toString(),
+//                            tvActProfileAddress.getText().toString().trim(),
+//                            "",
+//                            preferenceManager.getString(Constants.KEY_TEMP_AVARTAR));
+//                    SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
+//                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+//                    editor.putString(Constants.KEY_GET_USER,user.toString());
+//                    editor.apply();
+//
+//                    try {
+//                        JSONObject value = new JSONObject(user.toString());
+//
+//                        apiInterface.UpdateUser(value).enqueue(new Callback<String>() {
+//                            @Override
+//                            public void onResponse(Call<String> call, Response<String> response) {
+//                            }
+//                            @Override
+//                            public void onFailure(Call<String> call, Throwable t) {
+//                                Log.e("luclh", t.toString() );
+//                            }
+//                        });
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    preferenceManager.putString(Constants.KEY_FULL_NAME, user.getFullName());
+//                    preferenceManager.putString(Constants.KEY_SEX, user.getSex());
+//                    preferenceManager.putString(Constants.KEY_BIRTHDAY, user.getBirthdate());
+//                    preferenceManager.putString(Constants.KEY_ADDRESS, user.getAddress());
+//                    preferenceManager.putString(Constants.KEY_AVARTAR, user.getAvatar());
+//                    preferenceManager.putString(Constants.KEY_PHONE, user.getPhone());
+//                    Toast.makeText(getApplicationContext(),"SỬA THÔNG TIN THÀNH CÔNG",Toast.LENGTH_SHORT).show();
+//
+//                    Intent intent= new Intent(ProfileActivity.this,MainActivity.class);
+//                    startActivity(intent);
+//                }
 
 
     //dialog thay đổi tên, số điện thoại, địa chỉ
