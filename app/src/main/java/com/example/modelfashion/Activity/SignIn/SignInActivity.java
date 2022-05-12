@@ -1,5 +1,7 @@
 package com.example.modelfashion.Activity.SignIn;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import com.example.modelfashion.network.ApiInterface;
 import com.google.gson.Gson;
 
 import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,8 +83,8 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
 
-        if (edtPassword.getText().toString().length() < 8) {
-            Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 8 kí tự", Toast.LENGTH_SHORT).show();
+        if (edtPassword.getText().toString().length() < 6) {
+            Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -125,23 +128,24 @@ public class SignInActivity extends AppCompatActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.code() == 200) {
                             if (cbSaveValue.isChecked()) {
+                                Log.d("User123", String.valueOf(response.body()));
                                 Boolean aBoolean = cbSaveValue.isChecked();
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
                                 editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
 
                                 preferenceManager.putString(Constants.KEY_ID, response.body().getId());
-                                preferenceManager.putString(Constants.KEY_TAI_KHOAN, response.body().getTaiKhoan());
-                                preferenceManager.putString(Constants.KEY_MAT_KHAU, response.body().getMatKhau());
-                                preferenceManager.putString(Constants.KEY_EMAIL, response.body().getEmail());
-                                preferenceManager.putString(Constants.KEY_FULL_NAME, response.body().getFullName());
-                                preferenceManager.putString(Constants.KEY_SEX, response.body().getSex());
-                                preferenceManager.putString(Constants.KEY_BIRTHDAY, response.body().getBirthdate());
-                                preferenceManager.putString(Constants.KEY_ADDRESS, response.body().getAddress());
-                                preferenceManager.putString(Constants.KEY_AVARTAR, response.body().getAvatar());
-                                preferenceManager.putString(Constants.KEY_FUND, response.body().getFund());
-                                preferenceManager.putString(Constants.KEY_PHONE, response.body().getPhone());
-                                preferenceManager.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
+//                                preferenceManager.putString(Constants.KEY_TAI_KHOAN, response.body().getTaiKhoan());
+//                                preferenceManager.putString(Constants.KEY_MAT_KHAU, response.body().getMatKhau());
+//                                preferenceManager.putString(Constants.KEY_EMAIL, response.body().getEmail());
+//                                preferenceManager.putString(Constants.KEY_FULL_NAME, response.body().getFullName());
+//                                preferenceManager.putString(Constants.KEY_SEX, response.body().getSex());
+//                                preferenceManager.putString(Constants.KEY_BIRTHDAY, response.body().getBirthdate());
+//                                preferenceManager.putString(Constants.KEY_ADDRESS, response.body().getAddress());
+//                                preferenceManager.putString(Constants.KEY_AVARTAR, response.body().getAvatar());
+//                                preferenceManager.putString(Constants.KEY_FUND, response.body().getFund());
+//                                preferenceManager.putString(Constants.KEY_PHONE, response.body().getPhone());
+//                                preferenceManager.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
 
                                 editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
                                 editor.apply();
@@ -149,7 +153,7 @@ public class SignInActivity extends AppCompatActivity {
                                 sharedPreferences.edit().clear().apply();
                             }
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER,MODE_MULTI_PROCESS);
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, MODE_MULTI_PROCESS);
                             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
                             prefsEditor.putString(Constants.KEY_GET_USER, response.body().toString());
                             prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
@@ -157,7 +161,7 @@ public class SignInActivity extends AppCompatActivity {
                             prefsEditor.apply();
 
                             //lưu trạng thái đã đăng nhập.
-                            preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS,true);
+                            preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, true);
                             Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 //                            onBackPressed();
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -169,7 +173,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Log.e("DangNhap",t.toString());
+                        Log.e("DangNhap", t.toString());
                         Toast.makeText(SignInActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });

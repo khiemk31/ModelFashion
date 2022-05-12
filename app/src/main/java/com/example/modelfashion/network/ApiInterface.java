@@ -30,7 +30,7 @@ public interface ApiInterface {
     @GET
     Single<ProductResponse> getProductByCategory(@Url String url);
 
-    @GET("get_all_products.php")
+    @GET("/product/getAll")
     Single<ArrayList<MyProduct>> getAllProduct();
 
     @FormUrlEncoded
@@ -39,9 +39,9 @@ public interface ApiInterface {
                             @Field("matkhau") String matkhau);
 
     @FormUrlEncoded
-    @POST("check_login_user.php")
-    Call<User> checkLogin(@Field("taikhoan") String taikhoan,
-                          @Field("matkhau") String matkhau);
+    @POST("/user/login")
+    Call<User> checkLogin(@Field("phone") String phone,
+                          @Field("password") String password);
 
     @GET("get_product_by_id.php")
     Single<MyProduct> getProductById(

@@ -31,7 +31,7 @@ import retrofit2.http.Query;
 
 public interface ApiRetrofit {
     Gson gson = new GsonBuilder().setLenient().create();
-    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("https://cuongb2k53lvt.000webhostapp.com/")
+    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("https://model-fashion.herokuapp.com")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
