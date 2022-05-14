@@ -27,6 +27,9 @@ import com.example.modelfashion.network.Repository;
 import java.util.regex.Pattern;
 
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
