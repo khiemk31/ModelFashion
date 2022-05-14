@@ -22,8 +22,7 @@ public final class ApiClient {
         OkHttpClient client = provideHttpClient(context);
 
         Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://test-api-spring-boot.herokuapp.com/")
-                .baseUrl("https://model-fashion.herokuapp.com/")
+                .baseUrl("https://model-fashion.herokuapp.com")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

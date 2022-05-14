@@ -27,6 +27,9 @@ import com.example.modelfashion.network.Repository;
 import java.util.regex.Pattern;
 
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -78,8 +81,8 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
 
-        if (edtPassword.getText().toString().length() < 8) {
-            Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 8 kí tự", Toast.LENGTH_SHORT).show();
+        if (edtPassword.getText().toString().length() < 6) {
+            Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
