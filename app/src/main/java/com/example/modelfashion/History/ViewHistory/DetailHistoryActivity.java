@@ -2,38 +2,23 @@ package com.example.modelfashion.History.ViewHistory;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.modelfashion.History.ApdapterHistory.DetailHistoryAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
-import com.example.modelfashion.Model.MHistory.ModelHistory;
-import com.example.modelfashion.Model.MHistory.ProductHistory;
-import com.example.modelfashion.Model.User;
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.OrderStatus.ViewOrderStatus.OrderStatusActivity;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Utility.Constants;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -163,16 +148,16 @@ public class DetailHistoryActivity extends AppCompatActivity {
     }
 
     private void SetUserData(){
-        ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<com.example.modelfashion.Model.response.User.User>() {
+        ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<com.example.modelfashion.Model.response.Login.User>() {
             @Override
-            public void onResponse(Call<com.example.modelfashion.Model.response.User.User> call, Response<com.example.modelfashion.Model.response.User.User> response) {
-                com.example.modelfashion.Model.response.User.User user1 = response.body();
+            public void onResponse(Call<com.example.modelfashion.Model.response.Login.User> call, Response<com.example.modelfashion.Model.response.Login.User> response) {
+                com.example.modelfashion.Model.response.Login.User user1 = response.body();
                 phoneNumber_detail_history.setText(user1.getPhone());
                 address_detail_history.setText(user1.getAddress());
             }
 
             @Override
-            public void onFailure(Call<com.example.modelfashion.Model.response.User.User> call, Throwable t) {
+            public void onFailure(Call<com.example.modelfashion.Model.response.Login.User> call, Throwable t) {
 
             }
         });

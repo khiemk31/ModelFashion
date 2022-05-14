@@ -1,7 +1,6 @@
 package com.example.modelfashion.Interface;
 
-import com.example.modelfashion.Model.MHistory.BillModel;
-import com.example.modelfashion.Model.response.User.User;
+import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
@@ -73,9 +72,6 @@ public interface ApiRetrofit {
 
     @GET("FashionShop/get_amount_cart.php")
     Call<String> GetAmountCart(@Query("product_name") JSONArray product_name, @Query("user_id") String user_id);
-
-    @POST("insert_user.php")
-    Call<User> editUser(@Body User user);
 
     @FormUrlEncoded
     @POST("FashionShop/insert_payment.php")
