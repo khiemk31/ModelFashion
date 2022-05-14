@@ -2,6 +2,12 @@ package com.example.modelfashion.network;
 
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.Register.GetOTPRequest;
+import com.example.modelfashion.Model.response.Register.GetOTPResponse;
+import com.example.modelfashion.Model.response.Register.RegisterRequest;
+import com.example.modelfashion.Model.response.Register.RegisterResponse;
+import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
+import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductResponse;
@@ -38,6 +44,15 @@ public interface ApiInterface {
                             @Field("matkhau") String matkhau);
     @POST("user/login")
     Single<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("user/send-otp")
+    Single<GetOTPResponse> getOTP(@Body GetOTPRequest request);
+
+    @POST("user/verify-otp")
+    Single<VerifyOTPResponse> verifyOTP(@Body VerifyOTPRequest request);
+
+    @POST("user/register")
+    Single<RegisterResponse> register(@Body RegisterRequest request);
 
     @GET("get_product_by_id.php")
     Single<MyProduct> getProductById(
