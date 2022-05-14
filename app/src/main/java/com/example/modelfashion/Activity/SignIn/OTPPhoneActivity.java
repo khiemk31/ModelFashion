@@ -110,6 +110,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
                 }).subscribe(verifyOTP -> {
+                    Toast.makeText(OTPPhoneActivity.this, verifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
                     register();
                 }, throwable -> {
 
