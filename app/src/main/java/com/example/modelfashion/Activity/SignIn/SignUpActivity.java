@@ -30,7 +30,7 @@ import retrofit2.Response;
 public class SignUpActivity extends AppCompatActivity {
 
     ImageView imgBack;
-    EditText edtAccountSu, edtPassword, edtConfirmPassword;
+    EditText edtPhoneSu, edtPassword, edtConfirmPassword, edtNameSu;
     Button btnSignUp;
     CheckBox cbRules;
     TextView tvSignIn, tvRules;
@@ -48,9 +48,10 @@ public class SignUpActivity extends AppCompatActivity {
     //tham chiếu
     private void viewHolder() {
         imgBack = findViewById(R.id.imgBack);
-        edtAccountSu = findViewById(R.id.edtAccountSu);
+        edtPhoneSu = findViewById(R.id.edtPhoneSu);
         edtPassword = findViewById(R.id.edtPasswordSu);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        edtNameSu = findViewById(R.id.edtNameSu);
         btnSignUp = findViewById(R.id.btnSignUp);
         cbRules = findViewById(R.id.cbRules);
         tvSignIn = findViewById(R.id.tvSignIn);
@@ -94,46 +95,32 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void insertUser() {
-        apiInterface.insertUser(edtAccountSu.getText().toString(), edtPassword.getText().toString())
-                .enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                        if (response.code() == 200) {
-                            //progressLoadingCommon.hideProgressLoading(SignUpActivity.this);
-                            Toast.makeText(SignUpActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-                            Log.e("123", String.valueOf(response));
-                            onBackPressed();
-                        }else {
-
-                            Toast.makeText(SignUpActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                        Toast.makeText(SignUpActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if (validate()) {
+            Intent intent = new Intent(this, OTPPhoneActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("phone", edtPhoneSu.getText().toString());
+            bundle.putString("name", edtNameSu.getText().toString());
+            bundle.putString("password", edtPassword.getText().toString());
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
-
     // validate
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
-        if (edtAccountSu.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty() || edtConfirmPassword.getText().toString().isEmpty()) {
+        if (edtPhoneSu.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty() || edtConfirmPassword.getText().toString().isEmpty() || edtNameSu.getText().toString().isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Không để trống", Toast.LENGTH_SHORT).show();
             return false;
         }
 
 
-        if (special.matcher(edtAccountSu.getText().toString()).find() || special.matcher(edtPassword.getText().toString()).find()) {
+        if (special.matcher(edtNameSu.getText().toString()).find() || special.matcher(edtPassword.getText().toString()).find()) {
             Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtPassword.getText().toString().length() < 8) {
-            Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 8 kí tự", Toast.LENGTH_SHORT).show();
+        if (edtPassword.getText().toString().length() < 6) {
+            Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
 

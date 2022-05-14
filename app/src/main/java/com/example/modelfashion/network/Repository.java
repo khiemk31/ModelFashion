@@ -4,6 +4,12 @@ import android.content.Context;
 
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.Register.GetOTPRequest;
+import com.example.modelfashion.Model.response.Register.GetOTPResponse;
+import com.example.modelfashion.Model.response.Register.RegisterRequest;
+import com.example.modelfashion.Model.response.Register.RegisterResponse;
+import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
+import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductResponse;
@@ -35,17 +41,17 @@ public final class Repository {
 
     public Single<ArrayList<MyProduct>> getAllProduct() {
         return apiInterface.getAllProduct()
-                .subscribeOn(Schedulers.io()) 
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<MyProduct> getProductById(String id, String name){
+    public Single<MyProduct> getProductById(String id, String name) {
         return apiInterface.getProductById(id, name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ArrayList<MyProduct>> getProductByType(String type){
+    public Single<ArrayList<MyProduct>> getProductByType(String type) {
         return apiInterface.getProductByType(type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -53,6 +59,22 @@ public final class Repository {
 
     public Single<LoginResponse> login(LoginRequest loginRequest) {
         return apiInterface.login(loginRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<GetOTPResponse> getOTP(GetOTPRequest request) {
+        return apiInterface.getOTP(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Single<VerifyOTPResponse> verifyOTP(VerifyOTPRequest request) {
+        return apiInterface.verifyOTP(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Single<RegisterResponse> register(RegisterRequest request) {
+        return apiInterface.register(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
