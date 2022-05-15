@@ -15,6 +15,8 @@ import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 
+import java.util.ArrayList;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -44,8 +46,6 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ArrayList<MyProduct>> getProductByType(String type) {
-        return apiInterface.getProductByType(type)
     public Single<DataProduct> getProductByCategory(String categoryId){
         return apiInterface.getProductByCategory(categoryId)
                 .subscribeOn(Schedulers.io())

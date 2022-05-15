@@ -1,7 +1,5 @@
 package com.example.modelfashion.network;
 
-import com.example.modelfashion.Model.request.GetProductByCategoryRequest;
-import com.example.modelfashion.Model.response.User.User;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
@@ -12,16 +10,10 @@ import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
-import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.my_product.ProductByCategory;
-import com.example.modelfashion.Model.response.product.ProductResponse;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Single;
 import kotlin.Unit;
@@ -30,8 +22,8 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
