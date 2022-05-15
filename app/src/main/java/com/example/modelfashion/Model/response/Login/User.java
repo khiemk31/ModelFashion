@@ -1,6 +1,4 @@
-package com.example.modelfashion.Model.response.User;
-
-import java.util.List;
+package com.example.modelfashion.Model.response.Login;
 
 public class User {
     private String id;
@@ -27,23 +25,6 @@ public class User {
         this.address = address;
         this.fund = fund;
         this.avatar = avatar;
-    }
-
-    @Override
-    public String toString() {
-        return "{"+
-                "id='" + id + '\'' +
-                ", taiKhoan='" + taiKhoan + '\'' +
-                ", matKhau='" + matKhau + '\'' +
-                ", email='" + email + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthdate='" + birthdate + '\'' +
-                ", address='" + address + '\'' +
-                ", fund='" + fund + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
     }
 
     public String getId() {
@@ -133,5 +114,4 @@ public class User {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
 }

@@ -22,6 +22,9 @@
         android:theme="@style/Theme.ModelFashion"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.SignIn.OTPPhoneActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.NotifiDetailActivity"
             android:exported="false" />
         <activity

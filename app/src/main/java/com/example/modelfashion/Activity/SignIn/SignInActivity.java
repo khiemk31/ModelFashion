@@ -5,11 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Debug;
-import android.preference.PreferenceFragment;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,17 +16,17 @@ import android.widget.Toast;
 
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
-import com.example.modelfashion.Fragment.FragmentProfile;
-import com.example.modelfashion.Model.response.User.User;
+import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
-import com.google.gson.Gson;
+import com.example.modelfashion.network.Repository;
 
 import java.util.regex.Pattern;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +42,7 @@ public class SignInActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     ApiInterface apiInterface;
     ProgressLoadingCommon progressLoadingCommon;
+    CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +66,7 @@ public class SignInActivity extends AppCompatActivity {
         apiInterface = ApiClient.provideApiInterface(SignInActivity.this);
         progressLoadingCommon = new ProgressLoadingCommon();
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
     }
 
     private Boolean validate() {
@@ -122,67 +120,52 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void checkLogin() {
-        apiInterface.checkLogin(edtAccount.getText().toString(), edtPassword.getText().toString())
-                .enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.code() == 200) {
-                            if (cbSaveValue.isChecked()) {
-                                Log.d("User123", String.valueOf(response.body()));
-                                Boolean aBoolean = cbSaveValue.isChecked();
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
-                                editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
+        Repository repository = new Repository(this);
+        disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString(), edtPassword.getText().toString())) // truyen phone va password vao day
+                .doOnSubscribe(disposable -> {
+                    // hien loading
+                }).subscribe(loginResponse -> {
+                    if (cbSaveValue.isChecked()) {
+                        Log.d("User123", String.valueOf(loginResponse.getData()));
+                        Boolean aBoolean = cbSaveValue.isChecked();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
+                        editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
 
-                                preferenceManager.putString(Constants.KEY_ID, response.body().getId());
-//                                preferenceManager.putString(Constants.KEY_TAI_KHOAN, response.body().getTaiKhoan());
-//                                preferenceManager.putString(Constants.KEY_MAT_KHAU, response.body().getMatKhau());
-//                                preferenceManager.putString(Constants.KEY_EMAIL, response.body().getEmail());
-//                                preferenceManager.putString(Constants.KEY_FULL_NAME, response.body().getFullName());
-//                                preferenceManager.putString(Constants.KEY_SEX, response.body().getSex());
-//                                preferenceManager.putString(Constants.KEY_BIRTHDAY, response.body().getBirthdate());
-//                                preferenceManager.putString(Constants.KEY_ADDRESS, response.body().getAddress());
-//                                preferenceManager.putString(Constants.KEY_AVARTAR, response.body().getAvatar());
-//                                preferenceManager.putString(Constants.KEY_FUND, response.body().getFund());
-//                                preferenceManager.putString(Constants.KEY_PHONE, response.body().getPhone());
-//                                preferenceManager.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
+                        preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
+                        editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
+                        editor.apply();
 
-                                editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
-                                editor.apply();
-                            } else {
-                                sharedPreferences.edit().clear().apply();
-                            }
+                        SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, MODE_MULTI_PROCESS);
+                        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+                        prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                        preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                        prefsEditor.apply();
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, MODE_MULTI_PROCESS);
-                            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-                            prefsEditor.putString(Constants.KEY_GET_USER, response.body().toString());
-                            prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
-                            preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
-                            prefsEditor.apply();
-
-                            //lưu trạng thái đã đăng nhập.
-                            preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, true);
-                            Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        //lưu trạng thái đã đăng nhập.
+                        preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, true);
+                        Toast.makeText(SignInActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
 //                            onBackPressed();
-                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(SignInActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                        }
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        sharedPreferences.edit().clear().apply();
                     }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Log.e("DangNhap", t.toString());
-                        Toast.makeText(SignInActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }, throwable -> {
+                    // neu co loi thi debug o day nhe
+                }));
     }
 
     //chặn back
     @Override
     public void onBackPressed() {
         super.onBackPressed();  // optional depending on your needs
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposable.clear();
+        super.onDestroy();
     }
 
     public void getPreferencesData() {
@@ -200,31 +183,4 @@ public class SignInActivity extends AppCompatActivity {
             cbSaveValue.setChecked(check);
         }
     }
-
-//    public void DangKy(View view) {
-//        Intent intent = new Intent(SignInActivity.this, SignUpTestAct.class);
-//        startActivity(intent);
-//    }
-
-//    public void DangNhap(View view) {
-//        tk = edt_tk.getText().toString();
-//        mk = edt_mk.getText().toString();
-//        ApiRetrofit.apiRetrofit.GetUser(tk,mk).enqueue(new Callback<ArrayList<User>>() {
-//            @Override
-//            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-//                ArrayList<User> arrUser = response.body();
-//                Toast.makeText(SignInActivity.this, response.body()+"", Toast.LENGTH_LONG).show();
-//                if(arrUser.size()>0){
-//                    Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_LONG).show();
-//                    Glide.with(SignInActivity.this).load(arrUser.get(0).getAvatar()).into(user_avatar);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
 }
