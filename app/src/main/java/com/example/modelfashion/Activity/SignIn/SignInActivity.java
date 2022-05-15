@@ -24,6 +24,8 @@ import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.example.modelfashion.network.Repository;
 
+import org.json.JSONObject;
+
 import java.util.regex.Pattern;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -99,7 +101,7 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (validate()) {
                     progressLoadingCommon.showProgressLoading(SignInActivity.this);
-                    checkLogin();
+                    login();
                 }
             }
         });
@@ -119,40 +121,60 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private void checkLogin() {
+    private void login() {
         Repository repository = new Repository(this);
         disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString(), edtPassword.getText().toString())) // truyen phone va password vao day
                 .doOnSubscribe(disposable -> {
                     // hien loading
                 }).subscribe(loginResponse -> {
                     if (cbSaveValue.isChecked()) {
-                        Log.d("User123", String.valueOf(loginResponse.getData()));
                         Boolean aBoolean = cbSaveValue.isChecked();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
                         editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
-
-                        preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
                         editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
                         editor.apply();
 
-                        SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, MODE_MULTI_PROCESS);
-                        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-                        prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                        preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
                         preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
-                        prefsEditor.apply();
-
-                        //lưu trạng thái đã đăng nhập.
-                        preferenceManager.putBoolean(Constants.KEY_LOGIN_STARUS, true);
                         Toast.makeText(SignInActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-//                            onBackPressed();
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        getUserDetail();
                     } else {
                         sharedPreferences.edit().clear().apply();
                     }
                 }, throwable -> {
                     // neu co loi thi debug o day nhe
+                }));
+    }
+
+    private void getUserDetail() {
+        Repository repository = new Repository(this);
+        String userId = preferenceManager.getString(Constants.KEY_ID);
+        disposable.add(repository.getUserDetail(userId)
+                .doOnSubscribe(disposable -> {
+                    progressLoadingCommon.showProgressLoading(this);
+                }).subscribe(registerResponse -> {
+                    Log.e("register", String.valueOf(registerResponse.toString()));
+
+                    try {
+                        JSONObject obj = new JSONObject(registerResponse.toString());
+                        String fullName = obj.getString("userName");
+                        preferenceManager.putString(Constants.KEY_FULL_NAME, fullName);
+                        preferenceManager.putString(Constants.KEY_PHONE, obj.getString("phone"));
+                        preferenceManager.putString(Constants.KEY_ADDRESS, obj.getString("address"));
+                        preferenceManager.putString(Constants.KEY_BIRTHDAY, obj.getString("dateOfBirth"));
+                        preferenceManager.putInt(Constants.KEY_SEX, obj.getInt("gender"));
+                        preferenceManager.putString(Constants.KEY_AVARTAR, obj.getString("avatar"));
+                        Log.d("My App", obj.toString());
+
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
+                    }
+
+                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }, throwable -> {
+                    Toast.makeText(SignInActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
 

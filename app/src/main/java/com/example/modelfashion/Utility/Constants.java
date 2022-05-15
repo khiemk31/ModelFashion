@@ -1,5 +1,7 @@
 package com.example.modelfashion.Utility;
 
+import com.example.modelfashion.Model.response.User.UserDetailResponse;
+
 public class Constants {
     public static final String KEY_PREFERENCE_NAME = "ModelFashionPreference";
 
@@ -24,7 +26,8 @@ public class Constants {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_AVARTAR = "avatar";
     public static final String KEY_TEMP_AVARTAR = "avatar";
-    public static final String KEY_FUND = "fund";
+    public static final String KEY_CHANGE_IMAGE = "changeImage";
+
 
     // login
     public static final String KEY_LOGIN_STARUS = "KEY_LOGIN_STARUS";

@@ -68,66 +68,17 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/bg_gradient_blue"
                     app:riv_corner_radius="25dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="100dp"
-                    android:text="Sửa"
-                    android:textColor="@color/blue_grey_inactive"
-                    android:textSize="25dp"
-                    android:textStyle="bold" />
-
             </RelativeLayout>
 
 
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_TenDangNhap"
+            android:id="@+id/layout_act_Profile_Phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_information_line"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_user"
-                android:text=" Tên đăng nhập"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_tenDangNhap"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_act_Profile_tenDangNhap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="ten_dang_nhap"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_Email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="4"
@@ -140,20 +91,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_email"
-                android:text=" Email"
+                android:text="Phone"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_mail"
+                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_Phone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_act_Profile_mail"
+                android:id="@+id/tv_act_Profile_Phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginLeft="30dp"
-                android:text="abc@gmail.com"
+                android:text="0968796428"
                 android:textColor="@color/black"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -199,54 +150,6 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/act_Profile_change_name"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_arrow_right"
-                android:tint="@color/text_hint"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_phone"
-                android:text=" Số điện thoại"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_phone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_act_Profile_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="0123456789"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_Profile_change_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="right"

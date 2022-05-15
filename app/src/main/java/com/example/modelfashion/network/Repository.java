@@ -10,6 +10,9 @@ import com.example.modelfashion.Model.response.Register.RegisterRequest;
 import com.example.modelfashion.Model.response.Register.RegisterResponse;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
+import com.example.modelfashion.Model.response.User.UpdateUserRequest;
+import com.example.modelfashion.Model.response.User.UpdateUserResponse;
+import com.example.modelfashion.Model.response.User.UserDetailResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.product.ProductResponse;
@@ -75,6 +78,18 @@ public final class Repository {
     }
     public Single<RegisterResponse> register(RegisterRequest request) {
         return apiInterface.register(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<UserDetailResponse> getUserDetail(String userID) {
+        return apiInterface.getUserDetail(userID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
+        return apiInterface.updateUser(userID, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
