@@ -15,28 +15,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Model.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
-    Context context;
-    ArrayList<MyProduct> arrProduct;
+    private List<MyProductByCategory> arrProduct = new ArrayList<>();
 
-    public ProductAdapter(Context context, ArrayList<MyProduct> arrProduct) {
-        this.context = context;
-        this.arrProduct = arrProduct;
+    public void setListProduct(List<MyProductByCategory> list) {
+        this.arrProduct.clear();
+        this.arrProduct = list;
+        notifyDataSetChanged();
     }
 
-    public MyProduct getProduct(int position) {
+    public MyProductByCategory getProduct(int position) {
         return arrProduct.get(position);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.product_item_layout, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.product_item_layout,viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -51,9 +53,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             onItemClick.imgAddToCartClick(i, arrProduct.get(i));
         });
         DecimalFormat formatter = new DecimalFormat("###,###,###");
-        String money_format = formatter.format(Integer.parseInt(arrProduct.get(i).getPrice()));
-        Glide.with(context).load(arrProduct.get(i).getPhotos().get(0)).placeholder(R.drawable.test_img2).into(viewHolder.img);
-        viewHolder.tvProductName.setText(arrProduct.get(i).getProduct_name());
+        String money_format = formatter.format((arrProduct.get(i).getPrice()));
+        Glide.with(viewHolder.img.getContext()).load(arrProduct.get(i).getProductImage()).placeholder(R.drawable.test_img2).into(viewHolder.img);
+        viewHolder.tvProductName.setText(arrProduct.get(i).getProductName());
         viewHolder.tvPrice.setText(money_format+" VNĐ");
     }
 
@@ -83,7 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     interface OnItemClick {
-        void imgClick(int position, MyProduct product);
-        void imgAddToCartClick(int position, MyProduct product);
+        void imgClick(int position, MyProductByCategory product);
+        void imgAddToCartClick(int position, MyProductByCategory product);
     }
 }

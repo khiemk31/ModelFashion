@@ -102,12 +102,12 @@ public class HistoryAdapter extends BaseAdapter {
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         item_history_ma.setText("Mã đơn: DH"+ arr_bill.get(i).getBillId());
 
-        Glide.with(context).load(arr_my_product.get(i).getPhotos().get(0)).into(img_subproduct0);
+        Glide.with(context).load(arr_my_product.get(i).getProduct_image()).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
         tv_name_subproduct0.setText(arr_my_product.get(i).getProduct_name());
         tv_sumproduct0.setText("x"+arr_bill.get(i).getBillDetail().get(0).getQuantity());
         tv_size_subproduct0.setText(arr_bill.get(i).getBillDetail().get(0).getSize());
-        tv_price0.setText(decimalFormat.format(Integer.parseInt(arr_my_product.get(i).getPrice()))+" VNĐ");
+        tv_price0.setText(decimalFormat.format((arr_my_product.get(i).getPrice()))+" VNĐ");
         tv_sumSP.setText(arr_bill.get(i).getBillDetail().size()+" Sản phẩm");
         tv_sumPrice.setText("Tổng: "+decimalFormat.format(Integer.parseInt(arr_bill.get(i).getAmount()))+" VNĐ");
 

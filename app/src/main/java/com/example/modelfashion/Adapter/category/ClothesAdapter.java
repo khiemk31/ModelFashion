@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.product.ProductPreview;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
@@ -21,20 +20,20 @@ import java.util.List;
 
 public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHolder> {
 
-    private List<MyProduct> listProduct = new ArrayList<>();
+    private List<MyProductByCategory> listProduct = new ArrayList<>();
     private ItemClickListener mClickListener;
 
-    public void setListProduct(List<MyProduct> list) {
+    public void setListProduct(List<MyProductByCategory> list) {
         this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
     }
 
-    public List<MyProduct> getListProduct() {
+    public List<MyProductByCategory> getListProduct() {
         return this.listProduct;
     }
 
-    public MyProduct getProduct(int position) {
+    public MyProductByCategory getProduct(int position) {
         return listProduct.get(position);
     }
 
@@ -47,21 +46,21 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MyProduct product = listProduct.get(position);
-        holder.tvName.setText(product.getProduct_name());
+        MyProductByCategory product = listProduct.get(position);
+        holder.tvName.setText(product.getProductName());
         holder.tvPrice.setText(String.valueOf(product.getPrice()));
         holder.itemView.setOnClickListener(view -> {
             mClickListener.onItemClick(position, product);
         });
-        if (product.getPhotos().get(0).contains("http:")){
+        if (product.getProductImage().contains("http:")){
             Glide.with(holder.imgAva.getContext())
-                    .load(product.getPhotos().get(0).replace("http:","https:"))
+                    .load(product.getProductImage().replace("http:","https:"))
                     .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                     .placeholder(R.drawable.test_img)
                     .into(holder.imgAva);
         }else {
             Glide.with(holder.imgAva.getContext())
-                    .load(product.getPhotos().get(0))
+                    .load(product.getProductImage())
                     .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                     .placeholder(R.drawable.test_img)
                     .into(holder.imgAva);
@@ -91,6 +90,6 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
     }
 
     public interface ItemClickListener {
-        void onItemClick(int position, MyProduct productPreview);
+        void onItemClick(int position, MyProductByCategory productPreview);
     }
 }

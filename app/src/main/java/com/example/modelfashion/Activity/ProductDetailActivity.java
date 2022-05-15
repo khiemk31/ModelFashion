@@ -103,22 +103,22 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setData(MyProduct myProduct) {
-        DecimalFormat format = new DecimalFormat("###,###,###");
-        adapter.setArrItem(myProduct.getPhotos());
-        price = myProduct.getPrice();
-        tv_product_name.setText(myProduct.getProduct_name());
-        tv_price.setText(myProduct.getPriceFormat());
-        tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
-
-        Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
-        if (Integer.parseInt(myProduct.getSizes().get(0).getQuantity()) == 0)
-            img_size_s.setVisibility(View.GONE);
-        if (Integer.parseInt(myProduct.getSizes().get(1).getQuantity()) == 0)
-            img_size_m.setVisibility(View.GONE);
-        if (Integer.parseInt(myProduct.getSizes().get(2).getQuantity()) == 0)
-            img_size_l.setVisibility(View.GONE);
-        if (Integer.parseInt(myProduct.getSizes().get(3).getQuantity()) == 0)
-            img_size_xl.setVisibility(View.GONE);
+//        DecimalFormat format = new DecimalFormat("###,###,###");
+//        adapter.setArrItem(myProduct.getPhotos());
+//        price = myProduct.getPrice();
+//        tv_product_name.setText(myProduct.getProduct_name());
+//        tv_price.setText(myProduct.getPriceFormat());
+//        tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
+//
+//        Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
+//        if (Integer.parseInt(myProduct.getSizes().get(0).getQuantity()) == 0)
+//            img_size_s.setVisibility(View.GONE);
+//        if (Integer.parseInt(myProduct.getSizes().get(1).getQuantity()) == 0)
+//            img_size_m.setVisibility(View.GONE);
+//        if (Integer.parseInt(myProduct.getSizes().get(2).getQuantity()) == 0)
+//            img_size_l.setVisibility(View.GONE);
+//        if (Integer.parseInt(myProduct.getSizes().get(3).getQuantity()) == 0)
+//            img_size_xl.setVisibility(View.GONE);
     }
 
     private int currentCoverImage = 0;

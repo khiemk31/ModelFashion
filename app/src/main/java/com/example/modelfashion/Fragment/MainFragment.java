@@ -1,22 +1,21 @@
 package com.example.modelfashion.Fragment;
 
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,7 +24,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.NotifiActivity;
-import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
@@ -33,10 +31,10 @@ import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.Model.response.User.User;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.category.MyCategory;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
-import com.example.modelfashion.Utility.KeyboardUtils;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.Repository;
 
@@ -44,11 +42,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
-import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import me.relex.circleindicator.CircleIndicator3;
 import retrofit2.Call;
@@ -96,6 +92,7 @@ public class MainFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -133,7 +130,7 @@ public class MainFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 mHandler.removeCallbacks(mRunable);
-                mHandler.postDelayed(mRunable, 2000);
+                mHandler.postDelayed(mRunable, 4000);
             }
         });
         initData();
@@ -144,7 +141,8 @@ public class MainFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.VISIBLE);
-            getAllProduct(repository);
+            productListAdapter.clearAllData();
+            getAllCategory();
         });
 
         img_notifi.setOnClickListener(new View.OnClickListener() {
@@ -172,41 +170,62 @@ public class MainFragment extends Fragment {
         Calendar cal = Calendar.getInstance(Locale.US);
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
-        if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+        if (cal.get(Calendar.HOUR) == Calendar.AM) {
             tvGreeting.setText("Chào buổi sáng");
         } else {
             tvGreeting.setText("Chào buổi chiều");
-            tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
+
+        rcvProduct.setAdapter(productListAdapter);
+        initListener();
         repository = new Repository(requireContext());
-        getAllProduct(repository);
+
+        getAllCategory();
 
     }
+
+    private final List<MyCategory> categoryList = new ArrayList<>();
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getAllCategory(){
+        compositeDisposable.add(repository.getAllCategory()
+                .doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).doFinally(() -> {
+                    progressBar.setVisibility(View.GONE);
+                }).subscribe(dataAllCategory -> {
+                    categoryList.addAll(dataAllCategory.getData());
+                    getAllProductByCategory();
+                }, error -> {
+
+                }));
+    }
+
 
     private void initListener() {
         productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
             @Override
-            public void imgClick(int position, MyProduct product) {
-                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
-                intent.putExtra(KEY_PRODUCT_ID, product.getId());
-                intent.putExtra("user_id", user_id);
-                startActivity(intent);
+            public void imgClick(int position, MyProductByCategory product) {
+//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+//                intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
+//                intent.putExtra(KEY_PRODUCT_ID, product.getProduct_id());
+//                intent.putExtra("user_id", user_id);
+//                startActivity(intent);
             }
 
             @Override
-            public void imgAddToCartClick(int position, MyProduct product) {
+            public void imgAddToCartClick(int position, MyProductByCategory product) {
                 // TODO add to cart
             }
 
             @Override
-            public void imgWatchAll(int position, String type) {
+            public void imgWatchAll(int position, MyCategory type) {
                 Intent intent = new Intent(requireContext(), SeeAllActivity.class);
-                intent.putExtra(KEY_PRODUCT_TYPE, type);
+                intent.putExtra(KEY_PRODUCT_TYPE, type.getCategoryId());
                 startActivity(intent);
             }
         });
@@ -232,31 +251,24 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void getAllProduct(Repository repository) {
-        Single<ArrayList<MyProduct>> products = repository.getAllProduct();
-        compositeDisposable.add(products.doOnSubscribe(disposable -> {
-            // show loading
-            progressBar.setVisibility(View.VISIBLE);
-        })
-                .doFinally(() -> {
-                    // hide loading
-                    progressBar.setVisibility(View.GONE);
-                })
-                .subscribe(it -> {
+    private final ArrayList<MyProductByCategory> myProductByCategories = new ArrayList<>();
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getAllProductByCategory() {
+        categoryList.forEach(myCategory -> {
+            compositeDisposable.add(repository.getProductByCategory(myCategory.getCategoryId())
+                    .doOnSubscribe(disposable -> {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }).doFinally(() -> {
+                        progressBar.setVisibility(View.GONE);
+                    }).subscribe(dataProduct -> {
+                        myProductByCategories.addAll(dataProduct.getData());
+                        List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data = new ArrayList<>();
+                        data.add(new Pair<>(myCategory, dataProduct.getData()));
+                        productListAdapter.addListProduct(data);
+                    }, throwable -> {
 
-                    HashMap<String, String> hmType = new HashMap<>();
-                    for (int i = 0; i < it.size(); i++) {
-                        hmType.put(it.get(i).getType(), it.get(i).getType());
-                    }
-                    Set<String> key = hmType.keySet();
-                    ArrayList<String> arrProductType = new ArrayList<>(key);
-
-                    productListAdapter = new ProductListAdapter(requireContext(), arrProductType, it);
-                    rcvProduct.setAdapter(productListAdapter);
-                    initListener();
-                }, throwable -> {
-                    Log.d(Constants.ERROR_MESSAGE, throwable.toString());
-                }));
+                    }));
+        });
     }
 
 
