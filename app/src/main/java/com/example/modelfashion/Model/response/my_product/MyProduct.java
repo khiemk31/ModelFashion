@@ -1,39 +1,35 @@
 package com.example.modelfashion.Model.response.my_product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MyProduct {
-    private String id;
+    private String product_id;
     private String product_name;
-    private String description;
-    private String price;
-    private String cost;
-    private String type;
-    private String subtype;
-    private ArrayList<Sizes> sizes;
-    private ArrayList<String> photos;
+    private String product_image;
+    private int price;
+    private String category_name;
+    private String size;
+    private int quantity;
 
-    public MyProduct(String id, String product_name, String description, String price, String cost, String type, String subtype, ArrayList<Sizes> sizes, ArrayList<String> photos) {
-        this.id = id;
-        this.product_name = product_name;
-        this.description = description;
-        this.price = price;
-        this.cost = cost;
-        this.type = type;
-        this.subtype = subtype;
-        this.sizes = sizes;
-        this.photos = photos;
+    private HashMap<String, Integer> sizeQuantity;
+    private HashMap<String, Boolean> removeSameId;
+
+    public HashMap<String, Boolean> getRemoveSameId() {
+        return removeSameId;
     }
 
-    public MyProduct() {
+    public void setRemoveSameId(HashMap<String, Boolean> removeSameId) {
+        this.removeSameId = removeSameId;
     }
 
-    public String getId() {
-        return id;
+    public String getProduct_id() {
+        return product_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
     }
 
     public String getProduct_name() {
@@ -44,79 +40,80 @@ public class MyProduct {
         this.product_name = product_name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProduct_image() {
+        return product_image;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProduct_image(String product_image) {
+        this.product_image = product_image;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getCost() {
-        return cost;
+    public String getCategory_name() {
+        return category_name;
     }
 
-    public void setCost(String cost) {
-        this.cost = cost;
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 
-    public String getType() {
-        return type;
+    public String getSize() {
+        return size;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    public String getSubtype() {
-        return subtype;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setSubtype(String subtype) {
-        this.subtype = subtype;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public ArrayList<Sizes> getSizes() {
-        return sizes;
+    public HashMap<String, Integer> getSizeQuantity() {
+        return sizeQuantity;
     }
 
-    public void setSizes(ArrayList<Sizes> sizes) {
-        this.sizes = sizes;
+    public void setSizeQuantity(HashMap<String, Integer> sizeQuantity) {
+        this.sizeQuantity = sizeQuantity;
     }
 
-    public ArrayList<String> getPhotos() {
-        return photos;
+    public MyProduct(String product_id, String product_name, String product_image, int price, String category_name, String size, int quantity, HashMap<String, Integer> sizeQuantity) {
+        this.product_id = product_id;
+        this.product_name = product_name;
+        this.product_image = product_image;
+        this.price = price;
+        this.category_name = category_name;
+        this.size = size;
+        this.quantity = quantity;
+        this.sizeQuantity = sizeQuantity;
     }
 
-    public void setPhotos(ArrayList<String> photos) {
-        this.photos = photos;
+    public MyProduct() {
     }
 
     @Override
     public String toString() {
         return "MyProduct{" +
-                "id='" + id + '\'' +
+                "product_id='" + product_id + '\'' +
                 ", product_name='" + product_name + '\'' +
-                ", description='" + description + '\'' +
-                ", price='" + price + '\'' +
-                ", cost='" + cost + '\'' +
-                ", type='" + type + '\'' +
-                ", subtype='" + subtype + '\'' +
-                ", sizes=" + sizes +
-                ", photos=" + photos +
+                ", product_image='" + product_image + '\'' +
+                ", price=" + price +
+                ", category_name='" + category_name + '\'' +
+                ", size='" + size + '\'' +
+                ", quantity=" + quantity +
+                ", sizeQuantity=" + sizeQuantity +
                 '}';
-    }
-
-    public String getPriceFormat() {
-        return price + " đ";
     }
 }
 

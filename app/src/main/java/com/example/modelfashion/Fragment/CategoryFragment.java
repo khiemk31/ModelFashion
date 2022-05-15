@@ -5,38 +5,32 @@ import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
-import com.example.modelfashion.Model.Product;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.category.MyCategory;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Utility.KeyboardUtils;
 import com.example.modelfashion.customview.SearchBar;
 import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -54,8 +48,9 @@ public class CategoryFragment extends Fragment {
     private int currentCategory = 0;
     Repository repository;
 
-    private final ArrayList<MyProduct> productArrayList = new ArrayList<>();
+    private final ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,18 +65,19 @@ public class CategoryFragment extends Fragment {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initListener() {
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-                getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
+                getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
             }
 
             @Override
             public void afterTextChanged(String content) {
-                ArrayList<MyProduct> listSearch = new ArrayList<>();
+                ArrayList<MyProductByCategory> listSearch = new ArrayList<>();
                 for (int i = 0; i < productArrayList.size(); i++) {
-                    if (productArrayList.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())) {
+                    if (productArrayList.get(i).getProductName().toLowerCase().contains(content.toLowerCase())) {
                         listSearch.add(productArrayList.get(i));
                     }
                 }
@@ -92,18 +88,18 @@ public class CategoryFragment extends Fragment {
         categoryAdapter.setClickListener((view, position) -> {
             currentCategory = position;
             categoryAdapter.highLightSelectedItem(position);
-            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
+            getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
         });
 
         clothesAdapter.setClickListener((position, item) -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-            intent.putExtra(KEY_PRODUCT_ID, item.getId());
-            intent.putExtra(KEY_PRODUCT_NAME, item.getProduct_name());
+            intent.putExtra(KEY_PRODUCT_ID, item.getProductId());
+            intent.putExtra(KEY_PRODUCT_NAME, item.getProductName());
             startActivity(intent);
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
+            getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
             getCategory(repository);
             searchBar.clearSearchContent();
             refreshLayout.setRefreshing(false);
@@ -111,6 +107,7 @@ public class CategoryFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         repository = new Repository(requireContext());
         getCategory(repository);
@@ -134,8 +131,8 @@ public class CategoryFragment extends Fragment {
 
     }
 
-    private void getProductByCategory(Repository repository, String type) {
-        compositeDisposable.add(repository.getProductByType(type).doOnSubscribe(disposable -> {
+    private void getProductByCategory(Repository repository, MyCategory category) {
+        compositeDisposable.add(repository.getProductByCategory(category.getCategoryId()).doOnSubscribe(disposable -> {
             // show loading
             progressBar.setVisibility(View.VISIBLE);
         })
@@ -143,32 +140,29 @@ public class CategoryFragment extends Fragment {
                     // hide loading
                     progressBar.setVisibility(View.GONE);
                 })
-                .subscribe(productResponse -> {
+                .subscribe(dataProduct -> {
                     productArrayList.clear();
-                    clothesAdapter.setListProduct(productResponse);
-                    productArrayList.addAll(productResponse);
+                    clothesAdapter.setListProduct(dataProduct.getData());
+                    productArrayList.addAll(dataProduct.getData());
                 }, throwable -> {
                     Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void getCategory(Repository repository) {
-        compositeDisposable.add(repository.getAllProduct().doOnSubscribe(disposable -> {
-            progressBar.setVisibility(View.VISIBLE);
-        }).subscribe(myProducts -> {
-            progressBar.setVisibility(View.GONE);
-            HashMap<String, String> hmType = new HashMap<>();
-            for (int i = 0; i < myProducts.size(); i++) {
-                hmType.put(myProducts.get(i).getType(), myProducts.get(i).getType());
-            }
-            Set<String> key = hmType.keySet();
-            List<String> arrProductType = new ArrayList<>(key);
-            categoryAdapter.setListCategory(arrProductType);
+        compositeDisposable.add(repository.getAllCategory()
+                .doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).doFinally(() -> {
+                    progressBar.setVisibility(View.GONE);
+                }).subscribe(dataAllCategory -> {
+                    categoryAdapter.setListCategory(dataAllCategory.getData());
+                    getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
+                }, throwable -> {
 
-            getProductByCategory(repository, categoryAdapter.getCategory(currentCategory));
-        }, throwable -> {
+                }));
 
-        }));
     }
 
 

@@ -66,11 +66,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     public void onBindViewHolder(@NonNull ViewHoder holder, @SuppressLint("RecyclerView") int position) {
         AtomicInteger minteger= new AtomicInteger(1);
         DecimalFormat formatter = new DecimalFormat("###,###,###");
-        String money_format = formatter.format(Integer.parseInt(productArrayList.get(position).getPrice()));
+        String money_format = formatter.format((productArrayList.get(position).getPrice()));
         holder.nameProduct.setText("Sản phẩm: "+productArrayList.get(position).getProduct_name());
         holder.priceProduct.setText("Giá: "+money_format+" VNĐ");
         holder.sizeProduct.setText("Size: "+arrSize.get(position).getSize());
-        Glide.with(context).load(productArrayList.get(position).getPhotos().get(2)).into(holder.imgCart);
+        Glide.with(context).load(productArrayList.get(position).getProduct_image()).into(holder.imgCart);
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

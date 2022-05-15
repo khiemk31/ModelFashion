@@ -142,7 +142,7 @@ public class HistoryActivity extends AppCompatActivity {
                 arr_my_product = response.body();
                 Log.e("Checkresponse",arr_my_product.size()+""+arr_bill.size());
                 for (int i = 0; i< arr_my_product.size(); i++){
-                    Log.e("check3",i+""+arr_my_product.get(i).getId());
+                    Log.e("check3",i+""+arr_my_product.get(i).getProduct_id());
                 }
                 HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, arr_bill, arr_my_product, user_id);
                 lv_history.setAdapter(historyAdapter);
