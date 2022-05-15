@@ -8,6 +8,9 @@ import com.example.modelfashion.Model.response.Register.RegisterRequest;
 import com.example.modelfashion.Model.response.Register.RegisterResponse;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
+import com.example.modelfashion.Model.response.User.UpdateUserRequest;
+import com.example.modelfashion.Model.response.User.UpdateUserResponse;
+import com.example.modelfashion.Model.response.User.UserDetailResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
@@ -23,6 +26,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -50,6 +54,12 @@ public interface ApiInterface {
 
     @POST("user/register")
     Single<RegisterResponse> register(@Body RegisterRequest request);
+
+    @GET("/user/detail/{user_id}")
+    Single<UserDetailResponse> getUserDetail(@Path("user_id") String useID);
+
+    @PUT("/user/update")
+    Single<UpdateUserResponse> updateUser(@Query("user_id") String useID, @Body UpdateUserRequest request);
 
     @GET("get_product_by_id.php")
     Single<MyProduct> getProductById(

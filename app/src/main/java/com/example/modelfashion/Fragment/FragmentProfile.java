@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,15 @@ import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
+import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.network.Repository;
 import com.makeramen.roundedimageview.RoundedImageView;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 
 public class FragmentProfile extends Fragment {
@@ -36,11 +41,9 @@ public class FragmentProfile extends Fragment {
     LinearLayout layout_btn, layout_name;
     Boolean isLogin;
     String user_id;
-
     RelativeLayout rl_logout;
-
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
-
+    ProgressLoadingCommon progressLoadingCommon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,37 +64,33 @@ public class FragmentProfile extends Fragment {
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
+        preferenceManager = new PreferenceManager(getActivity());
 
-        Bundle info = getArguments();
-        user_id = info.getString("user_id");
+        user_id = preferenceManager.getString(Constants.KEY_ID);
 
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
-
         return view;
     }
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-
-
         isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
         if (isLogin == false) {
-
             btn_logout.setVisibility(View.GONE);
             layout_btn.setVisibility(View.VISIBLE);
             layout_name.setVisibility(View.GONE);
         } else {
-                    btn_logout.setVisibility(View.VISIBLE);
-                    layout_btn.setVisibility(View.GONE);
-                    img.setVisibility(View.VISIBLE);
-                    layout_name.setVisibility(View.VISIBLE);
-                    tv_user.setText(preferenceManager.getString(Constants.KEY_TAI_KHOAN));
-                    tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
-                    Glide.with(getActivity())
-                            .load(preferenceManager.getString(Constants.KEY_AVARTAR))
-                            .into(img);
+            btn_logout.setVisibility(View.VISIBLE);
+            layout_btn.setVisibility(View.GONE);
+            img.setVisibility(View.VISIBLE);
+            layout_name.setVisibility(View.VISIBLE);
+            tv_user.setText(preferenceManager.getString(Constants.KEY_PHONE));
+            tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+            Glide.with(getActivity())
+                    .load(preferenceManager.getString(Constants.KEY_AVARTAR))
+                    .into(img);
         }
     }
 
@@ -119,10 +118,11 @@ public class FragmentProfile extends Fragment {
             showDialogLogout();
         });
         btn_profile.setOnClickListener(v -> {
-            if(user_id.equalsIgnoreCase("null")){
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
                 showDialogLogIn();
                 // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 Intent intent = new Intent(getContext(), ProfileActivity.class);
                 startActivity(intent);
             }
@@ -152,19 +152,20 @@ public class FragmentProfile extends Fragment {
             intent.putExtra("user_id", user_id);
             startActivity(intent);
         });
-        btn_cart.setOnClickListener(v ->{
+        btn_cart.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), CartActivity.class);
-            intent.putExtra("use_id",user_id);
+            intent.putExtra("use_id", user_id);
             startActivity(intent);
         });
     }
-    private void showDialogLogout(){
+
+    private void showDialogLogout() {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_logout);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        TextView tv_yes_logout,tv_no_logout;
+        TextView tv_yes_logout, tv_no_logout;
         tv_yes_logout = dialog.findViewById(R.id.tv_yes_logout);
         tv_no_logout = dialog.findViewById(R.id.tv_no_logout);
         tv_no_logout.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +181,7 @@ public class FragmentProfile extends Fragment {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
                 sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
                 preferenceManager.clear();
-                preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN,false);
+                preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, false);
                 SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
                 prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
                 prefsEditor.apply();
@@ -194,13 +195,14 @@ public class FragmentProfile extends Fragment {
 
         dialog.show();
     }
-    private void showDialogLogIn(){
+
+    private void showDialogLogIn() {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_quest_login);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        TextView tv_yes_login,tv_no_login;
+        TextView tv_yes_login, tv_no_login;
         tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
         tv_no_login = dialog.findViewById(R.id.tv_no_login);
         tv_no_login.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +220,16 @@ public class FragmentProfile extends Fragment {
         });
         dialog.show();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+        Log.e("123", preferenceManager.getString(Constants.KEY_FULL_NAME));
+        Glide.with(getActivity())
+                .load(preferenceManager.getString(Constants.KEY_AVARTAR))
+                .into(img);
     }
 }
 
