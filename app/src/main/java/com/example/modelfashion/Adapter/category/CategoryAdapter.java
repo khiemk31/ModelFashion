@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modelfashion.Model.response.category.Category;
+import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
@@ -19,21 +20,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public CategoryAdapter() {
     }
 
-    private List<String> listCategory = new ArrayList<>();;
+    private List<MyCategory> listCategory = new ArrayList<>();;
     private ItemClickListener mClickListener;
     private int index;
 
-    public void setListCategory(List<String> list) {
+    public void setListCategory(List<MyCategory> list) {
         this.listCategory.clear();
         this.listCategory = list;
         notifyDataSetChanged();
     }
 
-    public List<String> getListCategory() {
+    public List<MyCategory> getListCategory() {
         return this.listCategory;
     }
 
-    public String getCategory(int position) {
+    public String getCategoryId(int position) {
+        return listCategory.get(position).getCategoryId();
+    }
+
+    public MyCategory getMyCategory(int position) {
         return listCategory.get(position);
     }
 
@@ -46,8 +51,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String category = listCategory.get(position);
-        holder.myTextView.setText(category);
+        MyCategory category = listCategory.get(position);
+        holder.myTextView.setText(category.getCategoryName());
         if (position == index) {
             holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.grey_active));
         }else {

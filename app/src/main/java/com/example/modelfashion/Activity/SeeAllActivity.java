@@ -4,10 +4,6 @@ import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +12,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.modelfashion.Adapter.see_all.ProductAdapter;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 import com.example.modelfashion.customview.SearchBar;
 import com.example.modelfashion.network.Repository;
@@ -32,9 +32,9 @@ public class SeeAllActivity extends AppCompatActivity {
     private SearchBar searchBar;
     private RecyclerView rcv;
     private ProgressBar progressBar;
-    private String type;
+    private String categoryId;
     private SwipeRefreshLayout refreshLayout;
-    private final ArrayList<MyProduct> productArrayList = new ArrayList<>();
+    private final ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
     private ProductAdapter adapter;
 
@@ -46,7 +46,7 @@ public class SeeAllActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_all);
 
-        type = getIntent().getStringExtra(KEY_PRODUCT_TYPE);
+        categoryId = getIntent().getStringExtra(KEY_PRODUCT_TYPE);
 
         initView();
         initData();
@@ -56,15 +56,15 @@ public class SeeAllActivity extends AppCompatActivity {
     private void initListener() {
         adapter.setClickListener(new ProductAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(int position, MyProduct productPreview) {
+            public void onItemClick(int position, MyProductByCategory productPreview) {
                 Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_ID, productPreview.getId());
-                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProduct_name());
+                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
+                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
                 startActivity(intent);
             }
 
             @Override
-            public void onAddToCartClick(int position, MyProduct productPreview) {
+            public void onAddToCartClick(int position, MyProductByCategory productPreview) {
                 Log.d("vcxvcx", "onAddToCartClick: position" + position + " product: " + productPreview.toString());
             }
         });
@@ -72,14 +72,14 @@ public class SeeAllActivity extends AppCompatActivity {
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-                getProductByCategory(repository, type);
+                getProductByCategory(repository, (categoryId));
             }
 
             @Override
             public void afterTextChanged(String content) {
-                ArrayList<MyProduct> listSearch = new ArrayList<>();
+                ArrayList<MyProductByCategory> listSearch = new ArrayList<>();
                 for (int i = 0; i < productArrayList.size(); i++) {
-                    if (productArrayList.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())) {
+                    if (productArrayList.get(i).getProductImage().toLowerCase().contains(content.toLowerCase())) {
                         listSearch.add(productArrayList.get(i));
                     }
                 }
@@ -88,7 +88,7 @@ public class SeeAllActivity extends AppCompatActivity {
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            getProductByCategory(repository, type);
+            getProductByCategory(repository, (categoryId));
             progressBar.setVisibility(View.VISIBLE);
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
@@ -112,11 +112,11 @@ public class SeeAllActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        getProductByCategory(repository, type);
+        getProductByCategory(repository, (categoryId));
     }
 
-    private void getProductByCategory(Repository repository, String type) {
-        compositeDisposable.add(repository.getProductByType(type).doOnSubscribe(disposable -> {
+    private void getProductByCategory(Repository repository, String categoryId) {
+        compositeDisposable.add(repository.getProductByCategory(categoryId).doOnSubscribe(disposable -> {
             // show loading
             progressBar.setVisibility(View.VISIBLE);
         })
@@ -126,8 +126,8 @@ public class SeeAllActivity extends AppCompatActivity {
                 })
                 .subscribe(productResponse -> {
                     productArrayList.clear();
-                    adapter.setListProduct(productResponse);
-                    productArrayList.addAll(productResponse);
+                    adapter.setListProduct(productResponse.getData());
+                    productArrayList.addAll(productResponse.getData());
                 }, throwable -> {
                     Toast.makeText(this, throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));

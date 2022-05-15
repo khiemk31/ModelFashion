@@ -76,15 +76,15 @@ public class DetailHistoryAdapter extends BaseAdapter {
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra("user_id", DetailHistoryActivity.user_id);
                 intent.putExtra(KEY_PRODUCT_NAME,arr_product.get(i).getProduct_name());
-                intent.putExtra(KEY_PRODUCT_ID,arr_product.get(i).getId());
+                intent.putExtra(KEY_PRODUCT_ID,arr_product.get(i).getProduct_id());
                 context.startActivity(intent);
             }
         });
         DecimalFormat format = new DecimalFormat("###,###,###");
         //Set data
-        Glide.with(context).load(arr_product.get(i).getPhotos().get(0)).into(img_subproduct);
+        Glide.with(context).load(arr_product.get(i).getProduct_image()).into(img_subproduct);
         tv_name_subproduct.setText(arr_product.get(i).getProduct_name());
-        tv_price.setText(format.format(Integer.parseInt(arr_product.get(i).getPrice())*Integer.parseInt(arr_bill_detail.get(i).getQuantity()))+" VNĐ");
+        tv_price.setText(format.format((arr_product.get(i).getPrice())*Integer.parseInt(arr_bill_detail.get(i).getQuantity()))+" VNĐ");
         tv_size_subproduct.setText(arr_bill_detail.get(i).getSize());
         tv_sumproduct.setText("Số lượng: "+arr_bill_detail.get(i).getQuantity());
 //        ProductHistory productHistory = productHistoryList.get(i);

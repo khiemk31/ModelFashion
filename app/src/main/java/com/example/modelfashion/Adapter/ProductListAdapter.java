@@ -1,82 +1,83 @@
 package com.example.modelfashion.Adapter;
 
-import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modelfashion.Model.Product;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.category.MyCategory;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 import com.example.modelfashion.customview.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
-    Context context;
-    ArrayList<String> arrProductType;
-    ArrayList<MyProduct> arrProduct;
+
+    private List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data = new ArrayList<>();
 
     public ProductListAdapter() {
     }
 
-    public ProductListAdapter(Context context, ArrayList<String> arrProductType, ArrayList<MyProduct> arrProduct){
-        this.context = context;
-        this.arrProductType = arrProductType;
-        this.arrProduct = arrProduct;
+    public void clearAllData() {
+        this.data.clear();
+        notifyDataSetChanged();
     }
 
+    public void setListProduct(List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data) {
+        this.data.clear();
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void addListProduct(List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data) {
+        this.data.addAll(data);
+        notifyDataSetChanged();
+    }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.rv_product_items_layout,null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rv_product_items_layout, viewGroup,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ArrayList<MyProduct> productsFiltered = new ArrayList<>();
-        for(int j = 0; j < arrProduct.size(); j++){
-            if(arrProduct.get(j).getType().equals(arrProductType.get(i))){
-                productsFiltered.add(arrProduct.get(j));
-            }
-        }
-        ProductAdapter productAdapter = new ProductAdapter(context,productsFiltered);
+        ProductAdapter productAdapter = new ProductAdapter();
         viewHolder.recyclerView.setAdapter(productAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
-        viewHolder.recyclerView.setLayoutManager(linearLayoutManager);
-        viewHolder.tv_product_item.setText(arrProductType.get(i));
+        productAdapter.setListProduct(data.get(i).second);
+
+        viewHolder.tv_product_item.setText(data.get(i).first.getCategoryName());
 
         viewHolder.recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(20));
 
         productAdapter.onItemClickListener(new ProductAdapter.OnItemClick() {
             @Override
-            public void imgClick(int position, MyProduct product) {
+            public void imgClick(int position, MyProductByCategory product) {
                 onItemClick.imgClick(position, product);
             }
 
             @Override
-            public void imgAddToCartClick(int position, MyProduct product) {
+            public void imgAddToCartClick(int position, MyProductByCategory product) {
                 onItemClick.imgAddToCartClick(position, product);
             }
         });
 
         viewHolder.tv_xem_tat_ca.setOnClickListener(view -> {
-            onItemClick.imgWatchAll(i, arrProductType.get(i));
+            onItemClick.imgWatchAll(i, data.get(i).first);
         });
     }
 
     @Override
     public int getItemCount() {
-        return arrProductType.size();
+        return data.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,8 +100,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     public interface OnItemClickListener{
-        void imgClick(int position, MyProduct product);
-        void imgAddToCartClick(int position, MyProduct product);
-        void imgWatchAll(int position, String type);
+        void imgClick(int position, MyProductByCategory product);
+        void imgAddToCartClick(int position, MyProductByCategory product);
+        void imgWatchAll(int position, MyCategory myCategory);
     }
 }

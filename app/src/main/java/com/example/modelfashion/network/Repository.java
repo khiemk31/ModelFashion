@@ -11,8 +11,9 @@ import com.example.modelfashion.Model.response.Register.RegisterResponse;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
+import com.example.modelfashion.Model.response.category.DataAllCategory;
+import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.product.ProductResponse;
 
 import java.util.ArrayList;
 
@@ -33,13 +34,7 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ProductResponse> getProductByCategory(String id) {
-        return apiInterface.getProductByCategory("https://test-api-spring-boot.herokuapp.com//api/products/categorys/" + id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Single<ArrayList<MyProduct>> getAllProduct() {
+    public Single<DataProduct> getAllProduct() {
         return apiInterface.getAllProduct()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -51,8 +46,8 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<ArrayList<MyProduct>> getProductByType(String type) {
-        return apiInterface.getProductByType(type)
+    public Single<DataProduct> getProductByCategory(String categoryId){
+        return apiInterface.getProductByCategory(categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -75,6 +70,12 @@ public final class Repository {
     }
     public Single<RegisterResponse> register(RegisterRequest request) {
         return apiInterface.register(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<DataAllCategory> getAllCategory() {
+        return apiInterface.getAllCategory()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
