@@ -84,11 +84,13 @@ public final class Repository {
     }
 
     public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
-        return apiInterface.updateUser(userID, request)
-
-    public Single<DataAllCategory> getAllCategory() {
-        return apiInterface.getAllCategory()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return apiInterface.updateUser(userID, request);
     }
+
+        public Single<DataAllCategory> getAllCategory () {
+            return apiInterface.getAllCategory()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+
 }
