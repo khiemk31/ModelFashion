@@ -85,6 +85,9 @@ public final class Repository {
 
     public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
         return apiInterface.updateUser(userID, request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
     public Single<DataAllCategory> getAllCategory() {
         return apiInterface.getAllCategory()

@@ -100,7 +100,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     otpToken = getOTPResponse.getOtpToken();
                     countDownTime();
                 }, throwable -> {
-
+                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -110,10 +110,9 @@ public class OTPPhoneActivity extends AppCompatActivity {
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
                 }).subscribe(verifyOTP -> {
-                    Toast.makeText(OTPPhoneActivity.this, verifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
                     register();
                 }, throwable -> {
-
+                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -126,7 +125,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     Toast.makeText(OTPPhoneActivity.this, registerResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(OTPPhoneActivity.this, MainActivity.class));
                 }, throwable -> {
-
+                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
 
