@@ -40,7 +40,7 @@ public class FragmentProfile extends Fragment {
     RoundedImageView img;
     LinearLayout layout_btn, layout_name;
     Boolean isLogin;
-    String user_id;
+    String user_id="1";
     RelativeLayout rl_logout;
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
     ProgressLoadingCommon progressLoadingCommon;
@@ -66,7 +66,7 @@ public class FragmentProfile extends Fragment {
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
         preferenceManager = new PreferenceManager(getActivity());
 
-        user_id = preferenceManager.getString(Constants.KEY_ID);
+
 
         preferenceManager = new PreferenceManager(getContext());
         loadDetails();

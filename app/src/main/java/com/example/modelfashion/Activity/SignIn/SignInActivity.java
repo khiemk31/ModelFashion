@@ -68,7 +68,7 @@ public class SignInActivity extends AppCompatActivity {
         apiInterface = ApiClient.provideApiInterface(SignInActivity.this);
         progressLoadingCommon = new ProgressLoadingCommon();
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
-
+        cbSaveValue.setChecked(false);
     }
 
     private Boolean validate() {
@@ -134,16 +134,16 @@ public class SignInActivity extends AppCompatActivity {
                         editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
                         editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
                         editor.apply();
-
-                        preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
-                        preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
-                        Toast.makeText(SignInActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                        getUserDetail();
                     } else {
                         sharedPreferences.edit().clear().apply();
                     }
+
+                    preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
+                    preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                    Toast.makeText(SignInActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    getUserDetail();
                 }, throwable -> {
-                    // neu co loi thi debug o day nhe
+                    Toast.makeText(SignInActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
 

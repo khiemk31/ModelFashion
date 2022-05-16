@@ -25,7 +25,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     public void clearAllData() {
-        this.data.clear();
+        this.data = new ArrayList<>();
         notifyDataSetChanged();
     }
 

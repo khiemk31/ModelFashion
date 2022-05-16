@@ -143,6 +143,7 @@ public class MainFragment extends Fragment {
             refreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.VISIBLE);
             productListAdapter.clearAllData();
+            categoryList.clear();
             getAllCategory();
         });
 
