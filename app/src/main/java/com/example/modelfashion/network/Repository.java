@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -14,7 +15,6 @@ import com.example.modelfashion.Model.response.User.UpdateUserRequest;
 import com.example.modelfashion.Model.response.User.UpdateUserResponse;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
 import com.example.modelfashion.Model.response.bill.Bill;
-import com.example.modelfashion.Model.response.bill.DataBill;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
@@ -99,10 +99,16 @@ public final class Repository {
     }
 
 
-    public Single<DataBill> getAllBill(String userID) {
+    public Single<Bill> getAllBill(String userID) {
         return apiInterface.getAllBill(userID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+
+    public Single<MyProductDetail> getProductDetail(String productId) {
+        return apiInterface.getProductDetail(productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

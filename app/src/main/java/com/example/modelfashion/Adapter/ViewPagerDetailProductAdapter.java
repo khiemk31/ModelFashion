@@ -9,16 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPagerDetailProductAdapter extends RecyclerView.Adapter<ViewPagerDetailProductAdapter.ViewHolder> {
 
-    private ArrayList<String> arrItem = new ArrayList<>();
+    private List<String> arrItem = new ArrayList<>();
 
-    public void setArrItem(ArrayList<String> arrItem) {
+    public void setArrItem(List<String> arrItem) {
         this.arrItem.clear();
         this.arrItem = arrItem;
         notifyDataSetChanged();
