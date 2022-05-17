@@ -5,58 +5,34 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Bill {
-    @SerializedName("bill_id")
-    @Expose
-    private String billId;
-    @SerializedName("user_id")
-    @Expose
-    private String userId;
-    @SerializedName("date_created")
-    @Expose
-    private String dateCreated;
-    @SerializedName("date_shipped")
-    @Expose
-    private String dateShipped;
-    @SerializedName("status")
-    @Expose
+    private String bill_id;
     private String status;
-    @SerializedName("amount")
-    @Expose
-    private String amount;
-    @SerializedName("bill_detail")
-    @Expose
-    private ArrayList<BillDetail> billDetail = null;
+    private String total_price;
+    private String total_product;
+    private String product_name;
+    private String size;
+    private String quantity;
+    private String product_image;
+    private String created_at;
 
-    public String getBillId() {
-        return billId;
+    public Bill(String bill_id, String status, String total_price, String total_product, String product_name, String size, String quantity, String product_image, String created_at) {
+        this.bill_id = bill_id;
+        this.status = status;
+        this.total_price = total_price;
+        this.total_product = total_product;
+        this.product_name = product_name;
+        this.size = size;
+        this.quantity = quantity;
+        this.product_image = product_image;
+        this.created_at = created_at;
     }
 
-    public void setBillId(String billId) {
-        this.billId = billId;
+    public String getBill_id() {
+        return bill_id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public String getDateShipped() {
-        return dateShipped;
-    }
-
-    public void setDateShipped(String dateShipped) {
-        this.dateShipped = dateShipped;
+    public void setBill_id(String bill_id) {
+        this.bill_id = bill_id;
     }
 
     public String getStatus() {
@@ -67,19 +43,59 @@ public class Bill {
         this.status = status;
     }
 
-    public String getAmount() {
-        return amount;
+    public String getTotal_price() {
+        return total_price;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setTotal_price(String total_price) {
+        this.total_price = total_price;
     }
 
-    public ArrayList<BillDetail> getBillDetail() {
-        return billDetail;
+    public String getTotal_product() {
+        return total_product;
     }
 
-    public void setBillDetail(ArrayList<BillDetail> billDetail) {
-        this.billDetail = billDetail;
+    public void setTotal_product(String total_product) {
+        this.total_product = total_product;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getProduct_image() {
+        return product_image;
+    }
+
+    public void setProduct_image(String product_image) {
+        this.product_image = product_image;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }

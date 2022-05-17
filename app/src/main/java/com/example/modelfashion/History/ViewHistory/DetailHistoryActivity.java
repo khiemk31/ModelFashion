@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.modelfashion.History.ApdapterHistory.DetailHistoryAdapter;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.bill.BillDetail;
+import com.example.modelfashion.Model.response.bill.BillProducts;
+import com.example.modelfashion.Model.response.bill.ContentBill;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
@@ -32,8 +36,8 @@ public class DetailHistoryActivity extends AppCompatActivity {
     ImageView back_detail_history;
     String bill_id, date_shipped, amount,status;
     public static String user_id;
-    ArrayList<BillDetail> arr_bill_detail = new ArrayList<>();
-    ArrayList<MyProduct> arr_my_product = new ArrayList<>();
+    ArrayList<ContentBill> arr_bill_detail = new ArrayList<>();
+    ArrayList<BillProducts> arr_my_product = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,124 +57,55 @@ public class DetailHistoryActivity extends AppCompatActivity {
                 finish();
             }
         });
-//        Locale locale = new Locale("vi","VN");
-//        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
-//        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-        DecimalFormat format = new DecimalFormat("###,###,###");
+
+
         Intent intent = getIntent();
         bill_id = intent.getStringExtra("bill_id");
-        user_id = intent.getStringExtra("user_id");
-        date_shipped = intent.getStringExtra("date");
-        amount = intent.getStringExtra("amount");
-        status = intent.getStringExtra("status");
-        if(status.matches("Đã giao")){
-            title_date_detail_history.setText("Ngày nhận hàng:");
-        }else {
-            title_date_detail_history.setText("Ngày mua hàng:");
-        }
+        getInfoBill();
+
+        title_date_detail_history.setText("Ngày mua hàng:");
+
         //Set data bill detail
-        GetBillDetail(bill_id);
-        tv_dh_detail_history.setText("DH "+bill_id);
-        date_detail_history.setText(date_shipped);
-        summoney_detail_history.setText(format.format(Integer.parseInt(amount))+" VNĐ");
-        SetUserData();
-//        int index = intent.getIntExtra("index",-1);
-//        String view = intent.getStringExtra("view");
-//        if(view.matches("History")) {
-//            ModelHistory modelHistory = HistoryActivity.listModelHistory.get(index);
-//            list = new ArrayList<>();
-//            list = modelHistory.getProductHistoryList();
-//            tv_dh_detail_history.setText("Mã đơn : "+modelHistory.getmIDHistory());
-//            phoneNumber_detail_history.setText(modelHistory.getmPhoneNumber());
-//            address_detail_history.setText(" - "+modelHistory.getmAddress());
-//            title_date_detail_history.setText("Ngày nhận hàng: ");
-//            date_detail_history.setText(modelHistory.getmTimeRecieve());
-//            date_detail_history.setTextColor(Color.parseColor("#000000"));
-//            String summoney = sumPrice(list);
-//            summoney_detail_history.setText(summoney);
-//            DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,list);
-//            lv_detail_history.setAdapter(historyAdapter);
-//        }else if(view.matches("OrderStatus")){
-//            ModelHistory modelHistory = OrderStatusActivity.listModelOrderStatus.get(index);
-//            list = new ArrayList<>();
-//            list = modelHistory.getProductHistoryList();
-//            tv_dh_detail_history.setText("Mã đơn : "+modelHistory.getmIDHistory());
-//            phoneNumber_detail_history.setText(modelHistory.getmPhoneNumber());
-//            address_detail_history.setText(" - "+modelHistory.getmAddress());
-//            title_date_detail_history.setText("Tình trạng đơn: ");
-//            date_detail_history.setText(modelHistory.getmStatus());
-//            if(modelHistory.getmStatus().matches("Đang Chờ")){
-//                date_detail_history.setTextColor(Color.parseColor("#FF0000"));
-//            }else if(modelHistory.getmStatus().matches("Đang Giao")){
-//                date_detail_history.setTextColor(Color.parseColor("#008E06"));
-//            }
-//            String summoney = sumPrice(list);
-//            summoney_detail_history.setText(summoney);
-//            DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,list);
-//            lv_detail_history.setAdapter(historyAdapter);
-//        }
+
+
+
+
+
     }
 
-    private void GetBillDetail(String bill_id){
-        ApiRetrofit.apiRetrofit.GetBillDetailInBill(bill_id).enqueue(new Callback<ArrayList<BillDetail>>() {
+    private void getInfoBill(){
+        ApiHistory.API_HISTORY.getBillDetail(bill_id).enqueue(new Callback<BillDetail>() {
             @Override
-            public void onResponse(Call<ArrayList<BillDetail>> call, Response<ArrayList<BillDetail>> response) {
-                arr_bill_detail = response.body();
-                ArrayList<String> arr_detail_id = new ArrayList<>();
-                for (int i = 0; i< arr_bill_detail.size(); i++){
-                    arr_detail_id.add(arr_bill_detail.get(i).getDetailId());
+            public void onResponse(Call<BillDetail> call, Response<BillDetail> response) {
+                for (int i = 0;i<response.body().getBill().size();i++){
+                    arr_bill_detail.add(response.body().getBill().get(i));
                 }
-                JSONArray jsonArray = new JSONArray(arr_detail_id);
-                SetData(jsonArray);
+                for (int i = 0;i<response.body().getListProduct().size();i++){
+                    arr_my_product.add(response.body().getListProduct().get(i));
+                }
+                setInfoBill();
             }
 
             @Override
-            public void onFailure(Call<ArrayList<BillDetail>> call, Throwable t) {
+            public void onFailure(Call<BillDetail> call, Throwable t) {
 
             }
         });
     }
+    private void setInfoBill(){
+        DecimalFormat format = new DecimalFormat("###,###,###");
+        ContentBill contentBill = arr_bill_detail.get(0);
+        tv_dh_detail_history.setText("MÃ\n"+contentBill.getBill_id());
+        phoneNumber_detail_history.setText(contentBill.getPhone());
+        address_detail_history.setText(contentBill.getAddress());
+        date_detail_history.setText(contentBill.getCreated_at());
+        summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" VNĐ");
+        DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
+        lv_detail_history.setAdapter(historyAdapter);
 
-    private void SetData(JSONArray arr_detail_id){
-        ApiRetrofit.apiRetrofit.GetProductByDetailId(arr_detail_id).enqueue(new Callback<ArrayList<MyProduct>>() {
-            @Override
-            public void onResponse(Call<ArrayList<MyProduct>> call, Response<ArrayList<MyProduct>> response) {
-                arr_my_product = response.body();
-                DetailHistoryAdapter detailHistoryAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_bill_detail,arr_my_product);
-                lv_detail_history.setAdapter(detailHistoryAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<MyProduct>> call, Throwable t) {
-
-            }
-        });
     }
 
-    private void SetUserData(){
-        ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<com.example.modelfashion.Model.response.Login.User>() {
-            @Override
-            public void onResponse(Call<com.example.modelfashion.Model.response.Login.User> call, Response<com.example.modelfashion.Model.response.Login.User> response) {
-                com.example.modelfashion.Model.response.Login.User user1 = response.body();
-                phoneNumber_detail_history.setText(user1.getPhone());
-                address_detail_history.setText(user1.getAddress());
-            }
 
-            @Override
-            public void onFailure(Call<com.example.modelfashion.Model.response.Login.User> call, Throwable t) {
 
-            }
-        });
-    }
-//    private String sumPrice(List<ProductHistory> list){
-//        int sum = 0;
-//        for (int i = 0;i<list.size();i++){
-//            sum+=Integer.parseInt(list.get(i).getmPriceProduct())*Integer.parseInt(list.get(i).getmSumProduct());
-//        }
-//        Locale locale = new Locale("vi","VN");
-//        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
-//        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-//        String sumP = numberFormat.format(Double.parseDouble(String.valueOf(sum)));
-//        return sumP;
-//    }
+
 }

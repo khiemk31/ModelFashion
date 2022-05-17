@@ -39,12 +39,11 @@ public class HistoryAdapter extends BaseAdapter {
     Context context;
     ArrayList<MyProduct> arr_my_product;
     String user_id;
-    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill, ArrayList<MyProduct> arr_my_product, String user_id){
+    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill){
 
         this.context = context;
         this.arr_bill = arr_bill;
-        this.arr_my_product = arr_my_product;
-        this.user_id = user_id;
+
     }
 //    public HistoryAdapter(Context context,List<ModelHistory> listModel) {
 //        this.listModel = listModel;
@@ -89,46 +88,34 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_feedback = view.findViewById(R.id.tv_feedback);
         LinearLayout ll_item_history = view.findViewById(R.id.ll_item_history);
 
-        //Set data
-//        item_history_ma.setText("Mã đơn: "+listModel.get(i).getmIDHistory());
-//        item_history_time.setText("Ngày nhận: "+listModel.get(i).getmTimeOrder());
-//        Glide.with(context).load(listModel.get(i).getProductHistoryList().get(0).getmImgeProduct()).into(img_subproduct0);
-//        tv_name_subproduct0.setText(listModel.get(i).getProductHistoryList().get(0).getmNameProduct());
-//        tv_sumproduct0.setText("x"+listModel.get(i).getProductHistoryList().get(0).getmSumProduct());
-//        tv_size_subproduct0.setText(listModel.get(i).getProductHistoryList().get(0).getmSizeProduct());
-//        tv_price0.setText(price0);
-//        tv_sumSP.setText(String.valueOf(listModel.get(i).getProductHistoryList().size())+" Sản phẩm");
-//        tv_sumPrice.setText("Tổng: "+sumPrice(listModel.get(i).getProductHistoryList()));
-        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        item_history_ma.setText("Mã đơn: DH"+ arr_bill.get(i).getBillId());
 
-        Glide.with(context).load(arr_my_product.get(i).getProduct_image()).into(img_subproduct0);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        item_history_ma.setText("Mã đơn: DH"+ arr_bill.get(i).getBill_id());
+
+        Glide.with(context).load(arr_bill.get(i).getProduct_image()).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
-        tv_name_subproduct0.setText(arr_my_product.get(i).getProduct_name());
-        tv_sumproduct0.setText("x"+arr_bill.get(i).getBillDetail().get(0).getQuantity());
-        tv_size_subproduct0.setText(arr_bill.get(i).getBillDetail().get(0).getSize());
-        tv_price0.setText(decimalFormat.format((arr_my_product.get(i).getPrice()))+" VNĐ");
-        tv_sumSP.setText(arr_bill.get(i).getBillDetail().size()+" Sản phẩm");
-        tv_sumPrice.setText("Tổng: "+decimalFormat.format(Integer.parseInt(arr_bill.get(i).getAmount()))+" VNĐ");
+        tv_name_subproduct0.setText(arr_bill.get(i).getProduct_name());
+        tv_sumproduct0.setText("x"+arr_bill.get(i).getQuantity());
+        tv_size_subproduct0.setText(arr_bill.get(i).getSize());
+        //tv_price0.setText(decimalFormat.format((arr_bill.get(i).getTotal_price()))+" VNĐ");
+        tv_sumSP.setText(arr_bill.get(i).getTotal_product()+" Sản phẩm");
+        tv_sumPrice.setText("Tổng: "+decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price()))+" VNĐ");
 
         tv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailHistoryActivity.class);
-                intent.putExtra("bill_id", arr_bill.get(i).getBillId());
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("date", arr_bill.get(i).getDateShipped());
-                intent.putExtra("amount", arr_bill.get(i).getAmount());
-                intent.putExtra("status", arr_bill.get(i).getStatus());
+                intent.putExtra("bill_id",arr_bill.get(i).getBill_id());
+
                 context.startActivity(intent);
             }
         });
         if(arr_bill.get(i).getStatus().matches("Đã giao")){
-            item_history_time.setText("Ngày nhận: "+ arr_bill.get(i).getDateShipped());
+            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at());
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
         }else {
-            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getDateCreated());
+            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at());
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
 
@@ -137,7 +124,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 if(arr_bill.get(i).getStatus().matches("Đã giao")) {
-                    loadDialogFeedback(context, "DH " + arr_bill.get(i).getBillId());
+                    loadDialogFeedback(context, "DH " + arr_bill.get(i).getBill_id());
                 }else {
                     showDialogCancelOrder();
                 }

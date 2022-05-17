@@ -1,28 +1,33 @@
 package com.example.modelfashion.History.ViewHistory;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modelfashion.History.ApdapterHistory.HistoryAdapter;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 
 import com.example.modelfashion.R;
+import com.example.modelfashion.network.Repository;
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
@@ -32,6 +37,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,10 +59,17 @@ public class HistoryActivity extends AppCompatActivity {
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
     private int numberStatus = 4;
-    private String user_id = "" ;
+    private String user_id = "1" ;
     private TextView tv_empty;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ProgressBar progressBar;
+    private ArrayList<Bill> bills;
+
+    private Repository repository ;
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +78,13 @@ public class HistoryActivity extends AppCompatActivity {
         img_history_back = findViewById(R.id.img_history_back);
         rl_filter_history = findViewById(R.id.rl_filter_history);
         tv_status_history = findViewById(R.id.tv_status_history);
+        progressBar = findViewById(R.id.progress_bar_history);
         tv_empty = findViewById(R.id.tv_empty);
+        bills = new ArrayList<>();
+        repository = new Repository(HistoryActivity.this);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
-        user_id = intent.getStringExtra("user_id");
+        //user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
        // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
@@ -88,36 +104,58 @@ public class HistoryActivity extends AppCompatActivity {
 //        listModelHistoryNew = new ArrayList<>();
 //        listProduct = new ArrayList<>();
 //        fakeData();
-        loadData(numberStatus);
+
+        getAllBill();
+
+        Log.e("id", String.valueOf(user_id));
 
     }
 
 
-    private void loadData(int i){
+    private String loadData(int i){
 
         String status = "";
         switch (i) {
-            case 1: status = "Đang chờ";
+            case 1: status = "Đang Chờ";
                     break;
-            case 2: status = "Hoàn thành";
+            case 2: status = "Hoàn Thành";
                     break;
-            case 3: status = "Đang giao";
+            case 3: status = "Đang Giao";
                     break;
-            case 4: status = "Đã giao";
+            case 4: status = "Đã Giao";
                     break;
-            case 5: status = "Đã hủy";
+            case 5: status = "Đã Hủy";
                 break;
 
         }
-        ApiRetrofit.apiRetrofit.GetBillByUserId(user_id, status).enqueue(new Callback<ArrayList<Bill>>() {
+        return status;
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getAllBill(){
+//        compositeDisposable.add(repository.getAllBill(user_id)
+//                .doOnSubscribe(disposable -> {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }).doFinally(() -> {
+//                    progressBar.setVisibility(View.GONE);
+//                }).subscribe(dataBill -> {
+//                    bills.clear();
+//                    bills = dataBill.getBills();
+//                    Log.e("list", String.valueOf(bills.size()));
+//
+//                }, throwable -> {
+//                    Log.e("err", String.valueOf(bills.size()));
+//                }));
+        ApiHistory.API_HISTORY.getBill(user_id).enqueue(new Callback<ArrayList<Bill>>() {
             @Override
             public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
-                arr_bill = response.body();
-                for(int i = 0; i < arr_bill.size(); i++){
-                    arr_detail_id.add(arr_bill.get(i).getBillDetail().get(0).getDetailId());
-                    Log.e("check2",arr_bill.get(i).getBillDetail().get(0).getDetailId());
+                for (int i = 0;i<response.body().size();i++){
+                    bills.add(response.body().get(i));
                 }
-                SetData(arr_detail_id);
+                setListBill(loadData(numberStatus),bills);
+
+
+
             }
 
             @Override
@@ -125,74 +163,21 @@ public class HistoryActivity extends AppCompatActivity {
 
             }
         });
-//        getData(i);
-//        if(i == 4){
-//            HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,listModelHistoryNew);
-//            lv_history.setAdapter(historyAdapter);
-//        }else {
-//            OrderStatusAdapter historyAdapterOrder = new OrderStatusAdapter(HistoryActivity.this,listModelHistoryNew);
-//            lv_history.setAdapter(historyAdapterOrder);
-//        }
+
     }
-    private void SetData(ArrayList<String> arr_detail_id){
-        JSONArray jsonArray = new JSONArray(arr_detail_id);
-        ApiRetrofit.apiRetrofit.GetProductByDetailId(jsonArray).enqueue(new Callback<ArrayList<MyProduct>>() {
-            @Override
-            public void onResponse(Call<ArrayList<MyProduct>> call, Response<ArrayList<MyProduct>> response) {
-                arr_my_product = response.body();
-                Log.e("Checkresponse",arr_my_product.size()+""+arr_bill.size());
-                for (int i = 0; i< arr_my_product.size(); i++){
-                    Log.e("check3",i+""+arr_my_product.get(i).getProduct_id());
-                }
-                HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, arr_bill, arr_my_product, user_id);
-                lv_history.setAdapter(historyAdapter);
-                if(arr_bill.size() > 0){
-                    tv_empty.setVisibility(View.GONE);
-                }else {
-                    tv_empty.setVisibility(View.VISIBLE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<MyProduct>> call, Throwable t) {
-
+    private void setListBill(String status,ArrayList<Bill> bills){
+        ArrayList<Bill> subBill = new ArrayList<>();
+        for (int i = 0;i<bills.size();i++){
+            if(bills.get(i).getStatus().matches(status)){
+                subBill.add(bills.get(i));
             }
-        });
+        }
+        HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,subBill);
+        lv_history.setAdapter(historyAdapter);
     }
-//    private void getData(int index){
-//        listModelHistoryNew.clear();
-//        String newStatus = "";
-//        if(index == 1){
-//            newStatus = "Chờ xác nhận";
-//        }else if(index == 2){
-//            newStatus = "Hoàn thành";
-//        }else if(index == 3){
-//            newStatus = "Đang giao";
-//        }else if(index == 4){
-//            newStatus = "Lịch sử";
-//        }
-//        for (int i = 0;i<listModelHistory.size();i++){
-//            if(listModelHistory.get(i).getmStatus().matches(newStatus)){
-//                listModelHistoryNew.add(listModelHistory.get(i));
-//            }
-//        }
-//
-//    }
 
-//    private void fakeData(){
-//        listProduct.add(new ProductHistory("1","a1","10000","L","https://i.pinimg.com/originals/ce/a7/5e/cea75e472d431e283a4a622ed1d7b155.png","10"));
-//        listProduct.add(new ProductHistory("2","a2","10000","L","https://i.pinimg.com/originals/ce/a7/5e/cea75e472d431e283a4a622ed1d7b155.png","10"));
-//        listProduct.add(new ProductHistory("3","a3","10000","L","https://i.pinimg.com/originals/ce/a7/5e/cea75e472d431e283a4a622ed1d7b155.png","10"));
-//
-//        listModelHistory.add(new ModelHistory("HD1","0987563","ha noi","12/2 0:0",
-//                "13/2 0:0","Chờ xác nhận","100000",listProduct));
-//        listModelHistory.add(new ModelHistory("HD2","0987563","ha noi","12/2 0:0",
-//                "13/2 0:0","Chờ lấy hàng","100000",listProduct));
-//        listModelHistory.add(new ModelHistory("HD3","0987563","ha noi","12/2 0:0",
-//                "13/2 0:0","Đang giao","100000",listProduct));
-//        listModelHistory.add(new ModelHistory("HD4","0987563","ha noi","12/2 0:0",
-//                "13/2 0:0","Đã giao","100000",listProduct));
-//    }
+
     private int filter_number = 0;
     private void showDialogFilter(){
         Dialog dialog = new Dialog(HistoryActivity.this);
@@ -260,7 +245,8 @@ public class HistoryActivity extends AppCompatActivity {
                 numberStatus = filter_number;
                 loadThemeFilterStatus(numberStatus,status1,status2,status3,status4,status5);
                 loadTitleStatus(numberStatus);
-                loadData(numberStatus);
+
+                setListBill(loadData(numberStatus),bills);
                 dialog.dismiss();
 
             }

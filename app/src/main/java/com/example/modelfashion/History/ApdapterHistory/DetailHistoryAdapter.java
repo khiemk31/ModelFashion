@@ -20,6 +20,7 @@ import com.example.modelfashion.Adapter.category.ClothesAdapter;
 import com.example.modelfashion.History.ViewHistory.DetailHistoryActivity;
 import com.example.modelfashion.Model.MHistory.ProductHistory;
 import com.example.modelfashion.Model.response.bill.BillDetail;
+import com.example.modelfashion.Model.response.bill.BillProducts;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
@@ -32,8 +33,8 @@ import java.util.Locale;
 
 public class DetailHistoryAdapter extends BaseAdapter {
     Context context;
-    ArrayList<BillDetail> arr_bill_detail;
-    ArrayList<MyProduct> arr_product;
+    ArrayList<BillProducts> arr_bill_detail;
+
     private ClothesAdapter.ItemClickListener mClickListener;
 //    List<ProductHistory> productHistoryList;
 //
@@ -41,10 +42,10 @@ public class DetailHistoryAdapter extends BaseAdapter {
 //        this.context = context;
 //        this.productHistoryList = productHistoryList;
 //    }
-    public DetailHistoryAdapter(Context context, ArrayList<BillDetail> arr_bill_detail, ArrayList<MyProduct> arr_product){
+    public DetailHistoryAdapter(Context context, ArrayList<BillProducts> arr_bill_detail){
         this.context = context;
         this.arr_bill_detail = arr_bill_detail;
-        this.arr_product = arr_product;
+
     }
     @Override
     public int getCount() {
@@ -70,33 +71,24 @@ public class DetailHistoryAdapter extends BaseAdapter {
         TextView tv_size_subproduct = view.findViewById(R.id.tv_size_subproduct);
         TextView tv_sumproduct = view.findViewById(R.id.tv_sumproduct);
         RelativeLayout rl_view_subproduct = view.findViewById(R.id.rl_view_subproduct);
-        rl_view_subproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ProductDetailActivity.class);
-                intent.putExtra("user_id", DetailHistoryActivity.user_id);
-                intent.putExtra(KEY_PRODUCT_NAME,arr_product.get(i).getProduct_name());
-                intent.putExtra(KEY_PRODUCT_ID,arr_product.get(i).getProduct_id());
-                context.startActivity(intent);
-            }
-        });
+//        rl_view_subproduct.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context, ProductDetailActivity.class);
+//                intent.putExtra("user_id", DetailHistoryActivity.user_id);
+//                intent.putExtra(KEY_PRODUCT_NAME,arr_product.get(i).getProduct_name());
+//                intent.putExtra(KEY_PRODUCT_ID,arr_product.get(i).getProduct_id());
+//                context.startActivity(intent);
+//            }
+//        });
         DecimalFormat format = new DecimalFormat("###,###,###");
         //Set data
-        Glide.with(context).load(arr_product.get(i).getProduct_image()).into(img_subproduct);
-        tv_name_subproduct.setText(arr_product.get(i).getProduct_name());
-        tv_price.setText(format.format((arr_product.get(i).getPrice())*Integer.parseInt(arr_bill_detail.get(i).getQuantity()))+" VNĐ");
+        Glide.with(context).load(arr_bill_detail.get(i).getProduct_image()).into(img_subproduct);
+        tv_name_subproduct.setText(arr_bill_detail.get(i).getProduct_name());
+        tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice()))+" VNĐ");
         tv_size_subproduct.setText(arr_bill_detail.get(i).getSize());
         tv_sumproduct.setText("Số lượng: "+arr_bill_detail.get(i).getQuantity());
-//        ProductHistory productHistory = productHistoryList.get(i);
-//        tv_name_subproduct.setText(productHistory.getmNameProduct());
-//        Locale locale = new Locale("vi","VN");
-//        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
-//        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-//        String money = numberFormat.format(Double.parseDouble(productHistory.getmPriceProduct()));
-//        tv_price.setText(money);
-//        tv_size_subproduct.setText(productHistory.getmSizeProduct());
-//        tv_sumproduct.setText("x"+productHistory.getmSumProduct());
-//        Glide.with(context).load(productHistory.getmImgeProduct()).into(img_subproduct);
+
         return view;
     }
 }
