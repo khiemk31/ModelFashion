@@ -2,6 +2,8 @@ package com.example.modelfashion.network;
 
 import android.content.Context;
 
+import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
+import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
@@ -85,6 +87,12 @@ public final class Repository {
 
     public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
         return apiInterface.updateUser(userID, request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<ForgotPasswordResponse> changePassword(ForgotPasswordRequest request) {
+        return apiInterface.changePassword(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

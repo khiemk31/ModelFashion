@@ -1,5 +1,7 @@
 package com.example.modelfashion.network;
 
+import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
+import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
@@ -60,6 +62,9 @@ public interface ApiInterface {
 
     @PUT("/user/update")
     Single<UpdateUserResponse> updateUser(@Query("user_id") String useID, @Body UpdateUserRequest request);
+
+    @PUT("/user/recoveryPass")
+    Single<ForgotPasswordResponse> changePassword(@Body ForgotPasswordRequest request);
 
     @GET("get_product_by_id.php")
     Single<MyProduct> getProductById(
