@@ -112,19 +112,19 @@
             app:layout_constraintTop_toTopOf="@+id/img_product"
             tools:text="MARU BLAZER (WHITE)" />
 
-        <TextView
-            android:id="@+id/tv_product_category"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/tv_product_name"
-            tools:text="Loại sản phẩm: MARU BLAZER" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_product_category"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:maxLines="2"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/img_product"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_product_name"-->
+<!--            tools:text="Loại sản phẩm: MARU BLAZER" />-->
 
         <TextView
             android:id="@+id/tv_product_availability"
@@ -135,7 +135,7 @@
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/tv_product_category"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_name"
             tools:text="Tình trạng: còn hàng" />
 
         <TextView
@@ -168,17 +168,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bg_btn_product_detail_buy"
             android:gravity="center"
             android:maxLines="1"
             android:padding="8dp"
             android:text="@string/them_vao_gio_hang"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_mua_ngay"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toBottomOf="@+id/img_product" />
 
         <ImageView
             android:id="@+id/img_size_s"

@@ -2,6 +2,7 @@ package com.example.modelfashion.network;
 
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -80,4 +81,6 @@ public interface ApiInterface {
     @GET("category/getAll")
     Single<DataAllCategory> getAllCategory();
 
+    @GET("product/detail/{id}")
+    Single<MyProductDetail> getProductDetail(@Path("id") String productId);
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -91,6 +92,12 @@ public final class Repository {
 
     public Single<DataAllCategory> getAllCategory() {
         return apiInterface.getAllCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<MyProductDetail> getProductDetail(String productId) {
+        return apiInterface.getProductDetail(productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

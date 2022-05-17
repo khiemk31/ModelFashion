@@ -1,5 +1,7 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.content.Intent;
@@ -24,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.NotifiActivity;
+import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
@@ -32,7 +35,6 @@ import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.category.MyCategory;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
@@ -212,11 +214,11 @@ public class MainFragment extends Fragment {
         productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
             @Override
             public void imgClick(int position, MyProductByCategory product) {
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_NAME, product.getProduct_name());
-//                intent.putExtra(KEY_PRODUCT_ID, product.getProduct_id());
-//                intent.putExtra("user_id", user_id);
-//                startActivity(intent);
+                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+                intent.putExtra(KEY_PRODUCT_NAME, product.getProductName());
+                intent.putExtra(KEY_PRODUCT_ID, product.getProductId());
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
             }
 
             @Override
