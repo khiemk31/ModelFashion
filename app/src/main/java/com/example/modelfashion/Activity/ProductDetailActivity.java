@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,20 +22,16 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
-import com.example.modelfashion.Interface.ApiRetrofit;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 import com.example.modelfashion.network.Repository;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
@@ -54,7 +49,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     String user_id = "";
     String productId = "";
     String productName = "";
-    private MyProduct myProduct = new MyProduct();
+    private MyProductDetail myProductDetail = new MyProductDetail();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -66,20 +61,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         productName = intent.getStringExtra(KEY_PRODUCT_NAME);
         productId = intent.getStringExtra(KEY_PRODUCT_ID);
         Log.e("t1", user_id + " ");
-        // TODO use id to call detail product api
-        ApiRetrofit.apiRetrofit.GetProductsSize(productName).enqueue(new Callback<ArrayList<Sizes>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Sizes>> call, Response<ArrayList<Sizes>> response) {
-                arr_size = response.body();
-                size_id = arr_size.get(0).getId();
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<Sizes>> call, Throwable t) {
-
-            }
-        });
-        repository = new Repository(getApplicationContext());
+        repository = new Repository(this);
 
         initView();
         initData();
@@ -89,36 +72,32 @@ public class ProductDetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         disposable.add(
-                repository.getProductById(productId, productName).doOnSubscribe(disposable -> {
+                repository.getProductDetail(productId).doOnSubscribe(disposable -> {
                     progressBar.setVisibility(View.VISIBLE);
-                }).subscribe(myProduct -> {
-                    this.myProduct = myProduct;
+                }).subscribe(myProductDetail -> {
+                    this.myProductDetail = myProductDetail;
                     progressBar.setVisibility(View.GONE);
-                    setData(myProduct);
-
+                    setData(myProductDetail);
+                    Log.d("ahuhu", "getProductDetail: success");
                 }, throwable -> {
-
+                    Log.d("ahuhu", "getProductDetail: error: " + throwable.toString());
                 }));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void setData(MyProduct myProduct) {
-//        DecimalFormat format = new DecimalFormat("###,###,###");
-//        adapter.setArrItem(myProduct.getPhotos());
-//        price = myProduct.getPrice();
-//        tv_product_name.setText(myProduct.getProduct_name());
-//        tv_price.setText(myProduct.getPriceFormat());
-//        tv_product_category.setText("Loại sản phẩm: " + myProduct.getSubtype());
-//
-//        Glide.with(this).load(myProduct.getPhotos().get(0)).placeholder(R.drawable.test_img2).into(img_product);
-//        if (Integer.parseInt(myProduct.getSizes().get(0).getQuantity()) == 0)
-//            img_size_s.setVisibility(View.GONE);
-//        if (Integer.parseInt(myProduct.getSizes().get(1).getQuantity()) == 0)
-//            img_size_m.setVisibility(View.GONE);
-//        if (Integer.parseInt(myProduct.getSizes().get(2).getQuantity()) == 0)
-//            img_size_l.setVisibility(View.GONE);
-//        if (Integer.parseInt(myProduct.getSizes().get(3).getQuantity()) == 0)
-//            img_size_xl.setVisibility(View.GONE);
+    private void setData(MyProductDetail myProductDetail) {
+        DecimalFormat format = new DecimalFormat("###,###,###");
+        List<String> images = new ArrayList<>();
+        images.add(myProductDetail.getListImage().get(0).getImage1());
+        images.add(myProductDetail.getListImage().get(0).getImage2());
+        images.add(myProductDetail.getListImage().get(0).getImage3());
+        adapter.setArrItem(images);
+        price = format.format(myProductDetail.getProduct().get(0).getPrice());
+        tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());
+        tv_price.setText(String.valueOf(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
+//        tv_product_category.setText("Loại sản phẩm: " );
+
+        Glide.with(this).load(myProductDetail.getProduct().get(0).getProductImage()).placeholder(R.drawable.test_img2).into(img_product);
     }
 
     private int currentCoverImage = 0;
@@ -152,10 +131,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
             viewPager.setCurrentItem(currentCoverImage);
         });
-        loadImageUrl("https://cf.shopee.vn/file/7624d506af9460c8f4e8e5a80c30b514", img_product);
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
-            size_id = arr_size.get(0).getId();
 
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s_red).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
@@ -166,7 +143,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
-            size_id = arr_size.get(1).getId();
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m_red).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
@@ -176,7 +152,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
-            size_id = arr_size.get(2).getId();
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l_red).into(img_size_l);
@@ -185,7 +160,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
-            size_id = arr_size.get(3).getId();
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
@@ -196,89 +170,14 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         tv_price.setText("650,000 VND");
         tv_product_name.setText("MARU BLAZER (WHITE)");
-        tv_product_category.setText("Loại sản phẩm: MARU BLAZER");
+//        tv_product_category.setText("Loại sản phẩm: MARU BLAZER");
         tv_product_availability.setText("Tình trạng: còn hàng");
 
         btn_mua_ngay.setOnClickListener(view -> {
-            // TODO BUY
-            if (user_id.equalsIgnoreCase("null")) {
-                Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
-            } else {
-                String date = LocalDate.now().toString();
-                ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.body().equals("ok")) {
-                            ApiRetrofit.apiRetrofit.InsertBillBuyNow(user_id, date, price, size_id).enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    Toast.makeText(ProductDetailActivity.this, "" + response.body(), Toast.LENGTH_SHORT).show();
-                                }
 
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-
-                                }
-                            });
-                        } else if (response.body().equals("fail")) {
-                            Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                    }
-                });
-            }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
-            // TODO ADD ON CART
-            if (user_id.equalsIgnoreCase("null")) {
-                showDialogLogIn();
-            } else {
-                ApiRetrofit.apiRetrofit.CheckSizeLeft(size_id, "1").enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.body().equals("ok")) {
-                            ApiRetrofit.apiRetrofit.InsertCart(user_id, size_id, productName, "1").enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    if (response.body().equals("duplicated")) {
-                                        Toast.makeText(ProductDetailActivity.this, "Sản phẩm đã nằm trong giỏ", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        if (response.body().equals("ok")) {
-                                            Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
-                                            intent.putExtra("use_id", user_id);
-                                            startActivity(intent);
-                                            Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ thành công", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(ProductDetailActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
-                                            Log.e("err", response.body());
-                                        }
-                                    }
-                                }
 
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-
-                                }
-                            });
-                        } else if (response.body().equals("fail")) {
-                            Toast.makeText(ProductDetailActivity.this, "Size này đã hết hàng", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ProductDetailActivity.this, "Lỗi db", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                    }
-                });
-            }
         });
     }
 
@@ -298,7 +197,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         tv_price = findViewById(R.id.tv_price);
         tv_product_name = findViewById(R.id.tv_product_name);
-        tv_product_category = findViewById(R.id.tv_product_category);
+//        tv_product_category = findViewById(R.id.tv_product_category);
         tv_product_availability = findViewById(R.id.tv_product_availability);
         btn_mua_ngay = findViewById(R.id.btn_mua_ngay);
         btn_them_vao_gio_hang = findViewById(R.id.btn_them_vao_gio_hang);

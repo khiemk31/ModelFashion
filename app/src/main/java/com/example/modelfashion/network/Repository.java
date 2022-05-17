@@ -6,6 +6,7 @@ import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -15,6 +16,7 @@ import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.User.UpdateUserRequest;
 import com.example.modelfashion.Model.response.User.UpdateUserResponse;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
+import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
@@ -51,7 +53,7 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<DataProduct> getProductByCategory(String categoryId){
+    public Single<DataProduct> getProductByCategory(String categoryId) {
         return apiInterface.getProductByCategory(categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -68,11 +70,13 @@ public final class Repository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public Single<VerifyOTPResponse> verifyOTP(VerifyOTPRequest request) {
         return apiInterface.verifyOTP(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public Single<RegisterResponse> register(RegisterRequest request) {
         return apiInterface.register(request)
                 .subscribeOn(Schedulers.io())
@@ -86,9 +90,8 @@ public final class Repository {
     }
 
     public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
-        return apiInterface.updateUser(userID, request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return apiInterface.updateUser(userID, request);
+
     }
 
     public Single<ForgotPasswordResponse> changePassword(ForgotPasswordRequest request) {
@@ -99,6 +102,20 @@ public final class Repository {
 
     public Single<DataAllCategory> getAllCategory() {
         return apiInterface.getAllCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Single<Bill> getAllBill(String userID) {
+        return apiInterface.getAllBill(userID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Single<MyProductDetail> getProductDetail(String productId) {
+        return apiInterface.getProductDetail(productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

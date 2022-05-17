@@ -4,19 +4,23 @@ import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -38,10 +42,12 @@ public class CategoryFragment extends Fragment {
     SearchView searchView;
     private CategoryAdapter categoryAdapter;
     private ClothesAdapter clothesAdapter;
-    private RecyclerView rcvCategory, rcvClothes;
+    private RecyclerView rcvCategory, rcvClothes,rcvCategoryF;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
     private SearchBar searchBar;
+    private Dialog dialog;
+    ImageView filter_category;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -115,11 +121,25 @@ public class CategoryFragment extends Fragment {
 
     private void initView(View view) {
         searchBar = view.findViewById(R.id.search_bar);
+        filter_category = view.findViewById(R.id.filter_category);
 //        searchView = view.findViewById(R.id.search_view);
         categoryAdapter = new CategoryAdapter();
         rcvCategory = view.findViewById(R.id.rcv_category);
         rcvCategory.setAdapter(categoryAdapter);
         categoryAdapter.highLightSelectedItem(currentCategory);
+        dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog_filter_category);
+        rcvCategoryF = dialog.findViewById(R.id.rcv_category_f);
+        rcvCategoryF.setAdapter(categoryAdapter);
+        filter_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+
+
+
 
         rcvClothes = view.findViewById(R.id.rcv_clothes);
         clothesAdapter = new ClothesAdapter();

@@ -6,12 +6,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragment.CategoryFragment">
-
-    <com.example.modelfashion.customview.SearchBar
-        android:id="@+id/search_bar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:right_drawable="@drawable/ic_mail"/>
+        android:layout_height="wrap_content">
+        <com.example.modelfashion.customview.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:right_drawable="@drawable/ic_mail"
+            android:layout_toLeftOf="@+id/filter_category"/>
+
+        <ImageView
+            android:id="@+id/filter_category"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:src="@drawable/filter_history" />
+
+    </RelativeLayout>
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -39,7 +54,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_category_left_list" />
+                    tools:listitem="@layout/item_category_left_list"
+                    android:visibility="visible"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_clothes"

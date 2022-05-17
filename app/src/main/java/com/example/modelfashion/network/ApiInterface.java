@@ -4,6 +4,7 @@ import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
+import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -13,6 +14,7 @@ import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
 import com.example.modelfashion.Model.response.User.UpdateUserRequest;
 import com.example.modelfashion.Model.response.User.UpdateUserResponse;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
+import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
@@ -85,4 +87,9 @@ public interface ApiInterface {
     @GET("category/getAll")
     Single<DataAllCategory> getAllCategory();
 
+    @GET("bill/getListBill/{id}")
+    Single<Bill> getAllBill(@Path("id") String userID);
+
+    @GET("product/detail/{id}")
+    Single<MyProductDetail> getProductDetail(@Path("id") String productId);
 }
