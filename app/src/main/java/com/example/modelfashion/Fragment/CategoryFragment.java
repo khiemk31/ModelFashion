@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -129,8 +131,16 @@ public class CategoryFragment extends Fragment {
         categoryAdapter.highLightSelectedItem(currentCategory);
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_filter_category);
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         rcvCategoryF = dialog.findViewById(R.id.rcv_category_f);
+        TextView tv_close_filterr = dialog.findViewById(R.id.tv_close_filterr);
         rcvCategoryF.setAdapter(categoryAdapter);
+        tv_close_filterr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
         filter_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

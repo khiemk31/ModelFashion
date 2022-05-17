@@ -97,7 +97,7 @@ public class HistoryAdapter extends BaseAdapter {
         tv_name_subproduct0.setText(arr_bill.get(i).getProduct_name());
         tv_sumproduct0.setText("x"+arr_bill.get(i).getQuantity());
         tv_size_subproduct0.setText(arr_bill.get(i).getSize());
-        //tv_price0.setText(decimalFormat.format((arr_bill.get(i).getTotal_price()))+" VNĐ");
+        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice()))+" VNĐ");
         tv_sumSP.setText(arr_bill.get(i).getTotal_product()+" Sản phẩm");
         tv_sumPrice.setText("Tổng: "+decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price()))+" VNĐ");
 
@@ -111,11 +111,11 @@ public class HistoryAdapter extends BaseAdapter {
             }
         });
         if(arr_bill.get(i).getStatus().matches("Đã giao")){
-            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at());
+            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at().substring(0,10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
         }else {
-            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at());
+            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at().substring(0,10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
 

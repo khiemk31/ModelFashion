@@ -12,10 +12,11 @@ public class Bill {
     private String product_name;
     private String size;
     private String quantity;
+    private String price;
     private String product_image;
     private String created_at;
 
-    public Bill(String bill_id, String status, String total_price, String total_product, String product_name, String size, String quantity, String product_image, String created_at) {
+    public Bill(String bill_id, String status, String total_price, String total_product, String product_name, String size, String quantity, String price, String product_image, String created_at) {
         this.bill_id = bill_id;
         this.status = status;
         this.total_price = total_price;
@@ -23,6 +24,7 @@ public class Bill {
         this.product_name = product_name;
         this.size = size;
         this.quantity = quantity;
+        this.price = price;
         this.product_image = product_image;
         this.created_at = created_at;
     }
@@ -81,6 +83,14 @@ public class Bill {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getProduct_image() {

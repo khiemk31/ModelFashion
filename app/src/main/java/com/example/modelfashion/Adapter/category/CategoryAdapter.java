@@ -54,9 +54,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         MyCategory category = listCategory.get(position);
         holder.myTextView.setText(category.getCategoryName());
         if (position == index) {
-            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.grey_active));
+            holder.myTextView.setBackground(holder.myTextView.getContext().getResources().getDrawable(R.drawable.bg_item_price_select));
         }else {
-            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.white));
+            holder.myTextView.setBackground(holder.myTextView.getContext().getResources().getDrawable(R.drawable.bg_item_price));
         }
     }
 
