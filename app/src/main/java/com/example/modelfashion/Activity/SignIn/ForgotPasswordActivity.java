@@ -13,32 +13,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.modelfashion.Common.ProgressLoadingCommon;
+import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.network.Repository;
 
 import java.util.Random;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    EditText edtEmail, edtCapcha;
-    TextView tvCapcha, tvBacktoLogin;
-    ImageView imgRefresh, imgBack;
+    EditText edtPhone;
+    TextView  tvBacktoLogin;
+    ImageView imgBack;
     Button btnGetPassword;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         viewHolder();
         setListener();
-        tvCapcha.setText(getRandomCapcha());
     }
 
     private void viewHolder() {
-        edtEmail = findViewById(R.id.edtEmail);
-        edtCapcha = findViewById(R.id.edtCapcha);
-        tvCapcha = findViewById(R.id.tvCapcha);
+        edtPhone = findViewById(R.id.edtPhone);
         tvBacktoLogin = findViewById(R.id.tvBackToLogin);
-        imgRefresh = findViewById(R.id.img_refresh);
         btnGetPassword = findViewById(R.id.btnGetPassword);
         imgBack = findViewById(R.id.btnBack);
     }
@@ -48,7 +48,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    startActivity(new Intent(ForgotPasswordActivity.this, EnterCapchaActivity.class));
+                    Intent intent = new Intent(ForgotPasswordActivity.this, EnterCapchaActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phoneForgotPass", edtPhone.getText().toString());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             }
         });
@@ -60,13 +64,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
 
-        imgRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tvCapcha.setText(getRandomCapcha());
-            }
-        });
-
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,26 +72,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    private String getRandomCapcha() {
-        Random random = new Random();
-        int result = 1000 + random.nextInt(8999);
-        return String.valueOf(result);
-    }
-
     private Boolean validate() {
-        if (edtEmail.getText().toString().isEmpty() || edtCapcha.getText().toString().isEmpty()) {
+        if (edtPhone.getText().toString().isEmpty()) {
             Toast.makeText(ForgotPasswordActivity.this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (!edtCapcha.getText().toString().equalsIgnoreCase(tvCapcha.getText().toString())) {
-            Toast.makeText(ForgotPasswordActivity.this, "Mã xác thực không chính xác", Toast.LENGTH_SHORT).show();
-            tvCapcha.setText(getRandomCapcha());
-            return false;
-        }
-
-        if (TextUtils.isEmpty(edtEmail.getText().toString()) && !Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches()) {
-            Toast.makeText(ForgotPasswordActivity.this, "Sai định dạng email", Toast.LENGTH_SHORT).show();
+        if (edtPhone.getText().toString().length() > 10) {
+            Toast.makeText(ForgotPasswordActivity.this, "Sai định dạng số điện thoại", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -103,6 +88,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        tvCapcha.setText(getRandomCapcha());
     }
 }

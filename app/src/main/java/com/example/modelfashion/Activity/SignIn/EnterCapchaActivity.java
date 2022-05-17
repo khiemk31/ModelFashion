@@ -12,13 +12,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.modelfashion.Common.ProgressLoadingCommon;
+import com.example.modelfashion.Model.response.Register.GetOTPRequest;
+import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.network.Repository;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class EnterCapchaActivity extends AppCompatActivity {
     EditText edtCapcha;
     Button btnGoToChangePassword;
     ImageView imgBack;
     TextView tvCountDown, tvResentCapcha;
+    String phone, otpToken;
+    CompositeDisposable disposable = new CompositeDisposable();
+    ProgressLoadingCommon progressLoadingCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +35,7 @@ public class EnterCapchaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_capcha);
         viewHolder();
         setListener();
-        countDownTime();
+        getData();
     }
 
     private void viewHolder() {
@@ -35,6 +44,7 @@ public class EnterCapchaActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.imgBackToGetCapcha);
         tvCountDown = findViewById(R.id.tvCountDownTime);
         tvResentCapcha = findViewById(R.id.tvResentCapcha);
+        progressLoadingCommon = new ProgressLoadingCommon();
     }
 
     private void setListener() {
@@ -42,7 +52,7 @@ public class EnterCapchaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    startActivity(new Intent(EnterCapchaActivity.this, ChangePasswordActivity.class));
+                   verifyOTP();
                     finish();
                 }
             }
@@ -59,9 +69,49 @@ public class EnterCapchaActivity extends AppCompatActivity {
         tvResentCapcha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // resent capcha here
+                getOTP();
             }
         });
+    }
+
+    private void getData() {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            phone = bundle.getString("phoneForgotPass");
+            getOTP();
+        }
+    }
+
+    private void getOTP() {
+        Repository repository = new Repository(this);
+        disposable.add(repository.getOTP(new GetOTPRequest(phone))
+                .doOnSubscribe(disposable -> {
+                    progressLoadingCommon.showProgressLoading(this);
+                }).subscribe(getOTPResponse -> {
+                    Toast.makeText(EnterCapchaActivity.this, "Đã gửi mã xác nhận!", Toast.LENGTH_SHORT).show();
+                    otpToken = getOTPResponse.getOtpToken();
+                    countDownTime();
+                }, throwable -> {
+                    Toast.makeText(EnterCapchaActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }));
+    }
+
+    private void verifyOTP() {
+        Repository repository = new Repository(this);
+        disposable.add(repository.verifyOTP(new VerifyOTPRequest(otpToken, edtCapcha.getText().toString()))
+                .doOnSubscribe(disposable -> {
+                    progressLoadingCommon.showProgressLoading(this);
+                }).subscribe(verifyOTP -> {
+                    Toast.makeText(EnterCapchaActivity.this, verifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EnterCapchaActivity.this, ChangePasswordActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phoneForgotPass", phone);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }, throwable -> {
+                    Toast.makeText(EnterCapchaActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }));
     }
 
     private Boolean validate() {
@@ -75,7 +125,7 @@ public class EnterCapchaActivity extends AppCompatActivity {
     }
 
     private void countDownTime() {
-        CountDownTimer Timer = new CountDownTimer(90000, 1000) {
+        CountDownTimer Timer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 tvCountDown.setText("Mã xác thực hết hạn trong " + millisUntilFinished / 1000 + " giây");
             }

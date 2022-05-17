@@ -73,17 +73,17 @@ public class SignInActivity extends AppCompatActivity {
 
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
-        if (edtAccount.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty()) {
+        if (edtAccount.getText().toString().trim().isEmpty() || edtPassword.getText().toString().trim().isEmpty()) {
             Toast.makeText(SignInActivity.this, "Không để trống email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (special.matcher(edtAccount.getText().toString()).find() || special.matcher(edtPassword.getText().toString()).find()) {
+        if (special.matcher(edtAccount.getText().toString().trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
             Toast.makeText(SignInActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtPassword.getText().toString().length() < 6) {
+        if (edtPassword.getText().toString().trim().length() < 6) {
             Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -123,7 +123,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private void login() {
         Repository repository = new Repository(this);
-        disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString(), edtPassword.getText().toString())) // truyen phone va password vao day
+        disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString().trim(),
+                edtPassword.getText().toString().trim())) // truyen phone va password vao day
                 .doOnSubscribe(disposable -> {
                     // hien loading
                 }).subscribe(loginResponse -> {
@@ -174,7 +175,7 @@ public class SignInActivity extends AppCompatActivity {
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                 }, throwable -> {
-                    Toast.makeText(SignInActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
     }
 

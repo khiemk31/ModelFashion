@@ -56,6 +56,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -81,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressLoadingCommon progressLoadingCommon;
     ApiInterface apiInterface;
     String encodedString;
+    String birthDay;
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -121,16 +125,18 @@ public class ProfileActivity extends AppCompatActivity {
     private void getData() {
         tvActProfileName.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
         tvActProfilePhone.setText(preferenceManager.getString(Constants.KEY_PHONE));
-        String birthDay = preferenceManager.getString(Constants.KEY_BIRTHDAY);
 
-        tvActProfileBirthday.setText(birthDay.equals("null") ? "Trống" : birthDay);
+        birthDay = preferenceManager.getString(Constants.KEY_BIRTHDAY);
+        String date = birthDay.substring(0, 10);
+        String[] date1 = date.split("-");
+        String dateFormated = date1[2] + "-" + date1[1] + "-" + date1[0];
+        tvActProfileBirthday.setText(dateFormated.equals("null") ? "Trống" : dateFormated);
         String address = preferenceManager.getString(Constants.KEY_ADDRESS);
         tvActProfileAddress.setText(address.equals("null") ? "Trống" : address);
         putTVSex(preferenceManager.getInt(Constants.KEY_SEX));
         Glide.with(this)
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(imgActProfileAvatar);
-
     }
 
     // check thông tin giới tính
@@ -159,9 +165,9 @@ public class ProfileActivity extends AppCompatActivity {
         layoutActProfileSex.setOnClickListener(v -> {
             changeSex(preferenceManager.getInt(Constants.KEY_SEX));
         });
-//        layoutActProfileBirthday.setOnClickListener(v -> {
-//            changeBirthDay();
-//        });
+        layoutActProfileBirthday.setOnClickListener(v -> {
+            changeBirthDay();
+        });
         layoutActProfileAddrest.setOnClickListener(v -> {
             changeProfile(2);
         });
@@ -186,11 +192,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void updateUser() {
         Repository repository = new Repository(this);
         disposable.add(repository.updateUser(preferenceManager.getString(Constants.KEY_ID),
-                new UpdateUserRequest(tvActProfileName.getText().toString(),
+                new UpdateUserRequest(tvActProfileName.getText().toString().trim(),
                         preferenceManager.getInt(Constants.KEY_SEX),
-                        "",
+                        tvActProfileBirthday.getText().toString().trim(),
                         preferenceManager.getBoolean(Constants.KEY_CHANGE_IMAGE) == true ? ("data:image/png;base64," + encodedString) : "",
-                        tvActProfileAddress.getText().toString()))
+                        tvActProfileAddress.getText().toString().trim()))
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
                 }).subscribe(updateResponse -> {
@@ -291,7 +297,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvOK = dialog.findViewById(R.id.tv_layout_dialog_changebirthday_ok);
         DatePicker datePicker = dialog.findViewById(R.id.datePicker_layout_dialog_changeBirthday);
 
-        String[] date1 = tvActProfileBirthday.getText().toString().split("-");
+        String date = birthDay.substring(0, 10);
+        String[] date1 = date.split("-");
         datePicker.init(Integer.parseInt(date1[0]), Integer.parseInt(date1[1]) - 1, Integer.parseInt(date1[2]), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -301,7 +308,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvOK.setOnClickListener(v -> {
             int month1 = datePicker.getMonth() + 1;
-            tvActProfileBirthday.setText(datePicker.getYear() + "-" + month1 + "-" + datePicker.getDayOfMonth());
+            tvActProfileBirthday.setText(datePicker.getDayOfMonth() + "-" + month1 + "-" + datePicker.getYear());
             dialog.dismiss();
             btnActProfileCheck.setVisibility(View.VISIBLE);
         });
