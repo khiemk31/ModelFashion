@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,13 +26,18 @@ import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
 import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.database.AppDatabase;
+import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
@@ -49,7 +55,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     String user_id = "";
     String productId = "";
     String productName = "";
-    private MyProductDetail myProductDetail = new MyProductDetail();
+
+    private MyProductDetail myProductDetail;
+    private String size = "S";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -78,9 +86,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     this.myProductDetail = myProductDetail;
                     progressBar.setVisibility(View.GONE);
                     setData(myProductDetail);
-                    Log.d("ahuhu", "getProductDetail: success");
                 }, throwable -> {
-                    Log.d("ahuhu", "getProductDetail: error: " + throwable.toString());
                 }));
     }
 
@@ -96,6 +102,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());
         tv_price.setText(String.valueOf(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
 //        tv_product_category.setText("Loại sản phẩm: " );
+
+        for (int i = 0; i < myProductDetail.getListSize().size(); i++) {
+            if (myProductDetail.getListSize().get(i).getQuantity() > 0) {
+                tv_product_availability.setText("Tình trạng: còn hàng");
+                break;
+            }
+        }
 
         Glide.with(this).load(myProductDetail.getProduct().get(0).getProductImage()).placeholder(R.drawable.test_img2).into(img_product);
     }
@@ -133,7 +146,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_s.setOnClickListener(view -> {
             // TODO SIZE S
-
+            size = "S";
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s_red).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
@@ -143,6 +156,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_m.setOnClickListener(view -> {
             // TODO SIZE M
+            size = "M";
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m_red).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
@@ -152,6 +166,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_l.setOnClickListener(view -> {
             // TODO SIZE L
+            size = "L";
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l_red).into(img_size_l);
@@ -160,6 +175,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
         img_size_xl.setOnClickListener(view -> {
             // TODO SIZE XL
+            size = "XL";
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_s).into(img_size_s);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_m).into(img_size_m);
             Glide.with(ProductDetailActivity.this).load(R.drawable.ic_size_l).into(img_size_l);
@@ -168,19 +184,73 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         });
 
-        tv_price.setText("650,000 VND");
-        tv_product_name.setText("MARU BLAZER (WHITE)");
-//        tv_product_category.setText("Loại sản phẩm: MARU BLAZER");
-        tv_product_availability.setText("Tình trạng: còn hàng");
+//        tv_price.setText("650,000 VND");
+//        tv_product_name.setText("MARU BLAZER (WHITE)");
+////        tv_product_category.setText("Loại sản phẩm: MARU BLAZER");
+//        tv_product_availability.setText("Tình trạng: còn hàng");
+
+
+
 
         btn_mua_ngay.setOnClickListener(view -> {
-
+            MyProductCart myProductCart = new MyProductCart(
+                    myProductDetail.getProduct().get(0).getProductId(),
+                    myProductDetail.getProduct().get(0).getProductName(),
+                    myProductDetail.getProduct().get(0).getPrice(),
+                    size,
+                    1,
+                    myProductDetail.getProduct().get(0).getProductImage()
+            );
+            // them vao gio hang + sang man gio hang
+            if (isExist(myProductCart)) {
+                // sang man gio hang
+                ProductDetailActivity.this.finish();
+            } else {
+                insertProduct(myProductCart);
+                ProductDetailActivity.this.finish();
+            }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
-
+            MyProductCart myProductCart = new MyProductCart(
+                    myProductDetail.getProduct().get(0).getProductId(),
+                    myProductDetail.getProduct().get(0).getProductName(),
+                    myProductDetail.getProduct().get(0).getPrice(),
+                    size,
+                    1,
+                    myProductDetail.getProduct().get(0).getProductImage()
+            );
+            // them vao gio hang
+            if (isExist(myProductCart)) {
+                Toast.makeText(this, "Trong giỏ hàng đã có sản phẩm này rồi", Toast.LENGTH_SHORT).show();
+            } else {
+                insertProduct(myProductCart);
+            }
         });
     }
 
+    private void insertProduct(MyProductCart myProductCart) {
+        disposable.add(AppDatabase.getInstance(this).cartDao().insertProductToCart(myProductCart)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        .doOnSubscribe(disposable1 -> {
+            btn_mua_ngay.setEnabled(false);
+            btn_them_vao_gio_hang.setEnabled(false);
+        }).doFinally(() -> {}).subscribe(aLong -> {
+                    Toast.makeText(this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                    btn_mua_ngay.setEnabled(true);
+                    btn_them_vao_gio_hang.setEnabled(true);
+                },throwable -> {
+                    btn_mua_ngay.setEnabled(true);
+                    btn_them_vao_gio_hang.setEnabled(true);
+                }));
+    }
+
+    private boolean isExist(MyProductCart myProductCart) {
+        int count = AppDatabase.getInstance(this).cartDao().countProduct(myProductCart.getProductId(), myProductCart.getProductSize());
+        if (count == 0) {
+            return false;
+        } else return true;
+    }
 
     private void initView() {
         progressBar = findViewById(R.id.progress_bar);

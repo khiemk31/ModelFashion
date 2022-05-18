@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,7 @@ public class MainFragment extends Fragment {
     private TextView tvCurrentDate, tvGreeting;
     private PreferenceManager preferenceManager;
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     ProductListAdapter productListAdapter = new ProductListAdapter();
 
@@ -171,13 +172,16 @@ public class MainFragment extends Fragment {
 
     private void initHeader() {
         DateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy");
-        Calendar cal = Calendar.getInstance(Locale.US);
+        Calendar cal = Calendar.getInstance();
+
         tvCurrentDate.setText(dateFormat.format(cal.getTime()));
 
-        if (cal.get(Calendar.HOUR) == Calendar.AM) {
+        if (cal.get(Calendar.HOUR_OF_DAY) < 12) {
             tvGreeting.setText("Chào buổi sáng");
-        } else {
+        } else if (cal.get(Calendar.HOUR_OF_DAY) < 18){
             tvGreeting.setText("Chào buổi chiều");
+        } else {
+            tvGreeting.setText("Chào buổi tối");
         }
         Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
     }
