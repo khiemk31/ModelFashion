@@ -74,7 +74,7 @@ public class SignInActivity extends AppCompatActivity {
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
         if (edtAccount.getText().toString().trim().isEmpty() || edtPassword.getText().toString().trim().isEmpty()) {
-            Toast.makeText(SignInActivity.this, "Không để trống email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, "Không để trống số điện thoại hoặc mật khẩu", Toast.LENGTH_SHORT).show();
             return false;
         }
 

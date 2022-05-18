@@ -1,7 +1,7 @@
 package com.example.modelfashion.Adapter.cart;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,31 +10,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.Model.Product;
-import com.example.modelfashion.Model.response.my_product.MyProduct;
-import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.database.MyProductCart;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
-    private ArrayList<MyProduct> productArrayList;
-    private ArrayList<Sizes> arrSize;
-    private Context context;
+    private List<MyProductCart> productArrayList = new ArrayList<>();
     private CartOnClick cartOnClick;
-    public CartAdapter(ArrayList<MyProduct> productArrayList, ArrayList<Sizes> arrSize, Context context) {
-        this.productArrayList = productArrayList;
-        this.arrSize = arrSize;
-        this.context =context;
+
+    public void setListData(List<MyProductCart> list) {
+        this.productArrayList = list;
+        notifyDataSetChanged();
     }
 
-    public void setOnClick(CartOnClick cartOnClick){
+    public void clearData() {
+        this.productArrayList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setOnClick(CartOnClick cartOnClick) {
         this.cartOnClick = cartOnClick;
     }
 
@@ -42,6 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         private TextView nameProduct, priceProduct, sizeProduct, amount, delete;
         private Button btnIncrease, btnDecrease;
         private ImageView imgCart;
+
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
             imgCart = itemView.findViewById(R.id.img_cart);
@@ -64,41 +68,66 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, @SuppressLint("RecyclerView") int position) {
-        AtomicInteger minteger= new AtomicInteger(1);
+        AtomicInteger minteger = new AtomicInteger(productArrayList.get(position).getProductQuantity());
         DecimalFormat formatter = new DecimalFormat("###,###,###");
-        String money_format = formatter.format((productArrayList.get(position).getPrice()));
-        holder.nameProduct.setText("Sản phẩm: "+productArrayList.get(position).getProduct_name());
-        holder.priceProduct.setText("Giá: "+money_format+" VNĐ");
-        holder.sizeProduct.setText("Size: "+arrSize.get(position).getSize());
-        Glide.with(context).load(productArrayList.get(position).getProduct_image()).into(holder.imgCart);
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cartOnClick.OnClick(position, arrSize.get(position).getId());
-            }
+        String money_format = formatter.format((productArrayList.get(position).getProductPrice()));
+        holder.nameProduct.setText("Sản phẩm: " + productArrayList.get(position).getProductName());
+        holder.priceProduct.setText("Giá: " + money_format + " VNĐ");
+        holder.sizeProduct.setText("Size: " + productArrayList.get(position).getProductSize());
+        Glide.with(holder.btnIncrease.getContext()).load(productArrayList.get(position).getProductImage()).into(holder.imgCart);
+        holder.delete.setOnClickListener(view -> {
+            MyProductCart myProductCart = productArrayList.get(position);
+            cartOnClick.OnClickDelete(position, myProductCart);
         });
         holder.btnIncrease.setOnClickListener(view -> {
             minteger.set(minteger.get() + 1);
-                holder.amount.setText(""+minteger);
+            holder.amount.setText("" + minteger);
+            cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
         });
         holder.btnDecrease.setOnClickListener(view -> {
             if(minteger.get() > 1){
                 minteger.set(minteger.get() - 1);
-                holder.amount.setText(""+minteger);
+                holder.amount.setText("" + minteger);
+                cartOnClick.OnClickDecreaseQuantity(position, productArrayList.get(position));
             }
         });
-        holder.amount.setText(""+minteger);
+        holder.amount.setText("" + productArrayList.get(position).getProductQuantity());
     }
-
-
 
     @Override
     public int getItemCount() {
         return productArrayList.size();
     }
 
-    public interface CartOnClick{
-        void OnClick(int position, String size_id);
+    public void increaseAmount(int position) {
+        productArrayList.get(position).setProductQuantity(productArrayList.get(position).getProductQuantity() + 1);
+        notifyItemChanged(position);
+    }
+
+    public void decreaseAmount(int position) {
+        productArrayList.get(position).setProductQuantity(productArrayList.get(position).getProductQuantity() - 1);
+        notifyItemChanged(position);
+    }
+
+    public void removeProduct(int position) {
+        productArrayList.remove(position);
+        notifyItemChanged(position);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Long getTotal() {
+        long total = 0L;
+        for (int i = 0; i < productArrayList.size(); i++) {
+            total += (long) productArrayList.get(i).getProductPrice() * productArrayList.get(i).getProductQuantity();
+        }
+        return total;
+    }
+
+
+    public interface CartOnClick {
+        void OnClickDelete(int position, MyProductCart myProductCart);
+        void OnClickIncreaseQuantity(int position, MyProductCart myProductCart);
+        void OnClickDecreaseQuantity(int position, MyProductCart myProductCart);
     }
 
 }

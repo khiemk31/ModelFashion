@@ -148,4 +148,15 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(fragmentProfile);
         navigationView.setSelectedItemId(R.id.main_item_profile);
     }
+
+    public void moveToCartFragment() {
+        CartFragment cartFragment = new CartFragment();
+        replaceFragment(cartFragment);
+        navigationView.setSelectedItemId(R.id.main_item_cart);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

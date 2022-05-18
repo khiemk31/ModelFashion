@@ -44,5 +44,12 @@ public class MyProductDetail {
 
     public MyProductDetail() {
     }
+
+    @Override
+    public String toString() {
+        return "MyProductDetail{" +
+                "product=" + product +
+                '}';
+    }
 }
 
