@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -80,9 +81,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             cartOnClick.OnClickDelete(position, myProductCart);
         });
         holder.btnIncrease.setOnClickListener(view -> {
-            minteger.set(minteger.get() + 1);
-            holder.amount.setText("" + minteger);
-            cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
+           if (minteger.get() == 10){
+               Toast.makeText(holder.btnIncrease.getContext(), "Số lượng tối đa là 10", Toast.LENGTH_SHORT).show();
+           }else {
+               minteger.set(minteger.get() + 1);
+               holder.amount.setText("" + minteger);
+               cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
+           }
         });
         holder.btnDecrease.setOnClickListener(view -> {
             if(minteger.get() > 1){
@@ -111,7 +116,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     public void removeProduct(int position) {
         productArrayList.remove(position);
-        notifyItemChanged(position);
+        notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

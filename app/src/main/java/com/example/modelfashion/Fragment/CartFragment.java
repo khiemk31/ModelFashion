@@ -144,8 +144,8 @@ public class CartFragment extends Fragment {
                     .doOnSubscribe(disposable1 -> {})
                     .doFinally(() -> {})
                     .subscribe(() -> {
-                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
                         adapter.removeProduct(position);
+                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
                     },throwable -> {}));
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {
