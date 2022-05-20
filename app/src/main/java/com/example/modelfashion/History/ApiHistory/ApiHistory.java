@@ -3,6 +3,7 @@ package com.example.modelfashion.History.ApiHistory;
 import com.example.modelfashion.Model.response.bill.Bill;
 
 import com.example.modelfashion.Model.response.bill.BillDetail;
+import com.example.modelfashion.Model.response.bill.CancelBill;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -11,8 +12,10 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -31,6 +34,9 @@ public interface ApiHistory {
 
     @GET("bill/getBillDetail/{id}")
     Call<BillDetail> getBillDetail(@Path("id") String id);
+
+    @PUT("bill/cancelOrder")
+    Call<CancelBill> cancelBill(@Body CancelBill cancelBill);
 
 
 }

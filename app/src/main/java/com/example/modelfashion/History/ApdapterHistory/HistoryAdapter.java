@@ -18,10 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.MainActivity;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.History.ViewHistory.DetailHistoryActivity;
+import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.Model.MHistory.ProductHistory;
 import com.example.modelfashion.Model.response.bill.Bill;
 
+import com.example.modelfashion.Model.response.bill.CancelBill;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
@@ -32,14 +36,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HistoryAdapter extends BaseAdapter {
 
-//    List<ModelHistory> listModel;
+    //    List<ModelHistory> listModel;
     ArrayList<Bill> arr_bill;
     Context context;
     ArrayList<MyProduct> arr_my_product;
     String user_id;
-    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill){
+    private ArrayList<Bill> bills;
+
+    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill) {
 
         this.context = context;
         this.arr_bill = arr_bill;
@@ -67,7 +77,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.item_history,viewGroup,false);
+        view = LayoutInflater.from(context).inflate(R.layout.item_history, viewGroup, false);
 
 //        Locale locale = new Locale("vi","VN");
 //        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
@@ -90,32 +100,32 @@ public class HistoryAdapter extends BaseAdapter {
 
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        item_history_ma.setText("Mã đơn: DH"+ arr_bill.get(i).getBill_id());
+        item_history_ma.setText("Mã đơn: DH " + arr_bill.get(i).getBill_id());
 
         Glide.with(context).load(arr_bill.get(i).getProduct_image()).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
         tv_name_subproduct0.setText(arr_bill.get(i).getProduct_name());
-        tv_sumproduct0.setText("x"+arr_bill.get(i).getQuantity());
+        tv_sumproduct0.setText("x" + arr_bill.get(i).getQuantity());
         tv_size_subproduct0.setText(arr_bill.get(i).getSize());
-        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice()))+" VNĐ");
-        tv_sumSP.setText(arr_bill.get(i).getTotal_product()+" Sản phẩm");
-        tv_sumPrice.setText("Tổng: "+decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price()))+" VNĐ");
+        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice())) + " VNĐ");
+        tv_sumSP.setText(arr_bill.get(i).getTotal_product() + " Sản phẩm");
+        tv_sumPrice.setText("Tổng: " + decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price())) + " VNĐ");
 
         tv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailHistoryActivity.class);
-                intent.putExtra("bill_id",arr_bill.get(i).getBill_id());
+                intent.putExtra("bill_id", arr_bill.get(i).getBill_id());
 
                 context.startActivity(intent);
             }
         });
-        if(arr_bill.get(i).getStatus().matches("Đã giao")){
-            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at().substring(0,10));
+        if (arr_bill.get(i).getStatus().matches("Đã giao")) {
+            item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
-        }else {
-            item_history_time.setText("Ngày đặt: "+ arr_bill.get(i).getCreated_at().substring(0,10));
+        } else {
+            item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
 
@@ -123,10 +133,13 @@ public class HistoryAdapter extends BaseAdapter {
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(arr_bill.get(i).getStatus().matches("Đã giao")) {
+                if (arr_bill.get(i).getStatus().matches("Đã giao")) {
                     loadDialogFeedback(context, "DH " + arr_bill.get(i).getBill_id());
-                }else {
-                    showDialogCancelOrder();
+                } else {
+                    // showDialogCancelOrder();
+                    CancelBill cancelBill = new CancelBill(arr_bill.get(i).getBill_id());
+                    showDialogCancelOrder(cancelBill);
+
                 }
 
             }
@@ -146,26 +159,44 @@ public class HistoryAdapter extends BaseAdapter {
 //        return sumP;
 //    }
 
-    private void loadDialogFeedback(Context context,String maDH){
+    private void cancelBill(CancelBill cancelBill) {
+        ApiHistory.API_HISTORY.cancelBill(cancelBill).enqueue(new Callback<CancelBill>() {
+            @Override
+            public void onResponse(Call<CancelBill> call, Response<CancelBill> response) {
+                Toast.makeText(context, "Yêu cầu hủy đơn thành công", Toast.LENGTH_SHORT).show();
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<CancelBill> call, Throwable t) {
+                Toast.makeText(context, "Yêu cầu hủy đơn thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+    private void loadDialogFeedback(Context context, String maDH) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_feedback);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         EditText edt_title = dialog.findViewById(R.id.edt_title);
         EditText edt_content = dialog.findViewById(R.id.edt_content);
         TextView btn_send = dialog.findViewById(R.id.btn_send);
-        edt_title.setText("Phản hồi đơn hàng "+maDH);
+        edt_title.setText("Phản hồi đơn hàng " + maDH);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String content;
                 content = edt_content.getText().toString().trim();
-                if (content.isEmpty() ){
-                    Toast.makeText(context,"Bạn chưa nhập nội dung",Toast.LENGTH_SHORT).show();
-                }else {
+                if (content.isEmpty()) {
+                    Toast.makeText(context, "Bạn chưa nhập nội dung", Toast.LENGTH_SHORT).show();
+                } else {
                     String uriText = "mailto:" + context.getString(R.string.email) +
-                            "?subject=" +"Feedback đơn hàng " +maDH +
+                            "?subject=" + "Feedback đơn hàng " + maDH +
                             "&body=" + content;
                     Uri uri = Uri.parse(uriText);
                     Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
@@ -178,15 +209,17 @@ public class HistoryAdapter extends BaseAdapter {
         });
         dialog.show();
     }
-    private void showDialogCancelOrder(){
+
+    private void showDialogCancelOrder(CancelBill cancelBill) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_cancel_order);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         TextView tv_cancel = dialog.findViewById(R.id.tv_cancel);
-        TextView tv_hotline,tv_email,tv_zalo;
-        ImageView img_coppy_hotline,img_email,img_coppy_zalo,img_page;
+        TextView tv_hotline, tv_email, tv_zalo;
+        TextView tv_yes = dialog.findViewById(R.id.tv_Yes);
+        ImageView img_coppy_hotline, img_email, img_coppy_zalo, img_page;
         tv_hotline = dialog.findViewById(R.id.tv_hotline);
         tv_email = dialog.findViewById(R.id.tv_email);
         tv_zalo = dialog.findViewById(R.id.tv_zalo);
@@ -194,34 +227,41 @@ public class HistoryAdapter extends BaseAdapter {
         img_email = dialog.findViewById(R.id.img_email);
         img_coppy_zalo = dialog.findViewById(R.id.img_coppy_zalo);
         img_page = dialog.findViewById(R.id.img_page);
-        tv_hotline.setText("Hotline   : "+context.getString(R.string.hotline));
-        tv_email.setText("Email      : "+context.getString(R.string.email));
-        tv_zalo.setText("Zalo        : "+context.getString(R.string.zalo));
+        tv_hotline.setText("Hotline   : " + context.getString(R.string.hotline));
+        tv_email.setText("Email      : " + context.getString(R.string.email));
+        tv_zalo.setText("Zalo        : " + context.getString(R.string.zalo));
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
+        tv_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelBill(cancelBill);
+                dialog.dismiss();
+            }
+        });
         img_coppy_hotline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setClipboard(context,context.getString(R.string.hotline));
-                Toast.makeText(context,"copy hotline successfully",Toast.LENGTH_SHORT).show();
+                setClipboard(context, context.getString(R.string.hotline));
+                Toast.makeText(context, "copy hotline successfully", Toast.LENGTH_SHORT).show();
             }
         });
         img_coppy_zalo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setClipboard(context,context.getString(R.string.zalo));
-                Toast.makeText(context,"copy zalo successfully",Toast.LENGTH_SHORT).show();
+                setClipboard(context, context.getString(R.string.zalo));
+                Toast.makeText(context, "copy zalo successfully", Toast.LENGTH_SHORT).show();
             }
         });
         img_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String uriText = "mailto:" + context.getString(R.string.email) +
-                        "?subject=" +"" +
+                        "?subject=" + "" +
                         "&body=" + "";
                 Uri uri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
@@ -243,8 +283,63 @@ public class HistoryAdapter extends BaseAdapter {
 
     }
 
+    private void updateList() {
+        ApiHistory.API_HISTORY.getBill(user_id).enqueue(new Callback<ArrayList<Bill>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
+                for (int i = 0; i < response.body().size(); i++) {
+                    bills.add(response.body().get(i));
+                }
+                setListBill(loadData(HistoryActivity.numberStatus), bills);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Bill>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setListBill(String status, ArrayList<Bill> bills) {
+        for (int i = 0; i < bills.size(); i++) {
+            if (bills.get(i).getStatus().matches(status)) {
+                arr_bill.add(bills.get(i));
+            }
+        }
+
+
+    }
+
+    private String loadData(int i) {
+
+        String status = "";
+        switch (i) {
+            case 1:
+                status = "Đang Chờ";
+                break;
+            case 2:
+                status = "Hoàn Thành";
+                break;
+            case 3:
+                status = "Đang Giao";
+                break;
+            case 4:
+                status = "Đã Giao";
+                break;
+            case 5:
+                status = "Đã Hủy";
+                break;
+
+        }
+        return status;
+
+    }
+
+
     private void setClipboard(Context context, String text) {
-        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setText(text);
         } else {

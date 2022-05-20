@@ -54,11 +54,11 @@ public class HistoryActivity extends AppCompatActivity {
     private ArrayList<BillDetail> arr_bill_detail = new ArrayList<>();
     private ArrayList<String> arr_detail_id = new ArrayList<>();
     private ArrayList<MyProduct> arr_my_product = new ArrayList<>();
-    private ListView lv_history;
+    public static ListView lv_history;
     private ImageView img_history_back;
     private RelativeLayout rl_filter_history;
     private TextView tv_status_history;
-    private int numberStatus = 4;
+    public static int numberStatus = 4;
     private String user_id = "1" ;
     private TextView tv_empty;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -132,7 +132,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getAllBill(){
+    public void getAllBill(){
 //        compositeDisposable.add(repository.getAllBill(user_id)
 //                .doOnSubscribe(disposable -> {
 //                    progressBar.setVisibility(View.VISIBLE);
@@ -165,6 +165,9 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
     private void setListBill(String status,ArrayList<Bill> bills){
         ArrayList<Bill> subBill = new ArrayList<>();
@@ -253,6 +256,9 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+    public static void Update(){
+
     }
     private void loadTitleStatus(int i){
         if (i == 1){
