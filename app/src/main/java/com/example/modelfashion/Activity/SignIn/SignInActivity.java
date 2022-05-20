@@ -1,5 +1,17 @@
 package com.example.modelfashion.Activity.SignIn;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ACTIVE;
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_BOX;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_MAT_KHAU;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
+import static com.example.modelfashion.Utility.Constants.KEY_SEX;
+import static com.example.modelfashion.Utility.Constants.KEY_TAI_KHOAN;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,12 +29,15 @@ import android.widget.Toast;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
+import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.example.modelfashion.network.Repository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
@@ -40,8 +55,7 @@ public class SignInActivity extends AppCompatActivity {
     Button btnLogin;
     TextView tvSignUp, tvForgotPassword;
     CheckBox cbSaveValue;
-    SharedPreferences sharedPreferences;
-    PreferenceManager preferenceManager;
+    PreferenceManager sharedPreferences;
     ApiInterface apiInterface;
     ProgressLoadingCommon progressLoadingCommon;
     CompositeDisposable disposable = new CompositeDisposable();
@@ -50,10 +64,10 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        preferenceManager = new PreferenceManager(getApplicationContext());
+        sharedPreferences = new PreferenceManager(this);
         viewHolder();
         setListener();
-        getPreferencesData();
+        layThongTinDangNhap();
     }
 
     // tham chiếu
@@ -64,11 +78,9 @@ public class SignInActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvSignUp = findViewById(R.id.tvSignUp);
         cbSaveValue = findViewById(R.id.cbSaveValue);
-        sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
         apiInterface = ApiClient.provideApiInterface(SignInActivity.this);
         progressLoadingCommon = new ProgressLoadingCommon();
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        cbSaveValue.setChecked(false);
     }
 
     private Boolean validate() {
@@ -129,53 +141,72 @@ public class SignInActivity extends AppCompatActivity {
                     // hien loading
                 }).subscribe(loginResponse -> {
                     if (cbSaveValue.isChecked()) {
-                        Boolean aBoolean = cbSaveValue.isChecked();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(Constants.KEY_SAVE_USER_INFO, edtAccount.getText().toString());
-                        editor.putString(Constants.KEY_SAVE_PASSWORD_INFO, edtPassword.getText().toString());
-                        editor.putBoolean(Constants.KEY_SAVE_CHECK_BOX, aBoolean);
-                        editor.apply();
+                        luuThongTinDangNhap();
                     } else {
-                        sharedPreferences.edit().clear().apply();
+                        sharedPreferences.putString(KEY_ID, loginResponse.getData());
                     }
 
-                    preferenceManager.putString(Constants.KEY_ID, loginResponse.getData());
-                    preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, true);
-                    Toast.makeText(SignInActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    getUserDetail();
+                    sharedPreferences.putString(KEY_ID, loginResponse.getData());
+                    sharedPreferences.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                    Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    getUserDetail(loginResponse.getData());
                 }, throwable -> {
-                    Toast.makeText(SignInActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, "Error Happened.Try again!", Toast.LENGTH_SHORT).show();
                 }));
     }
 
-    private void getUserDetail() {
+    private void luuThongTinDangNhap() {
+        sharedPreferences.putString(KEY_TAI_KHOAN, edtAccount.getText().toString().trim());
+        sharedPreferences.putString(KEY_MAT_KHAU, edtPassword.getText().toString().trim());
+        sharedPreferences.putBoolean(KEY_CHECK_BOX, cbSaveValue.isChecked());
+    }
+
+    private void layThongTinDangNhap() {
+        edtAccount.setText(sharedPreferences.getString(KEY_TAI_KHOAN));
+        edtPassword.setText(sharedPreferences.getString(KEY_MAT_KHAU));
+        cbSaveValue.setChecked(sharedPreferences.getBoolean(KEY_CHECK_BOX));
+    }
+
+    private void getUserDetail(String userId) {
         Repository repository = new Repository(this);
-        String userId = preferenceManager.getString(Constants.KEY_ID);
         disposable.add(repository.getUserDetail(userId)
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
-                }).subscribe(registerResponse -> {
-                    Log.e("register", String.valueOf(registerResponse.toString()));
+                }).subscribe(userDetailResponse -> {
+                    Log.d("ahuhu", "userDetailResponse: " + userDetailResponse.toString());
 
-                    try {
-                        JSONObject obj = new JSONObject(registerResponse.toString());
-                        String fullName = obj.getString("userName");
-                        preferenceManager.putString(Constants.KEY_FULL_NAME, fullName);
-                        preferenceManager.putString(Constants.KEY_PHONE, obj.getString("phone"));
-                        preferenceManager.putString(Constants.KEY_ADDRESS, obj.getString("address"));
-                        preferenceManager.putString(Constants.KEY_BIRTHDAY, obj.getString("dateOfBirth"));
-                        preferenceManager.putInt(Constants.KEY_SEX, obj.getInt("gender"));
-                        preferenceManager.putString(Constants.KEY_AVARTAR, obj.getString("avatar"));
-                        Log.d("My App", obj.toString());
+                    sharedPreferences.putString(KEY_ID, userDetailResponse.getData().getUserId());
+                    sharedPreferences.putString(KEY_AVARTAR, userDetailResponse.getData().getAvatar());
+                    sharedPreferences.putString(KEY_FULL_NAME, userDetailResponse.getData().getUsername());
+                    sharedPreferences.putInt(KEY_ACTIVE, userDetailResponse.getData().getActive());
+                    sharedPreferences.putString(KEY_PHONE, userDetailResponse.getData().getPhone());
+                    sharedPreferences.putString(KEY_BIRTHDAY, userDetailResponse.getData().getDateOfBirth());
+                    sharedPreferences.putString(KEY_ADDRESS, userDetailResponse.getData().getAddress());
+                    sharedPreferences.putInt(KEY_SEX, userDetailResponse.getData().getGender());
 
-                    } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
-                    }
 
-                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                    startActivity(intent);
+//                    Log.e("register", String.valueOf(registerResponse.toString()));
+//
+//                    try {
+//                        JSONObject obj = new JSONObject(registerResponse.toString());
+//                        String fullName = obj.getString("userName");
+//                        preferenceManager.putString(Constants.KEY_FULL_NAME, fullName);
+//                        preferenceManager.putString(Constants.KEY_PHONE, obj.getString("phone"));
+//                        preferenceManager.putString(Constants.KEY_ADDRESS, obj.getString("address"));
+//                        preferenceManager.putString(Constants.KEY_BIRTHDAY, obj.getString("dateOfBirth"));
+//                        preferenceManager.putInt(Constants.KEY_SEX, obj.getInt("gender"));
+//                        preferenceManager.putString(Constants.KEY_AVARTAR, obj.getString("avatar"));
+//                        Log.d("My App", obj.toString());
+//
+//                    } catch (Throwable t) {
+//                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
+//                    }
+//
+//                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                    startActivity(intent);
                 }, throwable -> {
-                    Toast.makeText(SignInActivity.this, throwable.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, "Error Happened.Try again!", Toast.LENGTH_SHORT).show();
+                    Log.d("ahuhu", "userDetailResponse: error" + throwable.toString());
                 }));
     }
 
@@ -191,19 +222,5 @@ public class SignInActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void getPreferencesData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        if (sharedPreferences.contains(Constants.KEY_SAVE_USER_INFO)) {
-            String user = sharedPreferences.getString(Constants.KEY_SAVE_USER_INFO, "not found.");
-            edtAccount.setText(user);
-        }
-        if (sharedPreferences.contains(Constants.KEY_SAVE_PASSWORD_INFO)) {
-            String pass = sharedPreferences.getString(Constants.KEY_SAVE_PASSWORD_INFO, "not found.");
-            edtPassword.setText(pass);
-        }
-        if (sharedPreferences.contains(Constants.KEY_SAVE_CHECK_BOX)) {
-            Boolean check = sharedPreferences.getBoolean(Constants.KEY_SAVE_CHECK_BOX, false);
-            cbSaveValue.setChecked(check);
-        }
-    }
+
 }

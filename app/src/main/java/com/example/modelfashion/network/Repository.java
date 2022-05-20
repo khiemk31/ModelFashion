@@ -2,6 +2,7 @@ package com.example.modelfashion.network;
 
 import android.content.Context;
 
+import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -117,6 +118,12 @@ public final class Repository {
 
     public Single<MyProductDetail> getProductDetail(String productId) {
         return apiInterface.getProductDetail(productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<ForgotPasswordResponse> createBill(CreateBillRequest request) {
+        return apiInterface.createBill(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

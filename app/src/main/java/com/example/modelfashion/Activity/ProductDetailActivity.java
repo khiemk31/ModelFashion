@@ -204,10 +204,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             // them vao gio hang + sang man gio hang
             if (isExist(myProductCart)) {
                 // sang man gio hang
-                ProductDetailActivity.this.finish();
+                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                intent.putExtra("use_id", user_id);
+                startActivity(intent);
             } else {
                 insertProduct(myProductCart);
-                ProductDetailActivity.this.finish();
+                // sang man gio hang
+                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                intent.putExtra("use_id", user_id);
+                startActivity(intent);
             }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {

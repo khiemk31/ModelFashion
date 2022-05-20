@@ -64,11 +64,9 @@ public class FragmentProfile extends Fragment {
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
-        preferenceManager = new PreferenceManager(getActivity());
+        preferenceManager = new PreferenceManager(requireContext());
 
 
-
-        preferenceManager = new PreferenceManager(getContext());
         loadDetails();
         setListener();
         return view;
