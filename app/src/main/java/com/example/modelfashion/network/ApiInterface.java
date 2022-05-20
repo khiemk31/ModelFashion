@@ -1,5 +1,6 @@
 package com.example.modelfashion.network;
 
+import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -29,6 +30,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -59,7 +61,7 @@ public interface ApiInterface {
     @POST("user/register")
     Single<RegisterResponse> register(@Body RegisterRequest request);
 
-    @GET("/user/detail/{user_id}")
+    @GET("user/detail/{user_id}")
     Single<UserDetailResponse> getUserDetail(@Path("user_id") String useID);
 
     @PUT("/user/update")
@@ -92,4 +94,7 @@ public interface ApiInterface {
 
     @GET("product/detail/{id}")
     Single<MyProductDetail> getProductDetail(@Path("id") String productId);
+
+    @POST("bill/add")
+    Single<ForgotPasswordResponse> createBill(@Body CreateBillRequest request);
 }

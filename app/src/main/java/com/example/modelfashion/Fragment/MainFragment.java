@@ -1,5 +1,7 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
@@ -108,7 +110,7 @@ public class MainFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         avatar = view.findViewById(R.id.img_user_avatar);
         img_notifi = view.findViewById(R.id.img_notifi);
-
+        repository = new Repository(requireContext());
         Bundle info = getArguments();
         user_id = info.getString("user_id");
 //        try {
@@ -140,7 +142,7 @@ public class MainFragment extends Fragment {
         initData();
 
         initHeader();
-//        initClickProfileAvatar();
+        initClickProfileAvatar();
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
@@ -161,7 +163,7 @@ public class MainFragment extends Fragment {
 
     private void initClickProfileAvatar() {
         avatar.setOnClickListener(view -> {
-            if (preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN)) {
+            if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
                 ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
             } else {
                 startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
@@ -183,7 +185,16 @@ public class MainFragment extends Fragment {
         } else {
             tvGreeting.setText("Chào buổi tối");
         }
-        Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
+
+        if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
+            compositeDisposable.add(repository.getUserDetail(preferenceManager.getString(KEY_ID))
+            .subscribe(userDetailResponse -> {
+                Glide.with(requireContext()).load(userDetailResponse.getData().getAvatar()).placeholder(R.drawable.ic_profile).into(avatar);
+            },throwable -> {
+                Log.d("ahuhu", "loadimage avatar mainfragment: error " + throwable.toString());
+            }));
+        }else
+            Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -191,7 +202,7 @@ public class MainFragment extends Fragment {
 
         rcvProduct.setAdapter(productListAdapter);
         initListener();
-        repository = new Repository(requireContext());
+
 
         getAllCategory();
 

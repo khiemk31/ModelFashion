@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.database.MyProductCart;
 
@@ -22,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     private List<MyProductCart> productArrayList = new ArrayList<>();
@@ -42,9 +46,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
-        private TextView nameProduct, priceProduct, sizeProduct, amount, delete;
+        private TextView nameProduct, priceProduct, sizeProduct, delete;
         private Button btnIncrease, btnDecrease;
         private ImageView imgCart;
+        private TextView amount;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
@@ -80,9 +85,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             cartOnClick.OnClickDelete(position, myProductCart);
         });
         holder.btnIncrease.setOnClickListener(view -> {
-            minteger.set(minteger.get() + 1);
-            holder.amount.setText("" + minteger);
-            cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
+           if (minteger.get() >= 10){
+               Toast.makeText(holder.btnIncrease.getContext(), "Số lượng tối đa là 10", Toast.LENGTH_SHORT).show();
+           }else {
+               minteger.set(minteger.get() + 1);
+               holder.amount.setText("" + minteger);
+               cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
+           }
         });
         holder.btnDecrease.setOnClickListener(view -> {
             if(minteger.get() > 1){
@@ -91,6 +100,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
                 cartOnClick.OnClickDecreaseQuantity(position, productArrayList.get(position));
             }
         });
+//        holder.amount.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                cartOnClick.OnTypeQuantityListener(position, productArrayList.get(position), Integer.parseInt(editable.toString()));
+//            }
+//        });
         holder.amount.setText("" + productArrayList.get(position).getProductQuantity());
     }
 
@@ -109,9 +134,32 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         notifyItemChanged(position);
     }
 
+    public void setAmount(int position, int newAmount) {
+        productArrayList.get(position).setProductQuantity(newAmount);
+        notifyItemChanged(position);
+    }
+
     public void removeProduct(int position) {
         productArrayList.remove(position);
-        notifyItemChanged(position);
+        notifyDataSetChanged();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public CreateBillRequest billInformation(String userId) {
+        List<String> listProduct = new ArrayList<>();
+        List<String> listQuantity = new ArrayList<>();
+        List<String> listSize = new ArrayList<>();
+        AtomicLong totalPrice = new AtomicLong();
+        productArrayList.forEach(myProductCart -> {
+            listProduct.add(myProductCart.getProductName());
+            listQuantity.add(String.valueOf(myProductCart.getProductQuantity()));
+            listSize.add(myProductCart.getProductSize());
+            totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
+        });
+        String price = String.valueOf(productArrayList.get(0).getProductPrice());
+        String image = productArrayList.get(0).getProductImage();
+
+        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, String.valueOf(totalPrice.get()), price, image);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -128,6 +176,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         void OnClickDelete(int position, MyProductCart myProductCart);
         void OnClickIncreaseQuantity(int position, MyProductCart myProductCart);
         void OnClickDecreaseQuantity(int position, MyProductCart myProductCart);
+//        void OnTypeQuantityListener(int position, MyProductCart myProductCart, int newAmount);
     }
 
 }

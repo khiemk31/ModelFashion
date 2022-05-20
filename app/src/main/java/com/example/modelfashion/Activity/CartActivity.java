@@ -41,13 +41,7 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card);
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
         img_back_cart = findViewById(R.id.img_back_cart);
-        img_back_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-
-            }
-        });
+        img_back_cart.setOnClickListener(view -> finish());
         Intent intent = getIntent();
         String user_id = intent.getStringExtra("use_id");
         info = new Bundle();

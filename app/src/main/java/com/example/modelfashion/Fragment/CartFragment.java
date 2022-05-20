@@ -1,14 +1,19 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +24,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Activity.CartActivity;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
+import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.database.AppDatabase;
 import com.example.modelfashion.database.MyProductCart;
+import com.example.modelfashion.network.Repository;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -53,9 +62,13 @@ public class CartFragment extends Fragment {
     private TextView tvTotal;
     public static Button btn_payment;
     private SwipeRefreshLayout refreshLayout;
+    private ProgressBar progressBar;
 
     private Boolean check_load_successful = false;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private PreferenceManager sharedPref;
+    private Repository repository;
+
 
     CartAdapter adapter = new CartAdapter();
 
@@ -90,12 +103,28 @@ public class CartFragment extends Fragment {
         tvTotal = initView.findViewById(R.id.total_money);
         btn_payment = initView.findViewById(R.id.btn_payment);
         refreshLayout = initView.findViewById(R.id.refresh_layout);
+        progressBar = initView.findViewById(R.id.progress_bar);
+        sharedPref = new PreferenceManager(requireContext());
+        repository = new Repository(requireContext());
 
         setAdapter();
         getProductInCart();
 
         btn_payment.setOnClickListener(v -> {
-            requestPayment();
+
+            // check dang nhap
+            String id = sharedPref.getString(KEY_ID);
+            Log.d("ahuhu", "sharedPref.getString(KEY_ID): " + id);
+            if (!sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
+                showDialogRequireLogin();
+            } else {
+                if (adapter.getItemCount() == 0) {
+                    Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
+                }else {
+//                    requestPayment();
+                    createBill();
+                }
+            }
         });
 
         refreshLayout.setOnRefreshListener(() -> {
@@ -104,6 +133,49 @@ public class CartFragment extends Fragment {
             tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
         });
         return initView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void createBill() {
+        AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                .create();
+        alertDialog.setTitle("Thông báo");
+        alertDialog.setCancelable(false);
+
+        alertDialog.setMessage("Xác nhận đặt hàng");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
+            disposable.add(repository.createBill(adapter.billInformation(sharedPref.getString(KEY_ID)))
+                    .doOnSubscribe(disposable1 -> {
+                        progressBar.setVisibility(View.VISIBLE);
+                    })
+                    .subscribe(okResponse -> {
+                        Log.d("ahuhu", "createBill: success: ");
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                        disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {},throwable -> {}));
+                        adapter.clearData();
+                    },throwable -> {
+                        progressBar.setVisibility(View.GONE);
+                        Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                    }));
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {});
+        alertDialog.show();
+
+    }
+
+    private void showDialogRequireLogin() {
+        AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                .create();
+        alertDialog.setTitle("Thông báo");
+        alertDialog.setCancelable(false);
+
+        alertDialog.setMessage("Bạn cần đăng nhập trước khi đặt hàng");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Đăng nhập", (dialogInterface, i) -> {
+            startActivity(new Intent(getContext(), SignInActivity.class));
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {});
+        alertDialog.show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -148,6 +220,12 @@ public class CartFragment extends Fragment {
                 adapter.decreaseAmount(position);
                 tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
             }
+
+//            @Override
+//            public void OnTypeQuantityListener(int position, MyProductCart myProductCart, int newAmount) {
+//                new Handler().postDelayed(() -> {adapter.setAmount(position, newAmount);
+//                    tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));}, 500);
+//            }
         });
     }
 
@@ -164,8 +242,8 @@ public class CartFragment extends Fragment {
                     .doOnSubscribe(disposable1 -> {})
                     .doFinally(() -> {})
                     .subscribe(() -> {
-                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
                         adapter.removeProduct(position);
+                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
                     },throwable -> {}));
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {
