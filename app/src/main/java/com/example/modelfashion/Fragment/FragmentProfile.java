@@ -40,7 +40,7 @@ public class FragmentProfile extends Fragment {
     RoundedImageView img;
     LinearLayout layout_btn, layout_name;
     Boolean isLogin;
-    String user_id="1";
+    String user_id = "1";
     RelativeLayout rl_logout;
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
     ProgressLoadingCommon progressLoadingCommon;
@@ -126,34 +126,69 @@ public class FragmentProfile extends Fragment {
             }
         });
         btn_history.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus", 4);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                user_id = preferenceManager.getString(Constants.KEY_ID);
+                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("numberStatus", 4);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+            }
         });
         btn_status.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus", 1);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                user_id = preferenceManager.getString(Constants.KEY_ID);
+                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("numberStatus", 1);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+            }
         });
 
         btn_status2.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus", 2);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                user_id = preferenceManager.getString(Constants.KEY_ID);
+                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("numberStatus", 2);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+            }
         });
         btn_status3.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), HistoryActivity.class);
-            intent.putExtra("numberStatus", 3);
-            intent.putExtra("user_id", user_id);
-            startActivity(intent);
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                user_id = preferenceManager.getString(Constants.KEY_ID);
+                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("numberStatus", 3);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+            }
         });
         btn_cart.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), CartActivity.class);
-            intent.putExtra("use_id", user_id);
-            startActivity(intent);
+            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
+            if (isLogin == false) {
+                showDialogLogIn();
+                // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
+            } else {
+                user_id = preferenceManager.getString(Constants.KEY_ID);
+                Intent intent = new Intent(getContext(), CartActivity.class);
+                intent.putExtra("use_id", user_id);
+                startActivity(intent);
+            }
         });
     }
 

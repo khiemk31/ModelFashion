@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.Model.request.CreateBillRequest;
@@ -38,12 +39,16 @@ import com.example.modelfashion.network.Repository;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import vn.momo.momo_partner.AppMoMoLib;
 
 public class CartFragment extends Fragment {
     private View initView;
@@ -55,7 +60,7 @@ public class CartFragment extends Fragment {
     private ArrayList<String> arr_product_name = new ArrayList<>();
     private String user_id, total_money;
     private TextView tvTotal;
-    private Button btn_payment;
+    public static Button btn_payment;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar progressBar;
 
@@ -66,6 +71,19 @@ public class CartFragment extends Fragment {
 
 
     CartAdapter adapter = new CartAdapter();
+
+    //momo
+    private Integer amount = 100000;
+    private String fee = "0";
+    int environment = 0;//developer default
+    private String merchantName = "FShop";
+    private String merchantCode = "MOMOLWUA20220517";
+    private String merchantNameLabel = "FPT plytechnich";
+    private String description = "Ví MoMo";
+
+
+
+
 
 
     public CartFragment() {
@@ -93,6 +111,7 @@ public class CartFragment extends Fragment {
         getProductInCart();
 
         btn_payment.setOnClickListener(v -> {
+
             // check dang nhap
             String id = sharedPref.getString(KEY_ID);
             Log.d("ahuhu", "sharedPref.getString(KEY_ID): " + id);
@@ -102,6 +121,7 @@ public class CartFragment extends Fragment {
                 if (adapter.getItemCount() == 0) {
                     Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
                 }else {
+//                    requestPayment();
                     createBill();
                 }
             }
@@ -246,4 +266,53 @@ public class CartFragment extends Fragment {
         disposable.dispose();
         super.onDestroy();
     }
+
+    // goi request MoMo pay
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void requestPayment() {
+        amount = Integer.parseInt(String.valueOf(adapter.getTotal()));
+        AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
+        AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
+
+
+        Map<String, Object> eventValue = new HashMap<>();
+
+        //client Required
+        eventValue.put("merchantname", merchantName); //Tên đối tác. được đăng ký tại https://business.momo.vn. VD: Google, Apple, Tiki , CGV Cinemas
+        eventValue.put("merchantcode", merchantCode); //Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
+        eventValue.put("amount", amount); //Kiểu integer
+        eventValue.put("orderId", merchantCode + "-" + UUID.randomUUID().toString()); //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
+        eventValue.put("orderLabel", "Mã đơn hàng"); //gán nhãn
+
+        //client Optional - bill info
+        eventValue.put("merchantnamelabel", merchantNameLabel);//gán nhãn
+        eventValue.put("fee", fee); //Kiểu integer
+        eventValue.put("description", description); //mô tả đơn hàng - short description
+
+        //client extra data
+        eventValue.put("requestId",  merchantCode+"merchant_billId_"+System.currentTimeMillis());
+        eventValue.put("partnerCode", merchantCode);
+//        //Example extra data
+//        JSONObject objExtraData = new JSONObject();
+//        try {
+//            objExtraData.put("site_code", "008");
+//            objExtraData.put("site_name", "CGV Cresent Mall");
+//            objExtraData.put("screen_code", 0);
+//            objExtraData.put("screen_name", "Special");
+//            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+//            objExtraData.put("movie_format", "2D");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        eventValue.put("extraData", objExtraData.toString());
+//
+//        eventValue.put("extra", "");
+        AppMoMoLib.getInstance().requestMoMoCallBack(getActivity(), eventValue);
+    }
+
+
+
+
+
+
 }
