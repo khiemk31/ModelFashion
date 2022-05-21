@@ -95,7 +95,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
     private void setInfoBill(){
         DecimalFormat format = new DecimalFormat("###,###,###");
         ContentBill contentBill = arr_bill_detail.get(0);
-        tv_dh_detail_history.setText("MÃ\n"+contentBill.getBill_id());
+        tv_dh_detail_history.setText("Mã Đơn:\n"+contentBill.getBill_id());
         phoneNumber_detail_history.setText(contentBill.getPhone());
         address_detail_history.setText(contentBill.getAddress());
         date_detail_history.setText(contentBill.getCreated_at().substring(0,10));

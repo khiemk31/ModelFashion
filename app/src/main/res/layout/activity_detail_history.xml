@@ -51,10 +51,10 @@
             android:layout_alignParentTop="true"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="10dp"
-            android:gravity="center"
+            android:gravity="left"
             android:text="Mã"
             android:textColor="#8E97FD"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="normal" />
 
 

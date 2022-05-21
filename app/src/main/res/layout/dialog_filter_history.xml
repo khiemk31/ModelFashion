@@ -69,7 +69,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Hoàn thành"
+                    android:text="Yêu cầu hủy"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 

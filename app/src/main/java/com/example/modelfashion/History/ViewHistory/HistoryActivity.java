@@ -2,9 +2,13 @@ package com.example.modelfashion.History.ViewHistory;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -69,11 +73,26 @@ public class HistoryActivity extends AppCompatActivity {
 
 
 
+    private BroadcastReceiver broadCastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String check = intent.getStringExtra("action");
+            if (check.matches("load")){
+                getAllBill();
+            }
+        }
+    };
+
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiver,new IntentFilter("send_data_to_activity"));
         lv_history = findViewById(R.id.lv_history);
         img_history_back = findViewById(R.id.img_history_back);
         rl_filter_history = findViewById(R.id.rl_filter_history);
@@ -84,7 +103,7 @@ public class HistoryActivity extends AppCompatActivity {
         repository = new Repository(HistoryActivity.this);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
-        user_id = intent.getStringExtra("user_id");
+        //user_id = intent.getStringExtra("user_id");
         loadTitleStatus(numberStatus);
        // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +130,11 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver((BroadcastReceiver) broadCastReceiver);
+    }
 
     private String loadData(int i){
 
@@ -118,7 +142,7 @@ public class HistoryActivity extends AppCompatActivity {
         switch (i) {
             case 1: status = "Đang Chờ";
                     break;
-            case 2: status = "Hoàn Thành";
+            case 2: status = "Yêu Cầu Hủy";
                     break;
             case 3: status = "Đang Giao";
                     break;
@@ -149,6 +173,7 @@ public class HistoryActivity extends AppCompatActivity {
         ApiHistory.API_HISTORY.getBill(user_id).enqueue(new Callback<ArrayList<Bill>>() {
             @Override
             public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
+                bills.clear();
                 for (int i = 0;i<response.body().size();i++){
                     bills.add(response.body().get(i));
                 }
@@ -175,6 +200,11 @@ public class HistoryActivity extends AppCompatActivity {
             if(bills.get(i).getStatus().matches(status)){
                 subBill.add(bills.get(i));
             }
+        }
+        if(subBill.size()>0){
+            tv_empty.setVisibility(View.GONE);
+        }else {
+            tv_empty.setVisibility(View.VISIBLE);
         }
         HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,subBill);
         lv_history.setAdapter(historyAdapter);
@@ -265,7 +295,7 @@ public class HistoryActivity extends AppCompatActivity {
             tv_status_history.setText("Chờ xác nhận");
             tv_status_history.setTextColor(Color.parseColor("#FF0000"));
         }else if (i == 2){
-            tv_status_history.setText("Hoàn thành");
+            tv_status_history.setText("Yêu cầu hủy");
             tv_status_history.setTextColor(Color.parseColor("#ff9800"));
         }
         else if (i == 3){

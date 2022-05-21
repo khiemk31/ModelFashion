@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
@@ -100,7 +102,7 @@ public class HistoryAdapter extends BaseAdapter {
 
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        item_history_ma.setText("Mã đơn: DH " + arr_bill.get(i).getBill_id());
+        item_history_ma.setText("Mã đơn: " + arr_bill.get(i).getBill_id().substring(0,20)+"...");
 
         Glide.with(context).load(arr_bill.get(i).getProduct_image()).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
@@ -124,7 +126,14 @@ public class HistoryAdapter extends BaseAdapter {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
-        } else {
+        } else if(arr_bill.get(i).getStatus().matches("Yêu Cầu Hủy")) {
+            item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
+            tv_feedback.setVisibility(View.VISIBLE);
+            tv_feedback.setText("Hủy đơn");
+            tv_feedback.setAlpha(0.5f);
+            tv_feedback.setEnabled(false);
+
+        }else  {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
@@ -164,8 +173,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onResponse(Call<CancelBill> call, Response<CancelBill> response) {
                 Toast.makeText(context, "Yêu cầu hủy đơn thành công", Toast.LENGTH_SHORT).show();
-                notifyDataSetChanged();
-
+                senDataToActivity();
             }
 
             @Override
@@ -283,60 +291,6 @@ public class HistoryAdapter extends BaseAdapter {
 
     }
 
-    private void updateList() {
-        ApiHistory.API_HISTORY.getBill(user_id).enqueue(new Callback<ArrayList<Bill>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
-                for (int i = 0; i < response.body().size(); i++) {
-                    bills.add(response.body().get(i));
-                }
-                setListBill(loadData(HistoryActivity.numberStatus), bills);
-
-
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Bill>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void setListBill(String status, ArrayList<Bill> bills) {
-        for (int i = 0; i < bills.size(); i++) {
-            if (bills.get(i).getStatus().matches(status)) {
-                arr_bill.add(bills.get(i));
-            }
-        }
-
-
-    }
-
-    private String loadData(int i) {
-
-        String status = "";
-        switch (i) {
-            case 1:
-                status = "Đang Chờ";
-                break;
-            case 2:
-                status = "Hoàn Thành";
-                break;
-            case 3:
-                status = "Đang Giao";
-                break;
-            case 4:
-                status = "Đã Giao";
-                break;
-            case 5:
-                status = "Đã Hủy";
-                break;
-
-        }
-        return status;
-
-    }
-
 
     private void setClipboard(Context context, String text) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -347,6 +301,11 @@ public class HistoryAdapter extends BaseAdapter {
             android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
             clipboard.setPrimaryClip(clip);
         }
+    }
+    private void senDataToActivity(){
+        Intent intent = new Intent("send_data_to_activity");
+        intent.putExtra("action", "load");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
 }
