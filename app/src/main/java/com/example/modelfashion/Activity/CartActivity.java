@@ -27,14 +27,6 @@ import vn.momo.momo_partner.AppMoMoLib;
 public class CartActivity extends AppCompatActivity {
     private Bundle info;
     private ImageView img_back_cart;
-
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

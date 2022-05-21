@@ -202,8 +202,8 @@ public class SignInActivity extends AppCompatActivity {
 //                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
 //                    }
 //
-//                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }, throwable -> {
                     Toast.makeText(SignInActivity.this, "Error Happened.Try again!", Toast.LENGTH_SHORT).show();
                     Log.d("ahuhu", "userDetailResponse: error" + throwable.toString());
