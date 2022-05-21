@@ -137,10 +137,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text=""
+                    android:text="Từ Chối"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
