@@ -1,8 +1,8 @@
-package com.example.modelfashion.Model.response.my_product;
+package com.example.modelfashion.Model.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MyProductByCategory {
+public class MyProductByPriceResponse {
     @SerializedName("product_id")
     private String productId;
     @SerializedName("product_name")
@@ -13,22 +13,6 @@ public class MyProductByCategory {
     private int price;
     @SerializedName("category_name")
     private String categoryName;
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public MyProductByCategory(String productId, String productName, String productImage, int price, String categoryName) {
-        this.productId = productId;
-        this.productName = productName;
-        this.productImage = productImage;
-        this.price = price;
-        this.categoryName = categoryName;
-    }
 
     public String getProductId() {
         return productId;
@@ -62,13 +46,22 @@ public class MyProductByCategory {
         this.price = price;
     }
 
-    public MyProductByCategory(String productId, String productName, String productImage, int price) {
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public MyProductByPriceResponse(String productId, String productName, String productImage, int price, String categoryName) {
         this.productId = productId;
         this.productName = productName;
         this.productImage = productImage;
         this.price = price;
+        this.categoryName = categoryName;
     }
 
-    public MyProductByCategory() {
+    public MyProductByPriceResponse() {
     }
 }

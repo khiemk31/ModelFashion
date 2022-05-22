@@ -3,6 +3,7 @@ package com.example.modelfashion.network;
 import android.content.Context;
 
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.request.GetProductByPriceRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -22,8 +23,9 @@ import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -124,6 +126,18 @@ public final class Repository {
 
     public Single<ForgotPasswordResponse> createBill(CreateBillRequest request) {
         return apiInterface.createBill(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<DataProduct> getAll() {
+        return apiInterface.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<List<MyProductByCategory>> getProductByPrice(GetProductByPriceRequest request) {
+        return apiInterface.getProductByPrice(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
