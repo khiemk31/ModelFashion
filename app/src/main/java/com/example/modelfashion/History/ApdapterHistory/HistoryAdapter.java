@@ -122,21 +122,22 @@ public class HistoryAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-        if (arr_bill.get(i).getStatus().matches("Đã giao")) {
+        if (arr_bill.get(i).getStatus().matches("Đã Giao")) {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
-        } else if(arr_bill.get(i).getStatus().matches("Yêu Cầu Hủy")) {
+        } else if(arr_bill.get(i).getStatus().matches("Đang Chờ")) {
+            item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
+            tv_feedback.setVisibility(View.VISIBLE);
+            tv_feedback.setText("Hủy đơn");
+
+        }else  {
+
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
             tv_feedback.setAlpha(0.5f);
             tv_feedback.setEnabled(false);
-
-        }else  {
-            item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
-            tv_feedback.setVisibility(View.VISIBLE);
-            tv_feedback.setText("Hủy đơn");
 
         }
         tv_feedback.setOnClickListener(new View.OnClickListener() {
