@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,21 +21,23 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
+import com.example.modelfashion.Model.request.GetProductByPriceRequest;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
+import com.example.modelfashion.customview.DialogCategory;
 import com.example.modelfashion.customview.SearchBar;
 import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -44,12 +45,14 @@ public class CategoryFragment extends Fragment {
     SearchView searchView;
     private CategoryAdapter categoryAdapter;
     private ClothesAdapter clothesAdapter;
-    private RecyclerView rcvCategory, rcvClothes,rcvCategoryF;
+    private RecyclerView rcvClothes;
+    private RecyclerView rcvCategoryF;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
     private SearchBar searchBar;
     private Dialog dialog;
     ImageView filter_category;
+    private DialogCategory dialogCategory;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -65,7 +68,7 @@ public class CategoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         initView(view);
-
+        repository = new Repository(requireContext());
 
 
         initData();
@@ -78,7 +81,7 @@ public class CategoryFragment extends Fragment {
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-                getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
+
             }
 
             @Override
@@ -93,11 +96,6 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-        categoryAdapter.setClickListener((view, position) -> {
-            currentCategory = position;
-            categoryAdapter.highLightSelectedItem(position);
-            getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
-        });
 
         clothesAdapter.setClickListener((position, item) -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
@@ -107,18 +105,85 @@ public class CategoryFragment extends Fragment {
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
-            getCategory(repository);
+            getAll();
             searchBar.clearSearchContent();
             refreshLayout.setRefreshing(false);
         });
 
+
+    }
+
+    private void getProductFilter(String categoryName, long price1, long price2, String sortOrder) {
+        compositeDisposable.add(repository.getProductByPrice(new GetProductByPriceRequest(categoryName, price1, price2, sortOrder))
+                .doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).doFinally(() -> {
+                })
+                .subscribe(myProductByPriceResponses -> {
+                    progressBar.setVisibility(View.GONE);
+                    clothesAdapter.setListProduct(myProductByPriceResponses);
+                    Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+                }, throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                }));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
-        repository = new Repository(requireContext());
-        getCategory(repository);
+
+        getCategory();
+        getAll();
+    }
+
+    private void getAll() {
+        compositeDisposable.add(repository.getAll()
+                .doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).doFinally(() -> {
+                })
+                .subscribe(myProductByCategories -> {
+                    clothesAdapter.setListProduct(myProductByCategories.getData());
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+                }, throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                }));
+    }
+
+    private void initDialogClickListener() {
+        dialogCategory.setClickListener(new DialogCategory.DialogClickInterface() {
+            @Override
+            public void confirmClickListener(String categoryName, long price1, long price2, String sortOrder) {
+                // call api with those params
+                getProductFilter(categoryName, price1, price2, sortOrder);
+            }
+
+            @Override
+            public void viewProductByCategoryOnly(String categoryId) {
+                viewProductByCategory(categoryId);
+            }
+
+            @Override
+            public void viewAllNoFilter() {
+                // call api getall
+                getAll();
+            }
+        });
+    }
+
+    private void viewProductByCategory(String categoryId) {
+        compositeDisposable.add(repository.getProductByCategory(categoryId)
+                .doOnSubscribe(disposable -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                }).subscribe(dataProduct -> {
+                    progressBar.setVisibility(View.GONE);
+                    clothesAdapter.setListProduct(dataProduct.getData());
+                    if (dataProduct.getData().size() == 0) {
+                        Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+                    }
+                }, throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                }));
     }
 
     private void initView(View view) {
@@ -126,29 +191,21 @@ public class CategoryFragment extends Fragment {
         filter_category = view.findViewById(R.id.filter_category);
 //        searchView = view.findViewById(R.id.search_view);
         categoryAdapter = new CategoryAdapter();
-        rcvCategory = view.findViewById(R.id.rcv_category);
-        rcvCategory.setAdapter(categoryAdapter);
         categoryAdapter.highLightSelectedItem(currentCategory);
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_filter_category);
-        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         rcvCategoryF = dialog.findViewById(R.id.rcv_category_f);
         TextView tv_close_filterr = dialog.findViewById(R.id.tv_close_filterr);
         rcvCategoryF.setAdapter(categoryAdapter);
-        tv_close_filterr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        filter_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.show();
-            }
-        });
+        tv_close_filterr.setOnClickListener(view1 -> dialog.dismiss());
+//        filter_category.setOnClickListener(view12 -> dialog.show());
+        filter_category.setOnClickListener(view1 -> {
+            dialogCategory = new DialogCategory(categoryListFinal);
+            dialogCategory.show(getChildFragmentManager(), dialogCategory.getTag());
 
-
+            initDialogClickListener();
+        });
 
 
         rcvClothes = view.findViewById(R.id.rcv_clothes);
@@ -159,38 +216,25 @@ public class CategoryFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         refreshLayout = view.findViewById(R.id.refresh_layout);
 
+        filter_category.setEnabled(false);
     }
 
-    private void getProductByCategory(Repository repository, MyCategory category) {
-        compositeDisposable.add(repository.getProductByCategory(category.getCategoryId()).doOnSubscribe(disposable -> {
-            // show loading
-            progressBar.setVisibility(View.VISIBLE);
-        })
-                .doFinally(() -> {
-                    // hide loading
-                    progressBar.setVisibility(View.GONE);
-                })
-                .subscribe(dataProduct -> {
-                    productArrayList.clear();
-                    clothesAdapter.setListProduct(dataProduct.getData());
-                    productArrayList.addAll(dataProduct.getData());
-                }, throwable -> {
-                    Toast.makeText(requireContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
-                }));
-    }
+
+    private final List<MyCategory> categoryListFinal = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getCategory(Repository repository) {
+    private void getCategory() {
         compositeDisposable.add(repository.getAllCategory()
                 .doOnSubscribe(disposable -> {
                     progressBar.setVisibility(View.VISIBLE);
                 }).doFinally(() -> {
                     progressBar.setVisibility(View.GONE);
                 }).subscribe(dataAllCategory -> {
-                    categoryAdapter.setListCategory(dataAllCategory.getData());
-                    getProductByCategory(repository, categoryAdapter.getMyCategory(currentCategory));
+                    progressBar.setVisibility(View.GONE);
+                    categoryListFinal.addAll(dataAllCategory.getData());
+                    filter_category.setEnabled(true);
                 }, throwable -> {
-
+                    progressBar.setVisibility(View.GONE);
                 }));
 
     }
@@ -201,11 +245,12 @@ public class CategoryFragment extends Fragment {
         compositeDisposable.dispose();
         super.onDestroy();
     }
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText()){
+        if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
                     activity.getCurrentFocus().getWindowToken(),
                     0

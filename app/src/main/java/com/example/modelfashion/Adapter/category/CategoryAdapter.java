@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modelfashion.Model.response.category.Category;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.R;
 
@@ -29,6 +28,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.listCategory = list;
         notifyDataSetChanged();
     }
+
+    public String getCategoryName(int position) {return listCategory.get(position).getCategoryName();}
 
     public List<MyCategory> getListCategory() {
         return this.listCategory;

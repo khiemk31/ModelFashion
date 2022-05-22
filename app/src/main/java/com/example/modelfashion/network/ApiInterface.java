@@ -1,6 +1,7 @@
 package com.example.modelfashion.network;
 
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.request.GetProductByPriceRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -22,8 +23,11 @@ import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
+import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import io.reactivex.Single;
 import kotlin.Unit;
@@ -32,7 +36,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -51,6 +54,7 @@ public interface ApiInterface {
     @POST("insert_user.php")
     Call<String> insertUser(@Field("taikhoan") String taikhoan,
                             @Field("matkhau") String matkhau);
+
     @POST("user/login")
     Single<LoginResponse> login(@Body LoginRequest request);
 
@@ -82,11 +86,15 @@ public interface ApiInterface {
     );
 
     @GET("product/getProductByCategory/{id}")
-    Single<DataProduct> getProductByCategory(@Path("id") String categoryId);
+    Single<DataProduct> getProductByCategory(
+            @Path("id") String categoryId
+//            @Path()
+    );
 
     @POST("check_login_user.php")
     Single<Unit> login(@Query("taikhoan") String tk,
                        @Query("matkhau") String mk);
+
     @FormUrlEncoded
     @POST("update_user_info.php")
     Call<String> UpdateUser(@Field("user") JSONObject user);
@@ -102,4 +110,13 @@ public interface ApiInterface {
 
     @POST("bill/add")
     Single<ForgotPasswordResponse> createBill(@Body CreateBillRequest request);
+
+    @GET("product/getAll")
+    Single<DataProduct> getAll();
+
+
+    @POST("product/getProductByPrice")
+    Single<List<MyProductByCategory>> getProductByPrice(
+            @Body GetProductByPriceRequest request
+    );
 }
