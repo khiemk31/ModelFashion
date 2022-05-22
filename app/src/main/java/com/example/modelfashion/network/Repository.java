@@ -8,6 +8,8 @@ import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.Model.response.MyProductDetail;
+import com.example.modelfashion.Model.response.Register.CheckUserRequest;
+import com.example.modelfashion.Model.response.Register.CheckUserResponse;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -123,7 +125,15 @@ public final class Repository {
     }
 
     public Single<ForgotPasswordResponse> createBill(CreateBillRequest request) {
-        return apiInterface.createBill(request)
+        return apiInterface
+                .createBill(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<CheckUserResponse> checkUser(CheckUserRequest request) {
+        return apiInterface
+                .checkUser(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

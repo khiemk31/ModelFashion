@@ -6,6 +6,8 @@ import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.Model.response.MyProductDetail;
+import com.example.modelfashion.Model.response.Register.CheckUserRequest;
+import com.example.modelfashion.Model.response.Register.CheckUserResponse;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPResponse;
 import com.example.modelfashion.Model.response.Register.RegisterRequest;
@@ -69,6 +71,9 @@ public interface ApiInterface {
 
     @PUT("/user/recoveryPass")
     Single<ForgotPasswordResponse> changePassword(@Body ForgotPasswordRequest request);
+
+    @POST("user/checkUser")
+    Single<CheckUserResponse> checkUser(@Body CheckUserRequest request);
 
     @GET("get_product_by_id.php")
     Single<MyProduct> getProductById(

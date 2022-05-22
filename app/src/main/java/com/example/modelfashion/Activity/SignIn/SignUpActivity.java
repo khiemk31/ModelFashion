@@ -1,5 +1,14 @@
 package com.example.modelfashion.Activity.SignIn;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ACTIVE;
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
+import static com.example.modelfashion.Utility.Constants.KEY_SEX;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -16,13 +25,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
+import com.example.modelfashion.Model.response.Register.CheckUserRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
+import com.example.modelfashion.network.Repository;
 
 import java.util.regex.Pattern;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextView tvSignIn, tvRules;
     ApiInterface apiInterface;
     ProgressLoadingCommon progressLoadingCommon;
+    CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    progressLoadingCommon.showProgressLoading(SignUpActivity.this);
-                    insertUser();
+                    checkUser();
                 }
             }
         });
@@ -95,16 +108,29 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void insertUser() {
-        if (validate()) {
             Intent intent = new Intent(this, OTPPhoneActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("phone", edtPhoneSu.getText().toString());
-            bundle.putString("name", edtNameSu.getText().toString());
-            bundle.putString("password", edtPassword.getText().toString());
+            bundle.putString("phone", edtPhoneSu.getText().toString().trim());
+            bundle.putString("name", edtNameSu.getText().toString().trim());
+            bundle.putString("password", edtPassword.getText().toString().trim());
             intent.putExtras(bundle);
             startActivity(intent);
-        }
     }
+
+    private void checkUser() {
+        Repository repository = new Repository(this);
+        disposable.add(repository.checkUser(new CheckUserRequest(edtPhoneSu.getText().toString().trim()))
+                .doOnSubscribe(disposable -> {
+                    progressLoadingCommon.showProgressLoading(this);
+                }).subscribe( checkUserResponse -> {
+                    insertUser();
+                }, throwable -> {
+                    if (throwable.getMessage().equalsIgnoreCase("HTTP 409 Conflict")) {
+                        Toast.makeText(SignUpActivity.this, "Số điện thoại đã được sử dụng", Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
     // validate
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
@@ -114,17 +140,22 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
 
-        if (special.matcher(edtNameSu.getText().toString()).find() || special.matcher(edtPassword.getText().toString()).find()) {
+        if (special.matcher(edtNameSu.getText().toString().trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
             Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtPassword.getText().toString().length() < 6) {
+        if (edtPassword.getText().toString().trim().length() < 6) {
             Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (!edtConfirmPassword.getText().toString().equalsIgnoreCase(edtPassword.getText().toString())) {
+        if (edtPhoneSu.getText().toString().trim().length() > 10) {
+            Toast.makeText(SignUpActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!edtConfirmPassword.getText().toString().trim().equalsIgnoreCase(edtPassword.getText().toString().trim())) {
             Toast.makeText(SignUpActivity.this, "Mật khẩu không giống nhau", Toast.LENGTH_SHORT).show();
             return false;
         }
