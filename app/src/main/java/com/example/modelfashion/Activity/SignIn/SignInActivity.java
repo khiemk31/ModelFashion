@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modelfashion.Activity.MainActivity;
+import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
 import com.example.modelfashion.Model.response.Login.LoginResponse;
@@ -47,6 +48,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -99,6 +101,11 @@ public class SignInActivity extends AppCompatActivity {
             Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        if (edtAccount.getText().toString().trim().length() > 10) {
+            Toast.makeText(SignInActivity.this, "Số điện thoại chỉ được 10 kí tự!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
@@ -136,14 +143,14 @@ public class SignInActivity extends AppCompatActivity {
     private void login() {
         Repository repository = new Repository(this);
         disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString().trim(),
-                edtPassword.getText().toString().trim())) // truyen phone va password vao day
+                edtPassword.getText().toString().trim()))
                 .doOnSubscribe(disposable -> {
                     // hien loading
                 }).subscribe(loginResponse -> {
                     if (cbSaveValue.isChecked()) {
                         luuThongTinDangNhap();
                     } else {
-                        sharedPreferences.putString(KEY_ID, loginResponse.getData());
+                        sharedPreferences.clear();
                     }
 
                     sharedPreferences.putString(KEY_ID, loginResponse.getData());
@@ -151,7 +158,12 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     getUserDetail(loginResponse.getData());
                 }, throwable -> {
-                    Toast.makeText(SignInActivity.this, "Error Happened.Try again!", Toast.LENGTH_SHORT).show();
+                    Log.e("bug", throwable.getMessage());
+                    if (throwable.getMessage().equalsIgnoreCase("HTTP 404 Not Found")) {
+                        Toast.makeText(SignInActivity.this, "Số điện thoại chưa được đăng kí", Toast.LENGTH_SHORT).show();
+                    } else if (throwable.getMessage().equalsIgnoreCase("HTTP 500 Internal Server Error")) {
+                        Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                    }
                 }));
     }
 
@@ -162,9 +174,19 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void layThongTinDangNhap() {
-        edtAccount.setText(sharedPreferences.getString(KEY_TAI_KHOAN));
-        edtPassword.setText(sharedPreferences.getString(KEY_MAT_KHAU));
-        cbSaveValue.setChecked(sharedPreferences.getBoolean(KEY_CHECK_BOX));
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_PREFERENCE_NAME, MODE_PRIVATE);
+        if (sharedPreferences.contains(Constants.KEY_TAI_KHOAN)) {
+            String user = sharedPreferences.getString(Constants.KEY_TAI_KHOAN, "not found.");
+            edtAccount.setText(user);
+        }
+        if (sharedPreferences.contains(Constants.KEY_MAT_KHAU)) {
+            String pass = sharedPreferences.getString(Constants.KEY_MAT_KHAU, "not found.");
+            edtPassword.setText(pass);
+        }
+        if (sharedPreferences.contains(Constants.KEY_CHECK_BOX)) {
+            Boolean check = sharedPreferences.getBoolean(Constants.KEY_CHECK_BOX, false);
+            cbSaveValue.setChecked(check);
+        }
     }
 
     private void getUserDetail(String userId) {
@@ -173,8 +195,6 @@ public class SignInActivity extends AppCompatActivity {
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
                 }).subscribe(userDetailResponse -> {
-                    Log.d("ahuhu", "userDetailResponse: " + userDetailResponse.toString());
-
                     sharedPreferences.putString(KEY_ID, userDetailResponse.getData().getUserId());
                     sharedPreferences.putString(KEY_AVARTAR, userDetailResponse.getData().getAvatar());
                     sharedPreferences.putString(KEY_FULL_NAME, userDetailResponse.getData().getUsername());
@@ -184,24 +204,6 @@ public class SignInActivity extends AppCompatActivity {
                     sharedPreferences.putString(KEY_ADDRESS, userDetailResponse.getData().getAddress());
                     sharedPreferences.putInt(KEY_SEX, userDetailResponse.getData().getGender());
 
-
-//                    Log.e("register", String.valueOf(registerResponse.toString()));
-//
-//                    try {
-//                        JSONObject obj = new JSONObject(registerResponse.toString());
-//                        String fullName = obj.getString("userName");
-//                        preferenceManager.putString(Constants.KEY_FULL_NAME, fullName);
-//                        preferenceManager.putString(Constants.KEY_PHONE, obj.getString("phone"));
-//                        preferenceManager.putString(Constants.KEY_ADDRESS, obj.getString("address"));
-//                        preferenceManager.putString(Constants.KEY_BIRTHDAY, obj.getString("dateOfBirth"));
-//                        preferenceManager.putInt(Constants.KEY_SEX, obj.getInt("gender"));
-//                        preferenceManager.putString(Constants.KEY_AVARTAR, obj.getString("avatar"));
-//                        Log.d("My App", obj.toString());
-//
-//                    } catch (Throwable t) {
-//                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
-//                    }
-//
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                 }, throwable -> {
@@ -221,6 +223,4 @@ public class SignInActivity extends AppCompatActivity {
         disposable.clear();
         super.onDestroy();
     }
-
-
 }

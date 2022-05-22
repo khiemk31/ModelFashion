@@ -1,5 +1,14 @@
 package com.example.modelfashion.Activity;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ACTIVE;
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
+import static com.example.modelfashion.Utility.Constants.KEY_SEX;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -141,11 +150,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     // check thông tin giới tính
     private void putTVSex(int check) {
-        if (check == 2) {
+        if (check == 3) {
             tvActProfileSex.setText("Khác");
-        } else if (check == 0) {
-            tvActProfileSex.setText("Nam");
         } else if (check == 1) {
+            tvActProfileSex.setText("Nam");
+        } else if (check == 2) {
             tvActProfileSex.setText("Nữ");
         }
     }
@@ -203,6 +212,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(ProfileActivity.this, updateResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     getUserDetail();
                     preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, false);
+                    onBackPressed();
                 }, throwable -> {
                     Toast.makeText(ProfileActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }));
@@ -215,18 +225,12 @@ public class ProfileActivity extends AppCompatActivity {
                 .doOnSubscribe(disposable -> {
 
                 }).subscribe(registerResponse -> {
-                    try {
-                        JSONObject obj = new JSONObject(registerResponse.toString());
-                        String fullName = obj.getString("userName");
-                        preferenceManager.putString(Constants.KEY_FULL_NAME, fullName);
-                        preferenceManager.putString(Constants.KEY_PHONE, obj.getString("phone"));
-                        preferenceManager.putString(Constants.KEY_ADDRESS, obj.getString("address"));
-                        preferenceManager.putString(Constants.KEY_BIRTHDAY, obj.getString("dateOfBirth"));
-                        preferenceManager.putInt(Constants.KEY_SEX, obj.getInt("gender"));
-                        preferenceManager.putString(Constants.KEY_AVARTAR, obj.getString("avatar"));
-                    } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + registerResponse.toString() + "\"");
-                    }
+                    preferenceManager.putString(KEY_AVARTAR, registerResponse.getData().getAvatar());
+                    preferenceManager.putString(KEY_FULL_NAME, registerResponse.getData().getUsername());
+                    preferenceManager.putString(KEY_PHONE, registerResponse.getData().getPhone());
+                    preferenceManager.putString(KEY_BIRTHDAY, registerResponse.getData().getDateOfBirth());
+                    preferenceManager.putString(KEY_ADDRESS, registerResponse.getData().getAddress());
+                    preferenceManager.putInt(KEY_SEX, registerResponse.getData().getGender());
                 }, throwable -> {
                     Toast.makeText(ProfileActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }));
@@ -341,21 +345,21 @@ public class ProfileActivity extends AppCompatActivity {
         RadioButton rdo_nu = dialog.findViewById(R.id.radio_layout_dialog_changeSex_nu);
 
 
-        if (check == 2) {
+        if (check == 3) {
             rdo_khac.setChecked(true);
-        } else if (check == 0) {
-            rdo_nam.setChecked(true);
         } else if (check == 1) {
+            rdo_nam.setChecked(true);
+        } else if (check == 2) {
             rdo_nu.setChecked(true);
         }
 
         tvOK.setOnClickListener(v -> {
             if (rdo_khac.isChecked()) {
-                preferenceManager.putInt(Constants.KEY_SEX, 2);
+                preferenceManager.putInt(Constants.KEY_SEX, 3);
             } else if (rdo_nam.isChecked()) {
-                preferenceManager.putInt(Constants.KEY_SEX, 0);
-            } else if (rdo_nu.isChecked()) {
                 preferenceManager.putInt(Constants.KEY_SEX, 1);
+            } else if (rdo_nu.isChecked()) {
+                preferenceManager.putInt(Constants.KEY_SEX, 2);
             }
 
             putTVSex(preferenceManager.getInt(Constants.KEY_SEX));

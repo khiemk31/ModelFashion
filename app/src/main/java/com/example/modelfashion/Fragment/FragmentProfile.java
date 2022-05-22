@@ -1,5 +1,7 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -211,13 +213,8 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 //            progressLoadingCommon.showProgressLoading(getActivity());
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
-                sharedPreferences.edit().remove(Constants.KEY_GET_USER).commit();
-                preferenceManager.clear();
                 preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, false);
-                SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-                prefsEditor.putBoolean(Constants.KEY_CHECK_LOGIN, false);
-                prefsEditor.apply();
+                preferenceManager.putString(KEY_AVARTAR, "");
                 img.setImageResource(R.drawable.bg_gradient_blue);
                 loadDetails();
                 Intent intent = new Intent(getContext(), MainActivity.class);
@@ -259,7 +256,6 @@ public class FragmentProfile extends Fragment {
     public void onResume() {
         super.onResume();
         tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
-        Log.e("123", preferenceManager.getString(Constants.KEY_FULL_NAME));
         Glide.with(getActivity())
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(img);
