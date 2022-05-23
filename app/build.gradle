@@ -13,6 +13,8 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def formattedDate = new Date().format('MMM.dd.yyyy')
+        archivesBaseName = "Model_Fashion${versionName}(${versionCode})_${formattedDate}"
     }
 
     buildTypes {

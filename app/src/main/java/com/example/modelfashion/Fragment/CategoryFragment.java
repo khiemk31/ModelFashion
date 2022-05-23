@@ -54,6 +54,7 @@ public class CategoryFragment extends Fragment {
     ImageView filter_category;
     private DialogCategory dialogCategory;
 
+
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private int currentCategory = 0;

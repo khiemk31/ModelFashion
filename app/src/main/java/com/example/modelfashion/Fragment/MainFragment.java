@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
-    private ImageView avatar,img_notifi;
+    private ImageView avatar, img_notifi;
     private String user_id;
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
     private TextView tvCurrentDate, tvGreeting;
@@ -180,7 +180,7 @@ public class MainFragment extends Fragment {
 
         if (cal.get(Calendar.HOUR_OF_DAY) < 12) {
             tvGreeting.setText("Chào buổi sáng");
-        } else if (cal.get(Calendar.HOUR_OF_DAY) < 18){
+        } else if (cal.get(Calendar.HOUR_OF_DAY) < 18) {
             tvGreeting.setText("Chào buổi chiều");
         } else {
             tvGreeting.setText("Chào buổi tối");
@@ -188,12 +188,12 @@ public class MainFragment extends Fragment {
 
         if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
             compositeDisposable.add(repository.getUserDetail(preferenceManager.getString(KEY_ID))
-            .subscribe(userDetailResponse -> {
-                Glide.with(requireContext()).load(userDetailResponse.getData().getAvatar()).placeholder(R.drawable.ic_profile).into(avatar);
-            },throwable -> {
-                Log.d("ahuhu", "loadimage avatar mainfragment: error " + throwable.toString());
-            }));
-        }else
+                    .subscribe(userDetailResponse -> {
+                        Glide.with(requireContext()).load(userDetailResponse.getData().getAvatar()).placeholder(R.drawable.ic_profile).into(avatar);
+                    }, throwable -> {
+                        Log.d("ahuhu", "loadimage avatar mainfragment: error " + throwable.toString());
+                    }));
+        } else
             Glide.with(requireContext()).load("").placeholder(R.drawable.ic_profile).into(avatar);
     }
 
@@ -209,16 +209,19 @@ public class MainFragment extends Fragment {
     }
 
     private final List<MyCategory> categoryList = new ArrayList<>();
+
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getAllCategory(){
+    private void getAllCategory() {
         compositeDisposable.add(repository.getAllCategory()
                 .doOnSubscribe(disposable -> {
                     progressBar.setVisibility(View.VISIBLE);
                 }).doFinally(() -> {
                     progressBar.setVisibility(View.GONE);
                 }).subscribe(dataAllCategory -> {
-                    categoryList.addAll(dataAllCategory.getData());
-                    getAllProductByCategory();
+                    if(dataAllCategory.getData().size()>0) {
+                        categoryList.addAll(dataAllCategory.getData());
+                        getAllProductByCategory();
+                    }
                 }, error -> {
 
                 }));
@@ -258,10 +261,12 @@ public class MainFragment extends Fragment {
                     User user = response.body();
                     try {
                         Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
 
 
                 }
+
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
 
@@ -271,6 +276,7 @@ public class MainFragment extends Fragment {
     }
 
     private final ArrayList<MyProductByCategory> myProductByCategories = new ArrayList<>();
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void getAllProductByCategory() {
         categoryList.forEach(myCategory -> {
@@ -282,8 +288,10 @@ public class MainFragment extends Fragment {
                     }).subscribe(dataProduct -> {
                         myProductByCategories.addAll(dataProduct.getData());
                         List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data = new ArrayList<>();
+
                         data.add(new Pair<>(myCategory, dataProduct.getData()));
                         productListAdapter.addListProduct(data);
+
                     }, throwable -> {
 
                     }));

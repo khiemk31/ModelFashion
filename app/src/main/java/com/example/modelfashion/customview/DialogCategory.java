@@ -81,7 +81,7 @@ public class DialogCategory extends DialogFragment {
         tv_confirm_filterr.setOnClickListener(view1 -> {
             String cateName = categoryAdapter.getCategoryName(currentPosition);
             long price1 = 0;
-            long price2 = 0;
+            long price2 = 1000000;
             if (currentPriceRange == 0) { // 100 - 500
                 price1 = 100000;
                 price2 = 500000;
@@ -91,9 +91,12 @@ public class DialogCategory extends DialogFragment {
             } else if (currentPriceRange == 2) {   // > 1tr
                 price1 = 1000000;
                 price2 = 10000000;
+            }else if (currentPriceRange == 3) {
+                price1 = 0;
+                price2 = 1000000;
             }
 
-            String sortOrder = "";
+            String sortOrder = "ASC";
             if (currentSortOrder == 0) {
                 sortOrder = "ASC";
             } else if (currentSortOrder == 1) {
@@ -104,16 +107,16 @@ public class DialogCategory extends DialogFragment {
                 dialogClickInterface.confirmClickListener(cateName, price1, price2, sortOrder);
                 dismiss();
             } else if (((price1 == 0 && price2 == 0) && !sortOrder.equals(""))
-            || (!(price1 == 0 && price2 == 0) && sortOrder.equals(""))){
-                Toast.makeText(requireContext(), "Hãy chọn khoảng giá và thứ tự", Toast.LENGTH_SHORT).show();
+            || (!(price1 == 0 && price2 == 0))){
+                Toast.makeText(requireContext(), "Hãy chọn khoảng giá", Toast.LENGTH_SHORT).show();
             } else {
                 dismiss();
                 dialogClickInterface.viewProductByCategoryOnly(categoryAdapter.getCategoryId(currentPosition));
             }
         });
 
-        initSortOrderListener(tv_sort_order_desc, tv_sort_order_asc);
-        initPriceRangeListner(tv_price_100_500, tv_price_500_1tr, tv_price_more_than_1tr);
+        initSortOrderListener();
+        initPriceRangeListner(tv_price_100_500, tv_price_500_1tr, tv_price_more_than_1tr,tv_sort_order_desc, tv_sort_order_asc);
         initListener();
 
     }
@@ -129,40 +132,64 @@ public class DialogCategory extends DialogFragment {
         return true;
     }
 
-    private void initSortOrderListener(TextView tv_sort_order_asc, TextView tv_sort_order_desc) {
-        tv_sort_order_desc.setOnClickListener(view -> {
-            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
-            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
-            currentSortOrder = 1;
-        });
-        tv_sort_order_asc.setOnClickListener(view -> {
-            currentSortOrder = 0;
-            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
-            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
-        });
+    private void initSortOrderListener() {
+
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void initPriceRangeListner(TextView tv_price_100_500, TextView tv_price_500_1tr, TextView tv_price_more_than_1tr) {
+    private void initPriceRangeListner(TextView tv_price_100_500, TextView tv_price_500_1tr, TextView tv_price_more_than_1tr,TextView tv_sort_order_asc, TextView tv_sort_order_desc) {
         tv_price_100_500.setOnClickListener(view -> {
             currentPriceRange = 0;
+            currentSortOrder = 0;
             tv_price_100_500.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
             tv_price_500_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
             tv_price_more_than_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+
         });
 
         tv_price_500_1tr.setOnClickListener(view -> {
             currentPriceRange = 1;
+            currentSortOrder = 0;
             tv_price_100_500.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
             tv_price_500_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
             tv_price_more_than_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
         });
 
         tv_price_more_than_1tr.setOnClickListener(view -> {
             currentPriceRange = 2;
+            currentSortOrder = 0;
             tv_price_100_500.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
             tv_price_500_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
             tv_price_more_than_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
+            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+        });
+
+        tv_sort_order_desc.setOnClickListener(view -> {
+            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
+            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_100_500.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_500_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_more_than_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+
+            currentSortOrder = 0;
+            currentPriceRange = 3;
+
+
+        });
+        tv_sort_order_asc.setOnClickListener(view -> {
+            currentSortOrder = 1;
+            currentPriceRange = 3;
+            tv_sort_order_asc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price_select));
+            tv_sort_order_desc.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_100_500.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_500_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+            tv_price_more_than_1tr.setBackground(requireContext().getResources().getDrawable(R.drawable.bg_item_price));
+
         });
     }
 
