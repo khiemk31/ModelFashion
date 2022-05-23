@@ -58,7 +58,7 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("check", String.valueOf(requestCode));
+
 
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             if (data != null) {
@@ -69,9 +69,6 @@ public class CartActivity extends AppCompatActivity {
                         // TODO:
                         //check_out();
                        Log.e("check", "Thanh cong");
-
-                    } else {
-                        Log.e("check", "that bai");
 
                     }
                 } else if (data.getIntExtra("status", -1) == 1) {

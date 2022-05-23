@@ -1,9 +1,12 @@
 package com.example.modelfashion.History.ApiHistory;
 
+import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.Bill;
 
 import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.bill.CancelBill;
+import com.example.modelfashion.Model.response.bill.UpdateAdress;
+import com.example.modelfashion.Model.response.bill.UserID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,6 +40,12 @@ public interface ApiHistory {
 
     @PUT("bill/cancelOrder")
     Call<CancelBill> cancelBill(@Body CancelBill cancelBill);
+
+    @GET("user/getAddress")
+    Call<Address> getAddress(@Body UserID userID);
+
+    @PUT("user/updateAddress")
+    Call<UpdateAdress> updateAddress(@Body UpdateAdress updateAdress);
 
 
 }

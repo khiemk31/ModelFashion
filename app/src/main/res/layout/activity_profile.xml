@@ -80,9 +80,9 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="0dp"
             android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
+
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="invisible">
@@ -90,8 +90,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_email"
-                android:text="Phone"
+                android:drawableLeft="@drawable/ic_phone_profile"
+                android:text=" Số điện thoại"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_Phone"
@@ -105,10 +105,19 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="30dp"
                 android:text="0968796428"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/black"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,9 +127,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="0dp"
             android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
+
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="invisible">
@@ -128,7 +137,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_profile"
+                android:drawableLeft="@drawable/ic_name_profile"
                 android:text=" Họ và tên"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
@@ -145,6 +154,7 @@
                 android:text="ở đây là họ tên "
                 android:textColor="@color/black"
                 android:textSize="15dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -154,10 +164,18 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:src="@drawable/ic_arrow_right"
-                android:tint="@color/text_hint"
+                android:tint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -166,9 +184,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="0dp"
             android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
+
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="invisible">
@@ -176,8 +194,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_sex"
-                android:text=" giới tính"
+                android:drawableLeft="@drawable/ic_sex_profile"
+                android:text=" Giới tính"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_sex"
@@ -193,6 +211,7 @@
                 android:text="chưa xác định"
                 android:textColor="@color/black"
                 android:textSize="15dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -202,10 +221,17 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:src="@drawable/ic_arrow_right"
-                android:tint="@color/text_hint"
+                android:tint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -214,9 +240,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="0dp"
             android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="invisible">
@@ -224,7 +249,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_birthday"
+                android:drawableLeft="@drawable/ic_birthday_profile"
                 android:text=" Sinh nhật"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
@@ -241,6 +266,7 @@
                 android:text="15 - 2 - 2022"
                 android:textColor="@color/black"
                 android:textSize="15dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -250,10 +276,17 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:src="@drawable/ic_arrow_right"
-                android:tint="@color/text_hint"
+                android:tint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -264,7 +297,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="4"
-            android:background="@drawable/bg_information_line"
+
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="invisible">
@@ -272,7 +305,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_home_2"
+                android:drawableLeft="@drawable/ic_address_profile"
                 android:text=" Địa chỉ"
                 android:textColor="@color/text_hint"
                 android:textSize="15dp"
@@ -298,7 +331,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:src="@drawable/ic_arrow_right"
-                android:tint="@color/text_hint"
+                android:tint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

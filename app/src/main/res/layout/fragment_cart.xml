@@ -63,6 +63,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Địa chỉ giao hàng"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -79,16 +81,22 @@
                     android:id="@+id/btn_change_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#605555"
-                    android:paddingHorizontal="10dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_btn_edit_address"
+                    android:paddingHorizontal="15dp"
                     android:paddingVertical="5dp"
                     android:text="Thay Đổi"
                     android:textColor="#fff"
+                    android:textSize="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:layout_marginTop="20dp"
                     android:id="@+id/header_2"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phương thức thanh toán"
@@ -106,16 +114,16 @@
                     <RadioButton
                         android:id="@+id/rdo_cash"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="#7583CA"
+                        android:layout_height="30dp"
+                        android:buttonTint="#000000"
                         android:checked="true"
                         android:text="Tiền mặt" />
 
                     <RadioButton
                         android:id="@+id/rdo_momo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="#7583CA"
+                        android:layout_height="30dp"
+                        android:buttonTint="#000000"
                         android:text="Ví Momo" />
 
                 </RadioGroup>

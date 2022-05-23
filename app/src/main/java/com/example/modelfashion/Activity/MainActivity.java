@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ import com.example.modelfashion.Utility.KeyboardUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
+
+import vn.momo.momo_partner.AppMoMoLib;
 
 public class MainActivity extends AppCompatActivity {
     String user_id;
@@ -158,5 +161,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    // tra Result cua momo
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+            if (data != null) {
+                if (data.getIntExtra("status", -1) == 0) {
+
+
+                    if (data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
+                        // TODO:
+                        //check_out();
+                        Log.e("check", "Thanh cong");
+
+                    }
+                } else if (data.getIntExtra("status", -1) == 1) {
+                    Log.e("check", "That bai");
+                    String message = data.getStringExtra("message") != null ? data.getStringExtra("message") : "Thất bại";
+
+                } else if (data.getIntExtra("status", -1) == 2) {
+
+                } else {
+
+                }
+            } else {
+
+            }
+        } else {
+        }
     }
 }

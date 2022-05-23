@@ -16,6 +16,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
+        android:maxLines="1"
         android:paddingVertical="4dp"
         tools:text="Ba lô" />
 

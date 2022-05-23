@@ -45,7 +45,7 @@
                     android:scaleType="centerCrop"
                     android:background="@drawable/bg_information_line"
                     android:src="@drawable/bg_gradient_blue"
-                    app:riv_corner_radius="25dp" />
+                    app:riv_corner_radius="50dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -65,21 +65,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"
+                            android:fontFamily="@font/nunito_bold"
 
-                            android:textColor="@color/white"
-                            android:textSize="27dp"
+                            android:textColor="@color/black"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tv_frag_Profile_user"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:gravity="left"
-
-                            android:textColor="@color/grey_active"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/nunito_bold"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                             />
                     </LinearLayout>
 
                     <LinearLayout

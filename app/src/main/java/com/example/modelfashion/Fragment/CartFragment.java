@@ -4,16 +4,23 @@ import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +33,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.response.bill.Address;
+import com.example.modelfashion.Model.response.bill.UpdateAdress;
+import com.example.modelfashion.Model.response.bill.UserID;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
@@ -48,6 +59,9 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.momo.momo_partner.AppMoMoLib;
 
 public class CartFragment extends Fragment {
@@ -59,7 +73,7 @@ public class CartFragment extends Fragment {
     private ArrayList<String> arr_size_id = new ArrayList<>();
     private ArrayList<String> arr_product_name = new ArrayList<>();
     private String user_id, total_money;
-    private TextView tvTotal;
+    private TextView tvTotal,tv_address;
     public static Button btn_payment;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar progressBar;
@@ -68,6 +82,10 @@ public class CartFragment extends Fragment {
     private CompositeDisposable disposable = new CompositeDisposable();
     private PreferenceManager sharedPref;
     private Repository repository;
+    private RadioButton rdo_cash,rdo_momo;
+    private int payment_methods = 0;
+    private String addRess = "";
+    private TextView btn_change_address;
 
 
     CartAdapter adapter = new CartAdapter();
@@ -104,8 +122,25 @@ public class CartFragment extends Fragment {
         btn_payment = initView.findViewById(R.id.btn_payment);
         refreshLayout = initView.findViewById(R.id.refresh_layout);
         progressBar = initView.findViewById(R.id.progress_bar);
+        rdo_cash = initView.findViewById(R.id.rdo_cash);
+        rdo_momo = initView.findViewById(R.id.rdo_momo);
+        tv_address = initView.findViewById(R.id.tv_address);
+        btn_change_address = initView.findViewById(R.id.btn_change_address);
         sharedPref = new PreferenceManager(requireContext());
         repository = new Repository(requireContext());
+
+        rdo_cash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                payment_methods = 0;
+            }
+        });
+        rdo_momo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                payment_methods =1;
+            }
+        });
 
         setAdapter();
         getProductInCart();
@@ -120,6 +155,8 @@ public class CartFragment extends Fragment {
             } else {
                 if (adapter.getItemCount() == 0) {
                     Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
+                }else if(addRess ==""){
+                    Toast.makeText(requireContext(), "Chưa có địa chỉ", Toast.LENGTH_SHORT).show();
                 }else {
 //                    requestPayment();
                     createBill();
@@ -132,7 +169,73 @@ public class CartFragment extends Fragment {
             getProductInCart();
             tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
         });
+        btn_change_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogAdress();
+            }
+        });
+       // getAddress();
         return initView;
+    }
+    private void showDialogAdress(){
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_update_address);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        EditText edt_address = dialog.findViewById(R.id.edt_address);
+        TextView tv_no_update = dialog.findViewById(R.id.tv_no_update);
+        TextView tv_yes_update = dialog.findViewById(R.id.tv_yes_update);
+        edt_address.setText(addRess);
+        tv_no_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tv_yes_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(edt_address.getText().toString().isEmpty()){
+                    Toast.makeText(requireContext(),"Bạn chưa nhập địa chỉ",Toast.LENGTH_SHORT).show();
+                }else {
+                    addRess = edt_address.getText().toString();
+                    tv_address.setText(edt_address.getText());
+                    //updateAddress();
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+    private void updateAddress(){
+        UpdateAdress updateAdress = new UpdateAdress("1",addRess);
+        ApiHistory.API_HISTORY.updateAddress(updateAdress).enqueue(new Callback<UpdateAdress>() {
+            @Override
+            public void onResponse(Call<UpdateAdress> call, Response<UpdateAdress> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<UpdateAdress> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getAddress(){
+        UserID userID = new UserID("1");
+        ApiHistory.API_HISTORY.getAddress(userID).enqueue(new Callback<Address>() {
+            @Override
+            public void onResponse(Call<Address> call, Response<Address> response) {
+                tv_address.setText(response.body().getAddress());
+            }
+
+            @Override
+            public void onFailure(Call<Address> call, Throwable t) {
+
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -144,43 +247,65 @@ public class CartFragment extends Fragment {
 
         alertDialog.setMessage("Xác nhận đặt hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
-            CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
-            CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
-                    temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
-                    temp.getProductImage(), "221 Doãn Kế Thiện , Mai Dịch Cầu GIấy");  // thay bằng address từ api get address nhé
-
-            disposable.add(repository.createBill(real)
-                    .doOnSubscribe(disposable1 -> {
-                        progressBar.setVisibility(View.VISIBLE);
-                    })
-                    .subscribe(okResponse -> {
-                        Log.d("ahuhu", "createBill: success: ");
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                        disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {},throwable -> {}));
-                        adapter.clearData();
-                    },throwable -> {
-                        progressBar.setVisibility(View.GONE);
-                        Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
-                    }));
+            if(payment_methods == 0) {
+                addBill();
+            }else {
+                requestPayment();
+            }
         });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {});
         alertDialog.show();
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void addBill(){
+        CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
+        CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
+                temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
+                temp.getProductImage(), addRess);  // thay bằng address từ api get address nhé
+
+        disposable.add(repository.createBill(real)
+                .doOnSubscribe(disposable1 -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                })
+                .subscribe(okResponse -> {
+                    Log.d("ahuhu", "createBill: success: ");
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                    disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {
+                    }, throwable -> {
+                    }));
+                    adapter.clearData();
+                }, throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                    Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                }));
+    }
 
     private void showDialogRequireLogin() {
-        AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
-                .create();
-        alertDialog.setTitle("Thông báo");
-        alertDialog.setCancelable(false);
-
-        alertDialog.setMessage("Bạn cần đăng nhập trước khi đặt hàng");
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Đăng nhập", (dialogInterface, i) -> {
-            startActivity(new Intent(getContext(), SignInActivity.class));
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.dialog_quest_login);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView tv_yes_login, tv_no_login;
+        tv_yes_login = dialog.findViewById(R.id.tv_yes_login);
+        tv_no_login = dialog.findViewById(R.id.tv_no_login);
+        tv_no_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
         });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {});
-        alertDialog.show();
+        tv_yes_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), SignInActivity.class));
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -275,6 +400,7 @@ public class CartFragment extends Fragment {
     // goi request MoMo pay
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void requestPayment() {
+        description = description+1;
         amount = Integer.parseInt(String.valueOf(adapter.getTotal()));
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);

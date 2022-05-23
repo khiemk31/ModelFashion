@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,8 @@ public class ClothesAdapter extends RecyclerView.Adapter<ClothesAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MyProductByCategory product = listProduct.get(position);
         holder.tvName.setText(product.getProductName());
-        holder.tvPrice.setText(String.valueOf(product.getPrice()));
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.tvPrice.setText(""+decimalFormat.format(Double.parseDouble(String.valueOf(product.getPrice())))+"đ");
         holder.itemView.setOnClickListener(view -> {
             mClickListener.onItemClick(position, product);
         });
