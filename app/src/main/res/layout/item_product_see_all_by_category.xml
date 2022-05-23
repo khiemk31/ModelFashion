@@ -74,6 +74,7 @@
         android:background="#103158"
         android:padding="4dp"
         android:src="@drawable/ic_add"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

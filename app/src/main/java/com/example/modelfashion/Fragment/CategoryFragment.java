@@ -180,7 +180,7 @@ public class CategoryFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     clothesAdapter.setListProduct(dataProduct.getData());
                     if (dataProduct.getData().size() == 0) {
-                        
+
                     }
                 }, throwable -> {
                     progressBar.setVisibility(View.GONE);
