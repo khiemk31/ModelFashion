@@ -19,6 +19,27 @@ public class CreateBillRequest {
     private String price;
     @SerializedName("product_image")
     private String productImage;
+    @SerializedName("address")
+    private String address;
+
+    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, String productImage, String address) {
+        this.userId = userId;
+        this.productList = productList;
+        this.listQuantity = listQuantity;
+        this.listSize = listSize;
+        this.totalPrice = totalPrice;
+        this.price = price;
+        this.productImage = productImage;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public CreateBillRequest() {
     }

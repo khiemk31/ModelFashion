@@ -144,7 +144,12 @@ public class CartFragment extends Fragment {
 
         alertDialog.setMessage("Xác nhận đặt hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
-            disposable.add(repository.createBill(adapter.billInformation(sharedPref.getString(KEY_ID)))
+            CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
+            CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
+                    temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
+                    temp.getProductImage(), "221 Doãn Kế Thiện , Mai Dịch Cầu GIấy");  // thay bằng address từ api get address nhé
+
+            disposable.add(repository.createBill(real)
                     .doOnSubscribe(disposable1 -> {
                         progressBar.setVisibility(View.VISIBLE);
                     })
