@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
                         // TODO:
-                        //check_out();
+                        senDataToActivity();
                         Log.e("check", "Thanh cong");
 
                     }
@@ -194,5 +195,11 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
         }
+    }
+
+    private void senDataToActivity(){
+        Intent intent = new Intent("send_data_to_fragment");
+        intent.putExtra("action", "addbill");
+        LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intent);
     }
 }

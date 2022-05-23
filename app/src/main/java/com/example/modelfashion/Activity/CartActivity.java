@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,6 +69,7 @@ public class CartActivity extends AppCompatActivity {
                     if (data.getStringExtra("data") != null && !data.getStringExtra("data").equals("")) {
                         // TODO:
                         //check_out();
+                        senDataToActivity();
                        Log.e("check", "Thanh cong");
 
                     }
@@ -85,6 +87,12 @@ public class CartActivity extends AppCompatActivity {
             }
         } else {
         }
+    }
+
+    private void senDataToActivity(){
+        Intent intent = new Intent("send_data_to_fragment");
+        intent.putExtra("action", "addbill");
+        LocalBroadcastManager.getInstance(CartActivity.this).sendBroadcast(intent);
     }
 
 
