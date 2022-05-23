@@ -5,7 +5,10 @@ import static com.example.modelfashion.Utility.Constants.KEY_ID;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -97,7 +101,18 @@ public class CartFragment extends Fragment {
     private String merchantName = "FShop";
     private String merchantCode = "MOMOLWUA20220517";
     private String merchantNameLabel = "FPT plytechnich";
-    private String description = "Ví MoMo";
+    private String description = "Thanh toán đơn hàng Model Fashion";
+
+    private BroadcastReceiver broadCastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String check = intent.getStringExtra("action");
+            if (check.matches("addbill")){
+                addBill();
+            }
+        }
+    };
 
 
 
@@ -117,6 +132,8 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initView = inflater.inflate(R.layout.fragment_cart, container, false);
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadCastReceiver,new IntentFilter("send_data_to_fragment"));
+
         recyclerView = initView.findViewById(R.id.list_product_cart);
         tvTotal = initView.findViewById(R.id.total_money);
         btn_payment = initView.findViewById(R.id.btn_payment);
@@ -175,9 +192,18 @@ public class CartFragment extends Fragment {
                 showDialogAdress();
             }
         });
-       // getAddress();
+        if (sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
+             getAddress();
+        }
         return initView;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver((BroadcastReceiver) broadCastReceiver);
+    }
+
     private void showDialogAdress(){
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_update_address);
@@ -224,10 +250,12 @@ public class CartFragment extends Fragment {
     }
 
     private void getAddress(){
-        UserID userID = new UserID("1");
-        ApiHistory.API_HISTORY.getAddress(userID).enqueue(new Callback<Address>() {
+        String id = sharedPref.getString(KEY_ID);
+
+        ApiHistory.API_HISTORY.getAddress(id).enqueue(new Callback<Address>() {
             @Override
             public void onResponse(Call<Address> call, Response<Address> response) {
+                addRess = response.body().getAddress();
                 tv_address.setText(response.body().getAddress());
             }
 
@@ -400,7 +428,6 @@ public class CartFragment extends Fragment {
     // goi request MoMo pay
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void requestPayment() {
-        description = description+1;
         amount = Integer.parseInt(String.valueOf(adapter.getTotal()));
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);

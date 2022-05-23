@@ -41,8 +41,8 @@ public interface ApiHistory {
     @PUT("bill/cancelOrder")
     Call<CancelBill> cancelBill(@Body CancelBill cancelBill);
 
-    @GET("user/getAddress")
-    Call<Address> getAddress(@Body UserID userID);
+    @GET("user/getAddress/{id}")
+    Call<Address> getAddress(@Path("id") String id);
 
     @PUT("user/updateAddress")
     Call<UpdateAdress> updateAddress(@Body UpdateAdress updateAdress);
