@@ -264,17 +264,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (check == 1) {
             tvTitle.setText("THAY ĐỔI HỌ VÀ TÊN");
-            edt.setText(tvActProfileName.getText().toString());
+            edt.setText(tvActProfileName.getText().toString().trim());
             tvOK.setOnClickListener(v -> {
-                tvActProfileName.setText(edt.getText());
+                if (edt.getText().toString().trim().isEmpty()) {
+                    tvActProfileName.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+                } else {
+                    tvActProfileName.setText(edt.getText().toString().trim());
+                }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);
             });
         } else if (check == 2) {
             edt.setTextSize(15);
             tvTitle.setText("THAY ĐỔI ĐỊA CHỈ");
+            edt.setText(tvActProfileName.getText().toString().trim());
             tvOK.setOnClickListener(v -> {
-                tvActProfileAddress.setText(edt.getText());
+                if (edt.getText().toString().trim().isEmpty()) {
+                    tvActProfileAddress.setText(preferenceManager.getString(Constants.KEY_ADDRESS));
+                } else {
+                    tvActProfileAddress.setText(edt.getText().toString().trim());
+                }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);
             });

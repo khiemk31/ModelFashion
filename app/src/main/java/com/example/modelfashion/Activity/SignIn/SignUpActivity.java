@@ -108,13 +108,13 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void insertUser() {
-            Intent intent = new Intent(this, OTPPhoneActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("phone", edtPhoneSu.getText().toString().trim());
-            bundle.putString("name", edtNameSu.getText().toString().trim());
-            bundle.putString("password", edtPassword.getText().toString().trim());
-            intent.putExtras(bundle);
-            startActivity(intent);
+        Intent intent = new Intent(this, OTPPhoneActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("phone", edtPhoneSu.getText().toString().trim());
+        bundle.putString("name", edtNameSu.getText().toString().trim());
+        bundle.putString("password", edtPassword.getText().toString().trim());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void checkUser() {
@@ -122,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
         disposable.add(repository.checkUser(new CheckUserRequest(edtPhoneSu.getText().toString().trim()))
                 .doOnSubscribe(disposable -> {
                     progressLoadingCommon.showProgressLoading(this);
-                }).subscribe( checkUserResponse -> {
+                }).subscribe(checkUserResponse -> {
                     insertUser();
                 }, throwable -> {
                     if (throwable.getMessage().equalsIgnoreCase("HTTP 409 Conflict")) {
@@ -137,32 +137,31 @@ public class SignUpActivity extends AppCompatActivity {
         if (edtPhoneSu.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty() || edtConfirmPassword.getText().toString().isEmpty() || edtNameSu.getText().toString().isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Không để trống", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        } else {
+            if (special.matcher(edtNameSu.getText().toString().trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
+                Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
+            if (edtPassword.getText().toString().trim().length() < 6) {
+                Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-        if (special.matcher(edtNameSu.getText().toString().trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
-            Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+            if (edtPhoneSu.getText().toString().trim().length() > 10 || edtPhoneSu.getText().toString().trim().length() < 10) {
+                Toast.makeText(SignUpActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-        if (edtPassword.getText().toString().trim().length() < 6) {
-            Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+            if (!edtConfirmPassword.getText().toString().trim().equalsIgnoreCase(edtPassword.getText().toString().trim())) {
+                Toast.makeText(SignUpActivity.this, "Mật khẩu không giống nhau", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-        if (edtPhoneSu.getText().toString().trim().length() > 10) {
-            Toast.makeText(SignUpActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!edtConfirmPassword.getText().toString().trim().equalsIgnoreCase(edtPassword.getText().toString().trim())) {
-            Toast.makeText(SignUpActivity.this, "Mật khẩu không giống nhau", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!cbRules.isChecked()) {
-            Toast.makeText(SignUpActivity.this, "Vui lòng đọc và đồng ý với chính sách bảo mật", Toast.LENGTH_SHORT).show();
-            return false;
+            if (!cbRules.isChecked()) {
+                Toast.makeText(SignUpActivity.this, "Vui lòng đọc và đồng ý với chính sách bảo mật", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return true;
     }

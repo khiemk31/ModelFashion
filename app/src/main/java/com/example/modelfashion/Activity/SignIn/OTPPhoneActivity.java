@@ -67,6 +67,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getOTP();
+                hideResent();
             }
         });
 
@@ -150,6 +151,19 @@ public class OTPPhoneActivity extends AppCompatActivity {
             }
         }.start();
     }
+
+    private void hideResent() {
+        CountDownTimer Timer = new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                tvResentOTP.setVisibility(View.GONE);
+            }
+
+            public void onFinish() {
+                tvResentOTP.setVisibility(View.VISIBLE);
+            }
+        }.start();
+    }
+
 
     @Override
     protected void onResume() {
