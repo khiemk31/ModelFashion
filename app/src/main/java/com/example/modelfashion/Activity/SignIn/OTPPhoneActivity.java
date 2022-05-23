@@ -101,6 +101,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     otpToken = getOTPResponse.getOtpToken();
                     countDownTime();
                 }, throwable -> {
+                    Log.e("123", throwable.getMessage());
                     Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 }));
     }
@@ -113,7 +114,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                 }).subscribe(verifyOTP -> {
                     register();
                 }, throwable -> {
-                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPPhoneActivity.this, "Sai mã xác nhận", Toast.LENGTH_SHORT).show();
                 }));
     }
 
