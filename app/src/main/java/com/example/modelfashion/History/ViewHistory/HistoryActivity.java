@@ -176,10 +176,12 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
                 bills.clear();
-                for (int i = 0;i<response.body().size();i++){
-                    bills.add(response.body().get(i));
+                if(response.body() != null) {
+                    for (int i = 0; i < response.body().size(); i++) {
+                        bills.add(response.body().get(i));
+                    }
+                    setListBill(loadData(numberStatus), bills);
                 }
-                setListBill(loadData(numberStatus),bills);
 
 
 

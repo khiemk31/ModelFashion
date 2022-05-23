@@ -251,19 +251,24 @@ public class CartFragment extends Fragment {
 
     private void getAddress(){
         String id = sharedPref.getString(KEY_ID);
+        try {
+            ApiHistory.API_HISTORY.getAddress(id).enqueue(new Callback<Address>() {
+                @Override
+                public void onResponse(Call<Address> call, Response<Address> response) {
+                    if (response.body() != null) {
+                        addRess = response.body().getAddress();
+                        tv_address.setText(response.body().getAddress());
+                    }
+                }
 
-        ApiHistory.API_HISTORY.getAddress(id).enqueue(new Callback<Address>() {
-            @Override
-            public void onResponse(Call<Address> call, Response<Address> response) {
-                addRess = response.body().getAddress();
-                tv_address.setText(response.body().getAddress());
-            }
+                @Override
+                public void onFailure(Call<Address> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<Address> call, Throwable t) {
+                }
+            });
+        }catch (Exception e){}
 
-            }
-        });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
