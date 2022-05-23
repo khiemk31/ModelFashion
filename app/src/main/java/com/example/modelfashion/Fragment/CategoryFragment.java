@@ -123,7 +123,7 @@ public class CategoryFragment extends Fragment {
                 .subscribe(myProductByPriceResponses -> {
                     progressBar.setVisibility(View.GONE);
                     clothesAdapter.setListProduct(myProductByPriceResponses);
-                    Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+
                 }, throwable -> {
                     progressBar.setVisibility(View.GONE);
                 }));
@@ -145,7 +145,7 @@ public class CategoryFragment extends Fragment {
                 .subscribe(myProductByCategories -> {
                     clothesAdapter.setListProduct(myProductByCategories.getData());
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+
                 }, throwable -> {
                     progressBar.setVisibility(View.GONE);
                 }));
@@ -180,7 +180,7 @@ public class CategoryFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     clothesAdapter.setListProduct(dataProduct.getData());
                     if (dataProduct.getData().size() == 0) {
-                        Toast.makeText(requireContext(), "Hiện chưa có sản phâm trong danh mục", Toast.LENGTH_SHORT).show();
+                        
                     }
                 }, throwable -> {
                     progressBar.setVisibility(View.GONE);
