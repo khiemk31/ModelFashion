@@ -181,20 +181,25 @@ public class ProfileActivity extends AppCompatActivity {
             changeProfile(2);
         });
         btnActProfileCheck.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("\nBẠN CÓ CHẮC VỚI CÁC THAY ĐỔI?\n\n")
-                    .setPositiveButton("Xác Nhận", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            updateUser();
-                        }
-                    })
-                    .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            builder.create().dismiss();
-                        }
-                    });
-            // tạo dialog và hiển thị
-            builder.create().show();
+
+            Dialog dialog = new Dialog(ProfileActivity.this);
+            dialog.setContentView(R.layout.dialog_change_profile);
+            dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.findViewById(R.id.tv_yes_change).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateUser();
+                }
+            });
+            dialog.findViewById(R.id.tv_no_change).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         });
     }
 

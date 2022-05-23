@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
-            android:text="CANCEL"
+            android:text="Hủy"
             android:textColor="@color/grey_active"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
-            android:text="OK"
+            android:text="Đồng ý"
             android:textColor="@color/green_active"
             android:textSize="20dp"
             android:textStyle="bold" />

@@ -43,7 +43,7 @@
                     android:layout_height="100dp"
                     android:layout_marginLeft="20dp"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/bg_information_line"
+                    android:background="@drawable/border_around_profile"
                     android:src="@drawable/bg_gradient_blue"
                     app:riv_corner_radius="50dp" />
 
