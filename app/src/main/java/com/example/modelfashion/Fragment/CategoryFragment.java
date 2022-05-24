@@ -60,7 +60,7 @@ public class CategoryFragment extends Fragment {
     private int currentCategory = 0;
     Repository repository;
 
-    private final ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
+    private ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -76,6 +76,7 @@ public class CategoryFragment extends Fragment {
         initListener();
         return view;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initListener() {
@@ -96,7 +97,6 @@ public class CategoryFragment extends Fragment {
                 clothesAdapter.setListProduct(listSearch);
             }
         });
-
 
         clothesAdapter.setClickListener((position, item) -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
@@ -124,6 +124,7 @@ public class CategoryFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     clothesAdapter.setListProduct(myProductByPriceResponses);
 
+
                 }, throwable -> {
                     progressBar.setVisibility(View.GONE);
                 }));
@@ -144,6 +145,8 @@ public class CategoryFragment extends Fragment {
                 })
                 .subscribe(myProductByCategories -> {
                     clothesAdapter.setListProduct(myProductByCategories.getData());
+                    productArrayList.clear();
+                    productArrayList = myProductByCategories.getData();
                     progressBar.setVisibility(View.GONE);
 
                 }, throwable -> {
