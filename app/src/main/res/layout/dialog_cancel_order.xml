@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bạn có thật sự muốn hủy đơn hàng ?"
+            android:text="Hủy đơn"
             android:textSize="20dp"
             android:gravity="center"
             android:textColor="#ffffff"
@@ -35,10 +35,9 @@
         android:textColor="#FF0000"/>
 
     <TextView
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thông tin liên hệ :"
+        android:text="Lý do hủy đơn:"
         android:paddingHorizontal="20dp"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -54,19 +53,20 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/img_coppy_hotline"
+            android:layout_toLeftOf="@+id/img_1"
             android:paddingHorizontal="20dp"
-            android:text="Hotline : 0369355563"
+            android:text="Đặt lại đơn hàng khác"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_coppy_hotline"
+            android:id="@+id/img_1"
             android:layout_width="20dp"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/copy_history" />
+            android:src="@drawable/ic_dot_select_cancel_bill" />
     </RelativeLayout>
 
 
@@ -82,20 +82,20 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/img_coppy_zalo"
+            android:layout_toLeftOf="@+id/img_2"
             android:paddingHorizontal="20dp"
-            android:text="Zalo : 0369355563"
+            android:text="Có việc bận không thể nhận hàng"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_coppy_zalo"
+            android:id="@+id/img_2"
             android:layout_width="20dp"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/copy_history" />
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -109,25 +109,25 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/img_email"
+            android:layout_toLeftOf="@+id/img_3"
             android:paddingHorizontal="20dp"
-            android:text="Email : mailhelp@gmail.com"
+            android:text="Thời gian xác nhận đơn quá chậm"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_email"
+            android:id="@+id/img_3"
             android:layout_width="20dp"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/send_history" />
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <TextView
@@ -135,21 +135,32 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/img_page"
+            android:layout_toLeftOf="@+id/img_4"
             android:paddingHorizontal="20dp"
-            android:text="@string/pagename"
+            android:text="Khác"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_page"
+            android:id="@+id/img_4"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/send_history" />
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
     </RelativeLayout>
+    <EditText
+        android:id="@+id/edt_reason_cacel_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="@color/black"
+        android:textSize="16dp"
+        android:hint="Lý do hủy đơn"
+        android:visibility="gone"
+        />
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/edt_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:backgroundTint="#8E97FD"
         android:enabled="false"

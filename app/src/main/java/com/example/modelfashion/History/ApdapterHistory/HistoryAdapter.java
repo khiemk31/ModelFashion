@@ -143,8 +143,8 @@ public class HistoryAdapter extends BaseAdapter {
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (arr_bill.get(i).getStatus().matches("Đã giao")) {
-                    loadDialogFeedback(context, "DH " + arr_bill.get(i).getBill_id());
+                if (arr_bill.get(i).getStatus().matches("Đã Giao")) {
+                    loadDialogFeedback(context, arr_bill.get(i).getBill_id());
                 } else {
                     // showDialogCancelOrder();
                     CancelBill cancelBill = new CancelBill(arr_bill.get(i).getBill_id());
@@ -218,6 +218,7 @@ public class HistoryAdapter extends BaseAdapter {
         });
         dialog.show();
     }
+    int reason_check = 1;
 
     private void showDialogCancelOrder(CancelBill cancelBill) {
         Dialog dialog = new Dialog(context);
@@ -228,17 +229,57 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_cancel = dialog.findViewById(R.id.tv_cancel);
         TextView tv_hotline, tv_email, tv_zalo;
         TextView tv_yes = dialog.findViewById(R.id.tv_Yes);
-        ImageView img_coppy_hotline, img_email, img_coppy_zalo, img_page;
+        ImageView img_1,img_2,img_3,img_4;
+        EditText edt_reason_cacel_bill;
         tv_hotline = dialog.findViewById(R.id.tv_hotline);
         tv_email = dialog.findViewById(R.id.tv_email);
         tv_zalo = dialog.findViewById(R.id.tv_zalo);
-        img_coppy_hotline = dialog.findViewById(R.id.img_coppy_hotline);
-        img_email = dialog.findViewById(R.id.img_email);
-        img_coppy_zalo = dialog.findViewById(R.id.img_coppy_zalo);
-        img_page = dialog.findViewById(R.id.img_page);
-        tv_hotline.setText("Hotline   : " + context.getString(R.string.hotline));
-        tv_email.setText("Email      : " + context.getString(R.string.email));
-        tv_zalo.setText("Zalo        : " + context.getString(R.string.zalo));
+        img_1 = dialog.findViewById(R.id.img_1);
+        img_2 = dialog.findViewById(R.id.img_2);
+        img_3 = dialog.findViewById(R.id.img_3);
+        img_4 = dialog.findViewById(R.id.img_4);
+        edt_reason_cacel_bill = dialog.findViewById(R.id.edt_reason_cacel_bill);
+
+        loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+
+        img_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reason_check = 1;
+                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                edt_reason_cacel_bill.setText("");
+                edt_reason_cacel_bill.setVisibility(View.GONE);
+            }
+        });
+        img_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reason_check = 2;
+                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                edt_reason_cacel_bill.setText("");
+                edt_reason_cacel_bill.setVisibility(View.GONE);
+            }
+        });
+        img_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reason_check = 3;
+                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                edt_reason_cacel_bill.setText("");
+                edt_reason_cacel_bill.setVisibility(View.GONE);
+            }
+        });
+        img_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reason_check = 4;
+                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                edt_reason_cacel_bill.setText("");
+                edt_reason_cacel_bill.setVisibility(View.VISIBLE);
+            }
+        });
+
+
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -252,43 +293,33 @@ public class HistoryAdapter extends BaseAdapter {
                 dialog.dismiss();
             }
         });
-        img_coppy_hotline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setClipboard(context, context.getString(R.string.hotline));
-                Toast.makeText(context, "copy hotline successfully", Toast.LENGTH_SHORT).show();
-            }
-        });
-        img_coppy_zalo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setClipboard(context, context.getString(R.string.zalo));
-                Toast.makeText(context, "copy zalo successfully", Toast.LENGTH_SHORT).show();
-            }
-        });
-        img_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String uriText = "mailto:" + context.getString(R.string.email) +
-                        "?subject=" + "" +
-                        "&body=" + "";
-                Uri uri = Uri.parse(uriText);
-                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                sendIntent.setData(uri);
-                context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
-                dialog.dismiss();
-            }
-        });
-        img_page.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String link = context.getString(R.string.linkpage);
-                Intent intentPrivacy = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                context.startActivity(intentPrivacy);
-            }
-        });
+
 
         dialog.show();
+
+    }
+    private void loadThemeDot(int index,ImageView img1,ImageView img2,ImageView img3,ImageView img4){
+        if(index == 1){
+            Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img1);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
+        }else if(index == 2){
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
+            Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img2);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
+        }else if(index == 3){
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
+            Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img3);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
+        }else if(index == 4){
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
+            Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
+            Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img4);
+        }
 
     }
 
