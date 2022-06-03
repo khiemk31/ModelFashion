@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:layout_marginHorizontal="20dp"
+    android:background="@drawable/bt_bg_feedback"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bt_bg_title"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trả hàng"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yêu cầu của quý khách sẽ được gửi tới bộ phận CSKH."
+        android:textSize="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:fontFamily="@font/nunito_bold"
+        android:layout_marginVertical="10dp"
+        android:textColor="#FF0000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lý do trả hàng:"
+        android:paddingHorizontal="20dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#000000"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_hotline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/img_1"
+            android:paddingHorizontal="20dp"
+            android:text="Gửi sai hàng"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/img_1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_dot_select_cancel_bill" />
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_zalo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/img_2"
+            android:paddingHorizontal="20dp"
+            android:text="Chưa nhận được hàng"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/img_2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/img_3"
+            android:paddingHorizontal="20dp"
+            android:text="Hàng lỗi"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/img_3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:visibility="visible"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/img_4"
+            android:paddingHorizontal="20dp"
+            android:text="Khác"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/img_4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_dot_unselect_cancel_bill" />
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/edt_reason_cacel_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="@color/black"
+        android:textSize="16dp"
+        android:hint="Lý do trả hàng"
+        android:visibility="gone"
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/note"
+        android:paddingHorizontal="20dp"
+        android:textSize="12dp"
+        android:textColor="#ff0000"/>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:background="@drawable/bt_btn_feedback"
+            />
+        <TextView
+            android:id="@+id/tv_Yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đồng ý"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:background="@drawable/bt_btn_feedback"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

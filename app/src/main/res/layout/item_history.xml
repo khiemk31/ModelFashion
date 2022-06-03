@@ -203,6 +203,23 @@
         android:text="Đã giao"
         android:textColor="@color/green_active"
         android:textSize="12dp" />
+    <TextView
+        android:id="@+id/tv_refund_of_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_2"
+        android:layout_toLeftOf="@+id/tv_feedback"
+
+        android:layout_marginVertical="5dp"
+        android:background="@drawable/bt_feedback"
+        android:fontFamily="@font/nunito_light"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Trả hàng"
+        android:textColor="#FFFFFF"
+        android:textSize="13dp"
+        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/tv_feedback"
@@ -210,7 +227,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/view_2"
         android:layout_alignParentEnd="true"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="5dp"
         android:layout_marginVertical="5dp"
         android:background="@drawable/bt_feedback"
         android:fontFamily="@font/nunito_light"
