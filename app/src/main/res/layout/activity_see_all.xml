@@ -75,6 +75,7 @@
                 tools:listitem="@layout/item_product_see_all_by_category" />
 
             <ProgressBar
+                style="@style/BackgroundProgressBar"
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
