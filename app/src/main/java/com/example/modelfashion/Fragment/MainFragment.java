@@ -154,7 +154,7 @@ public class MainFragment extends Fragment {
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
-            progressBar.setVisibility(View.VISIBLE);
+            showProgressBar(progressBar);
             productListAdapter.clearAllData();
             categoryList.clear();
             getAllCategory();

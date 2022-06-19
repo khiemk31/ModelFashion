@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -299,18 +300,18 @@ public class CartFragment extends Fragment {
 
         disposable.add(repository.createBill(real)
                 .doOnSubscribe(disposable1 -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 })
                 .subscribe(okResponse -> {
                     Log.d("ahuhu", "createBill: success: ");
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
                     disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {
                     }, throwable -> {
                     }));
                     adapter.clearData();
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
                 }));
     }
@@ -475,7 +476,15 @@ public class CartFragment extends Fragment {
 
 
 
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 
 
 }

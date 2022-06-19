@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -117,16 +118,16 @@ public class CategoryFragment extends Fragment {
     private void getProductFilter(String categoryName, long price1, long price2, String sortOrder) {
         compositeDisposable.add(repository.getProductByPrice(new GetProductByPriceRequest(categoryName, price1, price2, sortOrder))
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
                 })
                 .subscribe(myProductByPriceResponses -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     clothesAdapter.setListProduct(myProductByPriceResponses);
 
 
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -140,17 +141,17 @@ public class CategoryFragment extends Fragment {
     private void getAll() {
         compositeDisposable.add(repository.getAll()
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
                 })
                 .subscribe(myProductByCategories -> {
                     clothesAdapter.setListProduct(myProductByCategories.getData());
                     productArrayList.clear();
                     productArrayList = myProductByCategories.getData();
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
 
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -178,15 +179,15 @@ public class CategoryFragment extends Fragment {
     private void viewProductByCategory(String categoryId) {
         compositeDisposable.add(repository.getProductByCategory(categoryId)
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).subscribe(dataProduct -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     clothesAdapter.setListProduct(dataProduct.getData());
                     if (dataProduct.getData().size() == 0) {
 
                     }
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -230,15 +231,14 @@ public class CategoryFragment extends Fragment {
     private void getCategory() {
         compositeDisposable.add(repository.getAllCategory()
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
-                    progressBar.setVisibility(View.GONE);
                 }).subscribe(dataAllCategory -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     categoryListFinal.addAll(dataAllCategory.getData());
                     filter_category.setEnabled(true);
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
 
     }
@@ -260,5 +260,15 @@ public class CategoryFragment extends Fragment {
                     0
             );
         }
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }
