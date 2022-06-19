@@ -269,6 +269,7 @@ public class CategoryFragment extends Fragment {
         categoryAdapter.setClickListener((view, position) -> {
             categoryAdapter.highLightSelectedItem(position);
 //            getProductByCategory();
+            viewProductByCategory(categoryAdapter.getCategoryId(position));
         });
     }
 
