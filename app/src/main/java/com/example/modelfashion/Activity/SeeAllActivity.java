@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -89,7 +90,7 @@ public class SeeAllActivity extends AppCompatActivity {
 
         refreshLayout.setOnRefreshListener(() -> {
             getProductByCategory(repository, (categoryId));
-            progressBar.setVisibility(View.VISIBLE);
+            showProgressBar(progressBar);
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
         });
@@ -117,19 +118,28 @@ public class SeeAllActivity extends AppCompatActivity {
 
     private void getProductByCategory(Repository repository, String categoryId) {
         compositeDisposable.add(repository.getProductByCategory(categoryId).doOnSubscribe(disposable -> {
-            // show loading
-            progressBar.setVisibility(View.VISIBLE);
+            showProgressBar(progressBar);
         })
                 .doFinally(() -> {
-                    // hide loading
-                    progressBar.setVisibility(View.GONE);
                 })
                 .subscribe(productResponse -> {
+                    hideProgressBar(progressBar);
                     productArrayList.clear();
                     adapter.setListProduct(productResponse.getData());
                     productArrayList.addAll(productResponse.getData());
                 }, throwable -> {
+                    hideProgressBar(progressBar);
                     Toast.makeText(this, throwable.toString(), Toast.LENGTH_SHORT).show();
                 }));
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

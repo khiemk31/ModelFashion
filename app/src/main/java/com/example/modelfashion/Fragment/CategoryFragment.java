@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,12 +51,14 @@ public class CategoryFragment extends Fragment {
     private ClothesAdapter clothesAdapter;
     private RecyclerView rcvClothes;
     private RecyclerView rcvCategoryF;
+    private RecyclerView rcvLeftMenu;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
     private SearchBar searchBar;
     private Dialog dialog;
     ImageView filter_category;
     private DialogCategory dialogCategory;
+    private ImageView btnToggleMenu;
 
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -111,22 +117,33 @@ public class CategoryFragment extends Fragment {
             refreshLayout.setRefreshing(false);
         });
 
+        rcvLeftMenu.setVisibility(View.GONE);
+        btnToggleMenu.setOnClickListener(view -> {
+            if (isOpen) {
+                rcvLeftMenu.setVisibility(View.GONE);
+            }else {
+                rcvLeftMenu.setVisibility(View.VISIBLE);
+            }
+            isOpen = !isOpen;
+        });
 
     }
+
+    private Boolean isOpen = false;
 
     private void getProductFilter(String categoryName, long price1, long price2, String sortOrder) {
         compositeDisposable.add(repository.getProductByPrice(new GetProductByPriceRequest(categoryName, price1, price2, sortOrder))
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
                 })
                 .subscribe(myProductByPriceResponses -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     clothesAdapter.setListProduct(myProductByPriceResponses);
 
 
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -140,17 +157,17 @@ public class CategoryFragment extends Fragment {
     private void getAll() {
         compositeDisposable.add(repository.getAll()
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
                 })
                 .subscribe(myProductByCategories -> {
                     clothesAdapter.setListProduct(myProductByCategories.getData());
                     productArrayList.clear();
                     productArrayList = myProductByCategories.getData();
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
 
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -178,19 +195,21 @@ public class CategoryFragment extends Fragment {
     private void viewProductByCategory(String categoryId) {
         compositeDisposable.add(repository.getProductByCategory(categoryId)
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).subscribe(dataProduct -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     clothesAdapter.setListProduct(dataProduct.getData());
                     if (dataProduct.getData().size() == 0) {
 
                     }
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
     }
 
     private void initView(View view) {
+        btnToggleMenu = view.findViewById(R.id.btn_toggle_menu);
+        rcvLeftMenu = view.findViewById(R.id.rcv_category);
         searchBar = view.findViewById(R.id.search_bar);
         filter_category = view.findViewById(R.id.filter_category);
 //        searchView = view.findViewById(R.id.search_view);
@@ -221,6 +240,8 @@ public class CategoryFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refresh_layout);
 
         filter_category.setEnabled(false);
+
+        rcvLeftMenu.setAdapter(categoryAdapter);
     }
 
 
@@ -230,17 +251,26 @@ public class CategoryFragment extends Fragment {
     private void getCategory() {
         compositeDisposable.add(repository.getAllCategory()
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
-                    progressBar.setVisibility(View.GONE);
                 }).subscribe(dataAllCategory -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     categoryListFinal.addAll(dataAllCategory.getData());
                     filter_category.setEnabled(true);
+                    categoryAdapter.setListCategory(dataAllCategory.getData());
+                    initLeftMenuClick();
                 }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                 }));
 
+    }
+
+    private void initLeftMenuClick() {
+        categoryAdapter.setClickListener((view, position) -> {
+            categoryAdapter.highLightSelectedItem(position);
+//            getProductByCategory();
+            viewProductByCategory(categoryAdapter.getCategoryId(position));
+        });
     }
 
 
@@ -260,5 +290,15 @@ public class CategoryFragment extends Fragment {
                     0
             );
         }
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

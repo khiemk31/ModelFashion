@@ -6,15 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragment.CategoryFragment">
-    <RelativeLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/btn_toggle_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.example.modelfashion.customview.SearchBar
             android:id="@+id/search_bar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/filter_category"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/filter_category"
+            app:layout_constraintStart_toEndOf="@+id/btn_toggle_menu"
+            app:layout_constraintTop_toTopOf="parent"
             app:right_drawable="@drawable/ic_mail" />
 
         <ImageView
@@ -22,12 +37,14 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:padding="10dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_filter_history" />
+            android:padding="10dp"
+            android:src="@drawable/ic_filter_history"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.core.widget.NestedScrollView
@@ -46,32 +63,46 @@
                 android:background="#DBDBDB">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/item_category_left_list" />
+
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_clothes"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginVertical="8dp"
-                    android:layout_marginStart="12dp"
                     android:layout_marginEnd="8dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rcv_category"
                     app:layout_constraintTop_toTopOf="parent"
                     app:spanCount="2"
                     tools:listitem="@layout/item_clothes" />
+
                 <TextView
                     android:id="@+id/tv_emty_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hiện chưa có sản phẩm trong danh mục"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
+                    style="@style/BackgroundProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"

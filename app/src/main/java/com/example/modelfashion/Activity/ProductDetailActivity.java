@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -81,12 +82,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void initData() {
         disposable.add(
                 repository.getProductDetail(productId).doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).subscribe(myProductDetail -> {
                     this.myProductDetail = myProductDetail;
-                    progressBar.setVisibility(View.GONE);
+                    hideProgressBar(progressBar);
                     setData(myProductDetail);
                 }, throwable -> {
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -317,5 +319,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

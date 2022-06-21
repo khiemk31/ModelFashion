@@ -16,9 +16,11 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -36,25 +38,31 @@ import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
+import com.example.modelfashion.Model.response.BaseResponse;
 import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
-import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.relex.circleindicator.CircleIndicator3;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.HttpException;
 import retrofit2.Response;
 
 
@@ -146,7 +154,7 @@ public class MainFragment extends Fragment {
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
-            progressBar.setVisibility(View.VISIBLE);
+            showProgressBar(progressBar);
             productListAdapter.clearAllData();
             categoryList.clear();
             getAllCategory();
@@ -214,16 +222,18 @@ public class MainFragment extends Fragment {
     private void getAllCategory() {
         compositeDisposable.add(repository.getAllCategory()
                 .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
+                    showProgressBar(progressBar);
                 }).doFinally(() -> {
-                    progressBar.setVisibility(View.GONE);
                 }).subscribe(dataAllCategory -> {
-                    if(dataAllCategory.getData().size()>0) {
+                    hideProgressBar(progressBar);
+                    if (dataAllCategory.getData().size() > 0) {
                         categoryList.addAll(dataAllCategory.getData());
                         getAllProductByCategory();
                     }
-                }, error -> {
-
+                }, throwable -> {
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                    hideProgressBar(progressBar);
                 }));
     }
 
@@ -253,27 +263,6 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void setUserAvatar(String user_id) {
-        if (!user_id.equalsIgnoreCase("null")) {
-            ApiRetrofit.apiRetrofit.GetUserById(user_id).enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    User user = response.body();
-                    try {
-                        Glide.with(getActivity()).load(user.getAvatar()).into(avatar);
-                    } catch (Exception e) {
-                    }
-
-
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-                }
-            });
-        }
-    }
 
     private final ArrayList<MyProductByCategory> myProductByCategories = new ArrayList<>();
 
@@ -282,10 +271,10 @@ public class MainFragment extends Fragment {
         categoryList.forEach(myCategory -> {
             compositeDisposable.add(repository.getProductByCategory(myCategory.getCategoryId())
                     .doOnSubscribe(disposable -> {
-                        progressBar.setVisibility(View.VISIBLE);
+                        showProgressBar(progressBar);
                     }).doFinally(() -> {
-                        progressBar.setVisibility(View.GONE);
                     }).subscribe(dataProduct -> {
+                        hideProgressBar(progressBar);
                         myProductByCategories.addAll(dataProduct.getData());
                         List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data = new ArrayList<>();
 
@@ -293,9 +282,21 @@ public class MainFragment extends Fragment {
                         productListAdapter.addListProduct(data);
 
                     }, throwable -> {
-
+                        hideProgressBar(progressBar);
+                        String error = new Utils().getErrorBody(throwable).getMessage();
+                        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
                     }));
         });
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 
