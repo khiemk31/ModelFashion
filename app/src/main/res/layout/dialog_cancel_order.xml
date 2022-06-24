@@ -55,7 +55,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_1"
             android:paddingHorizontal="20dp"
-            android:text="Đặt lại đơn hàng khác"
+            android:text="@string/reason_cancer_1"
             android:textColor="#000000"
             android:textSize="15dp" />
 
@@ -84,7 +84,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_2"
             android:paddingHorizontal="20dp"
-            android:text="Có việc bận không thể nhận hàng"
+            android:text="@string/reason_cancer_2"
             android:textColor="#000000"
             android:textSize="15dp" />
 
@@ -111,7 +111,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_3"
             android:paddingHorizontal="20dp"
-            android:text="Thời gian xác nhận đơn quá chậm"
+            android:text="@string/reason_cancer_3"
             android:textColor="#000000"
             android:textSize="15dp" />
 
@@ -194,14 +194,14 @@
             android:id="@+id/tv_Yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đồng ý"
+            android:text="Gửi"
             android:textColor="#ffffff"
             android:textSize="15dp"
             android:textStyle="bold"
             android:layout_gravity="right"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:paddingHorizontal="20dp"
+            android:paddingHorizontal="30dp"
             android:paddingVertical="5dp"
             android:background="@drawable/bt_btn_feedback"
             />

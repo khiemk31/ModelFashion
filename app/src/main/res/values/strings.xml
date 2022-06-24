@@ -10,6 +10,10 @@
     <string name="note"><b>Lưu ý:</b><i> Mọi thắc mắc vui lòng liên hệ với shop để được hỗ trợ.\nXin chân thành cảm ơn!</i> </string>
 
     <string name="email"><i>khiemk31@gmail.com</i></string>
+    <string name="reason_cancer_1">Đặt lại đơn hàng khác</string>
+    <string name="reason_cancer_2">Có việc bận không thể nhận hàng</string>
+    <string name="reason_cancer_3">Thời gian xác nhận đơn quá chậm</string>
+    <string name="txt_confirm_cancer">Đơn hàng sẽ không được khôi phục. \n Bạn có chắc muốn hủy đơn ?</string>
 
 
 </resources>

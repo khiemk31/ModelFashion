@@ -4,15 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +53,10 @@ public class HistoryAdapter extends BaseAdapter {
     ArrayList<MyProduct> arr_my_product;
     String user_id;
     private ArrayList<Bill> bills;
+    String reason = "";
+    CancelBill cancelBill;
+    Dialog dialog;
+    AsyncTask<?, ?, ?> runningTask;
 
     public HistoryAdapter(Context context, ArrayList<Bill> arr_bill) {
 
@@ -103,7 +110,7 @@ public class HistoryAdapter extends BaseAdapter {
 
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        item_history_ma.setText("Mã đơn: " + arr_bill.get(i).getBill_id().substring(0,20)+"...");
+        item_history_ma.setText("Mã đơn: " + arr_bill.get(i).getBill_id());
 
         Glide.with(context).load(arr_bill.get(i).getProduct_image()).into(img_subproduct0);
         tv_status.setText(arr_bill.get(i).getStatus());
@@ -128,19 +135,20 @@ public class HistoryAdapter extends BaseAdapter {
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
             tv_refund_of_order.setVisibility(View.VISIBLE);
-        } else if(arr_bill.get(i).getStatus().matches("Đang Chờ")) {
+        } else if (arr_bill.get(i).getStatus().matches("Đang Chờ")) {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
             tv_refund_of_order.setVisibility(View.GONE);
 
-        }else  {
+        } else {
 
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
             tv_feedback.setAlpha(0.5f);
             tv_feedback.setEnabled(false);
+            tv_feedback.setVisibility(View.INVISIBLE);
             tv_refund_of_order.setVisibility(View.GONE);
 
         }
@@ -157,8 +165,8 @@ public class HistoryAdapter extends BaseAdapter {
                     loadDialogFeedback(context, arr_bill.get(i).getBill_id());
                 } else {
                     // showDialogCancelOrder();
-                    CancelBill cancelBill = new CancelBill(arr_bill.get(i).getBill_id());
-                    showDialogCancelOrder(cancelBill);
+
+                    showDialogCancelOrder(arr_bill.get(i).getBill_id());
 
                 }
 
@@ -179,7 +187,7 @@ public class HistoryAdapter extends BaseAdapter {
 //        return sumP;
 //    }
 
-    private void cancelBill(CancelBill cancelBill) {
+    private void sendCancelBill(CancelBill cancelBill) {
         ApiHistory.API_HISTORY.cancelBill(cancelBill).enqueue(new Callback<CancelBill>() {
             @Override
             public void onResponse(Call<CancelBill> call, Response<CancelBill> response) {
@@ -228,10 +236,12 @@ public class HistoryAdapter extends BaseAdapter {
         });
         dialog.show();
     }
+
     int reason_check = 1;
 
-    private void showDialogCancelOrder(CancelBill cancelBill) {
+    private void showDialogCancelOrder(String build_id) {
         reason_check = 1;
+        reason = context.getString(R.string.reason_cancer_1);
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_cancel_order);
         dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -240,7 +250,7 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_cancel = dialog.findViewById(R.id.tv_cancel);
         TextView tv_hotline, tv_email, tv_zalo;
         TextView tv_yes = dialog.findViewById(R.id.tv_Yes);
-        ImageView img_1,img_2,img_3,img_4;
+        ImageView img_1, img_2, img_3, img_4;
         EditText edt_reason_cacel_bill;
         tv_hotline = dialog.findViewById(R.id.tv_hotline);
         tv_email = dialog.findViewById(R.id.tv_email);
@@ -251,40 +261,43 @@ public class HistoryAdapter extends BaseAdapter {
         img_4 = dialog.findViewById(R.id.img_4);
         edt_reason_cacel_bill = dialog.findViewById(R.id.edt_reason_cacel_bill);
 
-        loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+        loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
 
         img_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reason_check = 1;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
+                reason = context.getString(R.string.reason_cancer_1);
             }
         });
         img_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reason_check = 2;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
+                reason = context.getString(R.string.reason_cancer_2);
             }
         });
         img_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reason_check = 3;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
+                reason = context.getString(R.string.reason_cancer_3);
             }
         });
         img_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reason_check = 4;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.VISIBLE);
             }
@@ -300,8 +313,27 @@ public class HistoryAdapter extends BaseAdapter {
         tv_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancelBill(cancelBill);
-                dialog.dismiss();
+                if (reason_check == 4) {
+                    if (edt_reason_cacel_bill.getText().length() > 0) {
+                        reason = edt_reason_cacel_bill.getText().toString().trim();
+                        cancelBill = new CancelBill(build_id,reason);
+                        //Toast.makeText(context,reason,Toast.LENGTH_SHORT).show();
+
+                        showDialogConfirmCancerBill(cancelBill);
+                        dialog.dismiss();
+                    }else {
+                        Toast.makeText(context,"Vui lòng nhập đầy đủ thông tin",Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }else {
+                    cancelBill = new CancelBill(build_id,reason);
+                    //Toast.makeText(context,reason,Toast.LENGTH_SHORT).show();
+                    showDialogConfirmCancerBill(cancelBill);
+                    dialog.dismiss();
+                }
+
+
             }
         });
 
@@ -310,7 +342,31 @@ public class HistoryAdapter extends BaseAdapter {
 
     }
 
-    private void showDialogRefundOfOrder(){
+    private void showDialogConfirmCancerBill(CancelBill cancelBill){
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.confirm_cancer_bill);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.findViewById(R.id.btn_cancel_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sendCancelBill(cancelBill);
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+    }
+
+    private void showDialogRefundOfOrder() {
         reason_check = 1;
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_refund_of_order);
@@ -320,7 +376,7 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_cancel = dialog.findViewById(R.id.tv_cancel);
         TextView tv_hotline, tv_email, tv_zalo;
         TextView tv_yes = dialog.findViewById(R.id.tv_Yes);
-        ImageView img_1,img_2,img_3,img_4;
+        ImageView img_1, img_2, img_3, img_4;
         EditText edt_reason_cacel_bill;
         tv_hotline = dialog.findViewById(R.id.tv_hotline);
         tv_email = dialog.findViewById(R.id.tv_email);
@@ -331,13 +387,13 @@ public class HistoryAdapter extends BaseAdapter {
         img_4 = dialog.findViewById(R.id.img_4);
         edt_reason_cacel_bill = dialog.findViewById(R.id.edt_reason_cacel_bill);
 
-        loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+        loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
 
         img_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reason_check = 1;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
             }
@@ -346,7 +402,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 2;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
             }
@@ -355,7 +411,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 3;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
             }
@@ -364,7 +420,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 4;
-                loadThemeDot(reason_check,img_1,img_2,img_3,img_4);
+                loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.VISIBLE);
             }
@@ -388,23 +444,24 @@ public class HistoryAdapter extends BaseAdapter {
         dialog.show();
 
     }
-    private void loadThemeDot(int index,ImageView img1,ImageView img2,ImageView img3,ImageView img4){
-        if(index == 1){
+
+    private void loadThemeDot(int index, ImageView img1, ImageView img2, ImageView img3, ImageView img4) {
+        if (index == 1) {
             Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img1);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
-        }else if(index == 2){
+        } else if (index == 2) {
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
             Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img2);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
-        }else if(index == 3){
+        } else if (index == 3) {
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
             Glide.with(context).load(R.drawable.ic_dot_select_cancel_bill).into(img3);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img4);
-        }else if(index == 4){
+        } else if (index == 4) {
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img1);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img2);
             Glide.with(context).load(R.drawable.ic_dot_unselect_cancel_bill).into(img3);
@@ -424,10 +481,12 @@ public class HistoryAdapter extends BaseAdapter {
             clipboard.setPrimaryClip(clip);
         }
     }
-    private void senDataToActivity(){
+
+    private void senDataToActivity() {
         Intent intent = new Intent("send_data_to_activity");
         intent.putExtra("action", "load");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
+
 
 }
