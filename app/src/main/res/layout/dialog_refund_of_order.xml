@@ -55,7 +55,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_1"
             android:paddingHorizontal="20dp"
-            android:text="Gửi sai hàng"
+            android:text="@string/gui_sai_hang"
             android:textColor="#000000"
             android:textSize="15dp" />
 
@@ -84,7 +84,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_2"
             android:paddingHorizontal="20dp"
-            android:text="Chưa nhận được hàng"
+            android:text="@string/chua_nhan_hang"
             android:textColor="#000000"
             android:textSize="15dp" />
 
@@ -111,7 +111,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/img_3"
             android:paddingHorizontal="20dp"
-            android:text="Hàng lỗi"
+            android:text="@string/hang_loi"
             android:textColor="#000000"
             android:textSize="15dp" />
 

@@ -31,6 +31,8 @@ import com.example.modelfashion.Model.MHistory.ProductHistory;
 import com.example.modelfashion.Model.response.bill.Bill;
 
 import com.example.modelfashion.Model.response.bill.CancelBill;
+import com.example.modelfashion.Model.response.bill.FeedbackBill;
+import com.example.modelfashion.Model.response.bill.RefundOfOrder;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.R;
 
@@ -155,7 +157,7 @@ public class HistoryAdapter extends BaseAdapter {
         tv_refund_of_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogRefundOfOrder();
+                showDialogRefundOfOrder(arr_bill.get(i).getBill_id());
             }
         });
         tv_feedback.setOnClickListener(new View.OnClickListener() {
@@ -175,29 +177,55 @@ public class HistoryAdapter extends BaseAdapter {
         return view;
     }
 
-//    private String sumPrice(List<ProductHistory> list){
-//        int sum = 0;
-//        for (int i = 0;i<list.size();i++){
-//            sum+=Integer.parseInt(list.get(i).getmPriceProduct())*Integer.parseInt(list.get(i).getmSumProduct());
-//        }
-//        Locale locale = new Locale("vi","VN");
-//        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
-//        numberFormat.setRoundingMode(RoundingMode.HALF_UP);
-//        String sumP = numberFormat.format(Double.parseDouble(String.valueOf(sum)));
-//        return sumP;
-//    }
 
     private void sendCancelBill(CancelBill cancelBill) {
         ApiHistory.API_HISTORY.cancelBill(cancelBill).enqueue(new Callback<CancelBill>() {
             @Override
             public void onResponse(Call<CancelBill> call, Response<CancelBill> response) {
-                Toast.makeText(context, "Yêu cầu hủy đơn thành công", Toast.LENGTH_SHORT).show();
+                HistoryActivity.rl_load.setVisibility(View.GONE);
+                Toast.makeText(context, "Đã gửi yêu cầu hủy đơn", Toast.LENGTH_SHORT).show();
                 senDataToActivity();
             }
 
             @Override
             public void onFailure(Call<CancelBill> call, Throwable t) {
+                HistoryActivity.rl_load.setVisibility(View.GONE);
                 Toast.makeText(context, "Yêu cầu hủy đơn thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void sendRefundOfOrder(RefundOfOrder refundOfOrder){
+        ApiHistory.API_HISTORY.refundOfOrder(refundOfOrder).enqueue(new Callback<RefundOfOrder>() {
+            @Override
+            public void onResponse(Call<RefundOfOrder> call, Response<RefundOfOrder> response) {
+                HistoryActivity.rl_load.setVisibility(View.GONE);
+                Toast.makeText(context, "Đã gửi yêu cầu trả hàng", Toast.LENGTH_SHORT).show();
+                senDataToActivity();
+            }
+
+            @Override
+            public void onFailure(Call<RefundOfOrder> call, Throwable t) {
+                HistoryActivity.rl_load.setVisibility(View.GONE);
+                Toast.makeText(context, "Yêu cầu trả hàng thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendFeedbackBill(FeedbackBill feedbackBill){
+        ApiHistory.API_HISTORY.feedbackBill(feedbackBill).enqueue(new Callback<FeedbackBill>() {
+            @Override
+            public void onResponse(Call<FeedbackBill> call, Response<FeedbackBill> response) {
+                HistoryActivity.rl_load.setVisibility(View.GONE);
+                Toast.makeText(context, "Đã gửi phản hồi", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<FeedbackBill> call, Throwable t) {
+                HistoryActivity.rl_load.setVisibility(View.GONE);
+                Toast.makeText(context, "Gửi phản hồi thất bại", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -222,13 +250,14 @@ public class HistoryAdapter extends BaseAdapter {
                 if (content.isEmpty()) {
                     Toast.makeText(context, "Bạn chưa nhập nội dung", Toast.LENGTH_SHORT).show();
                 } else {
-                    String uriText = "mailto:" + context.getString(R.string.email) +
-                            "?subject=" + "Feedback đơn hàng " + maDH +
-                            "&body=" + content;
-                    Uri uri = Uri.parse(uriText);
-                    Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                    sendIntent.setData(uri);
-                    context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
+//                    String uriText = "mailto:" + context.getString(R.string.email) +
+//                            "?subject=" + "Feedback đơn hàng " + maDH +
+//                            "&body=" + content;
+//                    Uri uri = Uri.parse(uriText);
+//                    Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+//                    sendIntent.setData(uri);
+//                    context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
+                    sendFeedbackBill(new FeedbackBill(maDH,content));
                     dialog.dismiss();
 
                 }
@@ -322,7 +351,7 @@ public class HistoryAdapter extends BaseAdapter {
                         showDialogConfirmCancerBill(cancelBill);
                         dialog.dismiss();
                     }else {
-                        Toast.makeText(context,"Vui lòng nhập đầy đủ thông tin",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Vui lòng nhập lý do hủy đơn",Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -359,6 +388,7 @@ public class HistoryAdapter extends BaseAdapter {
             public void onClick(View view) {
 
                 sendCancelBill(cancelBill);
+                HistoryActivity.rl_load.setVisibility(View.VISIBLE);
                 dialog.dismiss();
 
             }
@@ -366,8 +396,9 @@ public class HistoryAdapter extends BaseAdapter {
         dialog.show();
     }
 
-    private void showDialogRefundOfOrder() {
+    private void showDialogRefundOfOrder(String build_id) {
         reason_check = 1;
+        reason = context.getString(R.string.gui_sai_hang);
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_refund_of_order);
         dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -393,6 +424,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 1;
+                reason = context.getString(R.string.gui_sai_hang);
                 loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
@@ -402,6 +434,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 2;
+                reason = context.getString(R.string.chua_nhan_hang);
                 loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
@@ -411,6 +444,7 @@ public class HistoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 reason_check = 3;
+                reason = context.getString(R.string.hang_loi);
                 loadThemeDot(reason_check, img_1, img_2, img_3, img_4);
                 edt_reason_cacel_bill.setText("");
                 edt_reason_cacel_bill.setVisibility(View.GONE);
@@ -436,7 +470,22 @@ public class HistoryAdapter extends BaseAdapter {
         tv_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                if(reason_check==4){
+                    if(edt_reason_cacel_bill.getText().toString().trim().length()>0){
+                        reason = edt_reason_cacel_bill.getText().toString().trim();
+                        sendRefundOfOrder(new RefundOfOrder(build_id,reason));
+                        HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+                        dialog.dismiss();
+                    }else {
+                        Toast.makeText(context,"Vui lòng nhập lý do trả hàng",Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    sendRefundOfOrder(new RefundOfOrder(build_id,reason));
+                    HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
+                }
+
             }
         });
 

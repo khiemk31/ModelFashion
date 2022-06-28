@@ -28,4 +28,7 @@
         <item name="android:textSize">17dp</item>
         <item name="android:lineHeight">22dp</item>
     </style>
+    <style name="progressBarApp" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">#8E97FD</item>
+    </style>
 </resources>

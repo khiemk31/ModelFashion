@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -71,6 +72,7 @@ public class HistoryActivity extends AppCompatActivity {
     private ArrayList<Bill> bills;
 
     private Repository repository ;
+    public static RelativeLayout rl_load;
 
 
 
@@ -81,6 +83,9 @@ public class HistoryActivity extends AppCompatActivity {
             String check = intent.getStringExtra("action");
             if (check.matches("load")){
                 getAllBill();
+                if(rl_load.getVisibility()==View.VISIBLE){
+                    rl_load.setVisibility(View.GONE);
+                }
             }
         }
     };
@@ -101,6 +106,7 @@ public class HistoryActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar_history);
         tv_empty = findViewById(R.id.tv_empty);
         bills = new ArrayList<>();
+        rl_load = findViewById(R.id.rl_load);
         repository = new Repository(HistoryActivity.this);
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus",4);
@@ -414,6 +420,8 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
 }
