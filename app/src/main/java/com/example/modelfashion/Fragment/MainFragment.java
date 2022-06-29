@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +37,17 @@ import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
+import com.example.modelfashion.Adapter.ProductSaleAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.Model.response.BaseResponse;
 import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
+import com.example.modelfashion.Model.sale.ProductSale;
+import com.example.modelfashion.Model.sale.SaleModel;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.Utils;
@@ -78,10 +84,12 @@ public class MainFragment extends Fragment {
     ArrayList<ItemSaleMain> arrItem = new ArrayList<>();
     private TextView tvCurrentDate, tvGreeting;
     private PreferenceManager preferenceManager;
+    RecyclerView rcl_product_sale;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     ProductListAdapter productListAdapter = new ProductListAdapter();
+    private ArrayList<ProductSale> productSales = new ArrayList<>();
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable mRunable = new Runnable() {
@@ -307,5 +315,42 @@ public class MainFragment extends Fragment {
         compositeDisposable.dispose();
         mRunable = null;
         mHandler = null;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rcl_product_sale = view.findViewById(R.id.rcl_product_sale);
+        getListProductSale();
+    }
+
+    private void getListProductSale(){
+
+        ApiHistory.API_HISTORY.getListSale().enqueue(new Callback<SaleModel>() {
+            @Override
+            public void onResponse(Call<SaleModel> call, Response<SaleModel> response) {
+                productSales.clear();
+                if(response.body()!=null && response.body().getListProduct().size()>0){
+                    productSales.addAll(response.body().getListProduct());
+
+                }
+                setRclProductSale();
+            }
+
+            @Override
+            public void onFailure(Call<SaleModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setRclProductSale(){
+        if(productSales.size()>0){
+            ProductSaleAdapter productSaleAdapter = new ProductSaleAdapter(requireContext(),productSales);
+            rcl_product_sale.setAdapter(productSaleAdapter);
+        }
+
+
     }
 }

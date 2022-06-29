@@ -9,6 +9,7 @@ import com.example.modelfashion.Model.response.bill.FeedbackBill;
 import com.example.modelfashion.Model.response.bill.RefundOfOrder;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
 import com.example.modelfashion.Model.response.bill.UserID;
+import com.example.modelfashion.Model.sale.SaleModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -52,6 +53,9 @@ public interface ApiHistory {
 
     @PUT("user/updateAddress")
     Call<UpdateAdress> updateAddress(@Body UpdateAdress updateAdress);
+
+    @GET("product/getProductDiscount")
+    Call<SaleModel> getListSale();
 
 
 }
