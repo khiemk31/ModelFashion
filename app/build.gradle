@@ -57,6 +57,7 @@ dependencies {
     //lấy hình ảnh từ máy hoặc chụp ảnh để đưa lên
     implementation 'gun0912.ted:tedbottompicker:2.0.1'
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+    implementation 'com.cloudinary:cloudinary-android:2.2.0'
     // glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
 
