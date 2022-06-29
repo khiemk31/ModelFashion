@@ -29,7 +29,7 @@ public class Constants {
     public static final String KEY_AVARTAR = "avatar";
     public static final String KEY_TEMP_AVARTAR = "avatar";
     public static final String KEY_CHANGE_IMAGE = "changeImage";
-
+    public static final String FIRST_TIME_INIT = "firstTimeInit";
 
     // login
     public static final String KEY_LOGIN_STARUS = "KEY_LOGIN_STARUS";

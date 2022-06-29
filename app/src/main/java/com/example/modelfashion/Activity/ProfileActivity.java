@@ -9,14 +9,18 @@ import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 import static com.example.modelfashion.Utility.Constants.KEY_SEX;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,12 +40,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.example.modelfashion.Activity.SignIn.OTPPhoneActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
@@ -52,6 +60,7 @@ import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.RealPathUtil;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.example.modelfashion.network.Repository;
@@ -71,7 +80,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
@@ -92,9 +103,11 @@ public class ProfileActivity extends AppCompatActivity {
     RoundedImageView imgActProfileAvatar;
     ProgressLoadingCommon progressLoadingCommon;
     ApiInterface apiInterface;
-    String encodedString;
+    String avtUrl;
+    Uri uriUrl;
     String birthDay;
     CompositeDisposable disposable = new CompositeDisposable();
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
         imgActProfileAvatar = findViewById(R.id.img_act_profile_avatar);
         progressLoadingCommon = new ProgressLoadingCommon();
         preferenceManager = new PreferenceManager(this);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void getData() {
@@ -191,6 +205,7 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     updateUser();
+                    dialog.dismiss();
                 }
             });
             dialog.findViewById(R.id.tv_no_change).setOnClickListener(new View.OnClickListener() {
@@ -209,17 +224,18 @@ public class ProfileActivity extends AppCompatActivity {
                 new UpdateUserRequest(tvActProfileName.getText().toString().trim(),
                         preferenceManager.getInt(Constants.KEY_SEX),
                         tvActProfileBirthday.getText().toString().trim(),
-                        preferenceManager.getBoolean(Constants.KEY_CHANGE_IMAGE) == true ? ("data:image/png;base64," + encodedString) : "",
+                        preferenceManager.getBoolean(Constants.KEY_CHANGE_IMAGE) == true ? avtUrl : "",
                         tvActProfileAddress.getText().toString().trim()))
                 .doOnSubscribe(disposable -> {
-                    progressLoadingCommon.showProgressLoading(this);
+                    showProgressBar(progressBar);
                 }).subscribe(updateResponse -> {
                     Toast.makeText(ProfileActivity.this, updateResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     getUserDetail();
-                    preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, false);
-                    onBackPressed();
+                    hideProgressBar(progressBar);
                 }, throwable -> {
-                    Toast.makeText(ProfileActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    hideProgressBar(progressBar);
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -228,16 +244,20 @@ public class ProfileActivity extends AppCompatActivity {
         String userId = preferenceManager.getString(Constants.KEY_ID);
         disposable.add(repository.getUserDetail(userId)
                 .doOnSubscribe(disposable -> {
-
+                    showProgressBar(progressBar);
                 }).subscribe(registerResponse -> {
+                    hideProgressBar(progressBar);
                     preferenceManager.putString(KEY_AVARTAR, registerResponse.getData().getAvatar());
                     preferenceManager.putString(KEY_FULL_NAME, registerResponse.getData().getUsername());
                     preferenceManager.putString(KEY_PHONE, registerResponse.getData().getPhone());
                     preferenceManager.putString(KEY_BIRTHDAY, registerResponse.getData().getDateOfBirth());
                     preferenceManager.putString(KEY_ADDRESS, registerResponse.getData().getAddress());
                     preferenceManager.putInt(KEY_SEX, registerResponse.getData().getGender());
+                    onBackPressed();
                 }, throwable -> {
-                    Toast.makeText(ProfileActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    hideProgressBar(progressBar);
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -389,7 +409,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     //animation
     private void profileAnimation() {
-
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
         Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
         Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
@@ -486,24 +505,52 @@ public class ProfileActivity extends AppCompatActivity {
                 .show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
                     @Override
                     public void onImageSelected(Uri uri) {
-                        Bitmap bitmap = null;
-                        try {
-                            bitmap = MediaStore.Images.Media.getBitmap(ProfileActivity.this.getContentResolver(), uri);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        byte[] byteArray = outputStream.toByteArray();
-
-                        //Use your Base64 String as you wish
-                        encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
                         imgActProfileAvatar.setImageURI(uri);
-                        preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, true);
                         btnActProfileCheck.setVisibility(View.VISIBLE);
+                        uriUrl = uri;
+                        preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, true);
+                        getImageUrl();
                     }
                 });
+    }
 
+    private void getImageUrl() {
+        MediaManager.get().upload(uriUrl).callback(new UploadCallback() {
+            @Override
+            public void onStart(String requestId) {
+                showProgressBar(progressBar);
+            }
+
+            @Override
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+
+            }
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                avtUrl = String.valueOf(resultData.get("secure_url"));
+                hideProgressBar(progressBar);
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+                Toast.makeText(ProfileActivity.this, (CharSequence) error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+                Toast.makeText(ProfileActivity.this, (CharSequence) error, Toast.LENGTH_SHORT).show();
+            }
+        }).dispatch();
+    }
+
+    void showProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    void hideProgressBar(ProgressBar progressBar) {
+        progressBar.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

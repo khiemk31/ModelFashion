@@ -6,335 +6,354 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ProfileActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/layout_info_logo"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/bg_gradient_blue" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btn_act_profile_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_arrow_left"
-                android:tint="@color/white" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btn_act_profile_check"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/ic_check"
-                android:visibility="gone"
-                android:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:text="Hồ sơ của tôi"
-                android:textColor="@color/white"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
 
             <RelativeLayout
-                android:id="@+id/layout_act_profile_avatar"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp">
+                android:id="@+id/layout_info_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/img_act_profile_avatar"
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@drawable/bg_gradient_blue" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btn_act_profile_back"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_arrow_left"
+                    android:tint="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btn_act_profile_check"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_check"
+                    android:tint="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text="Hồ sơ của tôi"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+
+                <RelativeLayout
+                    android:id="@+id/layout_act_profile_avatar"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
-                    android:background="@drawable/bg_information_line"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/bg_gradient_blue"
-                    app:riv_corner_radius="25dp" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="70dp">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/img_act_profile_avatar"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:background="@drawable/bg_information_line"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bg_gradient_blue"
+                        app:riv_corner_radius="25dp" />
+                </RelativeLayout>
+
+
             </RelativeLayout>
 
-
-        </RelativeLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_Phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="4"
-
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_phone_profile"
-                android:text=" Số điện thoại"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_Phone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_act_Profile_Phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="0968796428"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_act_Profile_Phone"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="4"
-
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_name_profile"
-                android:text=" Họ và tên"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="4"
 
-            <TextView
-                android:id="@+id/tv_act_Profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="ở đây là họ tên "
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_Profile_change_name"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_arrow_right"
-                android:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone_profile"
+                    android:text=" Số điện thoại"
+                    android:textColor="@color/text_hint"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_Phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <View
+                <TextView
+                    android:id="@+id/tv_act_Profile_Phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="0968796428"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_act_Profile_Name"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_Sex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="4"
-
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_sex_profile"
-                android:text=" Giới tính"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_sex"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="4"
 
-            <TextView
-                android:id="@+id/tv_act_Profile_sex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="chưa xác định"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_Profile_change_sex"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_arrow_right"
-                android:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <View
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_name_profile"
+                    android:text=" Họ và tên"
+                    android:textColor="@color/text_hint"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tv_act_Profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="ở đây là họ tên "
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/act_Profile_change_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_arrow_right"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_act_Profile_Sex"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_birthday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="0dp"
-            android:layout_weight="4"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_birthday_profile"
-                android:text=" Sinh nhật"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_birthday"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="4"
 
-            <TextView
-                android:id="@+id/tv_act_Profile_birthday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="15 - 2 - 2022"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_Profile_change_birthday"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_arrow_right"
-                android:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <View
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_sex_profile"
+                    android:text=" Giới tính"
+                    android:textColor="@color/text_hint"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_sex"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tv_act_Profile_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="chưa xác định"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/act_Profile_change_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_arrow_right"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_act_Profile_birthday"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="4"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_act_Profile_addrest"
-            android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_birthday_profile"
+                    android:text=" Sinh nhật"
+                    android:textColor="@color/text_hint"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_birthday"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_act_Profile_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="15 - 2 - 2022"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/act_Profile_change_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_arrow_right"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_act_Profile_addrest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="4"
+
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_address_profile"
+                    android:text=" Địa chỉ"
+                    android:textColor="@color/text_hint"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_address"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_act_Profile_address"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="30dp"
+                    android:text="Nam Từ Liêm - Hà Nội"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/act_Profile_change_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_arrow_right"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/BackgroundProgressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="4"
-
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_address_profile"
-                android:text=" Địa chỉ"
-                android:textColor="@color/text_hint"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_act_Profile_address"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_act_Profile_address"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="30dp"
-                android:text="Nam Từ Liêm - Hà Nội"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/act_Profile_change_address"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_arrow_right"
-                android:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

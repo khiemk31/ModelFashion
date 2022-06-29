@@ -91,6 +91,7 @@
             android:name=".Activity.ProductDetailActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://537853312614449:__Rb7zY3SQzgNSdlzh3PLP0Jz8Y@cde"/>
     </application>
 
 </manifest>

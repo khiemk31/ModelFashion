@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.cloudinary.android.MediaManager;
 import com.example.modelfashion.Fragment.CartFragment;
 import com.example.modelfashion.Fragment.CategoryFragment;
 import com.example.modelfashion.Fragment.FragmentProfile;
@@ -31,6 +32,9 @@ import com.example.modelfashion.Utility.KeyboardUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import vn.momo.momo_partner.AppMoMoLib;
 
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         info = new Bundle();
         getUserData();
         info.putString("user_id",user_id);
+        initConfig();
         replaceFragment(new MainFragment());
         navigationView=findViewById(R.id.bottom_navigation_view_linear);
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -201,5 +206,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent("send_data_to_fragment");
         intent.putExtra("action", "addbill");
         LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intent);
+    }
+
+    private void initConfig() {
+        Map config = new HashMap();
+        config.put("cloud_name", "cde");
+        config.put("api_key", "537853312614449");
+        config.put("api_secret", "__Rb7zY3SQzgNSdlzh3PLP0Jz8Y");
+        MediaManager.init(this, config);
     }
 }
