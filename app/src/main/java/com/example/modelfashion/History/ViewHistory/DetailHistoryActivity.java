@@ -38,6 +38,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
     public static String user_id;
     ArrayList<ContentBill> arr_bill_detail = new ArrayList<>();
     ArrayList<BillProducts> arr_my_product = new ArrayList<>();
+    private TextView contentCancelBill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         title_date_detail_history = findViewById(R.id.title_date_detail_history);
         lv_detail_history = findViewById(R.id.lv_detail_history);
         back_detail_history = findViewById(R.id.back_detail_history);
+        contentCancelBill = findViewById(R.id.contentCancelBill);
         back_detail_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,13 +97,26 @@ public class DetailHistoryActivity extends AppCompatActivity {
     private void setInfoBill(){
         DecimalFormat format = new DecimalFormat("###,###,###");
         ContentBill contentBill = arr_bill_detail.get(0);
-        tv_dh_detail_history.setText("Mã Đơn:\n"+contentBill.getBill_id());
+        tv_dh_detail_history.setText("Mã Đơn: "+contentBill.getBill_id());
         phoneNumber_detail_history.setText(contentBill.getPhone());
         address_detail_history.setText(contentBill.getAddress());
         date_detail_history.setText(contentBill.getCreated_at().substring(0,10));
         summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" VNĐ");
         DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
         lv_detail_history.setAdapter(historyAdapter);
+
+        if(contentBill.getCancellation_reason() == null && contentBill.getFeedback()==null && contentBill.getReturn_request()==null){
+            contentCancelBill.setVisibility(View.GONE);
+        }else {
+            contentCancelBill.setVisibility(View.VISIBLE);
+            if(contentBill.getCancellation_reason()!=null){
+                contentCancelBill.setText("Lý do hủy: "+contentBill.getCancellation_reason());
+            }else if(contentBill.getFeedback()!=null){
+                contentCancelBill.setText("Phản hồi: "+contentBill.getFeedback());
+            }else if(contentBill.getReturn_request()!=null){
+                contentCancelBill.setText("Lý do trả hàng: "+contentBill.getReturn_request());
+            }
+        }
 
     }
 

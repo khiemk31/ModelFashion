@@ -54,7 +54,7 @@
             android:gravity="left"
             android:text="Mã"
             android:textColor="#8E97FD"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="normal" />
 
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:text="Số điện thoại: "
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text="Địa chỉ giao hàng: "
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal" />
 
             <TextView
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ngày nhận hàng: "
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal" />
 
             <TextView
@@ -170,11 +170,30 @@
                 android:textSize="18sp"
                 android:textStyle="italic" />
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="20dp"
+            android:id="@+id/rl_cancelBill"
+            android:layout_below="@+id/rl_summoney_detail_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/contentCancelBill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="#ff0000"
+                android:fontFamily="@font/nunito_bold"/>
+
+        </RelativeLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/rl_summoney_detail_history"
+            android:layout_below="@+id/rl_cancelBill"
             android:layout_marginTop="20sp"
             android:background="#F4F4F4">
 
