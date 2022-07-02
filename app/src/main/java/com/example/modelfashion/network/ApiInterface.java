@@ -21,6 +21,7 @@ import com.example.modelfashion.Model.response.User.UserDetailResponse;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
+import com.example.modelfashion.Model.response.main_screen.GetAllResponse;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
@@ -119,4 +120,7 @@ public interface ApiInterface {
     Single<List<MyProductByCategory>> getProductByPrice(
             @Body GetProductByPriceRequest request
     );
+
+    @GET("product/getAll")
+    Single<GetAllResponse> getAllProduct(@Query("offset") int offset);
 }
