@@ -1,6 +1,7 @@
 package com.example.modelfashion.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Model.sale.ProductSale;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.PreferenceManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 public class ProductSaleAdapter extends RecyclerView.Adapter<ProductSaleAdapter.SaleHolder> {
     Context context;
     ArrayList<ProductSale> productSales;
+    PreferenceManager preferenceManager;
 
     public ProductSaleAdapter(Context context, ArrayList<ProductSale> productSales) {
         this.context = context;
@@ -42,6 +47,18 @@ public class ProductSaleAdapter extends RecyclerView.Adapter<ProductSaleAdapter.
         holder.tv_name_sale.setText(productSale.getProduct_name());
         holder.tv_price_old.setText(decimalFormat.format(Double.parseDouble(String.valueOf(productSale.getPrice())))+" VNĐ");
         holder.tv_price_sale.setText(decimalFormat.format(Double.parseDouble(getPriceSale(productSale.getPrice(), productSale.getDiscount()))) + " VNĐ");
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                preferenceManager = new PreferenceManager(context);
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("user_id", preferenceManager.getString(Constants.KEY_ID));
+                intent.putExtra(Constants.KEY_PRODUCT_NAME,productSale.getProduct_name());
+                intent.putExtra(Constants.KEY_PRODUCT_ID,productSale.getProduct_id());
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,6 +86,7 @@ public class MainFragment extends Fragment {
     private TextView tvCurrentDate, tvGreeting;
     private PreferenceManager preferenceManager;
     RecyclerView rcl_product_sale;
+    RelativeLayout rl_sale;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -322,6 +324,8 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rcl_product_sale = view.findViewById(R.id.rcl_product_sale);
+        rl_sale = view.findViewById(R.id.rl_sale);
+        rl_sale.setVisibility(View.GONE);
         getListProductSale();
     }
 
@@ -347,8 +351,11 @@ public class MainFragment extends Fragment {
 
     private void setRclProductSale(){
         if(productSales.size()>0){
+            rl_sale.setVisibility(View.VISIBLE);
             ProductSaleAdapter productSaleAdapter = new ProductSaleAdapter(requireContext(),productSales);
             rcl_product_sale.setAdapter(productSaleAdapter);
+        }else {
+            rl_sale.setVisibility(View.GONE);
         }
 
 
