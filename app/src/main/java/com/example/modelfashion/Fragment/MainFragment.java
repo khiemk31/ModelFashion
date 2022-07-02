@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
@@ -39,11 +40,9 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.ProductSaleAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
+import com.example.modelfashion.Adapter.main_screen.ProductMainAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
-import com.example.modelfashion.Interface.ApiRetrofit;
 import com.example.modelfashion.Model.ItemSaleMain;
-import com.example.modelfashion.Model.response.BaseResponse;
-import com.example.modelfashion.Model.response.Login.User;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.Model.sale.ProductSale;
@@ -52,23 +51,17 @@ import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.relex.circleindicator.CircleIndicator3;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.HttpException;
 import retrofit2.Response;
 
 
@@ -103,6 +96,15 @@ public class MainFragment extends Fragment {
         }
     };
 
+
+    private int offset = 0;
+    private int currentPage = 0;
+    private int totalPage = 0;
+    private Boolean canLoadMore = true;
+    private RecyclerView rcv;
+
+    private ProductMainAdapter productMainAdapter;
+
     public MainFragment() {
 
     }
@@ -126,6 +128,7 @@ public class MainFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         avatar = view.findViewById(R.id.img_user_avatar);
         img_notifi = view.findViewById(R.id.img_notifi);
+        rcv = view.findViewById(R.id.rcv);
         repository = new Repository(requireContext());
         Bundle info = getArguments();
         user_id = info.getString("user_id");
@@ -134,6 +137,9 @@ public class MainFragment extends Fragment {
 //        } catch (Exception e) {
 //        }
 
+        productMainAdapter = new ProductMainAdapter();
+        rcv.setAdapter(productMainAdapter);
+        setUpRcvLoadData();
 
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);
@@ -163,9 +169,11 @@ public class MainFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             showProgressBar(progressBar);
-            productListAdapter.clearAllData();
-            categoryList.clear();
-            getAllCategory();
+            getAllOffset(true);
+            canLoadMore = true;
+//            productListAdapter.clearAllData();
+//            categoryList.clear();
+//            getAllCategory();
         });
 
         img_notifi.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +185,32 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    private void setUpRcvLoadData() {
+        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView mRecyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    int firstVisibleItemPosition = 0;
+                    int lastVisibleItemPosition = 0;
+
+                    RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    }
+
+                    if (firstVisibleItemPosition >= 0 && lastVisibleItemPosition == productMainAdapter.getItemCount() - 1) {
+                        if (canLoadMore) {
+                            getAllOffset(false);
+                        }
+                    }
+                }
+
+
+            }
+        });
+    }
+
     private void initClickProfileAvatar() {
         avatar.setOnClickListener(view -> {
             if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
@@ -186,6 +220,40 @@ public class MainFragment extends Fragment {
             }
         });
 
+    }
+
+    private void getAllOffset(Boolean refresh) {
+        if (refresh) {
+            offset = 0;
+            currentPage = 0;
+        }
+        compositeDisposable.add(repository.getAllProductOffset(offset)
+                .doOnSubscribe(disposable -> {
+                    showProgressBar(progressBar);
+                }).subscribe(getAllResponse -> {
+                    Log.d("ahihi", "getAllResponse: " + getAllResponse);
+                    hideProgressBar(progressBar);
+                    totalPage = getAllResponse.getTotalPage();
+                    currentPage++;
+                    offset += 10;
+                    if (currentPage >= totalPage) {
+                        canLoadMore = false;
+                    }
+
+                    // get data
+                    if (!refresh){
+                        productMainAdapter.addLoadMore(getAllResponse.getListProduct());
+                    }else {
+                        productMainAdapter.refreshList(getAllResponse.getListProduct());
+                    }
+
+                }, throwable -> {
+                    Log.d("ahihi", "throwable: " + throwable.toString());
+                    hideProgressBar(progressBar);
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                })
+        );
     }
 
     private void initHeader() {
@@ -219,8 +287,8 @@ public class MainFragment extends Fragment {
         rcvProduct.setAdapter(productListAdapter);
         initListener();
 
-
-        getAllCategory();
+        getAllOffset(false);
+//        getAllCategory();
 
     }
 
@@ -236,7 +304,7 @@ public class MainFragment extends Fragment {
                     hideProgressBar(progressBar);
                     if (dataAllCategory.getData().size() > 0) {
                         categoryList.addAll(dataAllCategory.getData());
-                        getAllProductByCategory();
+//                        getAllProductByCategory();
                     }
                 }, throwable -> {
                     String error = new Utils().getErrorBody(throwable).getMessage();
