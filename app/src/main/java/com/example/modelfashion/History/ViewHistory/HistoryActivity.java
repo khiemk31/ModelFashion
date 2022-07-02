@@ -147,18 +147,18 @@ public class HistoryActivity extends AppCompatActivity {
 
         String status = "";
         switch (i) {
-            case 1: status = "Đang Chờ";
+            case 1: status = "Chờ Xác Nhận";
                     break;
-            case 2: status = "Yêu Cầu Hủy";
+            case 2: status = "Đang Chờ Xử Lý";
                     break;
             case 3: status = "Đang Giao";
                     break;
-            case 4: status = "Đã Giao";
+            case 4: status = "Hoàn Thành";
                     break;
-            case 5: status = "Đã Hủy";
+            case 5: status = "Thất Bại";
                 break;
-            case 6: status = "Từ Chối";
-                break;
+//            case 6: status = "Từ Chối";
+//                break;
 
         }
         return status;
@@ -187,7 +187,7 @@ public class HistoryActivity extends AppCompatActivity {
                     for (int i = 0; i < response.body().size(); i++) {
                         bills.add(response.body().get(i));
                     }
-                    setListBill(loadData(numberStatus), bills);
+                    setListBill(numberStatus, bills);
                 }
 
 
@@ -205,12 +205,32 @@ public class HistoryActivity extends AppCompatActivity {
 
 
 
-    private void setListBill(String status,ArrayList<Bill> bills){
+    private void setListBill(int status,ArrayList<Bill> bills){
         ArrayList<Bill> subBill = new ArrayList<>();
         for (int i = 0;i<bills.size();i++){
-            if(bills.get(i).getStatus().matches(status)){
-                subBill.add(bills.get(i));
+            if(status == 1){
+                if(bills.get(i).getStatus().matches("Chờ Xác Nhận")){
+                    subBill.add(bills.get(i));
+                }
+            }else if(status == 2){
+                if(bills.get(i).getStatus().matches("Yêu Cầu Hủy Đơn") || bills.get(i).getStatus().matches("Yêu Cầu Trả Đơn")){
+                    subBill.add(bills.get(i));
+                }
+            }else if(status == 3){
+                if(bills.get(i).getStatus().matches("Đang Giao")){
+                    subBill.add(bills.get(i));
+                }
+            }else if(status == 4){
+                if(bills.get(i).getStatus().matches("Hoàn Thành")){
+                    subBill.add(bills.get(i));
+                }
+            }else if(status == 5){
+                if(bills.get(i).getStatus().matches("Đã Hủy") || bills.get(i).getStatus().matches("Đã Hoàn")
+                        || bills.get(i).getStatus().matches("Thất Bại") || bills.get(i).getStatus().matches("Từ Chối Đơn") ){
+                    subBill.add(bills.get(i));
+                }
             }
+
         }
         if(subBill.size()>0){
             tv_empty.setVisibility(View.GONE);
@@ -298,7 +318,7 @@ public class HistoryActivity extends AppCompatActivity {
                 loadThemeFilterStatus(numberStatus,status1,status2,status3,status4,status5,status6);
                 loadTitleStatus(numberStatus);
 
-                setListBill(loadData(numberStatus),bills);
+                setListBill(numberStatus,bills);
                 dialog.dismiss();
 
             }
@@ -311,22 +331,22 @@ public class HistoryActivity extends AppCompatActivity {
     }
     private void loadTitleStatus(int i){
         if (i == 1){
-            tv_status_history.setText("Chờ xác nhận");
+            tv_status_history.setText("Chờ Xác Nhận");
             tv_status_history.setTextColor(Color.parseColor("#FF0000"));
         }else if (i == 2){
-            tv_status_history.setText("Yêu cầu hủy");
+            tv_status_history.setText("Đang Chờ Xử Lý");
             tv_status_history.setTextColor(Color.parseColor("#ff9800"));
         }
         else if (i == 3){
-            tv_status_history.setText("Đang giao");
+            tv_status_history.setText("Đang Giao");
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
         else if (i == 4){
-            tv_status_history.setText("Đã giao");
+            tv_status_history.setText("Hoàn Thành");
             tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
         else if (i == 5){
-            tv_status_history.setText("Đã hủy");
+            tv_status_history.setText("Thất Bại");
             tv_status_history.setTextColor(Color.parseColor("#FF0000"));
         }
         else if (i == 6){

@@ -132,12 +132,12 @@ public class HistoryAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-        if (arr_bill.get(i).getStatus().matches("Đã Giao")) {
+        if (arr_bill.get(i).getStatus().matches("Hoàn Thành")) {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Phản hồi");
             tv_refund_of_order.setVisibility(View.VISIBLE);
-        } else if (arr_bill.get(i).getStatus().matches("Đang Chờ")) {
+        } else if (arr_bill.get(i).getStatus().matches("Chờ Xác Nhận")) {
             item_history_time.setText("Ngày đặt: " + arr_bill.get(i).getCreated_at().substring(0, 10));
             tv_feedback.setVisibility(View.VISIBLE);
             tv_feedback.setText("Hủy đơn");
@@ -163,7 +163,7 @@ public class HistoryAdapter extends BaseAdapter {
         tv_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (arr_bill.get(i).getStatus().matches("Đã Giao")) {
+                if (arr_bill.get(i).getStatus().matches("Hoàn Thành")) {
                     loadDialogFeedback(context, arr_bill.get(i).getBill_id());
                 } else {
                     // showDialogCancelOrder();

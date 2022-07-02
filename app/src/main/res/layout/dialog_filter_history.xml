@@ -56,7 +56,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Chờ xác nhận"
+                    android:text="Chờ Xác Nhận"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -69,7 +69,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Yêu cầu hủy"
+                    android:text="Đang Chờ Xử Lý"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -92,7 +92,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Đang giao"
+                    android:text="Đang Giao"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -105,7 +105,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Đã giao"
+                    android:text="Hoàn Thành"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -127,7 +127,7 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Đã hủy"
+                    android:text="Thất Bại"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -142,7 +142,9 @@
                     android:paddingVertical="5dp"
                     android:text="Từ Chối"
                     android:textColor="@color/black"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:focusable="false"
+                    android:visibility="invisible"/>
 
             </LinearLayout>
 
