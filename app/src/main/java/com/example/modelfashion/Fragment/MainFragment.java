@@ -45,6 +45,7 @@ import com.example.modelfashion.Adapter.main_screen.ProductMainAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.Model.response.category.MyCategory;
+import com.example.modelfashion.Model.response.main_screen.ProductMain;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.Model.sale.ProductSale;
 import com.example.modelfashion.Model.sale.SaleModel;
@@ -317,25 +318,36 @@ public class MainFragment extends Fragment {
 
 
     private void initListener() {
-        productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
+//        productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
+//            @Override
+//            public void imgClick(int position, MyProductByCategory product) {
+//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+//                intent.putExtra(KEY_PRODUCT_NAME, product.getProductName());
+//                intent.putExtra(KEY_PRODUCT_ID, product.getProductId());
+//                intent.putExtra("user_id", user_id);
+//                startActivity(intent);
+//            }
+//
+//            @Override
+//            public void imgAddToCartClick(int position, MyProductByCategory product) {
+//                // TODO add to cart
+//            }
+//
+//            @Override
+//            public void imgWatchAll(int position, MyCategory type) {
+//                Intent intent = new Intent(requireContext(), SeeAllActivity.class);
+//                intent.putExtra(KEY_PRODUCT_TYPE, type.getCategoryId());
+//                startActivity(intent);
+//            }
+//        });
+
+        productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
             @Override
-            public void imgClick(int position, MyProductByCategory product) {
+            public void onItemClick(int position, ProductMain productMain) {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_NAME, product.getProductName());
-                intent.putExtra(KEY_PRODUCT_ID, product.getProductId());
+                intent.putExtra(KEY_PRODUCT_NAME, productMain.getProductName());
+                intent.putExtra(KEY_PRODUCT_ID, productMain.getProductId());
                 intent.putExtra("user_id", user_id);
-                startActivity(intent);
-            }
-
-            @Override
-            public void imgAddToCartClick(int position, MyProductByCategory product) {
-                // TODO add to cart
-            }
-
-            @Override
-            public void imgWatchAll(int position, MyCategory type) {
-                Intent intent = new Intent(requireContext(), SeeAllActivity.class);
-                intent.putExtra(KEY_PRODUCT_TYPE, type.getCategoryId());
                 startActivity(intent);
             }
         });
