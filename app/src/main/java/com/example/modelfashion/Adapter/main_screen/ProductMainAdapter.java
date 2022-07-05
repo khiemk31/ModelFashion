@@ -65,6 +65,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
         holder.itemView.setOnClickListener(view -> {
             mClickListener.onItemClick(position, product);
         });
+
     }
 
     @Override

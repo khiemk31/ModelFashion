@@ -96,9 +96,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void setData(MyProductDetail myProductDetail) {
         DecimalFormat format = new DecimalFormat("###,###,###");
         List<String> images = new ArrayList<>();
-        images.add(myProductDetail.getListImage().get(0).getImage1());
-        images.add(myProductDetail.getListImage().get(0).getImage2());
-        images.add(myProductDetail.getListImage().get(0).getImage3());
+        images.add(myProductDetail.getProduct().get(0).getProductBgr1());
+        images.add(myProductDetail.getProduct().get(0).getProductBgr2());
+        images.add(myProductDetail.getProduct().get(0).getProductBgr3());
         adapter.setArrItem(images);
         price = format.format(myProductDetail.getProduct().get(0).getPrice());
         tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());

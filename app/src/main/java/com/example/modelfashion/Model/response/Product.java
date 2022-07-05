@@ -11,12 +11,21 @@ public class Product {
     private int price;
     @SerializedName("product_image")
     private String productImage;
+    @SerializedName("product_bgr1")
+    private String productBgr1;
+    @SerializedName("product_bgr2")
+    private String productBgr2;
+    @SerializedName("product_bgr3")
+    private String productBgr3;
 
-    public Product(String productId, String productName, int price, String productImage) {
+    public Product(String productId, String productName, int price, String productImage, String productBgr1, String productBgr2, String productBgr3) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.productImage = productImage;
+        this.productBgr1 = productBgr1;
+        this.productBgr2 = productBgr2;
+        this.productBgr3 = productBgr3;
     }
 
     public String getProductId() {
@@ -49,6 +58,30 @@ public class Product {
 
     public void setProductImage(String productImage) {
         this.productImage = productImage;
+    }
+
+    public String getProductBgr1() {
+        return productBgr1;
+    }
+
+    public void setProductBgr1(String productBgr1) {
+        this.productBgr1 = productBgr1;
+    }
+
+    public String getProductBgr2() {
+        return productBgr2;
+    }
+
+    public void setProductBgr2(String productBgr2) {
+        this.productBgr2 = productBgr2;
+    }
+
+    public String getProductBgr3() {
+        return productBgr3;
+    }
+
+    public void setProductBgr3(String productBgr3) {
+        this.productBgr3 = productBgr3;
     }
 
     public Product() {
