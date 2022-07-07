@@ -45,7 +45,7 @@ public interface ApiHistory {
     Call<CancelBill> cancelBill(@Body CancelBill cancelBill);
     @PUT("bill/returnRequest")
     Call<RefundOfOrder> refundOfOrder(@Body RefundOfOrder refundOfOrder);
-    @PUT("bill/returnRequest")
+    @PUT("bill/feedback")
     Call<FeedbackBill> feedbackBill(@Body FeedbackBill feedbackBill);
 
     @GET("user/getAddress/{id}")

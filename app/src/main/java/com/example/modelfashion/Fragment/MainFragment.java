@@ -81,6 +81,7 @@ public class MainFragment extends Fragment {
     private PreferenceManager preferenceManager;
     RecyclerView rcl_product_sale;
     RelativeLayout rl_sale;
+    ImageView icon_sale;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -405,6 +406,8 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rcl_product_sale = view.findViewById(R.id.rcl_product_sale);
         rl_sale = view.findViewById(R.id.rl_sale);
+        icon_sale = view.findViewById(R.id.icon_sale);
+       // Glide.with(view).load(R.drawable.sale_home).into(icon_sale);
         rl_sale.setVisibility(View.GONE);
         getListProductSale();
     }
