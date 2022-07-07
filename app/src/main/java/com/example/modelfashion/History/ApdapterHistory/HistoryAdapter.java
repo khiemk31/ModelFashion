@@ -1,5 +1,6 @@
 package com.example.modelfashion.History.ApdapterHistory;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -59,11 +60,13 @@ public class HistoryAdapter extends BaseAdapter {
     CancelBill cancelBill;
     Dialog dialog;
     AsyncTask<?, ?, ?> runningTask;
+    Activity activity;
 
-    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill) {
+    public HistoryAdapter(Context context, ArrayList<Bill> arr_bill, Activity activity) {
 
         this.context = context;
         this.arr_bill = arr_bill;
+        this.activity = activity;
 
     }
 //    public HistoryAdapter(Context context,List<ModelHistory> listModel) {
@@ -182,14 +185,14 @@ public class HistoryAdapter extends BaseAdapter {
         ApiHistory.API_HISTORY.cancelBill(cancelBill).enqueue(new Callback<CancelBill>() {
             @Override
             public void onResponse(Call<CancelBill> call, Response<CancelBill> response) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+                hideLoad();
                 Toast.makeText(context, "Đã gửi yêu cầu hủy đơn", Toast.LENGTH_SHORT).show();
                 senDataToActivity();
             }
 
             @Override
             public void onFailure(Call<CancelBill> call, Throwable t) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+                hideLoad();
                 Toast.makeText(context, "Yêu cầu hủy đơn thất bại", Toast.LENGTH_SHORT).show();
             }
         });
@@ -200,14 +203,14 @@ public class HistoryAdapter extends BaseAdapter {
         ApiHistory.API_HISTORY.refundOfOrder(refundOfOrder).enqueue(new Callback<RefundOfOrder>() {
             @Override
             public void onResponse(Call<RefundOfOrder> call, Response<RefundOfOrder> response) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+                hideLoad();
                 Toast.makeText(context, "Đã gửi yêu cầu trả hàng", Toast.LENGTH_SHORT).show();
                 senDataToActivity();
             }
 
             @Override
             public void onFailure(Call<RefundOfOrder> call, Throwable t) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+             hideLoad();
                 Toast.makeText(context, "Yêu cầu trả hàng thất bại", Toast.LENGTH_SHORT).show();
             }
         });
@@ -217,14 +220,14 @@ public class HistoryAdapter extends BaseAdapter {
         ApiHistory.API_HISTORY.feedbackBill(feedbackBill).enqueue(new Callback<FeedbackBill>() {
             @Override
             public void onResponse(Call<FeedbackBill> call, Response<FeedbackBill> response) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+               hideLoad();
                 Toast.makeText(context, "Đã gửi phản hồi", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(Call<FeedbackBill> call, Throwable t) {
-                HistoryActivity.rl_load.setVisibility(View.GONE);
+                hideLoad();
                 Toast.makeText(context, "Gửi phản hồi thất bại", Toast.LENGTH_SHORT).show();
             }
         });
@@ -250,6 +253,7 @@ public class HistoryAdapter extends BaseAdapter {
                 if (content.isEmpty()) {
                     Toast.makeText(context, "Bạn chưa nhập nội dung", Toast.LENGTH_SHORT).show();
                 } else {
+                    showLoad();
 //                    String uriText = "mailto:" + context.getString(R.string.email) +
 //                            "?subject=" + "Feedback đơn hàng " + maDH +
 //                            "&body=" + content;
@@ -388,7 +392,7 @@ public class HistoryAdapter extends BaseAdapter {
             public void onClick(View view) {
 
                 sendCancelBill(cancelBill);
-                HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+                showLoad();
                 dialog.dismiss();
 
             }
@@ -474,7 +478,7 @@ public class HistoryAdapter extends BaseAdapter {
                     if(edt_reason_cacel_bill.getText().toString().trim().length()>0){
                         reason = edt_reason_cacel_bill.getText().toString().trim();
                         sendRefundOfOrder(new RefundOfOrder(build_id,reason));
-                        HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+                        showLoad();
                         dialog.dismiss();
                     }else {
                         Toast.makeText(context,"Vui lòng nhập lý do trả hàng",Toast.LENGTH_SHORT).show();
@@ -482,7 +486,7 @@ public class HistoryAdapter extends BaseAdapter {
 
                 }else {
                     sendRefundOfOrder(new RefundOfOrder(build_id,reason));
-                    HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+                    showLoad();
                     dialog.dismiss();
                 }
 
@@ -535,6 +539,17 @@ public class HistoryAdapter extends BaseAdapter {
         Intent intent = new Intent("send_data_to_activity");
         intent.putExtra("action", "load");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    private void showLoad(){
+        HistoryActivity.rl_load.setVisibility(View.VISIBLE);
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+    }
+    private void hideLoad(){
+        HistoryActivity.rl_load.setVisibility(View.GONE);
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
     }
 
 

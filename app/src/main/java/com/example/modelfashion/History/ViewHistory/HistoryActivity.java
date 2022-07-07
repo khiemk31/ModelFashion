@@ -237,7 +237,7 @@ public class HistoryActivity extends AppCompatActivity {
         }else {
             tv_empty.setVisibility(View.VISIBLE);
         }
-        HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,subBill);
+        HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,subBill,HistoryActivity.this);
         lv_history.setAdapter(historyAdapter);
     }
 
