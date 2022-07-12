@@ -38,6 +38,7 @@ import com.example.modelfashion.Activity.NotifiActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
+import com.example.modelfashion.Activity.ViewSaleActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
 import com.example.modelfashion.Adapter.ProductSaleAdapter;
 import com.example.modelfashion.Adapter.VpSaleMainFmAdapter;
@@ -82,11 +83,12 @@ public class MainFragment extends Fragment {
     RecyclerView rcl_product_sale;
     RelativeLayout rl_sale;
     ImageView icon_sale;
+    TextView tv_viewall_sale;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     ProductListAdapter productListAdapter = new ProductListAdapter();
-    private ArrayList<ProductSale> productSales = new ArrayList<>();
+    public static ArrayList<ProductSale> productSales = new ArrayList<>();
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable mRunable = new Runnable() {
@@ -133,6 +135,13 @@ public class MainFragment extends Fragment {
         avatar = view.findViewById(R.id.img_user_avatar);
         img_notifi = view.findViewById(R.id.img_notifi);
         rcv = view.findViewById(R.id.rcv);
+        tv_viewall_sale = view.findViewById(R.id.tv_viewall_sale);
+        tv_viewall_sale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireContext(), ViewSaleActivity.class));
+            }
+        });
         repository = new Repository(requireContext());
         Bundle info = getArguments();
         user_id = info.getString("user_id");

@@ -13,17 +13,20 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/logo"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.ModelFashion"
         android:usesCleartextTraffic="true"
-        tools:Replace= "android:theme"
+        tools:Replace="android:theme"
         tools:replace="android:hardwareAccelerated">
+        <activity
+            android:name=".Activity.ViewSaleActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.SignIn.OTPPhoneActivity"
             android:exported="false" />
@@ -52,7 +55,7 @@
             android:name=".Activity.SignIn.SignUpActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activity.SplashActivity"
             android:exported="true"
@@ -91,7 +94,10 @@
             android:name=".Activity.ProductDetailActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true" />
-        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://537853312614449:__Rb7zY3SQzgNSdlzh3PLP0Jz8Y@cde"/>
+
+        <meta-data
+            android:name="CLOUDINARY_URL"
+            android:value="cloudinary://537853312614449:__Rb7zY3SQzgNSdlzh3PLP0Jz8Y@cde" />
     </application>
 
 </manifest>

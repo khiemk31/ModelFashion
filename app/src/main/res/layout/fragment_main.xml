@@ -159,16 +159,16 @@
                         android:text="Xem tất cả"
                         android:textColor="@color/black"
                         android:textSize="13dp" />
+
                     <androidx.recyclerview.widget.RecyclerView
-                        android:layout_below="@+id/tv_title_sale"
-                        android:paddingLeft="20dp"
                         android:id="@+id/rcl_product_sale"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_below="@+id/tv_title_sale"
                         android:orientation="horizontal"
+                        android:paddingLeft="20dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_product_sale"
-                        />
+                        tools:listitem="@layout/item_product_sale" />
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

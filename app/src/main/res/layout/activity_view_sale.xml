@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F6F6F6"
+    tools:context=".Activity.ViewSaleActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bt_toolbar_history"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/back_view_sale"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:padding="7dp"
+            android:src="@drawable/ic_back_detail_history" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="Sale"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="normal" />>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:background="@drawable/bt_search_sale"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/edt_search_sale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/nunito_medium"
+            android:hint="Search"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcl_view_sale"
+       android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:spanCount="2"
+        tools:listitem="@layout/item_product_sale"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+</LinearLayout>
