@@ -13,17 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,6 +27,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
+import com.example.modelfashion.Adapter.category.MyCategoryAdapter;
+import com.example.modelfashion.Model.MyStyle;
 import com.example.modelfashion.Model.request.GetProductByPriceRequest;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
@@ -65,6 +63,8 @@ public class CategoryFragment extends Fragment {
 
     private int currentCategory = 0;
     Repository repository;
+    private List<MyStyle> myCategories ;
+    private RecyclerView rcv_mycategory;
 
     private ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
@@ -75,12 +75,29 @@ public class CategoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         initView(view);
+        rcv_mycategory = view.findViewById(R.id.rcv_mycategory);
+        fakedata();
+        setListStyle();
         repository = new Repository(requireContext());
 
 
         initData();
         initListener();
         return view;
+    }
+
+    private void setListStyle(){
+        MyCategoryAdapter myCategoryAdapter = new MyCategoryAdapter(requireContext(),myCategories);
+        rcv_mycategory.setAdapter(myCategoryAdapter);
+
+    }
+
+    private void fakedata(){
+        myCategories = new ArrayList<>();
+        myCategories.add(new MyStyle("ÁO PHÔNG","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
+        myCategories.add(new MyStyle("ÁO POLO","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
+        myCategories.add(new MyStyle("ÁO SƠ MI","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
+        myCategories.add(new MyStyle("QUẦN KAKI","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
     }
 
 

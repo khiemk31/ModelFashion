@@ -60,7 +60,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#DBDBDB">
+                android:background="#F1F1F1">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_category"
@@ -87,7 +87,23 @@
                     app:layout_constraintStart_toEndOf="@+id/rcv_category"
                     app:layout_constraintTop_toTopOf="parent"
                     app:spanCount="2"
+                    android:visibility="gone"
                     tools:listitem="@layout/item_clothes" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_mycategory"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rcv_category"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:spanCount="2"
+                    android:visibility="visible"
+                    tools:listitem="@layout/item_mycategory" />
+
 
                 <TextView
                     android:id="@+id/tv_emty_category"

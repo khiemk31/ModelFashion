@@ -85,4 +85,6 @@ dependencies {
 
     //add momo
     implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
+
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
