@@ -31,7 +31,7 @@ public interface ApiHistory {
             .create();
 
     ApiHistory  API_HISTORY = new Retrofit.Builder()
-            .baseUrl("http://modelfashion.store")
+            .baseUrl("http://modelfashion.store/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiHistory.class);
