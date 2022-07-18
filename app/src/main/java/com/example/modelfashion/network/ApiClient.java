@@ -2,6 +2,7 @@ package com.example.modelfashion.network;
 
 import android.content.Context;
 
+import com.example.modelfashion.Utility.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,7 +23,7 @@ public final class ApiClient {
         OkHttpClient client = provideHttpClient(context);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://modelfashion.store")
+                .baseUrl(Constants.URL_SERVER)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

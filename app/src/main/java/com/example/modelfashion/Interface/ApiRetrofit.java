@@ -6,6 +6,7 @@ import com.example.modelfashion.Model.response.bill.BillDetail;
 import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
+import com.example.modelfashion.Utility.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,7 +31,7 @@ import retrofit2.http.Query;
 
 public interface ApiRetrofit {
     Gson gson = new GsonBuilder().setLenient().create();
-    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl("http://modelfashion.store")
+    ApiRetrofit apiRetrofit = new Retrofit.Builder().baseUrl(Constants.URL_SERVER)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

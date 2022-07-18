@@ -3,6 +3,9 @@ package com.example.modelfashion.Utility;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
 
 public class Constants {
+
+    // link url
+    public static final String URL_SERVER = "http://modelfashion.store";
     public static final String KEY_PREFERENCE_NAME = "ModelFashionPreference";
 
     //profile
