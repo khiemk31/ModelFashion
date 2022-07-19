@@ -493,12 +493,12 @@ public class CartFragment extends Fragment {
 
     void showProgressBar(ProgressBar progressBar) {
         progressBar.setVisibility(View.VISIBLE);
-        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     void hideProgressBar(ProgressBar progressBar) {
         progressBar.setVisibility(View.GONE);
-        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 
