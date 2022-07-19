@@ -34,7 +34,7 @@ public class ViewPagerDetailProductAdapter extends RecyclerView.Adapter<ViewPage
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String url = arrItem.get(position);
-        Glide.with(holder.img.getContext()).load(url).placeholder(R.drawable.test_img).into(holder.img);
+        Glide.with(holder.img.getContext()).load(url).into(holder.img);
     }
 
     @Override

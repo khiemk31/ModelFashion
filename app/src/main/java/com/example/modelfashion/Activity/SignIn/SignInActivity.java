@@ -34,6 +34,7 @@ import com.example.modelfashion.Model.response.Login.LoginResponse;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.example.modelfashion.network.Repository;
@@ -158,12 +159,8 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     getUserDetail(loginResponse.getData());
                 }, throwable -> {
-                    Log.e("bug", throwable.getMessage());
-                    if (throwable.getMessage().equalsIgnoreCase("HTTP 404 Not Found")) {
-                        Toast.makeText(SignInActivity.this, "Số điện thoại chưa được đăng kí", Toast.LENGTH_SHORT).show();
-                    } else if (throwable.getMessage().equalsIgnoreCase("HTTP 500 Internal Server Error")) {
-                        Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-                    }
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(SignInActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -207,8 +204,8 @@ public class SignInActivity extends AppCompatActivity {
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                 }, throwable -> {
-                    Toast.makeText(SignInActivity.this, "Error Happened.Try again!", Toast.LENGTH_SHORT).show();
-                    Log.d("ahuhu", "userDetailResponse: error" + throwable.toString());
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(SignInActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
