@@ -23,6 +23,7 @@ import com.example.modelfashion.Model.response.User.UserDetailResponse;
 import com.example.modelfashion.Model.response.bill.Bill;
 import com.example.modelfashion.Model.response.category.CategoryResponse;
 import com.example.modelfashion.Model.response.category.DataAllCategory;
+import com.example.modelfashion.Model.response.main_screen.GetAllProductByCategoryResponse;
 import com.example.modelfashion.Model.response.main_screen.GetAllResponse;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
@@ -155,6 +156,12 @@ public final class Repository {
 
     public Single<GetAllResponse> getAllProductOffset(int offset) {
         return apiInterface.getAllProduct(offset)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<GetAllProductByCategoryResponse> getAllProductByCategory() {
+        return apiInterface.getAllProductByCategory()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

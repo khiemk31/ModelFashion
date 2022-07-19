@@ -4,7 +4,6 @@ import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
-import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.content.Intent;
 import android.os.Build;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
@@ -36,7 +33,6 @@ import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.NotifiActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
-import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.ViewSaleActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
@@ -46,13 +42,14 @@ import com.example.modelfashion.Adapter.main_screen.ProductMainAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.ItemSaleMain;
 import com.example.modelfashion.Model.response.category.MyCategory;
-import com.example.modelfashion.Model.response.main_screen.ProductMain;
+import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.Model.sale.ProductSale;
 import com.example.modelfashion.Model.sale.SaleModel;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.Utils;
+import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
 import java.text.DateFormat;
@@ -71,7 +68,6 @@ import retrofit2.Response;
 public class MainFragment extends Fragment {
     private ViewPager2 vpSaleMain;
     private CircleIndicator3 ciSale;
-    private RecyclerView rcvProduct;
     Repository repository;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
@@ -141,7 +137,6 @@ public class MainFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refresh_layout);
         vpSaleMain = view.findViewById(R.id.vp_sale_main_fm);
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
-        rcvProduct = view.findViewById(R.id.rv_men_page_fm);
         progressBar = view.findViewById(R.id.progress_bar);
         avatar = view.findViewById(R.id.img_user_avatar);
         img_notifi = view.findViewById(R.id.img_notifi);
@@ -163,7 +158,10 @@ public class MainFragment extends Fragment {
 
         productMainAdapter = new ProductMainAdapter();
         rcv.setAdapter(productMainAdapter);
-        setUpRcvLoadData();
+        rcv.addItemDecoration(new SpacesItemDecoration(10));
+//        setUpRcvLoadData();
+
+
 
         tvCurrentDate = view.findViewById(R.id.tv_current_date);
         tvGreeting = view.findViewById(R.id.tv_greeting);
@@ -192,9 +190,8 @@ public class MainFragment extends Fragment {
 
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
-            showProgressBar(progressBar);
-            getAllOffset(true);
-            canLoadMore = true;
+            getAllProductByCategory();
+
 //            productListAdapter.clearAllData();
 //            categoryList.clear();
 //            getAllCategory();
@@ -209,31 +206,32 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void setUpRcvLoadData() {
-        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView mRecyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int firstVisibleItemPosition = 0;
-                    int lastVisibleItemPosition = 0;
-
-                    RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-                    if (layoutManager instanceof LinearLayoutManager) {
-                        firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-                    }
-
-                    if (firstVisibleItemPosition >= 0 && lastVisibleItemPosition == productMainAdapter.getItemCount() - 1) {
-                        if (canLoadMore) {
-                            getAllOffset(false);
-                        }
-                    }
-                }
-
-
-            }
-        });
-    }
+    // loadmore
+//    private void setUpRcvLoadData() {
+//        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView mRecyclerView, int newState) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    int firstVisibleItemPosition = 0;
+//                    int lastVisibleItemPosition = 0;
+//
+//                    RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+//                    if (layoutManager instanceof LinearLayoutManager) {
+//                        firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+//                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+//                    }
+//
+//                    if (firstVisibleItemPosition >= 0 && lastVisibleItemPosition == productMainAdapter.getItemCount() - 1) {
+//                        if (canLoadMore) {
+//                            getAllOffset(false);
+//                        }
+//                    }
+//                }
+//
+//
+//            }
+//        });
+//    }
 
     private void initClickProfileAvatar() {
         avatar.setOnClickListener(view -> {
@@ -247,39 +245,42 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void getAllOffset(Boolean refresh) {
-        if (refresh) {
-            offset = 0;
-            currentPage = 0;
-        }
-        compositeDisposable.add(repository.getAllProductOffset(offset)
-                .doOnSubscribe(disposable -> {
-                    showProgressBar(progressBar);
-                }).subscribe(getAllResponse -> {
-                    Log.d("ahihi", "getAllResponse: " + getAllResponse);
-                    hideProgressBar(progressBar);
-                    totalPage = getAllResponse.getTotalPage();
-                    currentPage++;
-                    offset += 10;
-                    if (currentPage >= totalPage) {
-                        canLoadMore = false;
-                    }
 
-                    // get data
-                    if (!refresh){
-                        productMainAdapter.addLoadMore(getAllResponse.getListProduct());
-                    }else {
-                        productMainAdapter.refreshList(getAllResponse.getListProduct());
-                    }
 
-                }, throwable -> {
-                    Log.d("ahihi", "throwable: " + throwable.toString());
-                    hideProgressBar(progressBar);
-                    String error = new Utils().getErrorBody(throwable).getMessage();
-                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-                })
-        );
-    }
+    // loadmore
+//    private void getAllOffset(Boolean refresh) {
+//        if (refresh) {
+//            offset = 0;
+//            currentPage = 0;
+//        }
+//        compositeDisposable.add(repository.getAllProductOffset(offset)
+//                .doOnSubscribe(disposable -> {
+//                    showProgressBar(progressBar);
+//                }).subscribe(getAllResponse -> {
+//                    Log.d("ahihi", "getAllResponse: " + getAllResponse);
+//                    hideProgressBar(progressBar);
+//                    totalPage = getAllResponse.getTotalPage();
+//                    currentPage++;
+//                    offset += 10;
+//                    if (currentPage >= totalPage) {
+//                        canLoadMore = false;
+//                    }
+//
+//                    // get data
+//                    if (!refresh){
+//                        productMainAdapter.addLoadMore(getAllResponse.getListProduct());
+//                    }else {
+//                        productMainAdapter.refreshList(getAllResponse.getListProduct());
+//                    }
+//
+//                }, throwable -> {
+//                    Log.d("ahihi", "throwable: " + throwable.toString());
+//                    hideProgressBar(progressBar);
+//                    String error = new Utils().getErrorBody(throwable).getMessage();
+//                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+//                })
+//        );
+//    }
 
     private void initHeader() {
         DateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy");
@@ -309,10 +310,9 @@ public class MainFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
 
-        rcvProduct.setAdapter(productListAdapter);
         initListener();
+        getAllProductByCategory();
 
-        getAllOffset(false);
 //        getAllCategory();
 
     }
@@ -365,7 +365,7 @@ public class MainFragment extends Fragment {
 
         productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(int position, ProductMain productMain) {
+            public void onItemClick(int position, Product productMain) {
                 Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
                 intent.putExtra(KEY_PRODUCT_NAME, productMain.getProductName());
                 intent.putExtra(KEY_PRODUCT_ID, productMain.getProductId());
@@ -380,25 +380,19 @@ public class MainFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void getAllProductByCategory() {
-        categoryList.forEach(myCategory -> {
-            compositeDisposable.add(repository.getProductByCategory(myCategory.getCategoryId())
+            compositeDisposable.add(repository.getAllProductByCategory()
                     .doOnSubscribe(disposable -> {
                         showProgressBar(progressBar);
                     }).doFinally(() -> {
                     }).subscribe(dataProduct -> {
                         hideProgressBar(progressBar);
-                        myProductByCategories.addAll(dataProduct.getData());
-                        List<Pair<MyCategory, ArrayList<MyProductByCategory>>> data = new ArrayList<>();
-
-                        data.add(new Pair<>(myCategory, dataProduct.getData()));
-                        productListAdapter.addListProduct(data);
+                        productMainAdapter.refreshList(dataProduct.getProductList());
 
                     }, throwable -> {
                         hideProgressBar(progressBar);
                         String error = new Utils().getErrorBody(throwable).getMessage();
                         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
                     }));
-        });
     }
 
     void showProgressBar(ProgressBar progressBar) {

@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_variablefont_wght"
             android:paddingLeft="5dp"
+            android:lines="2"
+            android:ellipsize="end"
             android:text="Product name"
             android:textColor="@color/black" />
 

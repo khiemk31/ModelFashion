@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.main_screen.ProductMain;
 import com.example.modelfashion.R;
 
@@ -20,15 +21,15 @@ import java.util.List;
 
 public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.ProductMainViewHolder> {
 
-    private List<ProductMain> listProduct = new ArrayList<>();
+    private List<Product> listProduct = new ArrayList<>();
 
-    public void refreshList(List<ProductMain> list) {
+    public void refreshList(List<Product> list) {
         this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
     }
 
-    public void addLoadMore(List<ProductMain> list) {
+    public void addLoadMore(List<Product> list) {
         this.listProduct.addAll(list);
         notifyDataSetChanged();
     }
@@ -43,7 +44,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductMainViewHolder holder, int position) {
-        ProductMain product = listProduct.get(position);
+        Product product = listProduct.get(position);
 
         holder.tv_my_product_name.setText(product.getProductName());
         holder.tv_my_product_price.setText("" + product.getPrice());
@@ -95,6 +96,6 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
     }
 
     public interface ItemClickListener {
-        void onItemClick(int position, ProductMain productMain);
+        void onItemClick(int position, Product productMain);
     }
 }

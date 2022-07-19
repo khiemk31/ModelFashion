@@ -54,8 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:riv_corner_radius="100dip"
-             />
+            app:riv_corner_radius="100dip" />
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_notifi"
@@ -122,9 +121,9 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_sale"
-                    android:layout_marginTop="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -133,8 +132,7 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:paddingLeft="20dp"
-                        android:src="@drawable/icon_sale_home"
-                         />
+                        android:src="@drawable/icon_sale_home" />
 
                     <TextView
                         android:id="@+id/tv_title_sale"
@@ -172,24 +170,14 @@
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_men_page_fm"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="#F4F4F6"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/rv_product_items_layout" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginTop="20dp"
                     android:id="@+id/rcv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:background="#F4F4F6"
+                    android:clipToPadding="false"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
@@ -201,8 +189,8 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        style="@style/BackgroundProgressBar"
         android:id="@+id/progress_bar"
+        style="@style/BackgroundProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
