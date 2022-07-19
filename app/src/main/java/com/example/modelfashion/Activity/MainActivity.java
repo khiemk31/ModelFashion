@@ -1,15 +1,21 @@
 package com.example.modelfashion.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     Boolean isLogin;
     Bundle info;
     public static BottomNavigationView navigationView;
+    public static ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,36 +58,59 @@ public class MainActivity extends AppCompatActivity {
         info = new Bundle();
         getUserData();
         info.putString("user_id",user_id);
-        replaceFragment(new MainFragment());
         navigationView=findViewById(R.id.bottom_navigation_view_linear);
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.main_item_home:
-                        MainFragment mainFragment = new MainFragment();
-                        mainFragment.setArguments(info);
-                        replaceFragment(mainFragment);
+                       viewPager.setCurrentItem(0);
                         break;
                     case R.id.main_item_cart:
-                        CartFragment cartFragment = new CartFragment();
-                        cartFragment.setArguments(info);
-                        replaceFragment(cartFragment);
+                        viewPager.setCurrentItem(2);
                         break;
                     case R.id.main_item_category:
-                        CategoryFragment categoryFragment = new CategoryFragment();
-                        categoryFragment.setArguments(info);
-                        replaceFragment(categoryFragment);
+                        viewPager.setCurrentItem(1);
                         break;
                     case R.id.main_item_profile:
-                        FragmentProfile fragmentProfile = new FragmentProfile();
-                        fragmentProfile.setArguments(info);
-                        replaceFragment(fragmentProfile);
+                        viewPager.setCurrentItem(3);
                         break;
                 }
                 return true;
             }
         });
+        viewPager = findViewById(R.id.viewpager_main);
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        navigationView.getMenu().getItem(0).setChecked(true);
+                        break;
+                    case 1:
+                        navigationView.getMenu().getItem(1).setChecked(true);
+                        break;
+                    case 2:
+                        navigationView.getMenu().getItem(2).setChecked(true);
+                        break;
+                    case 3:
+                        navigationView.getMenu().getItem(3).setChecked(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         KeyboardUtils.addKeyboardToggleListener(this, isVisible -> {
             if (!isVisible) {
@@ -90,7 +121,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getUserData(){
+    private class MyPagerAdapter extends FragmentPagerAdapter{
+
+        public MyPagerAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            switch(position) {
+
+                case 0: return MainFragment.newInstance("FirstFragment, Instance 1");
+                case 1: return CategoryFragment.newInstance("SecondFragment, Instance 2");
+                case 2: return CartFragment.newInstance("ThirdFragment, Instance 3");
+                case 3: return FragmentProfile.newInstance("FourthFragment, Instance 4");
+
+                default: return FragmentProfile.newInstance("FourthFragment, Default");
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+    }
+
+    private void getUserData() {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
         isLogin = sharedPreferences.getBoolean(Constants.KEY_CHECK_LOGIN, true);
         if (isLogin == false) {
@@ -105,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(userData);
                     user_id = obj.getString(Constants.KEY_ID);
-                    Log.d("My App", obj.toString()+user_id);
+                    Log.d("My App", obj.toString() + user_id);
 
                 } catch (Throwable t) {
                     Log.e("My App", "Could not parse malformed JSON: \"" + userData + "\"");
@@ -114,16 +171,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void replaceFragment(Fragment fm){
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fm.setArguments(info);
-        fragmentTransaction.replace(R.id.frmlayout,fm);
-        fragmentTransaction.commit();
-
-    }
+//    private void replaceFragment(Fragment fm){
+//        FragmentManager fragmentManager= getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+//        fm.setArguments(info);
+//        fragmentTransaction.replace(R.id.frmlayout,fm);
+//        fragmentTransaction.commit();
+//
+//    }
 
     boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -138,30 +196,30 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
 
-    public void showBottomNavigation(){
+    public void showBottomNavigation() {
         navigationView.setVisibility(View.VISIBLE);
     }
 
-    public void hideBottomNavigation(){
+    public void hideBottomNavigation() {
         navigationView.setVisibility(View.GONE);
     }
 
-    public void moveToFragmentProfile(){
-        FragmentProfile fragmentProfile = new FragmentProfile();
-        replaceFragment(fragmentProfile);
-        navigationView.setSelectedItemId(R.id.main_item_profile);
-    }
+//    public void moveToFragmentProfile() {
+//        FragmentProfile fragmentProfile = new FragmentProfile();
+//        replaceFragment(fragmentProfile);
+//        navigationView.setSelectedItemId(R.id.main_item_profile);
+//    }
 
-    public void moveToCartFragment() {
-        CartFragment cartFragment = new CartFragment();
-        replaceFragment(cartFragment);
-        navigationView.setSelectedItemId(R.id.main_item_cart);
-    }
+//    public void moveToCartFragment() {
+//        CartFragment cartFragment = new CartFragment();
+//        replaceFragment(cartFragment);
+//        navigationView.setSelectedItemId(R.id.main_item_cart);
+//    }
 
     @Override
     protected void onResume() {
@@ -201,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void senDataToActivity(){
+    private void senDataToActivity() {
         Intent intent = new Intent("send_data_to_fragment");
         intent.putExtra("action", "addbill");
         LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intent);

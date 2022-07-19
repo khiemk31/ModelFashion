@@ -68,6 +68,17 @@ public class CategoryFragment extends Fragment {
 
     private ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
+    public static CategoryFragment newInstance(String text) {
+
+        CategoryFragment f = new CategoryFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        f.setArguments(b);
+
+        return f;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

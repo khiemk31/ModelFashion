@@ -19,7 +19,7 @@
         android:id="@+id/img_product_sale"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        app:riv_corner_radius="15dp"
+        app:riv_corner_radius="10dp"
         android:layout_marginBottom="10dp"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"

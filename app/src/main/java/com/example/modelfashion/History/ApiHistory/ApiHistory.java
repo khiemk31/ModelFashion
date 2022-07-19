@@ -10,6 +10,7 @@ import com.example.modelfashion.Model.response.bill.RefundOfOrder;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
 import com.example.modelfashion.Model.response.bill.UserID;
 import com.example.modelfashion.Model.sale.SaleModel;
+import com.example.modelfashion.Utility.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -31,7 +32,7 @@ public interface ApiHistory {
             .create();
 
     ApiHistory  API_HISTORY = new Retrofit.Builder()
-            .baseUrl("http://modelfashion.store/")
+            .baseUrl(Constants.URL_SERVER+"/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiHistory.class);

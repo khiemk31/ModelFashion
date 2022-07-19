@@ -122,6 +122,17 @@ public class MainFragment extends Fragment {
 
     }
 
+    public static MainFragment newInstance(String text) {
+
+        MainFragment f = new MainFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        f.setArguments(b);
+
+        return f;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -227,7 +238,8 @@ public class MainFragment extends Fragment {
     private void initClickProfileAvatar() {
         avatar.setOnClickListener(view -> {
             if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
-                ((MainActivity) requireActivity()).moveToFragmentProfile();  // dang nhap roi thi vao profile
+                MainActivity.viewPager.setCurrentItem(3);
+                MainActivity.navigationView.getMenu().getItem(3).setChecked(true);// dang nhap roi thi vao profile
             } else {
                 startActivity(new Intent(requireContext(), SignInActivity.class)); // chua dang nhap thi vao dang nhap
             }

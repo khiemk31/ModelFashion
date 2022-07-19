@@ -49,6 +49,17 @@ public class FragmentProfile extends Fragment {
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
     ProgressLoadingCommon progressLoadingCommon;
 
+    public static FragmentProfile newInstance(String text) {
+
+        FragmentProfile f = new FragmentProfile();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        f.setArguments(b);
+
+        return f;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

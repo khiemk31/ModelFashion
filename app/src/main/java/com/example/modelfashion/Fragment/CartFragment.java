@@ -116,6 +116,17 @@ public class CartFragment extends Fragment {
         }
     };
 
+    public static CartFragment newInstance(String text) {
+
+        CartFragment f = new CartFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        f.setArguments(b);
+
+        return f;
+    }
+
 
 
 
