@@ -34,6 +34,7 @@ import com.example.modelfashion.network.Repository;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,7 +59,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     String productName = "";
 
     private MyProductDetail myProductDetail;
-    private String size = "S";
+    private String size = "not specified";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -102,8 +103,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         adapter.setArrItem(images);
         price = format.format(myProductDetail.getProduct().get(0).getPrice());
         tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());
-        tv_price.setText(String.valueOf(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
-//        tv_product_category.setText("Loại sản phẩm: " );
+
+        if (String.valueOf(myProductDetail.getProduct().get(0).getDiscount()) == null) {
+            tv_price.setText(String.valueOf(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
+        } else {
+            int discountPrice = myProductDetail.getProduct().get(0).getPrice() - ((myProductDetail.getProduct().get(0).getPrice() * myProductDetail.getProduct().get(0).getDiscount()) / 100);
+            tv_price.setText(String.valueOf(discountPrice) + " VNĐ");
+        }
+
+
 
         for (int i = 0; i < myProductDetail.getListSize().size(); i++) {
             if (myProductDetail.getListSize().get(i).getQuantity() > 0) {
@@ -210,11 +218,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                 intent.putExtra("use_id", user_id);
                 startActivity(intent);
             } else {
-                insertProduct(myProductCart);
-                // sang man gio hang
-                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
-                intent.putExtra("use_id", user_id);
-                startActivity(intent);
+                if (!(Objects.equals(size, "not specified"))){
+                    insertProduct(myProductCart);
+                    // sang man gio hang
+                    Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                    intent.putExtra("use_id", user_id);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(this, "Bạn chưa chọn size cho sản phẩm", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
@@ -230,7 +242,10 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (isExist(myProductCart)) {
                 Toast.makeText(this, "Trong giỏ hàng đã có sản phẩm này rồi", Toast.LENGTH_SHORT).show();
             } else {
-                insertProduct(myProductCart);
+                if (!(Objects.equals(size, "not specified"))){
+                    insertProduct(myProductCart);
+                } else
+                    Toast.makeText(this, "Bạn chưa chọn size cho sản phẩm", Toast.LENGTH_SHORT).show();
             }
         });
     }

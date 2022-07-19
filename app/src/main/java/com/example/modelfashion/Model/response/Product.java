@@ -9,6 +9,8 @@ public class Product {
     private String productName;
     @SerializedName("price")
     private int price;
+    @SerializedName("discount")
+    private int discount;
     @SerializedName("product_image")
     private String productImage;
     @SerializedName("product_bgr1")
@@ -22,6 +24,25 @@ public class Product {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
+        this.productImage = productImage;
+        this.productBgr1 = productBgr1;
+        this.productBgr2 = productBgr2;
+        this.productBgr3 = productBgr3;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public Product(String productId, String productName, int price, int discount, String productImage, String productBgr1, String productBgr2, String productBgr3) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.discount = discount;
         this.productImage = productImage;
         this.productBgr1 = productBgr1;
         this.productBgr2 = productBgr2;

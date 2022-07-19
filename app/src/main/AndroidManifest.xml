@@ -70,7 +70,7 @@
             android:name=".Activity.SignIn.SignInActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".History.ViewHistory.HistoryActivity"
             android:exported="true" />
