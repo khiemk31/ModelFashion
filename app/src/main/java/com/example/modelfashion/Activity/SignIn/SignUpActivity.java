@@ -26,9 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modelfashion.Activity.MainActivity;
+import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Register.CheckUserRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.ApiClient;
 import com.example.modelfashion.network.ApiInterface;
 import com.example.modelfashion.network.Repository;
@@ -125,9 +127,8 @@ public class SignUpActivity extends AppCompatActivity {
                 }).subscribe(checkUserResponse -> {
                     insertUser();
                 }, throwable -> {
-                    if (throwable.getMessage().equalsIgnoreCase("HTTP 409 Conflict")) {
-                        Toast.makeText(SignUpActivity.this, "Số điện thoại đã được sử dụng", Toast.LENGTH_SHORT).show();
-                    }
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(SignUpActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 

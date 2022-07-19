@@ -297,7 +297,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else if (check == 2) {
             edt.setTextSize(15);
             tvTitle.setText("THAY ĐỔI ĐỊA CHỈ");
-            edt.setText(tvActProfileName.getText().toString().trim());
+            edt.setText(tvActProfileAddress.getText().toString().trim());
             tvOK.setOnClickListener(v -> {
                 if (edt.getText().toString().trim().isEmpty()) {
                     tvActProfileAddress.setText(preferenceManager.getString(Constants.KEY_ADDRESS));

@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Activity.CartActivity;
+import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
@@ -253,18 +254,20 @@ public class CartFragment extends Fragment {
     private void getAddress(){
         String id = sharedPref.getString(KEY_ID);
         try {
+            showProgressBar(progressBar);
             ApiHistory.API_HISTORY.getAddress(id).enqueue(new Callback<Address>() {
                 @Override
                 public void onResponse(Call<Address> call, Response<Address> response) {
                     if (response.body() != null) {
                         addRess = response.body().getAddress();
                         tv_address.setText(response.body().getAddress());
+                        hideProgressBar(progressBar);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Address> call, Throwable t) {
-
+                    hideProgressBar(progressBar);
                 }
             });
         }catch (Exception e){}
@@ -306,6 +309,7 @@ public class CartFragment extends Fragment {
                     Log.d("ahuhu", "createBill: success: ");
                     hideProgressBar(progressBar);
                     Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(requireContext(), MainActivity.class));
                     disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {
                     }, throwable -> {
                     }));
