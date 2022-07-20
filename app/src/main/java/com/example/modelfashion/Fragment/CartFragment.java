@@ -298,7 +298,12 @@ public class CartFragment extends Fragment {
         alertDialog.setMessage("Xác nhận đặt hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
             if(payment_methods == 0) {
-                addBill();
+                if (tv_address.toString().trim().isEmpty()){
+                    Toast.makeText(requireContext(), "Bạn cần nhập địa chỉ giao hàng!", Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                } else {
+                    addBill();
+                }
             }else {
                 requestPayment();
             }

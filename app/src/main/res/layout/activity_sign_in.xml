@@ -47,6 +47,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/border_edit_text"
             android:hint="Số Điện Thoại"
+            android:textSize="15dp"
             android:paddingHorizontal="20dp"
             android:singleLine="true"
             android:textColor="#0D0D0D" />
@@ -86,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nhớ mật khẩu?"
                 android:textColor="#3F414E"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -96,7 +97,7 @@
                 android:gravity="right"
                 android:text="Quên mật khẩu?"
                 android:textColor="#3F414E"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
