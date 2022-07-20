@@ -27,9 +27,11 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
     private List<Product> listProduct = new ArrayList<>();
 
     public void refreshList(List<Product> list) {
-        this.listProduct.clear();
-        this.listProduct = list;
-        notifyDataSetChanged();
+        if (list!=null) {
+            this.listProduct.clear();
+            this.listProduct = list;
+            notifyDataSetChanged();
+        }
     }
 
     public void addLoadMore(List<Product> list) {
@@ -74,7 +76,11 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
 
     @Override
     public int getItemCount() {
-        return listProduct.size();
+        if(listProduct!=null) {
+            return listProduct.size();
+        }else {
+            return 0;
+        }
     }
 
     class ProductMainViewHolder extends RecyclerView.ViewHolder {

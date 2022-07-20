@@ -43,10 +43,10 @@ public class ProductSaleAdapter extends RecyclerView.Adapter<ProductSaleAdapter.
         ProductSale productSale = productSales.get(position);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         Glide.with(context).load(productSale.getProduct_image()).into(holder.img_product_sale);
-        holder.tv_discount_sale.setText(decimalFormat.format(Double.parseDouble(String.valueOf(productSale.getDiscount()))) + "%");
+        holder.tv_discount_sale.setText(decimalFormat.format(productSale.getDiscount()) + "%");
         holder.tv_name_sale.setText(productSale.getProduct_name());
-        holder.tv_price_old.setText(decimalFormat.format(Double.parseDouble(String.valueOf(productSale.getPrice())))+" VNĐ");
-        holder.tv_price_sale.setText(decimalFormat.format(Double.parseDouble(getPriceSale(productSale.getPrice(), productSale.getDiscount()))) + " VNĐ");
+        holder.tv_price_old.setText(decimalFormat.format(productSale.getPrice())+" đ");
+        holder.tv_price_sale.setText(decimalFormat.format(getPriceSale(productSale.getPrice(), productSale.getDiscount())) + " đ");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,11 +71,11 @@ public class ProductSaleAdapter extends RecyclerView.Adapter<ProductSaleAdapter.
         }
     }
 
-    private String getPriceSale(int price, int discount) {
-        String priceSale = "";
+    private int getPriceSale(int price, int discount) {
+
         int p = price - ((int) (price * discount) / 100);
-        priceSale = String.valueOf(p);
-        return priceSale;
+
+        return p;
     }
 
     public class SaleHolder extends RecyclerView.ViewHolder {

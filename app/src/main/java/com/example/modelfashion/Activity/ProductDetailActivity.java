@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +45,7 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import me.relex.circleindicator.CircleIndicator3;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
@@ -54,12 +57,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Repository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
     private ProgressBar progressBar;
+    private CircleIndicator3 ci_detail_fm;
 
     ArrayList<Sizes> arr_size = new ArrayList<>();
     String size_id, price;
     String user_id = "";
     String productId = "";
     String productName = "";
+    private int index = 0;
+    private TextView tv_discount_sale;
 
     private MyProductDetail myProductDetail;
     private String size = "not specified";
@@ -105,16 +111,45 @@ public class ProductDetailActivity extends AppCompatActivity {
         images.add(myProductDetail.getProduct().get(0).getProductBgr2());
         images.add(myProductDetail.getProduct().get(0).getProductBgr3());
         adapter.setArrItem(images);
+        ci_detail_fm.setViewPager(viewPager);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CountDownTimer timer = new CountDownTimer(6000,1500) {
+                    @Override
+                    public void onTick(long l) {
+
+                        index = viewPager.getCurrentItem()+1;
+                        if (index==3){
+                            viewPager.setCurrentItem(0);
+                        }else {
+                            viewPager.setCurrentItem(index);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        start();
+                    }
+                }.start();
+            }
+        },1000);
+
         price = format.format(myProductDetail.getProduct().get(0).getPrice());
         tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());
 
-        tv_price.setText(formatString(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
+
 
         if (String.valueOf(myProductDetail.getProduct().get(0).getDiscount()) == null) {
             tv_price_discount.setVisibility(View.GONE);
+            tv_price.setText(price+"đ");
+            findViewById(R.id.rl_discount).setVisibility(View.INVISIBLE);
         } else {
             int discountPrice = myProductDetail.getProduct().get(0).getPrice() - ((myProductDetail.getProduct().get(0).getPrice() * myProductDetail.getProduct().get(0).getDiscount()) / 100);
-            tv_price_discount.setText(formatString(discountPrice)  + " VNĐ");
+            tv_price.setText(formatString(discountPrice)  + " đ");
+            tv_price_discount.setText(price+" đ");
+            tv_discount_sale.setText(myProductDetail.getProduct().get(0).getDiscount()+"%");
         }
 
 
@@ -291,6 +326,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_m = findViewById(R.id.img_size_m);
         img_size_l = findViewById(R.id.img_size_l);
         img_size_xl = findViewById(R.id.img_size_xl);
+        ci_detail_fm = findViewById(R.id.cir_3);
+        tv_discount_sale = findViewById(R.id.tv_discount_sale);
+
 
         tv_price = findViewById(R.id.tv_price);
         tv_price_discount = findViewById(R.id.tv_price_discount);
@@ -303,6 +341,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         adapter = new ViewPagerDetailProductAdapter();
 
         viewPager.setAdapter(adapter);
+
     }
 
 

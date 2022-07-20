@@ -119,6 +119,7 @@
                     android:layout_height="2dp"
                     android:background="@color/gray" />
 
+
                 <RelativeLayout
                     android:id="@+id/rl_sale"
                     android:layout_width="match_parent"

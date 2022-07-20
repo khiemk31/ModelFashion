@@ -175,6 +175,7 @@ public class MainFragment extends Fragment {
 
         ciSale.setViewPager(vpSaleMain);
 
+
         vpSaleMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -206,32 +207,6 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    // loadmore
-//    private void setUpRcvLoadData() {
-//        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView mRecyclerView, int newState) {
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    int firstVisibleItemPosition = 0;
-//                    int lastVisibleItemPosition = 0;
-//
-//                    RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-//                    if (layoutManager instanceof LinearLayoutManager) {
-//                        firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-//                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-//                    }
-//
-//                    if (firstVisibleItemPosition >= 0 && lastVisibleItemPosition == productMainAdapter.getItemCount() - 1) {
-//                        if (canLoadMore) {
-//                            getAllOffset(false);
-//                        }
-//                    }
-//                }
-//
-//
-//            }
-//        });
-//    }
 
     private void initClickProfileAvatar() {
         avatar.setOnClickListener(view -> {
@@ -246,41 +221,6 @@ public class MainFragment extends Fragment {
     }
 
 
-
-    // loadmore
-//    private void getAllOffset(Boolean refresh) {
-//        if (refresh) {
-//            offset = 0;
-//            currentPage = 0;
-//        }
-//        compositeDisposable.add(repository.getAllProductOffset(offset)
-//                .doOnSubscribe(disposable -> {
-//                    showProgressBar(progressBar);
-//                }).subscribe(getAllResponse -> {
-//                    Log.d("ahihi", "getAllResponse: " + getAllResponse);
-//                    hideProgressBar(progressBar);
-//                    totalPage = getAllResponse.getTotalPage();
-//                    currentPage++;
-//                    offset += 10;
-//                    if (currentPage >= totalPage) {
-//                        canLoadMore = false;
-//                    }
-//
-//                    // get data
-//                    if (!refresh){
-//                        productMainAdapter.addLoadMore(getAllResponse.getListProduct());
-//                    }else {
-//                        productMainAdapter.refreshList(getAllResponse.getListProduct());
-//                    }
-//
-//                }, throwable -> {
-//                    Log.d("ahihi", "throwable: " + throwable.toString());
-//                    hideProgressBar(progressBar);
-//                    String error = new Utils().getErrorBody(throwable).getMessage();
-//                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-//                })
-//        );
-//    }
 
     private void initHeader() {
         DateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy");
