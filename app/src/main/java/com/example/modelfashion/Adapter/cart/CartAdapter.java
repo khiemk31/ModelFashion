@@ -61,6 +61,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             btnIncrease = itemView.findViewById(R.id.btn_increase);
             btnDecrease = itemView.findViewById(R.id.btn_decrease);
             delete = itemView.findViewById(R.id.tv_delete);
+
+
         }
     }
 
@@ -84,39 +86,29 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             MyProductCart myProductCart = productArrayList.get(position);
             cartOnClick.OnClickDelete(position, myProductCart);
         });
+
+        holder.amount.setText("" + productArrayList.get(position).getProductQuantity());
+
         holder.btnIncrease.setOnClickListener(view -> {
-           if (minteger.get() >= 10){
-               Toast.makeText(holder.btnIncrease.getContext(), "Số lượng tối đa là 10", Toast.LENGTH_SHORT).show();
-           }else {
-               minteger.set(minteger.get() + 1);
-               holder.amount.setText("" + minteger);
-               cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
-           }
+            if (minteger.get() >= 9){
+                Toast.makeText(holder.btnIncrease.getContext(), "Số lượng tối đa là 10", Toast.LENGTH_SHORT).show();
+                holder.amount.setText("10");
+            }else {
+                minteger.set(minteger.get() + 1);
+                holder.amount.setText("" + minteger);
+                cartOnClick.OnClickIncreaseQuantity(position, productArrayList.get(position));
+            }
         });
         holder.btnDecrease.setOnClickListener(view -> {
-            if(minteger.get() > 1){
+            minteger.set(minteger.get() - 1);
+            if(minteger.get() > 0 ){
                 minteger.set(minteger.get() - 1);
                 holder.amount.setText("" + minteger);
                 cartOnClick.OnClickDecreaseQuantity(position, productArrayList.get(position));
+            }else if (minteger.get() <= 0){
+                cartOnClick.OnClickDelete(position, productArrayList.get(position));
             }
         });
-//        holder.amount.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                cartOnClick.OnTypeQuantityListener(position, productArrayList.get(position), Integer.parseInt(editable.toString()));
-//            }
-//        });
-        holder.amount.setText("" + productArrayList.get(position).getProductQuantity());
     }
 
     @Override

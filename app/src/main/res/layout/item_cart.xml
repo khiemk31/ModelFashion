@@ -125,7 +125,7 @@
                         android:layout_marginLeft="11dp"
                         android:layout_marginRight="11dp"
                         android:lineHeight="16dp"
-                        android:text="0"
+                        tools:text="0"
                         android:gravity="center"
                         android:inputType="numberDecimal"
                         android:textAlignment="center"
