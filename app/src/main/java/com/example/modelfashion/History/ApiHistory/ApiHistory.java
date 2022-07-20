@@ -1,5 +1,6 @@
 package com.example.modelfashion.History.ApiHistory;
 
+import com.example.modelfashion.Model.CategoryModel;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.Bill;
 
@@ -57,6 +58,8 @@ public interface ApiHistory {
 
     @GET("product/getProductDiscount")
     Call<SaleModel> getListSale();
+    @GET("category/getAll")
+    Call<CategoryModel> getListCategory();
 
 
 }

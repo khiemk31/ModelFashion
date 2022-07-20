@@ -13,17 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.modelfashion.Model.MyStyle;
+import com.example.modelfashion.Model.Category;
 import com.example.modelfashion.R;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.CategoryHolder>{
     Context context;
-    List<MyStyle> myCategories;
+    ArrayList<Category> myCategories;
 
-    public MyCategoryAdapter(Context context, List<MyStyle> myCategories) {
+    public MyCategoryAdapter(Context context, ArrayList<Category> myCategories) {
         this.context = context;
         this.myCategories = myCategories;
     }
@@ -38,10 +39,10 @@ public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CategoryHolder holder, int position) {
-        MyStyle myCategory = myCategories.get(position);
+        Category myCategory = myCategories.get(position);
 
-        Glide.with(context).load(myCategory.getImgCategory()).into(holder.img_category);
-        holder.tv_style.setText(myCategory.getNameCategory());
+        Glide.with(context).load(myCategory.getCategory_image()).into(holder.img_category);
+        holder.tv_style.setText(myCategory.getCategory_name());
         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 
     }

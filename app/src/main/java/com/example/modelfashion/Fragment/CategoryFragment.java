@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,9 @@ import com.example.modelfashion.Activity.ProductDetailActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
 import com.example.modelfashion.Adapter.category.MyCategoryAdapter;
-import com.example.modelfashion.Model.MyStyle;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
+import com.example.modelfashion.Model.Category;
+import com.example.modelfashion.Model.CategoryModel;
 import com.example.modelfashion.Model.request.GetProductByPriceRequest;
 import com.example.modelfashion.Model.response.category.MyCategory;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
@@ -42,6 +45,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoryFragment extends Fragment {
     SearchView searchView;
@@ -63,7 +69,7 @@ public class CategoryFragment extends Fragment {
 
     private int currentCategory = 0;
     Repository repository;
-    private List<MyStyle> myCategories ;
+    private ArrayList<Category> myCategories ;
     private RecyclerView rcv_mycategory;
 
     private ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
@@ -87,14 +93,38 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         initView(view);
         rcv_mycategory = view.findViewById(R.id.rcv_mycategory);
-        fakedata();
-        setListStyle();
+
+
         repository = new Repository(requireContext());
 
 
         initData();
         initListener();
+        getListCategory();
         return view;
+    }
+
+    private void getListCategory(){
+        ApiHistory.API_HISTORY.getListCategory().enqueue(new Callback<CategoryModel>() {
+            @Override
+            public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
+                myCategories = new ArrayList<>();
+                if(response.body()!=null){
+                    CategoryModel categoryModel = response.body();
+                    myCategories.addAll(categoryModel.getData());
+                    Log.e("aaa", String.valueOf(myCategories.size()));
+                    setListStyle();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<CategoryModel> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void setListStyle(){
@@ -103,13 +133,7 @@ public class CategoryFragment extends Fragment {
 
     }
 
-    private void fakedata(){
-        myCategories = new ArrayList<>();
-        myCategories.add(new MyStyle("ÁO PHÔNG","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
-        myCategories.add(new MyStyle("ÁO POLO","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
-        myCategories.add(new MyStyle("ÁO SƠ MI","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
-        myCategories.add(new MyStyle("QUẦN KAKI","https://salt.tikicdn.com/cache/550x550/ts/product/38/df/17/9d29a308217d2da4c343153ee1df70e9.jpg"));
-    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
