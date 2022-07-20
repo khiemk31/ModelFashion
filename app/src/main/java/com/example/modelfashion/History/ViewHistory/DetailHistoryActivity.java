@@ -101,7 +101,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         phoneNumber_detail_history.setText(contentBill.getPhone());
         address_detail_history.setText(contentBill.getAddress());
         date_detail_history.setText(contentBill.getCreated_at().substring(0,10));
-        summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" VNĐ");
+        summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" đ");
         DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
         lv_detail_history.setAdapter(historyAdapter);
 

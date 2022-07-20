@@ -85,7 +85,7 @@ public class DetailHistoryAdapter extends BaseAdapter {
         //Set data
         Glide.with(context).load(arr_bill_detail.get(i).getProduct_image()).into(img_subproduct);
         tv_name_subproduct.setText(arr_bill_detail.get(i).getProduct_name());
-        tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice()))+" VNĐ");
+        tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice()))+" đ");
         tv_size_subproduct.setText(arr_bill_detail.get(i).getSize());
         tv_sumproduct.setText("Số lượng: "+arr_bill_detail.get(i).getQuantity());
 

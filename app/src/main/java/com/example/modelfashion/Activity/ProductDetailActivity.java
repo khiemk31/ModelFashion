@@ -3,6 +3,7 @@ package com.example.modelfashion.Activity;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.ViewPagerDetailProductAdapter;
+import com.example.modelfashion.AmimationView.CircleAnimationUtil;
 import com.example.modelfashion.Model.response.MyProductDetail;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
@@ -49,7 +51,7 @@ import me.relex.circleindicator.CircleIndicator3;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
-            img_size_s, img_size_m, img_size_l, img_size_xl;
+            img_size_s, img_size_m, img_size_l, img_size_xl,img_product_sub;
     private TextView tv_price, tv_product_name, tv_product_category, tv_product_availability,
             btn_mua_ngay, btn_them_vao_gio_hang, tv_price_discount;
     private ViewPager2 viewPager;
@@ -115,7 +117,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                CountDownTimer timer = new CountDownTimer(6000,1500) {
+                CountDownTimer timer = new CountDownTimer(12000,3000) {
                     @Override
                     public void onTick(long l) {
 
@@ -147,7 +149,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             findViewById(R.id.rl_discount).setVisibility(View.INVISIBLE);
         } else {
             int discountPrice = myProductDetail.getProduct().get(0).getPrice() - ((myProductDetail.getProduct().get(0).getPrice() * myProductDetail.getProduct().get(0).getDiscount()) / 100);
-            tv_price.setText(formatString(discountPrice)  + " đ");
+            tv_price.setText(format.format(discountPrice)  + " đ");
             tv_price_discount.setText(price+" đ");
             tv_discount_sale.setText(myProductDetail.getProduct().get(0).getDiscount()+"%");
         }
@@ -161,6 +163,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         Glide.with(this).load(myProductDetail.getProduct().get(0).getProductImage()).placeholder(R.drawable.test_img2).into(img_product);
+        Glide.with(this).load(myProductDetail.getProduct().get(0).getProductImage()).placeholder(R.drawable.test_img2).into(img_product_sub);
+
     }
 
     private int currentCoverImage = 0;
@@ -283,11 +287,39 @@ public class ProductDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Trong giỏ hàng đã có sản phẩm này rồi", Toast.LENGTH_SHORT).show();
             } else {
                 if (!(Objects.equals(size, "not specified"))){
-                    insertProduct(myProductCart);
+                    makeFlyAnimation(img_product_sub,myProductCart);
                 } else
                     Toast.makeText(this, "Bạn chưa chọn size cho sản phẩm", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void makeFlyAnimation(ImageView targetView,MyProductCart myProductCart) {
+
+        ImageView destView = (ImageView) findViewById(R.id.img_cart);
+
+        new CircleAnimationUtil().attachActivity(this).setTargetView(targetView).setMoveDuration(1000).setDestView(destView).setAnimationListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                insertProduct(myProductCart);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).startAnimation();
+
+
     }
 
     private void insertProduct(MyProductCart myProductCart) {
@@ -328,6 +360,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_xl = findViewById(R.id.img_size_xl);
         ci_detail_fm = findViewById(R.id.cir_3);
         tv_discount_sale = findViewById(R.id.tv_discount_sale);
+        img_product_sub = findViewById(R.id.img_product_sub);
 
 
         tv_price = findViewById(R.id.tv_price);
