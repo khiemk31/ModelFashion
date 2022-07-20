@@ -16,8 +16,11 @@ import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.main_screen.ProductMain;
 import com.example.modelfashion.R;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.ProductMainViewHolder> {
 
@@ -47,7 +50,7 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
         Product product = listProduct.get(position);
 
         holder.tv_my_product_name.setText(product.getProductName());
-        holder.tv_my_product_price.setText("" + product.getPrice());
+        holder.tv_my_product_price.setText(formatString(product.getPrice()) + "VNĐ");
         if (product.getProductImage().contains("http:")) {
             Glide.with(holder.img_product_main_avatar.getContext())
                     .load(product.getProductImage().replace("http:", "https:"))
@@ -97,5 +100,11 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
 
     public interface ItemClickListener {
         void onItemClick(int position, Product productMain);
+    }
+
+    public static String formatString(int number) {
+        DecimalFormat df = new DecimalFormat(",###");
+        df.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+        return df.format(number);
     }
 }

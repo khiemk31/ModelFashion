@@ -3,6 +3,7 @@ package com.example.modelfashion.Activity;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
@@ -32,8 +33,10 @@ import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import io.reactivex.Single;
@@ -45,7 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img_back, img_cart, img_prev, img_next, img_product,
             img_size_s, img_size_m, img_size_l, img_size_xl;
     private TextView tv_price, tv_product_name, tv_product_category, tv_product_availability,
-            btn_mua_ngay, btn_them_vao_gio_hang;
+            btn_mua_ngay, btn_them_vao_gio_hang, tv_price_discount;
     private ViewPager2 viewPager;
     private ViewPagerDetailProductAdapter adapter;
     private Repository repository;
@@ -93,6 +96,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }));
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setData(MyProductDetail myProductDetail) {
         DecimalFormat format = new DecimalFormat("###,###,###");
@@ -104,13 +108,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         price = format.format(myProductDetail.getProduct().get(0).getPrice());
         tv_product_name.setText(myProductDetail.getProduct().get(0).getProductName());
 
+        tv_price.setText(formatString(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
+
         if (String.valueOf(myProductDetail.getProduct().get(0).getDiscount()) == null) {
-            tv_price.setText(String.valueOf(myProductDetail.getProduct().get(0).getPrice()) + " VNĐ");
+            tv_price_discount.setVisibility(View.GONE);
         } else {
             int discountPrice = myProductDetail.getProduct().get(0).getPrice() - ((myProductDetail.getProduct().get(0).getPrice() * myProductDetail.getProduct().get(0).getDiscount()) / 100);
-            tv_price.setText(String.valueOf(discountPrice) + " VNĐ");
+            tv_price_discount.setText(formatString(discountPrice)  + " VNĐ");
         }
-
 
 
         for (int i = 0; i < myProductDetail.getListSize().size(); i++) {
@@ -288,6 +293,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         img_size_xl = findViewById(R.id.img_size_xl);
 
         tv_price = findViewById(R.id.tv_price);
+        tv_price_discount = findViewById(R.id.tv_price_discount);
         tv_product_name = findViewById(R.id.tv_product_name);
 //        tv_product_category = findViewById(R.id.tv_product_category);
         tv_product_availability = findViewById(R.id.tv_product_availability);
@@ -334,6 +340,12 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    public static String formatString(int number) {
+        DecimalFormat df = new DecimalFormat(",###");
+        df.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+        return df.format(number);
     }
 
     void showProgressBar(ProgressBar progressBar) {
