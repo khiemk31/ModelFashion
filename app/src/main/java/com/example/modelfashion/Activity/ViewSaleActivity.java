@@ -3,11 +3,13 @@ package com.example.modelfashion.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +47,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_all);
         init();
         onClick();
+
     }
     private void init(){
         rcl_view_sale = findViewById(R.id.rcl_view_sale);
@@ -99,20 +102,37 @@ public class ViewSaleActivity extends AppCompatActivity {
                 finish();
             }
         });
+        edt_search_sale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
+
     }
 
     private void loadSearch(){
-        AllSaleAdapter allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, productSaleSearch);
-        rcl_view_sale.setAdapter(allSaleAdapter);
+        allSaleAdapter.setList(productSaleSearch);
     }
     private void getListSearch(){
         productSaleSearch.clear();
-        for (int i=0;i<MainFragment.productSales.size();i++){
-            if(MainFragment.productSales.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
-                productSaleSearch.add(MainFragment.productSales.get(i));
+        for (int i=0;i<productSaleAll.size();i++){
+            if(productSaleAll.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
+                productSaleSearch.add(productSaleAll.get(i));
             }
         }
 
+    }
+    private void hidekeyboard(){
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void onClick(){
@@ -120,6 +140,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         filter_sale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                edt_search_sale.setText("");
+                hidekeyboard();
                 if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
@@ -137,6 +159,7 @@ public class ViewSaleActivity extends AppCompatActivity {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 allSaleAdapter.setList(MainFragment.productSales);
                 loadFilter(1);
+
 
             }
         });

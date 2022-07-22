@@ -26,7 +26,9 @@
         tools:replace="android:hardwareAccelerated">
         <activity
             android:name=".Activity.ViewSaleActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Activity.SignIn.OTPPhoneActivity"
             android:exported="false" />

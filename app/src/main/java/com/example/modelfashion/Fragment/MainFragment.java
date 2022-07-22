@@ -177,6 +177,7 @@ public class MainFragment extends Fragment {
         VpSaleMainFmAdapter vpSaleMainFmAdapter = new VpSaleMainFmAdapter(arrItem);
         vpSaleMain.setAdapter(vpSaleMainFmAdapter);
 
+
         ciSale.setViewPager(vpSaleMain);
 
 
@@ -439,6 +440,7 @@ public class MainFragment extends Fragment {
             rl_sale.setVisibility(View.VISIBLE);
             ProductSaleAdapter productSaleAdapter = new ProductSaleAdapter(requireContext(),productSales);
             rcl_product_sale.setAdapter(productSaleAdapter);
+            rcl_product_sale.addItemDecoration(new SpacesItemDecoration(10));
         }else {
             rl_sale.setVisibility(View.GONE);
         }
