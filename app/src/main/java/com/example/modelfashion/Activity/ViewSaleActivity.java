@@ -32,6 +32,7 @@ public class ViewSaleActivity extends AppCompatActivity {
     private ArrayList<ProductSale> productSaleSearch = new ArrayList<>();
     private ArrayList<ProductSale> productSaleFilter = new ArrayList<>();
     private ArrayList<ProductSale> productSaleAll = new ArrayList<>();
+    private ArrayList<ProductSale> productSaleAllFilter = new ArrayList<>();
     private String content = "";
     private EditText edt_search_sale;
     private ImageView filter_sale;
@@ -45,8 +46,10 @@ public class ViewSaleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
+        getAll();
         init();
         onClick();
+
 
     }
     private void init(){
@@ -70,13 +73,11 @@ public class ViewSaleActivity extends AppCompatActivity {
         img_tick_6=findViewById(R.id.img_tick_6);
         img_tick_7=findViewById(R.id.img_tick_7);
         img_tick_8=findViewById(R.id.img_tick_8);
-        productSaleAll.addAll(MainFragment.productSales);
-
 
 
         bottomSheetBehavior = BottomSheetBehavior.from(layout_filter_sale);
 
-        allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, MainFragment.productSales);
+        allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, productSaleAll);
         rcl_view_sale.setAdapter(allSaleAdapter);
         edt_search_sale.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,9 +120,9 @@ public class ViewSaleActivity extends AppCompatActivity {
     }
     private void getListSearch(){
         productSaleSearch.clear();
-        for (int i=0;i<productSaleAll.size();i++){
-            if(productSaleAll.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
-                productSaleSearch.add(productSaleAll.get(i));
+        for (int i=0;i<productSaleAllFilter.size();i++){
+            if(productSaleAllFilter.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
+                productSaleSearch.add(productSaleAllFilter.get(i));
             }
         }
 
@@ -140,7 +141,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         filter_sale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edt_search_sale.setText("");
+
                 hidekeyboard();
                 if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -154,10 +155,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                productSaleFilter.clear();
-                productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                allSaleAdapter.setList(MainFragment.productSales);
+                allSaleAdapter.setList(productSaleAllFilter);
                 loadFilter(1);
 
 
@@ -206,8 +205,12 @@ public class ViewSaleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 SortPrice(0,500000);
-                allSaleAdapter.setList(productSaleFilter);
-                loadFilter(4);
+                if(productSaleFilter.size()>0) {
+                    allSaleAdapter.setList(productSaleFilter);
+                    loadFilter(4);
+                }else {
+                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -216,8 +219,12 @@ public class ViewSaleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 SortPrice(500000,1000000);
-                allSaleAdapter.setList(productSaleFilter);
-                loadFilter(5);
+                if(productSaleFilter.size()>0) {
+                    allSaleAdapter.setList(productSaleFilter);
+                    loadFilter(5);
+                }else {
+                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -226,8 +233,13 @@ public class ViewSaleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 SortPrice(1000000,100000000);
-                allSaleAdapter.setList(productSaleFilter);
-                loadFilter(6);
+                if(productSaleFilter.size()>0) {
+                    allSaleAdapter.setList(productSaleFilter);
+                    loadFilter(6);
+                }else {
+                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -285,6 +297,13 @@ public class ViewSaleActivity extends AppCompatActivity {
             }
         });
     }
+    private void getAll(){
+        productSaleAll.clear();
+        for (int i=0;i<MainFragment.productSales.size();i++){
+            productSaleAll.add(MainFragment.productSales.get(i));
+            productSaleAllFilter.add(MainFragment.productSales.get(i));
+        }
+    }
     private int getPrice(int price , int discount){
         int p =price-(price*discount/100);
 
@@ -300,6 +319,8 @@ public class ViewSaleActivity extends AppCompatActivity {
             }
 
         }
+
+
 
     }
 
