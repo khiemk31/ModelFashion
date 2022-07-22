@@ -274,10 +274,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
+            int price;
+            if (myProductDetail.getProduct().get(0).getDiscount() == 0) {
+                price = myProductDetail.getProduct().get(0).getPrice();
+            } else {
+                price = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
+            }
+
             MyProductCart myProductCart = new MyProductCart(
                     myProductDetail.getProduct().get(0).getProductId(),
                     myProductDetail.getProduct().get(0).getProductName(),
-                    myProductDetail.getProduct().get(0).getPrice(),
+                    price,
                     size,
                     1,
                     myProductDetail.getProduct().get(0).getProductImage()
