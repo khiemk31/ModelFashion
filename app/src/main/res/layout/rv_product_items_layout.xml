@@ -40,5 +40,6 @@
         android:layout_height="220dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="horizontal"
+        android:clipToPadding="false"
         tools:listitem="@layout/product_item_layout" />
 </LinearLayout>

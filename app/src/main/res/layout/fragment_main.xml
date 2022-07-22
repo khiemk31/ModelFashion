@@ -180,9 +180,8 @@
                     android:background="#F4F4F6"
                     android:clipToPadding="false"
                     android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    tools:listitem="@layout/product_item_layout" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/rv_product_items_layout" />
 
 
             </LinearLayout>
