@@ -4,6 +4,7 @@ import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.content.Intent;
 import android.os.Build;
@@ -33,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.NotifiActivity;
 import com.example.modelfashion.Activity.ProductDetailActivity;
+import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.ViewSaleActivity;
 import com.example.modelfashion.Adapter.ProductListAdapter;
@@ -56,9 +58,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
+import kotlin.Triple;
 import me.relex.circleindicator.CircleIndicator3;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -303,16 +307,18 @@ public class MainFragment extends Fragment {
 //            }
 //        });
 
-        productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, Product productMain) {
-                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_NAME, productMain.getProductName());
-                intent.putExtra(KEY_PRODUCT_ID, productMain.getProductId());
-                intent.putExtra("user_id", user_id);
-                startActivity(intent);
-            }
-        });
+//        productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
+//            @Override
+//            public void onItemClick(int position, Product productMain) {
+//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+//                intent.putExtra(KEY_PRODUCT_NAME, productMain.getProductName());
+//                intent.putExtra(KEY_PRODUCT_ID, productMain.getProductId());
+//                intent.putExtra("user_id", user_id);
+//                startActivity(intent);
+//            }
+//        });
+
+
     }
 
 
@@ -320,13 +326,54 @@ public class MainFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void getAllProductByCategory() {
+            rcv.setAdapter(null);
             compositeDisposable.add(repository.getAllProductByCategory()
                     .doOnSubscribe(disposable -> {
                         showProgressBar(progressBar);
                     }).doFinally(() -> {
                     }).subscribe(dataProduct -> {
-                        hideProgressBar(progressBar);
-                        productMainAdapter.refreshList(dataProduct.getProductList());
+
+                        try {
+                            hideProgressBar(progressBar);
+                            // category name ,  id,  list
+                            List<Triple<String, Integer, List<Product>>> dataAdapter = new ArrayList<>();
+                                dataProduct.getProductList().forEach(listList -> {
+                                    if (listList.size() > 0){
+                                        Integer id = listList.get(0).getCategoryId();
+                                        String category = listList.get(0).getCategoryName();
+                                        List<Product> productOfCate = listList;
+                                        Triple<String, Integer, List<Product>> data = new Triple<>(category, id, productOfCate);
+                                        dataAdapter.add(data);
+
+                                    }
+
+                                });
+
+
+                            productMainAdapter.refreshList(dataAdapter);
+                            rcv.setAdapter(productMainAdapter);
+
+                            productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
+                                @Override
+                                public void onItemClick(int position, Product product) {
+                                    Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
+                                    intent.putExtra(KEY_PRODUCT_NAME, product.getProductName());
+                                    intent.putExtra(KEY_PRODUCT_ID, product.getProductId());
+                                    intent.putExtra("user_id", user_id);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onSeeAllClick(int position, int id) {
+                                    Intent intent = new Intent(requireContext(), SeeAllActivity.class);
+                                    intent.putExtra(KEY_PRODUCT_TYPE, id);
+                                    startActivity(intent);
+
+                                }
+                            });
+                        } catch (Exception e){
+                            Log.d("ahihi", "Exception: " + e);
+                        }
 
                     }, throwable -> {
                         hideProgressBar(progressBar);

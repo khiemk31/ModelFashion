@@ -7,8 +7,13 @@ import java.util.List;
 public class GetAllProductByCategoryResponse {
     @SerializedName("message")
     private String message;
-    @SerializedName("listProduct")
-    private List<Product> productList;
+    @SerializedName("listAllProduct")
+    private List<List<Product>> productList;
+
+    public GetAllProductByCategoryResponse(String message, List<List<Product>> productList) {
+        this.message = message;
+        this.productList = productList;
+    }
 
     public String getMessage() {
         return message;
@@ -18,16 +23,11 @@ public class GetAllProductByCategoryResponse {
         this.message = message;
     }
 
-    public List<Product> getProductList() {
+    public List<List<Product>> getProductList() {
         return productList;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
-
-    public GetAllProductByCategoryResponse(String message, List<Product> productList) {
-        this.message = message;
+    public void setProductList(List<List<Product>> productList) {
         this.productList = productList;
     }
 

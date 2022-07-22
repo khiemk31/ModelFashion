@@ -15,85 +15,84 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.main_screen.ProductMain;
 import com.example.modelfashion.R;
+import com.example.modelfashion.customview.SpacesItemDecoration;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import kotlin.Triple;
+
 public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.ProductMainViewHolder> {
 
-    private List<Product> listProduct = new ArrayList<>();
+    private List<Triple<String, Integer, List<Product>>> dataAdapter = new ArrayList<>();
 
-    public void refreshList(List<Product> list) {
-        if (list!=null) {
-            this.listProduct.clear();
-            this.listProduct = list;
+    public void refreshList(List<Triple<String, Integer, List<Product>>> dataAdapter) {
+        if (dataAdapter!=null) {
+            this.dataAdapter.clear();
+            this.dataAdapter = dataAdapter;
             notifyDataSetChanged();
         }
     }
 
-    public void addLoadMore(List<Product> list) {
-        this.listProduct.addAll(list);
-        notifyDataSetChanged();
-    }
+//    public void addLoadMore(List<Product> list) {
+//        this.listProduct.addAll(list);
+//        notifyDataSetChanged();
+//    }
 
 
     @NonNull
     @Override
     public ProductMainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item_layout, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_product_items_layout, parent, false);
         return new ProductMainAdapter.ProductMainViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductMainViewHolder holder, int position) {
-        Product product = listProduct.get(position);
+//        Product product = listProduct.get(position);
+        Triple<String, Integer, List<Product>> item = dataAdapter.get(position);
 
-        holder.tv_my_product_name.setText(product.getProductName());
-        holder.tv_my_product_price.setText(formatString(product.getPrice()) + "VNĐ");
-        if (product.getProductImage().contains("http:")) {
-            Glide.with(holder.img_product_main_avatar.getContext())
-                    .load(product.getProductImage().replace("http:", "https:"))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .placeholder(R.drawable.test_img)
-                    .into(holder.img_product_main_avatar);
-        } else {
-            Glide.with(holder.img_product_main_avatar.getContext())
-                    .load(product.getProductImage())
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                    .placeholder(R.drawable.test_img)
-                    .into(holder.img_product_main_avatar);
-        }
+        holder.tv_product_item.setText(item.getFirst());
+
+        ProductAdapter adapter = new ProductAdapter();
+        adapter.addItems(item.getThird());
+        holder.rv_product_item.addItemDecoration(new SpacesItemDecoration(10));
+        holder.rv_product_item.setAdapter(adapter);
+
+        adapter.setItemClickListener((position1, product) -> mClickListener.onItemClick(position1, product));
 
 
-        holder.itemView.setOnClickListener(view -> {
-            mClickListener.onItemClick(position, product);
+        holder.tv_xem_tat_ca.setOnClickListener(view -> {
+            mClickListener.onSeeAllClick(position, item.getSecond());
         });
 
     }
 
     @Override
     public int getItemCount() {
-        if(listProduct!=null) {
-            return listProduct.size();
+        if(dataAdapter!=null) {
+            return dataAdapter.size();
         }else {
             return 0;
         }
     }
 
     class ProductMainViewHolder extends RecyclerView.ViewHolder {
-        ImageView img_product_main_avatar;
-        TextView tv_my_product_name;
-        TextView tv_my_product_price;
+        RecyclerView rv_product_item;
+        TextView tv_product_item;
+        TextView tv_xem_tat_ca;
 
         ProductMainViewHolder(View itemView) {
             super(itemView);
 
-            img_product_main_avatar = itemView.findViewById(R.id.img_product_main_avatar);
-            tv_my_product_name = itemView.findViewById(R.id.tv_my_product_name);
-            tv_my_product_price = itemView.findViewById(R.id.tv_my_product_price);
+            rv_product_item = itemView.findViewById(R.id.rv_product_item);
+            tv_product_item = itemView.findViewById(R.id.tv_product_item);
+            tv_xem_tat_ca = itemView.findViewById(R.id.tv_xem_tat_ca);
 
         }
     }
@@ -105,12 +104,9 @@ public class ProductMainAdapter extends RecyclerView.Adapter<ProductMainAdapter.
     }
 
     public interface ItemClickListener {
-        void onItemClick(int position, Product productMain);
+        void onItemClick(int position, Product product);
+        void onSeeAllClick(int position, int id);
     }
 
-    public static String formatString(int number) {
-        DecimalFormat df = new DecimalFormat(",###");
-        df.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
-        return df.format(number);
-    }
+
 }
