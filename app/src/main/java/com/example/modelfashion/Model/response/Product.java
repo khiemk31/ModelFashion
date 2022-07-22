@@ -111,7 +111,14 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "productName='" + productName + '\'' +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", price=" + price +
+                ", discount=" + discount +
+                ", productImage='" + productImage + '\'' +
+                ", productBgr1='" + productBgr1 + '\'' +
+                ", productBgr2='" + productBgr2 + '\'' +
+                ", productBgr3='" + productBgr3 + '\'' +
                 '}';
     }
 }
