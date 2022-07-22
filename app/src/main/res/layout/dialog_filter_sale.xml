@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_filter_sale"
+    android:background="@drawable/bg_filter_sale"
+    android:layout_marginTop="10dp"
+    android:elevation="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="3dp"
+            android:layout_marginBottom="20dp"
+            android:background="#959595"/>
+
+        <LinearLayout
+            android:id="@+id/ll_all"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_1"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Tất cả sản phẩm"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+
+        <LinearLayout
+            android:id="@+id/ll_a_z"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_2"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="A->Z"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_z_a"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_3"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Z-&gt;A"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_500"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_4"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Giá &lt; 500.000đ"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_500_1000"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_5"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Giá 500.000đ - 1.000.000đ"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_1000"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_6"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Giá &gt; 1.000.000đ"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_low_tall"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_7"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Giá thấp -&gt; cao"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#DFDFDF"/>
+        <LinearLayout
+            android:id="@+id/ll_tall_low"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_tick_8"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:src="@drawable/ic_check_filter_sale"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Giá cao -&gt; thấp"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

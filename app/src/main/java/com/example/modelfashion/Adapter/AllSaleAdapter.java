@@ -31,6 +31,15 @@ public class AllSaleAdapter extends RecyclerView.Adapter<AllSaleAdapter.SaleHold
         this.productSales = productSales;
     }
 
+    public void setList(ArrayList<ProductSale> list){
+        if(list!=null){
+            productSales.clear();
+            this.productSales.addAll(list);
+            notifyDataSetChanged();
+        }
+
+    }
+
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

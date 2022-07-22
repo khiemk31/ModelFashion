@@ -29,16 +29,34 @@
             android:text="Sale"
             android:textColor="@color/white"
             android:textSize="24sp"
-            android:textStyle="normal" />>
+            android:textStyle="normal" />
+
+        <ImageView
+            android:id="@+id/filter_sale"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="10dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_filter_history"
+            app:tint="@color/white" />
 
     </RelativeLayout>
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:elevation="5dp"
+        android:orientation="horizontal"
         android:background="@drawable/bt_search_sale"
         android:padding="5dp">
+        <ImageView
+            android:layout_marginStart="10dp"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_search"/>
 
         <EditText
             android:id="@+id/edt_search_sale"
@@ -48,9 +66,11 @@
             android:backgroundTint="@color/white"
             android:fontFamily="@font/nunito_medium"
             android:hint="Search"
+            android:maxLines="1"
             android:textColor="@color/black"
-            android:textSize="15dp" />
-    </RelativeLayout>
+            android:textSize="15dp"
+            android:textCursorDrawable="@drawable/custom_cursor"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcl_view_sale"
        android:layout_marginHorizontal="15dp"

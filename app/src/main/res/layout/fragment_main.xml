@@ -156,7 +156,7 @@
                         android:gravity="center"
                         android:paddingRight="20dp"
                         android:text="Xem tất cả"
-                        android:textColor="@color/black"
+                        android:textColor="#54B175"
                         android:textSize="13dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
