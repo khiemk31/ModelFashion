@@ -28,6 +28,7 @@ import com.example.modelfashion.Model.response.main_screen.GetAllResponse;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
+import com.example.modelfashion.Model.response.see_all.GetProductByCategoryResponse;
 
 import java.util.List;
 
@@ -60,8 +61,8 @@ public final class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<DataProduct> getProductByCategory(String categoryId) {
-        return apiInterface.getProductByCategory(categoryId)
+    public Single<GetProductByCategoryResponse> getProductByCategory(int categoryId, int price1, int price2, String sortPrice, String sortDiscount, int pageNumber) {
+        return apiInterface.getProductByCategory(categoryId, price1, price2, sortPrice, sortDiscount, pageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
