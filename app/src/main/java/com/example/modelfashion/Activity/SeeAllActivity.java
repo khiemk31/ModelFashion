@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Adapter.see_all.ProductAdapter;
+import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Utils;
@@ -58,20 +59,16 @@ public class SeeAllActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-//        adapter.setClickListener(new ProductAdapter.ItemClickListener() {
-//            @Override
-//            public void onItemClick(int position, MyProductByCategory productPreview) {
-//                Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
-//                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onAddToCartClick(int position, MyProductByCategory productPreview) {
-//
-//            }
-//        });
+
+        adapter.setClickListener(new ProductAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position, Product productPreview) {
+                Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
+                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
+                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
+                startActivity(intent);
+            }
+        });
 
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
@@ -92,6 +89,7 @@ public class SeeAllActivity extends AppCompatActivity {
 
             getProductByCategory(true);
             adapter.clearItems();
+            canLoadMore = true;
         });
 
     }
@@ -107,7 +105,7 @@ public class SeeAllActivity extends AppCompatActivity {
         rcv.setAdapter(adapter);
         rcv.addItemDecoration(new SpacesItemDecoration(20));
 
-//        setupRcv();
+        setupRcv();
     }
 
     private void initData() {
@@ -139,7 +137,7 @@ public class SeeAllActivity extends AppCompatActivity {
                 .subscribe(productResponse -> {
                     pageNumber++;
                     adapter.addItems(productResponse.getListProduct());
-                    if (productResponse.getTotalPage() < pageNumber){
+                    if (pageNumber > productResponse.getTotalPage()){
                         canLoadMore = false;
                     }
 
@@ -162,9 +160,7 @@ public class SeeAllActivity extends AppCompatActivity {
                     int firstVisibleItemPosition = 0;
                     int lastVisibleItemPosition = 0;
 
-                    if (disableLoadMore || isLoading) {
-                        return;
-                    }
+
 
                     RecyclerView.LayoutManager layoutManager = rcv.getLayoutManager();
                     if (layoutManager instanceof GridLayoutManager) {
@@ -172,8 +168,8 @@ public class SeeAllActivity extends AppCompatActivity {
                         lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                     }
                     if (firstVisibleItemPosition > 0 && lastVisibleItemPosition == (adapter.getItemCount() - 1)) {
-                        isLoading = true;
-                        if (canLoadMore = true) {
+
+                        if (canLoadMore) {
                             getProductByCategory(false);
                         }
                     }

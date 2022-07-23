@@ -31,6 +31,7 @@ import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.Model.response.see_all.GetProductByCategoryResponse;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,6 +64,7 @@ public final class Repository {
 
     public Single<GetProductByCategoryResponse> getProductByCategory(int categoryId, int price1, int price2, String sortPrice, String sortDiscount, int pageNumber) {
         return apiInterface.getProductByCategory(categoryId, price1, price2, sortPrice, sortDiscount, pageNumber)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
