@@ -89,7 +89,9 @@ public class SeeAllActivity extends AppCompatActivity {
             showProgressBar(progressBar);
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
-            getProductByCategory();
+
+            getProductByCategory(true);
+            adapter.clearItems();
         });
 
     }
@@ -104,26 +106,43 @@ public class SeeAllActivity extends AppCompatActivity {
         adapter = new ProductAdapter();
         rcv.setAdapter(adapter);
         rcv.addItemDecoration(new SpacesItemDecoration(20));
+
+//        setupRcv();
     }
 
     private void initData() {
-        getProductByCategory();
+        getProductByCategory(false);
     }
 
-    private void getProductByCategory() {
+    private int pageNumber = 1;
+    private int price1 = 0, price2 = 10000000;
+    private String sortPrice = "DESC", sortDiscount = "DESC";
+
+    private Boolean canLoadMore = true;
+
+    private void getProductByCategory(Boolean isRefresh) {
+        if (isRefresh) {
+            pageNumber = 1;
+        }
+
         compositeDisposable.add(repository.getProductByCategory(categoryId,
-                        0,
-                        1000000,
-                        "DESC",
-                        "DESC",
-                        1)
+                        price1,
+                        price2,
+                        sortPrice,
+                        sortDiscount,
+                        pageNumber)
                 .doOnSubscribe(disposable -> {
                     showProgressBar(progressBar);
                 })
                 .doFinally(() -> {
                 })
                 .subscribe(productResponse -> {
+                    pageNumber++;
                     adapter.addItems(productResponse.getListProduct());
+                    if (productResponse.getTotalPage() < pageNumber){
+                        canLoadMore = false;
+                    }
+
                     hideProgressBar(progressBar);
 
                 }, throwable -> {
@@ -154,7 +173,9 @@ public class SeeAllActivity extends AppCompatActivity {
                     }
                     if (firstVisibleItemPosition > 0 && lastVisibleItemPosition == (adapter.getItemCount() - 1)) {
                         isLoading = true;
-                        getProductByCategory();
+                        if (canLoadMore = true) {
+                            getProductByCategory(false);
+                        }
                     }
                 }
             }
