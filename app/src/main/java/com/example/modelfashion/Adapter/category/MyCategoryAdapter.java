@@ -45,6 +45,9 @@ public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.Ca
         holder.tv_style.setText(myCategory.getCategory_name());
         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 
+        holder.itemView.setOnClickListener(v -> {
+            mClickListener.itemCLick(position, myCategory);
+        });
     }
 
     @Override
@@ -61,5 +64,15 @@ public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.Ca
             this.img_category = itemView.findViewById(R.id.img_category);
             this.tv_style = itemView.findViewById(R.id.tv_style);
         }
+    }
+
+    private ItemClickListener mClickListener;
+
+    public void setOnItemClickListener(ItemClickListener mClickListener) {
+        this.mClickListener = mClickListener;
+    }
+
+    public interface ItemClickListener {
+        void itemCLick(int position, Category myCategory);
     }
 }

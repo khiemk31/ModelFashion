@@ -102,11 +102,6 @@ public class MainFragment extends Fragment {
         }
     };
 
-
-    private int offset = 0;
-    private int currentPage = 0;
-    private int totalPage = 0;
-    private Boolean canLoadMore = true;
     private RecyclerView rcv;
 
     private ProductMainAdapter productMainAdapter;
@@ -155,15 +150,10 @@ public class MainFragment extends Fragment {
         repository = new Repository(requireContext());
         Bundle info = getArguments();
         user_id = info.getString("user_id");
-//        try {
-//            setUserAvatar(user_id);
-//        } catch (Exception e) {
-//        }
 
         productMainAdapter = new ProductMainAdapter();
         rcv.setAdapter(productMainAdapter);
         rcv.addItemDecoration(new SpacesItemDecoration(10));
-//        setUpRcvLoadData();
 
 
 
@@ -197,10 +187,6 @@ public class MainFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getAllProductByCategory();
-
-//            productListAdapter.clearAllData();
-//            categoryList.clear();
-//            getAllCategory();
         });
 
         img_notifi.setOnClickListener(new View.OnClickListener() {
@@ -258,67 +244,10 @@ public class MainFragment extends Fragment {
         initListener();
         getAllProductByCategory();
 
-//        getAllCategory();
 
     }
-
-    private final List<MyCategory> categoryList = new ArrayList<>();
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getAllCategory() {
-        compositeDisposable.add(repository.getAllCategory()
-                .doOnSubscribe(disposable -> {
-                    showProgressBar(progressBar);
-                }).doFinally(() -> {
-                }).subscribe(dataAllCategory -> {
-                    hideProgressBar(progressBar);
-                    if (dataAllCategory.getData().size() > 0) {
-                        categoryList.addAll(dataAllCategory.getData());
-//                        getAllProductByCategory();
-                    }
-                }, throwable -> {
-                    String error = new Utils().getErrorBody(throwable).getMessage();
-                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-                    hideProgressBar(progressBar);
-                }));
-    }
-
 
     private void initListener() {
-//        productListAdapter.onItemClickListener(new ProductListAdapter.OnItemClickListener() {
-//            @Override
-//            public void imgClick(int position, MyProductByCategory product) {
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_NAME, product.getProductName());
-//                intent.putExtra(KEY_PRODUCT_ID, product.getProductId());
-//                intent.putExtra("user_id", user_id);
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void imgAddToCartClick(int position, MyProductByCategory product) {
-//                // TODO add to cart
-//            }
-//
-//            @Override
-//            public void imgWatchAll(int position, MyCategory type) {
-//                Intent intent = new Intent(requireContext(), SeeAllActivity.class);
-//                intent.putExtra(KEY_PRODUCT_TYPE, type.getCategoryId());
-//                startActivity(intent);
-//            }
-//        });
-
-//        productMainAdapter.setClickListener(new ProductMainAdapter.ItemClickListener() {
-//            @Override
-//            public void onItemClick(int position, Product productMain) {
-//                Intent intent = new Intent(requireActivity(), ProductDetailActivity.class);
-//                intent.putExtra(KEY_PRODUCT_NAME, productMain.getProductName());
-//                intent.putExtra(KEY_PRODUCT_ID, productMain.getProductId());
-//                intent.putExtra("user_id", user_id);
-//                startActivity(intent);
-//            }
-//        });
-
 
     }
 

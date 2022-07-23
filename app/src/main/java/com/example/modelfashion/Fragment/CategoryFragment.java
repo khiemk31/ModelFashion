@@ -2,6 +2,7 @@ package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PRODUCT_TYPE;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Activity.ProductDetailActivity;
+import com.example.modelfashion.Activity.SeeAllActivity;
 import com.example.modelfashion.Adapter.category.CategoryAdapter;
 import com.example.modelfashion.Adapter.category.ClothesAdapter;
 import com.example.modelfashion.Adapter.category.MyCategoryAdapter;
@@ -131,6 +133,11 @@ public class CategoryFragment extends Fragment {
         MyCategoryAdapter myCategoryAdapter = new MyCategoryAdapter(requireContext(),myCategories);
         rcv_mycategory.setAdapter(myCategoryAdapter);
 
+        myCategoryAdapter.setOnItemClickListener((position, myCategory) -> {
+            Intent intent = new Intent(requireContext(), SeeAllActivity.class);
+            intent.putExtra(KEY_PRODUCT_TYPE, myCategory.getCategory_id());
+            startActivity(intent);
+        });
     }
 
 
@@ -233,7 +240,7 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void viewProductByCategoryOnly(String categoryId) {
-                viewProductByCategory(categoryId);
+//                viewProductByCategory(categoryId);
             }
 
             @Override
@@ -245,18 +252,18 @@ public class CategoryFragment extends Fragment {
     }
 
     private void viewProductByCategory(String categoryId) {
-        compositeDisposable.add(repository.getProductByCategory(categoryId)
-                .doOnSubscribe(disposable -> {
-                    showProgressBar(progressBar);
-                }).subscribe(dataProduct -> {
-                    hideProgressBar(progressBar);
-                    clothesAdapter.setListProduct(dataProduct.getData());
-                    if (dataProduct.getData().size() == 0) {
-
-                    }
-                }, throwable -> {
-                    hideProgressBar(progressBar);
-                }));
+//        compositeDisposable.add(repository.getProductByCategory(categoryId)
+//                .doOnSubscribe(disposable -> {
+//                    showProgressBar(progressBar);
+//                }).subscribe(dataProduct -> {
+//                    hideProgressBar(progressBar);
+//                    clothesAdapter.setListProduct(dataProduct.getData());
+//                    if (dataProduct.getData().size() == 0) {
+//
+//                    }
+//                }, throwable -> {
+//                    hideProgressBar(progressBar);
+//                }));
     }
 
     private void initView(View view) {

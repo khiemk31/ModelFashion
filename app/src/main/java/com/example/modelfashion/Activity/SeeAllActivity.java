@@ -13,14 +13,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.modelfashion.Adapter.see_all.ProductAdapter;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.customview.SearchBar;
+import com.example.modelfashion.customview.SpacesItemDecoration;
 import com.example.modelfashion.network.Repository;
 
 import java.util.ArrayList;
@@ -29,13 +33,11 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SeeAllActivity extends AppCompatActivity {
 
-    private ImageView imgBack;
     private SearchBar searchBar;
     private RecyclerView rcv;
     private ProgressBar progressBar;
-    private String categoryId;
+    private int categoryId;
     private SwipeRefreshLayout refreshLayout;
-    private final ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
     private ProductAdapter adapter;
 
@@ -47,7 +49,8 @@ public class SeeAllActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_all);
 
-        categoryId = getIntent().getStringExtra(KEY_PRODUCT_TYPE);
+//        categoryId = getIntent().getStringExtra(KEY_PRODUCT_TYPE);
+        categoryId = getIntent().getIntExtra(KEY_PRODUCT_TYPE, 0);
 
         initView();
         initData();
@@ -55,82 +58,133 @@ public class SeeAllActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        adapter.setClickListener(new ProductAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, MyProductByCategory productPreview) {
-                Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
-                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onAddToCartClick(int position, MyProductByCategory productPreview) {
-                Log.d("vcxvcx", "onAddToCartClick: position" + position + " product: " + productPreview.toString());
-            }
-        });
+//        adapter.setClickListener(new ProductAdapter.ItemClickListener() {
+//            @Override
+//            public void onItemClick(int position, MyProductByCategory productPreview) {
+//                Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
+//                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
+//                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
+//                startActivity(intent);
+//            }
+//
+//            @Override
+//            public void onAddToCartClick(int position, MyProductByCategory productPreview) {
+//
+//            }
+//        });
 
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-                getProductByCategory(repository, (categoryId));
+
             }
 
             @Override
             public void afterTextChanged(String content) {
-                ArrayList<MyProductByCategory> listSearch = new ArrayList<>();
-                for (int i = 0; i < productArrayList.size(); i++) {
-                    if (productArrayList.get(i).getProductImage().toLowerCase().contains(content.toLowerCase())) {
-                        listSearch.add(productArrayList.get(i));
-                    }
-                }
-                adapter.setListProduct(listSearch);
+
             }
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            getProductByCategory(repository, (categoryId));
             showProgressBar(progressBar);
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
+
+            getProductByCategory(true);
+            adapter.clearItems();
         });
 
-        imgBack.setOnClickListener(view -> {
-            this.finish();
-        });
     }
 
     private void initView() {
-        imgBack = findViewById(R.id.img_back);
         searchBar = findViewById(R.id.search_bar);
-        rcv = findViewById(R.id.rcv_product);
+        rcv = findViewById(R.id.rcv_product_of_category);
         progressBar = findViewById(R.id.progress_bar);
         refreshLayout = findViewById(R.id.refresh_layout);
 
         repository = new Repository(this);
         adapter = new ProductAdapter();
         rcv.setAdapter(adapter);
+        rcv.addItemDecoration(new SpacesItemDecoration(20));
+
+//        setupRcv();
     }
 
     private void initData() {
-        getProductByCategory(repository, (categoryId));
+        getProductByCategory(false);
     }
 
-    private void getProductByCategory(Repository repository, String categoryId) {
-        compositeDisposable.add(repository.getProductByCategory(categoryId).doOnSubscribe(disposable -> {
-            showProgressBar(progressBar);
-        })
+    private int pageNumber = 1;
+    private int price1 = 0, price2 = 10000000;
+    private String sortPrice = "DESC", sortDiscount = "DESC";
+
+    private Boolean canLoadMore = true;
+
+    private void getProductByCategory(Boolean isRefresh) {
+        if (isRefresh) {
+            pageNumber = 1;
+        }
+
+        compositeDisposable.add(repository.getProductByCategory(categoryId,
+                        price1,
+                        price2,
+                        sortPrice,
+                        sortDiscount,
+                        pageNumber)
+                .doOnSubscribe(disposable -> {
+                    showProgressBar(progressBar);
+                })
                 .doFinally(() -> {
                 })
                 .subscribe(productResponse -> {
+                    pageNumber++;
+                    adapter.addItems(productResponse.getListProduct());
+                    if (productResponse.getTotalPage() < pageNumber){
+                        canLoadMore = false;
+                    }
+
                     hideProgressBar(progressBar);
-                    productArrayList.clear();
-                    adapter.setListProduct(productResponse.getData());
-                    productArrayList.addAll(productResponse.getData());
+
                 }, throwable -> {
                     hideProgressBar(progressBar);
-                    Toast.makeText(this, throwable.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, new Utils().getErrorBody(throwable).toString(), Toast.LENGTH_SHORT).show();
                 }));
+    }
+
+    private Boolean disableLoadMore;
+    private Boolean isLoading;
+    private void setupRcv() {
+        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    int firstVisibleItemPosition = 0;
+                    int lastVisibleItemPosition = 0;
+
+                    if (disableLoadMore || isLoading) {
+                        return;
+                    }
+
+                    RecyclerView.LayoutManager layoutManager = rcv.getLayoutManager();
+                    if (layoutManager instanceof GridLayoutManager) {
+                        firstVisibleItemPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                        lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    }
+                    if (firstVisibleItemPosition > 0 && lastVisibleItemPosition == (adapter.getItemCount() - 1)) {
+                        isLoading = true;
+                        if (canLoadMore = true) {
+                            getProductByCategory(false);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     void showProgressBar(ProgressBar progressBar) {

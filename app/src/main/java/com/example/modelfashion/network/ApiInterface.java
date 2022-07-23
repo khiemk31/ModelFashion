@@ -26,6 +26,7 @@ import com.example.modelfashion.Model.response.main_screen.GetAllResponse;
 import com.example.modelfashion.Model.response.my_product.DataProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
+import com.example.modelfashion.Model.response.see_all.GetProductByCategoryResponse;
 
 import org.json.JSONObject;
 
@@ -87,10 +88,14 @@ public interface ApiInterface {
             @Query("product_name") String productName
     );
 
-    @GET("product/getProductByCategory/{id}")
-    Single<DataProduct> getProductByCategory(
-            @Path("id") String categoryId
-//            @Path()
+    @GET("/product/getProductByCategory")
+    Single<GetProductByCategoryResponse> getProductByCategory(
+        @Query("category_id") int categoryId,
+        @Query("price1") int price1,
+        @Query("price2") int price2,
+        @Query("sortPrice") String sortPrice,
+        @Query("sortDiscount") String sortDiscount,
+        @Query("pageNumber") int pageNumber
     );
 
     @POST("check_login_user.php")
