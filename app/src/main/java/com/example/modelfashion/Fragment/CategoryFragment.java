@@ -161,6 +161,11 @@ public class CategoryFragment extends Fragment {
                 }
                 clothesAdapter.setListProduct(listSearch);
             }
+
+            @Override
+            public void rightIconClick() {
+
+            }
         });
 
         clothesAdapter.setClickListener((position, item) -> {
