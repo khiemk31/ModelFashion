@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F4F4F4"
     tools:context=".History.ViewHistory.DetailHistoryActivity">
 
     <RelativeLayout
@@ -17,18 +18,18 @@
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:padding="8dp"
             android:src="@drawable/ic_back_detail_history" />
 
 
         <TextView
-            android:layout_toRightOf="@+id/back_detail_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/back_detail_history"
             android:text="Thông tin đơn hàng"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="normal" />
     </RelativeLayout>
 
@@ -42,166 +43,164 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_top_detail_history">
-
-        <TextView
-            android:id="@+id/tv_dh_detail_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:gravity="left"
-            android:text="Mã"
-            android:textColor="#8E97FD"
-            android:textSize="17sp"
-            android:textStyle="normal" />
-
+        android:layout_below="@+id/rl_top_detail_history"
+        android:background="#F4F4F4">
 
         <RelativeLayout
-            android:id="@+id/rl_phomeNumber"
+            android:id="@+id/rl_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_dh_detail_history"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp">
+            android:background="@color/white"
+            android:paddingBottom="10dp">
+
 
             <TextView
-                android:id="@+id/title_phone"
+                android:id="@+id/tv_dh_detail_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Số điện thoại: "
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/tv_bill_status"
+                android:gravity="left"
+                android:text="Mã"
+                android:textColor="#8E97FD"
+                android:textSize="17sp"
                 android:textStyle="normal" />
 
             <TextView
-                android:id="@+id/phoneNumber_detail_history"
+                android:id="@+id/tv_bill_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/title_phone"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="normal" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_phomeNumber"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="5sp">
-
-            <TextView
-                android:id="@+id/title_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Địa chỉ giao hàng: "
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:alpha="0.6"
+                android:gravity="left"
+                android:text="Đang chờ"
+                android:textColor="#000000"
+                android:textSize="15sp"
                 android:textStyle="normal" />
 
-            <TextView
-                android:id="@+id/address_detail_history"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_date_detail_history"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/title_address"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="normal" />
-        </RelativeLayout>
+                android:layout_below="@+id/tv_dh_detail_history"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/rl_date_detail_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_address"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="5dp"
-            android:visibility="visible">
+                <TextView
+                    android:id="@+id/title_date_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
 
-            <TextView
-                android:id="@+id/title_date_detail_history"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/date_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/title_date_detail_history"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_phomeNumber"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ngày nhận hàng: "
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:layout_below="@+id/rl_date_detail_history"
+                android:layout_marginHorizontal="20dp">
 
-            <TextView
-                android:id="@+id/date_detail_history"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/title_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số điện thoại: "
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/phoneNumber_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/title_phone"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_address"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/title_date_detail_history"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="normal" />
-        </RelativeLayout>
+                android:layout_below="@+id/rl_phomeNumber"
+                android:layout_marginHorizontal="20dp">
 
-        <RelativeLayout
-            android:id="@+id/rl_summoney_detail_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_date_detail_history"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/title_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ giao hàng: "
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
 
-            <TextView
-                android:id="@+id/title_summoney_detail_history"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/address_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title_address"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_cancelBill"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tổng tiền: "
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="normal" />
+                android:layout_below="@+id/rl_address"
+                android:layout_marginHorizontal="20dp">
 
-            <TextView
-                android:id="@+id/summoney_detail_history"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/title_summoney_detail_history"
-                android:text="0đ"
-                android:textColor="#FF0000"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginTop="5dp"
-            android:layout_marginHorizontal="20dp"
-            android:id="@+id/rl_cancelBill"
-            android:layout_below="@+id/rl_summoney_detail_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/contentCancelBill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text=""
+                    android:textColor="#ff0000"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/contentCancelBill"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp"
-                android:textColor="#ff0000"
-                android:fontFamily="@font/nunito_bold"/>
-
+            </RelativeLayout>
         </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/rl_cancelBill"
-            android:layout_marginTop="20sp"
+            android:layout_above="@+id/rl_bottom"
+            android:layout_below="@+id/rl_top"
             android:background="#F4F4F4">
 
             <View
                 android:id="@+id/view_detail_history"
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="#8E97FD" />
+                android:layout_height="1dp"
+                android:background="#000000" />
 
             <TextView
                 android:id="@+id/tv_sum"
@@ -210,7 +209,7 @@
                 android:layout_below="@+id/view_detail_history"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Tất cả sản phẩm: "
+                android:text="Tất cả(2 sản phẩm):"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="normal" />
@@ -224,7 +223,149 @@
                 android:layout_marginTop="5sp"
                 android:divider="@null"
                 android:dividerHeight="5dp"
-                android:padding="5sp" />
+                android:padding="5sp"
+                tools:listitem="@layout/item_subproducts" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_sub_detail">
+
+
+            <RelativeLayout
+                android:id="@+id/rl_summoney_detail_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/title_summoney_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng tiền:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/summoney_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toRightOf="@+id/title_summoney_detail_history"
+                    android:gravity="right"
+                    android:text="0đ"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_sale_detail_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_summoney_detail_history"
+                android:layout_marginHorizontal="20dp">
+
+                <TextView
+                    android:id="@+id/title_sale_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khuyến mãi:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/sale_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+
+                    android:gravity="right"
+                    android:text="-0đ"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_transport_detail_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_sale_detail_history"
+                android:layout_marginHorizontal="20dp">
+
+                <TextView
+                    android:id="@+id/title_transport_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phí vận chuyển:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/transport_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+
+                    android:gravity="right"
+                    android:text="0đ"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_price_detail_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_close_detail"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:id="@+id/title_price_detail_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Thành tiền:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/summoney_price_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/nunito_medium"
+                    android:gravity="right"
+                    android:text="0đ "
+                    android:textColor="#ff0000"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_close_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="#ff0000"
+                android:fontFamily="@font/nunito_medium"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="Đóng"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
         </RelativeLayout>
 
     </RelativeLayout>
