@@ -143,7 +143,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
 
-        if (String.valueOf(myProductDetail.getProduct().get(0).getDiscount()) == null) {
+        if (myProductDetail.getProduct().get(0).getDiscount() == 0) {
             tv_price_discount.setVisibility(View.GONE);
             tv_price.setText(price+"đ");
             findViewById(R.id.rl_discount).setVisibility(View.INVISIBLE);
@@ -247,10 +247,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         btn_mua_ngay.setOnClickListener(view -> {
+            int price;
+            if (myProductDetail.getProduct().get(0).getDiscount() == 0) {
+                price = myProductDetail.getProduct().get(0).getPrice();
+            } else {
+                price = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
+            }
             MyProductCart myProductCart = new MyProductCart(
                     myProductDetail.getProduct().get(0).getProductId(),
                     myProductDetail.getProduct().get(0).getProductName(),
-                    myProductDetail.getProduct().get(0).getPrice(),
+                    price,
                     size,
                     1,
                     myProductDetail.getProduct().get(0).getProductImage()
