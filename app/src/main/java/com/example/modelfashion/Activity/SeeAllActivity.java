@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.modelfashion.Adapter.see_all.PageAdapter;
 import com.example.modelfashion.Adapter.see_all.ProductAdapter;
 import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
@@ -36,11 +37,13 @@ public class SeeAllActivity extends AppCompatActivity {
 
     private SearchBar searchBar;
     private RecyclerView rcv;
+    private RecyclerView rcv_pages;
     private ProgressBar progressBar;
     private int categoryId;
     private SwipeRefreshLayout refreshLayout;
 
     private ProductAdapter adapter;
+    private PageAdapter pageAdapter;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Repository repository;
@@ -60,14 +63,17 @@ public class SeeAllActivity extends AppCompatActivity {
 
     private void initListener() {
 
-        adapter.setClickListener(new ProductAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, Product productPreview) {
-                Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
-                intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
-                intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
-                startActivity(intent);
-            }
+        pageAdapter.setOnItemClickListener(position -> {
+            pageNumber = position + 1;
+            pageAdapter.setColor(position);
+            getProductByCategory();
+        });
+
+        adapter.setClickListener((position, productPreview) -> {
+            Intent intent = new Intent(SeeAllActivity.this, ProductDetailActivity.class);
+            intent.putExtra(KEY_PRODUCT_NAME, productPreview.getProductName());
+            intent.putExtra(KEY_PRODUCT_ID, productPreview.getProductId());
+            startActivity(intent);
         });
 
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
@@ -87,9 +93,8 @@ public class SeeAllActivity extends AppCompatActivity {
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
 
-            getProductByCategory(true);
+            getProductByCategory();
             adapter.clearItems();
-            canLoadMore = true;
         });
 
     }
@@ -97,32 +102,29 @@ public class SeeAllActivity extends AppCompatActivity {
     private void initView() {
         searchBar = findViewById(R.id.search_bar);
         rcv = findViewById(R.id.rcv_product_of_category);
+        rcv_pages = findViewById(R.id.rcv_pages);
         progressBar = findViewById(R.id.progress_bar);
         refreshLayout = findViewById(R.id.refresh_layout);
 
         repository = new Repository(this);
         adapter = new ProductAdapter();
+        pageAdapter = new PageAdapter();
         rcv.setAdapter(adapter);
         rcv.addItemDecoration(new SpacesItemDecoration(20));
 
-        setupRcv();
+        rcv_pages.setAdapter(pageAdapter);
+
     }
 
     private void initData() {
-        getProductByCategory(false);
+        getProductByCategory();
     }
 
     private int pageNumber = 1;
     private int price1 = 0, price2 = 10000000;
     private String sortPrice = "DESC", sortDiscount = "DESC";
 
-    private Boolean canLoadMore = true;
-
-    private void getProductByCategory(Boolean isRefresh) {
-        if (isRefresh) {
-            pageNumber = 1;
-        }
-
+    private void getProductByCategory() {
         compositeDisposable.add(repository.getProductByCategory(categoryId,
                         price1,
                         price2,
@@ -135,12 +137,9 @@ public class SeeAllActivity extends AppCompatActivity {
                 .doFinally(() -> {
                 })
                 .subscribe(productResponse -> {
-                    pageNumber++;
-                    adapter.addItems(productResponse.getListProduct());
-                    if (pageNumber > productResponse.getTotalPage()){
-                        canLoadMore = false;
-                    }
+                    adapter.setListProduct(productResponse.getListProduct());
 
+                    pageAdapter.setPageCount(productResponse.getTotalPage());
                     hideProgressBar(progressBar);
 
                 }, throwable -> {
@@ -149,39 +148,6 @@ public class SeeAllActivity extends AppCompatActivity {
                 }));
     }
 
-    private Boolean disableLoadMore;
-    private Boolean isLoading;
-    private void setupRcv() {
-        rcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int firstVisibleItemPosition = 0;
-                    int lastVisibleItemPosition = 0;
-
-
-
-                    RecyclerView.LayoutManager layoutManager = rcv.getLayoutManager();
-                    if (layoutManager instanceof GridLayoutManager) {
-                        firstVisibleItemPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                        lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
-                    }
-                    if (firstVisibleItemPosition > 0 && lastVisibleItemPosition == (adapter.getItemCount() - 1)) {
-
-                        if (canLoadMore) {
-                            getProductByCategory(false);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-    }
 
     void showProgressBar(ProgressBar progressBar) {
         progressBar.setVisibility(View.VISIBLE);
