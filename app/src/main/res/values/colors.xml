@@ -46,4 +46,6 @@
     <color name="background_item_navigation">#FFFFFF</color>
     <color name="tint_item_navigation">#AEAEB2</color>
     <color name="tint_item_navigation_choice">#8E97FD</color>
+
+    <color name="tint_page_selected">#B94F4F50</color>
 </resources>
