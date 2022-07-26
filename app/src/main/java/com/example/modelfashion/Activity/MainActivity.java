@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        viewPager.setOffscreenPageLimit(4);
 
         KeyboardUtils.addKeyboardToggleListener(this, isVisible -> {
             if (!isVisible) {

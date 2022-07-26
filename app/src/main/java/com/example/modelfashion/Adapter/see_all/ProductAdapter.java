@@ -1,6 +1,7 @@
 package com.example.modelfashion.Adapter.see_all;
 
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,18 +19,24 @@ import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.MyProductByCategory;
 import com.example.modelfashion.Model.response.my_product.ProductByCategory;
+import com.example.modelfashion.Model.sale.ProductSale;
 import com.example.modelfashion.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> listProduct = new ArrayList<>();
+    private List<Product> listStatic = new ArrayList<>();
 
     public void setListProduct(List<Product> list) {
+        this.listStatic = list;
         this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
@@ -41,6 +49,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public void clearItems() {
         this.listProduct.clear();
+        notifyDataSetChanged();
+    }
+
+    public void sortAToZ() {
+        Collections.sort(this.listProduct, (p1, p2) -> p1.getProductName().compareToIgnoreCase(p2.getProductName()));
+        notifyDataSetChanged();
+    }
+
+    public void sortZToA() {
+        Collections.sort(this.listProduct, (p1, p2) -> p2.getProductName().compareToIgnoreCase(p1.getProductName()));
+        notifyDataSetChanged();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void search(String word) {
+        this.listProduct = this.listStatic.stream().filter(x -> x.getProductName().toLowerCase().contains(word.toLowerCase())).collect(Collectors.toList());
         notifyDataSetChanged();
     }
 
