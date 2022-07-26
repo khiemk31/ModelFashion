@@ -157,8 +157,8 @@ public class HistoryActivity extends AppCompatActivity {
                     break;
             case 5: status = "Thất Bại";
                 break;
-//            case 6: status = "Từ Chối";
-//                break;
+            case 6: status = "Từ Chối";
+                break;
 
         }
         return status;
@@ -314,11 +314,21 @@ public class HistoryActivity extends AppCompatActivity {
         filter_history_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 numberStatus = filter_number;
                 loadThemeFilterStatus(numberStatus,status1,status2,status3,status4,status5,status6);
                 loadTitleStatus(numberStatus);
-
-                setListBill(numberStatus,bills);
+                if(filter_number<6) {
+                    setListBill(numberStatus, bills);
+                }else {
+                    if(bills.size()>0){
+                        tv_empty.setVisibility(View.GONE);
+                    }else {
+                        tv_empty.setVisibility(View.VISIBLE);
+                    }
+                    HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this,bills,HistoryActivity.this);
+                    lv_history.setAdapter(historyAdapter);
+                }
                 dialog.dismiss();
 
             }
@@ -350,8 +360,8 @@ public class HistoryActivity extends AppCompatActivity {
             tv_status_history.setTextColor(Color.parseColor("#FF0000"));
         }
         else if (i == 6){
-            tv_status_history.setText("Từ chối");
-            tv_status_history.setTextColor(Color.parseColor("#FF0000"));
+            tv_status_history.setText("Tất cả");
+            tv_status_history.setTextColor(Color.parseColor("#4caf50"));
         }
     }
     private void loadThemeFilterStatus(int i,TextView st1,TextView st2,TextView st3,TextView st4,TextView st5,TextView st6){

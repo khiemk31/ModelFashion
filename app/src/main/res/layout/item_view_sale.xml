@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_item_sale"
-    android:layout_margin="10dp"
+   android:layout_marginHorizontal="10dp"
+    android:layout_marginBottom="10dp"
     android:paddingBottom="10dp">
 
     <RelativeLayout
@@ -12,17 +13,16 @@
         android:layout_height="wrap_content">
 
 
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/img_product_sale"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="10dp"
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:layout_centerHorizontal="true"
-        android:id="@+id/img_product_sale"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        app:riv_corner_radius="10dp"
-        android:layout_marginBottom="10dp"
-        android:scaleType="fitXY"
-
-         />
+            />
     <ImageView
         android:layout_width="45dp"
         android:layout_height="45dp"

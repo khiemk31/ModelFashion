@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120dp"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_item_sale"
-    android:layout_marginTop="10dp"
     android:layout_marginRight="5dp"
     android:paddingBottom="10dp">
 
@@ -17,10 +16,10 @@
         <com.makeramen.roundedimageview.RoundedImageView
             android:layout_centerHorizontal="true"
             android:id="@+id/img_product_sale"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:riv_corner_radius="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
 
             />

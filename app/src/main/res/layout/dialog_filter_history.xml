@@ -140,11 +140,11 @@
                     android:background="@drawable/bt_item_filter_history"
                     android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="Từ Chối"
+                    android:text="Tất Cả"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     android:focusable="false"
-                    android:visibility="invisible"/>
+                    android:visibility="visible"/>
 
             </LinearLayout>
 

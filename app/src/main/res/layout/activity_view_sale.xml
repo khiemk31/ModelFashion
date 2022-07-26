@@ -28,8 +28,8 @@
             android:gravity="center"
             android:text="Sale"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="normal" />
+            android:textSize="20sp"
+            android:fontFamily="@font/nunito_bold" />
 
         <ImageView
             android:id="@+id/filter_sale"
@@ -46,15 +46,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="15dp"
         android:elevation="5dp"
         android:orientation="horizontal"
         android:background="@drawable/bt_search_sale"
-        android:padding="5dp">
+        >
         <ImageView
             android:layout_marginStart="10dp"
-            android:layout_width="24sp"
-            android:layout_height="24sp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_search"/>
 
@@ -68,7 +69,7 @@
             android:hint="Search"
             android:maxLines="1"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="12dp"
             android:textCursorDrawable="@drawable/custom_cursor"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
