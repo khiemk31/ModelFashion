@@ -118,6 +118,7 @@ public class SeeAllActivity extends AppCompatActivity {
             showProgressBar(progressBar);
             refreshLayout.setRefreshing(false);
             searchBar.clearSearchContent();
+            hidekeyboard();
 
             getProductByCategory();
             adapter.clearItems();
@@ -131,8 +132,6 @@ public class SeeAllActivity extends AppCompatActivity {
             getProductByCategory();
             hideBottom();
         });
-        //        ll_a_z = findViewById(R.id.ll_a_z);
-//        ll_z_a = findViewById(R.id.ll_z_a);
         ll_a_z.setOnClickListener(v -> {
             removeAllTick();
             showTick(2);

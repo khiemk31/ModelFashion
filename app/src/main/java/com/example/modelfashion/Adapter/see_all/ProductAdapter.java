@@ -83,9 +83,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = listProduct.get(position);
 
-        holder.tv_my_product_price.setText(product.getProductName());
+        holder.tv_my_product_name.setText(product.getProductName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.tv_my_product_name.setText(decimalFormat.format(Double.parseDouble(String.valueOf(product.getPrice())))+"đ");
+        holder.tv_my_product_price.setText(decimalFormat.format(Double.parseDouble(String.valueOf(product.getPrice())))+"đ");
         holder.itemView.setOnClickListener(view -> {
             mClickListener.onItemClick(position, product);
         });
