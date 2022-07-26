@@ -59,20 +59,20 @@
         android:textColor="@color/black"
         android:textSize="15dp" />
 
-    <TextView
-        android:id="@+id/tv_price_old"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_name_sale"
-        android:layout_marginHorizontal="15dp"
-        android:alpha="0.5"
-        android:background="@drawable/striking_text"
-        android:fontFamily="@font/nunito_medium"
-        android:maxLines="1"
-        android:paddingHorizontal="5dp"
-        android:text="0đ"
-        android:textColor="@color/black"
-        android:textSize="12dp" />
+        <TextView
+            android:id="@+id/tv_price_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_sale"
+            android:layout_marginHorizontal="15dp"
+            android:alpha="0.5"
+            android:background="@drawable/striking_text"
+            android:fontFamily="@font/nunito_medium"
+            android:maxLines="1"
+            android:paddingHorizontal="5dp"
+            android:text="0đ"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
 
     <TextView
         android:id="@+id/tv_price_sale"
