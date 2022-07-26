@@ -22,6 +22,7 @@ import com.example.modelfashion.Model.response.Register.RegisterRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -101,8 +102,8 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     otpToken = getOTPResponse.getOtpToken();
                     countDownTime();
                 }, throwable -> {
-                    Log.e("123", throwable.getMessage());
-                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(OTPPhoneActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -114,7 +115,8 @@ public class OTPPhoneActivity extends AppCompatActivity {
                 }).subscribe(verifyOTP -> {
                     register();
                 }, throwable -> {
-                    Toast.makeText(OTPPhoneActivity.this, "Sai mã xác nhận", Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(OTPPhoneActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -127,7 +129,8 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     Toast.makeText(OTPPhoneActivity.this, registerResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(OTPPhoneActivity.this, MainActivity.class));
                 }, throwable -> {
-                    Toast.makeText(OTPPhoneActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(OTPPhoneActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 

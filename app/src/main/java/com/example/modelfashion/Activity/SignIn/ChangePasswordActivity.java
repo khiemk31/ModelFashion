@@ -14,6 +14,7 @@ import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -78,7 +79,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Toast.makeText(ChangePasswordActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ChangePasswordActivity.this, SignInActivity.class));
                 }, throwable -> {
-                    Toast.makeText(ChangePasswordActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(ChangePasswordActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 

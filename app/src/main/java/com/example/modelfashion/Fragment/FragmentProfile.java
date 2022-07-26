@@ -1,6 +1,11 @@
 package com.example.modelfashion.Fragment;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
 import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -99,8 +104,8 @@ public class FragmentProfile extends Fragment {
             layout_btn.setVisibility(View.GONE);
             img.setVisibility(View.VISIBLE);
             layout_name.setVisibility(View.VISIBLE);
-            tv_user.setText(preferenceManager.getString(Constants.KEY_PHONE));
-            tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+            tv_user.setText(preferenceManager.getString(KEY_PHONE));
+            tv_name.setText(preferenceManager.getString(KEY_FULL_NAME));
             Glide.with(getActivity())
                     .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                     .into(img);
@@ -114,8 +119,14 @@ public class FragmentProfile extends Fragment {
             startActivity(intent);
         });
         img.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), ProfileActivity.class);
-            startActivity(intent);
+            if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getContext(), SignInActivity.class);
+                startActivity(intent);
+            }
+
         });
         tv_login.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SignInActivity.class);
@@ -226,8 +237,13 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 //            progressLoadingCommon.showProgressLoading(getActivity());
-                preferenceManager.putBoolean(Constants.KEY_CHECK_LOGIN, false);
+                preferenceManager.putBoolean(KEY_CHECK_LOGIN, false);
                 preferenceManager.putString(KEY_AVARTAR, "");
+                preferenceManager.putString(KEY_FULL_NAME, "");
+                preferenceManager.putString(KEY_PHONE, "");
+                preferenceManager.putString(KEY_ADDRESS, "");
+                preferenceManager.putString(KEY_BIRTHDAY, "");
+
                 img.setImageResource(R.drawable.bg_gradient_blue);
                 loadDetails();
                 Intent intent = new Intent(getContext(), MainActivity.class);
@@ -268,7 +284,7 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+        tv_name.setText(preferenceManager.getString(KEY_FULL_NAME));
         Glide.with(getActivity())
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(img);
