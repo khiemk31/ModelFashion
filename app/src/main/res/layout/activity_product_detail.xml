@@ -160,7 +160,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="3"
             app:layout_constraintEnd_toStartOf="@+id/rl_discount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/img_product"
