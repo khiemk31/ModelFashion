@@ -17,6 +17,7 @@ import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -94,7 +95,8 @@ public class EnterCapchaActivity extends AppCompatActivity {
                     otpToken = getOTPResponse.getOtpToken();
                     countDownTime();
                 }, throwable -> {
-                    Toast.makeText(EnterCapchaActivity.this, "Sai mã xác nhận", Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(EnterCapchaActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
@@ -111,7 +113,8 @@ public class EnterCapchaActivity extends AppCompatActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }, throwable -> {
-                    Toast.makeText(EnterCapchaActivity.this, "Sai mã xác nhận", Toast.LENGTH_SHORT).show();
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(EnterCapchaActivity.this, error, Toast.LENGTH_SHORT).show();
                 }));
     }
 
