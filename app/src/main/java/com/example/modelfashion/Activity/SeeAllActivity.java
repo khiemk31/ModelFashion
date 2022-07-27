@@ -198,7 +198,7 @@ public class SeeAllActivity extends AppCompatActivity {
         adapter = new ProductAdapter();
         pageAdapter = new PageAdapter();
         rcv.setAdapter(adapter);
-        rcv.addItemDecoration(new SpacesItemDecoration(20));
+        rcv.addItemDecoration(new SpacesItemDecoration(10));
 
         rcv_pages.setAdapter(pageAdapter);
 
