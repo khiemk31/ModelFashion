@@ -38,7 +38,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
     public static String user_id;
     ArrayList<ContentBill> arr_bill_detail = new ArrayList<>();
     ArrayList<BillProducts> arr_my_product = new ArrayList<>();
-    private TextView contentCancelBill;
+    private TextView contentCancelBill,tv_bill_status,sale_detail_history,summoney_price_history,tv_feedback_shop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,10 @@ public class DetailHistoryActivity extends AppCompatActivity {
         lv_detail_history = findViewById(R.id.lv_detail_history);
         back_detail_history = findViewById(R.id.back_detail_history);
         contentCancelBill = findViewById(R.id.contentCancelBill);
+        tv_bill_status = findViewById(R.id.tv_bill_status);
+        sale_detail_history = findViewById(R.id.sale_detail_history);
+        summoney_price_history = findViewById(R.id.summoney_price_history);
+        tv_feedback_shop = findViewById(R.id.tv_feedback_shop);
         back_detail_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,11 +106,16 @@ public class DetailHistoryActivity extends AppCompatActivity {
         address_detail_history.setText(contentBill.getAddress());
         date_detail_history.setText(contentBill.getCreated_at().substring(0,10));
         summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" đ");
+        tv_bill_status.setText(contentBill.getStatus());
+
         DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
+        sale_detail_history.setText("-"+format.format(Double.valueOf(contentBill.getDiscount_voucher_price()))+" đ");
+        int sumprice = contentBill.getTotal_price() - contentBill.getDiscount_voucher_price();
+        summoney_price_history.setText(format.format(Double.valueOf(sumprice))+" đ ");
         lv_detail_history.setAdapter(historyAdapter);
 
         if(contentBill.getCancellation_reason() == null && contentBill.getFeedback()==null && contentBill.getReturn_request()==null){
-            contentCancelBill.setVisibility(View.GONE);
+            contentCancelBill.setVisibility(View.INVISIBLE);
         }else {
             contentCancelBill.setVisibility(View.VISIBLE);
             if(contentBill.getCancellation_reason()!=null){
@@ -116,6 +125,11 @@ public class DetailHistoryActivity extends AppCompatActivity {
             }else if(contentBill.getReturn_request()!=null){
                 contentCancelBill.setText("Lý do trả hàng: "+contentBill.getReturn_request());
             }
+        }
+        if(contentBill.getFeedback_by_store()==null){
+            tv_feedback_shop.setVisibility(View.GONE);
+        }else {
+            tv_feedback_shop.setText("Shop : "+contentBill.getFeedback_by_store());
         }
 
     }

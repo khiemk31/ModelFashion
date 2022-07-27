@@ -173,7 +173,7 @@ public class ViewSaleActivity extends AppCompatActivity {
                     @Override
                     public int compare(ProductSale p1, ProductSale p2) {
 
-                        return p1.getProduct_name().compareToIgnoreCase(p2.getProduct_name());
+                        return p2.getProduct_name().compareToIgnoreCase(p1.getProduct_name());
                     }
                 });
                 allSaleAdapter.setList(productSaleFilter);
@@ -192,7 +192,7 @@ public class ViewSaleActivity extends AppCompatActivity {
                     @Override
                     public int compare(ProductSale p1, ProductSale p2) {
 
-                        return p2.getProduct_name().compareToIgnoreCase(p1.getProduct_name());
+                        return p1.getProduct_name().compareToIgnoreCase(p2.getProduct_name());
                     }
                 });
                 allSaleAdapter.setList(productSaleFilter);

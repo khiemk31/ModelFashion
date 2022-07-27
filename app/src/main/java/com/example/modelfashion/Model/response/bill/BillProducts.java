@@ -5,13 +5,15 @@ public class BillProducts {
     private String size;
     private String quantity;
     private String price;
+    private String price_sale;
     private String product_image;
 
-    public BillProducts(String product_name, String size, String quantity, String price, String product_image) {
+    public BillProducts(String product_name, String size, String quantity, String price, String price_sale, String product_image) {
         this.product_name = product_name;
         this.size = size;
         this.quantity = quantity;
         this.price = price;
+        this.price_sale = price_sale;
         this.product_image = product_image;
     }
 
@@ -45,6 +47,14 @@ public class BillProducts {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getPrice_sale() {
+        return price_sale;
+    }
+
+    public void setPrice_sale(String price_sale) {
+        this.price_sale = price_sale;
     }
 
     public String getProduct_image() {
