@@ -247,19 +247,21 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         btn_mua_ngay.setOnClickListener(view -> {
-            int price;
+            int priceSale;
             if (myProductDetail.getProduct().get(0).getDiscount() == 0) {
-                price = myProductDetail.getProduct().get(0).getPrice();
+                priceSale = myProductDetail.getProduct().get(0).getPrice();
             } else {
-                price = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
+                priceSale = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
             }
             MyProductCart myProductCart = new MyProductCart(
                     myProductDetail.getProduct().get(0).getProductId(),
                     myProductDetail.getProduct().get(0).getProductName(),
-                    price,
+                    myProductDetail.getProduct().get(0).getPrice(),
                     size,
                     1,
-                    myProductDetail.getProduct().get(0).getProductImage()
+                    myProductDetail.getProduct().get(0).getProductImage(),
+                    priceSale,
+                    myProductDetail.getProduct().get(0).getDiscount()
             );
             // them vao gio hang + sang man gio hang
             if (isExist(myProductCart)) {
@@ -280,20 +282,22 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         btn_them_vao_gio_hang.setOnClickListener(view -> {
-            int price;
+            int priceSale;
             if (myProductDetail.getProduct().get(0).getDiscount() == 0) {
-                price = myProductDetail.getProduct().get(0).getPrice();
+                priceSale = myProductDetail.getProduct().get(0).getPrice();
             } else {
-                price = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
+                priceSale = (int) (myProductDetail.getProduct().get(0).getPrice() * (1 - (myProductDetail.getProduct().get(0).getDiscount() / 100f)));
             }
 
             MyProductCart myProductCart = new MyProductCart(
                     myProductDetail.getProduct().get(0).getProductId(),
                     myProductDetail.getProduct().get(0).getProductName(),
-                    price,
+                    priceSale,
                     size,
                     1,
-                    myProductDetail.getProduct().get(0).getProductImage()
+                    myProductDetail.getProduct().get(0).getProductImage(),
+                    priceSale,
+                    myProductDetail.getProduct().get(0).getDiscount()
             );
             // them vao gio hang
             if (isExist(myProductCart)) {

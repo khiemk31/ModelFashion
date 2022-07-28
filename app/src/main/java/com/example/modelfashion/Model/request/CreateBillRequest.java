@@ -17,20 +17,54 @@ public class CreateBillRequest {
     private String totalPrice;
     @SerializedName("price")
     private String price;
+    @SerializedName("list_price")
+    private List<String> listPrice;
+    @SerializedName("list_price_sale")
+    private List<String> listPriceSale;
+    @SerializedName("discount_voucher_price")
+    private String discountVoucherPrice;
     @SerializedName("product_image")
     private String productImage;
     @SerializedName("address")
     private String address;
 
-    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, String productImage, String address) {
+    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, List<String> listPrice, List<String> listPriceSale, String discountVoucherPrice, String productImage, String address) {
         this.userId = userId;
         this.productList = productList;
         this.listQuantity = listQuantity;
         this.listSize = listSize;
         this.totalPrice = totalPrice;
         this.price = price;
+        this.listPrice = listPrice;
+        this.listPriceSale = listPriceSale;
+        this.discountVoucherPrice = discountVoucherPrice;
         this.productImage = productImage;
         this.address = address;
+    }
+
+
+    public List<String> getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(List<String> listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    public List<String> getListPriceSale() {
+        return listPriceSale;
+    }
+
+    public void setListPriceSale(List<String> listPriceSale) {
+        this.listPriceSale = listPriceSale;
+    }
+
+    public String getDiscountVoucherPrice() {
+        return discountVoucherPrice;
+    }
+
+    public void setDiscountVoucherPrice(String discountVoucherPrice) {
+        this.discountVoucherPrice = discountVoucherPrice;
     }
 
     public String getAddress() {
@@ -100,13 +134,16 @@ public class CreateBillRequest {
         this.productImage = productImage;
     }
 
-    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, String productImage) {
+    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, List<String> listPrice, List<String> listPriceSale, String discountVoucherPrice, String productImage) {
         this.userId = userId;
         this.productList = productList;
         this.listQuantity = listQuantity;
         this.listSize = listSize;
         this.totalPrice = totalPrice;
         this.price = price;
+        this.listPrice = listPrice;
+        this.listPriceSale = listPriceSale;
+        this.discountVoucherPrice = discountVoucherPrice;
         this.productImage = productImage;
     }
 }
