@@ -197,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Shop :"
+                    android:text="Cửa hàng : "
                     android:textColor="#ff0000"
                     android:textSize="17sp" />
 
@@ -263,7 +263,7 @@
                     android:id="@+id/title_summoney_detail_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tổng tiền:"
+                    android:text="Tổng tiền(Tạm tính):"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="normal" />

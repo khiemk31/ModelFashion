@@ -109,8 +109,9 @@ public class DetailHistoryActivity extends AppCompatActivity {
         tv_bill_status.setText(contentBill.getStatus());
 
         DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
-        sale_detail_history.setText("-"+format.format(Double.valueOf(contentBill.getDiscount_voucher_price()))+" đ");
-        int sumprice = contentBill.getTotal_price() - contentBill.getDiscount_voucher_price();
+        int priceSale = contentBill.getTotal_price()*contentBill.getDiscount_voucher_price()/100;
+        sale_detail_history.setText("-"+format.format(Double.valueOf(priceSale))+" đ");
+        int sumprice = contentBill.getTotal_price() - priceSale;
         summoney_price_history.setText(format.format(Double.valueOf(sumprice))+" đ ");
         lv_detail_history.setAdapter(historyAdapter);
 
@@ -129,7 +130,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         if(contentBill.getFeedback_by_store()==null){
             tv_feedback_shop.setVisibility(View.GONE);
         }else {
-            tv_feedback_shop.setText("Shop : "+contentBill.getFeedback_by_store());
+            tv_feedback_shop.setText("Cửa hàng : "+contentBill.getFeedback_by_store());
         }
 
     }
