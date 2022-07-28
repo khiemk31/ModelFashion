@@ -30,7 +30,7 @@ import retrofit2.Response;
 
 public class DetailHistoryActivity extends AppCompatActivity {
     TextView tv_dh_detail_history,phoneNumber_detail_history,address_detail_history,
-            date_detail_history,summoney_detail_history,title_date_detail_history,tv_sum;
+            date_detail_history,summoney_detail_history,title_date_detail_history,tv_sum,tv_close_detail;
 //    List<ProductHistory> list;
     ListView lv_detail_history;
     ImageView back_detail_history;
@@ -57,8 +57,15 @@ public class DetailHistoryActivity extends AppCompatActivity {
         sale_detail_history = findViewById(R.id.sale_detail_history);
         summoney_price_history = findViewById(R.id.summoney_price_history);
         tv_feedback_shop = findViewById(R.id.tv_feedback_shop);
+        tv_close_detail = findViewById(R.id.tv_close_detail);
         tv_sum = findViewById(R.id.tv_sum);
         back_detail_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tv_close_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
