@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:background="@drawable/bt_item_history"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tv_title_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Tài khoản của bạn đã bị khóa!"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_confirm_user_check"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title_logout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/bt_btn_feedback"
+        android:gravity="center"
+        android:paddingVertical="5dp"
+        android:text="Xác nhận"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+</RelativeLayout>

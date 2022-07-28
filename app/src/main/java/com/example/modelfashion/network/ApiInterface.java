@@ -15,6 +15,8 @@ import com.example.modelfashion.Model.response.Register.RegisterRequest;
 import com.example.modelfashion.Model.response.Register.RegisterResponse;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
+import com.example.modelfashion.Model.response.User.CheckUserActiveResponse;
 import com.example.modelfashion.Model.response.User.UpdateUserRequest;
 import com.example.modelfashion.Model.response.User.UpdateUserResponse;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
@@ -132,4 +134,7 @@ public interface ApiInterface {
 
     @GET("/product/getAllProductByCategory")
     Single<GetAllProductByCategoryResponse> getAllProductByCategory();
+
+    @POST("user/checkActive")
+    Single<CheckUserActiveResponse> checkUserActive(@Body CheckUserActiveRequest request);
 }
