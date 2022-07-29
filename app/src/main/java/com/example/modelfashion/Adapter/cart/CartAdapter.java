@@ -77,9 +77,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     public void onBindViewHolder(@NonNull ViewHoder holder, @SuppressLint("RecyclerView") int position) {
         AtomicInteger minteger = new AtomicInteger(productArrayList.get(position).getProductQuantity());
         DecimalFormat formatter = new DecimalFormat("###,###,###");
-        String money_format = formatter.format((productArrayList.get(position).getProductPrice()));
+
+        if (productArrayList.get(position).getDiscount() == 0) {
+            String money_format = formatter.format((productArrayList.get(position).getProductPrice()));
+            holder.priceProduct.setText("Giá: " + money_format + " VNĐ");
+        }else {
+            String money_format_sale = formatter.format((productArrayList.get(position).getProductPriceSale()));
+            holder.priceProduct.setText("Giá: " + money_format_sale + " VNĐ");
+        }
+
         holder.nameProduct.setText("Sản phẩm: " + productArrayList.get(position).getProductName());
-        holder.priceProduct.setText("Giá: " + money_format + " VNĐ");
         holder.sizeProduct.setText("Size: " + productArrayList.get(position).getProductSize());
         Glide.with(holder.btnIncrease.getContext()).load(productArrayList.get(position).getProductImage()).into(holder.imgCart);
         holder.delete.setOnClickListener(view -> {
@@ -141,24 +148,48 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         List<String> listProduct = new ArrayList<>();
         List<String> listQuantity = new ArrayList<>();
         List<String> listSize = new ArrayList<>();
+        List<String> listPrice = new ArrayList<>();
+        List<String> listPriceSale = new ArrayList<>();
+        String discountVoucherPrice = "0";
+
         AtomicLong totalPrice = new AtomicLong();
-        productArrayList.forEach(myProductCart -> {
+        for (int i = 0; i < productArrayList.size(); i++) {
+            MyProductCart myProductCart = productArrayList.get(i);
             listProduct.add(myProductCart.getProductName());
             listQuantity.add(String.valueOf(myProductCart.getProductQuantity()));
             listSize.add(myProductCart.getProductSize());
             totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
-        });
+            listPrice.add(String.valueOf(myProductCart.getProductPrice()));
+
+            if (myProductCart.getDiscount() == 0) {
+                listPriceSale.add("0");
+            }else listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
+        }
+
+//        productArrayList.forEach(myProductCart -> {
+//            listProduct.add(myProductCart.getProductName());
+//            listQuantity.add(String.valueOf(myProductCart.getProductQuantity()));
+//            listSize.add(myProductCart.getProductSize());
+//            totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
+//            listPrice.add(String.valueOf(myProductCart.getProductPrice()));
+//            listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
+//            discountVoucherPrice = String.valueOf(myProductCart.getDiscount()) + "";
+//        });
+
         String price = String.valueOf(productArrayList.get(0).getProductPrice());
         String image = productArrayList.get(0).getProductImage();
 
-        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, String.valueOf(totalPrice.get()), price, image);
+        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, String.valueOf(totalPrice.get()), price, listPrice, listPriceSale, discountVoucherPrice, image);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public Long getTotal() {
         long total = 0L;
         for (int i = 0; i < productArrayList.size(); i++) {
-            total += (long) productArrayList.get(i).getProductPrice() * productArrayList.get(i).getProductQuantity();
+            if (productArrayList.get(i).getDiscount() != 0) {
+                total += (long) productArrayList.get(i).getProductPriceSale() * productArrayList.get(i).getProductQuantity();
+            }else
+                total += (long) productArrayList.get(i).getProductPrice() * productArrayList.get(i).getProductQuantity();
         }
         return total;
     }

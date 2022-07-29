@@ -317,6 +317,7 @@ public class CartFragment extends Fragment {
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
         CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
                 temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
+                temp.getListPrice(), temp.getListPriceSale(), temp.getDiscountVoucherPrice(),
                 temp.getProductImage(), addRess);  // thay bằng address từ api get address nhé
 
         disposable.add(repository.createBill(real)

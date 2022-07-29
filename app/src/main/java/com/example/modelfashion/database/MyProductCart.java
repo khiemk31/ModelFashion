@@ -23,6 +23,26 @@ public class MyProductCart {
     private int productQuantity;
     @ColumnInfo(name = "product_image")
     private String productImage;
+    @ColumnInfo(name = "product_price_sale")
+    private int productPriceSale;
+    @ColumnInfo(name = "discount")
+    private int discount;
+
+    public int getProductPriceSale() {
+        return productPriceSale;
+    }
+
+    public void setProductPriceSale(int productPriceSale) {
+        this.productPriceSale = productPriceSale;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
 
     public String getProductImage() {
         return productImage;
@@ -80,14 +100,25 @@ public class MyProductCart {
         this.productQuantity = productQuantity;
     }
 
-    public MyProductCart(String productId, String productName, int productPrice, String productSize, int productQuantity, String productImage) {
+    public MyProductCart(String productId, String productName, int productPrice, String productSize, int productQuantity, String productImage, int productPriceSale, int discount) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productSize = productSize;
         this.productQuantity = productQuantity;
         this.productImage = productImage;
+        this.productPriceSale = productPriceSale;
+        this.discount = discount;
     }
+
+    //    public MyProductCart(String productId, String productName, int productPrice, String productSize, int productQuantity, String productImage) {
+//        this.productId = productId;
+//        this.productName = productName;
+//        this.productPrice = productPrice;
+//        this.productSize = productSize;
+//        this.productQuantity = productQuantity;
+//        this.productImage = productImage;
+//    }
 
     public MyProductCart() {
     }
