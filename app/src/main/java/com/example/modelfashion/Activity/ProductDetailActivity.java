@@ -35,6 +35,8 @@ import com.example.modelfashion.R;
 import com.example.modelfashion.database.AppDatabase;
 import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
+import com.example.modelfashion.rx.RxBus;
+import com.example.modelfashion.rx.RxEvent;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -351,6 +353,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Toast.makeText(this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                     btn_mua_ngay.setEnabled(true);
                     btn_them_vao_gio_hang.setEnabled(true);
+                    RxBus.publish(RxEvent.addItemToCart);
                 },throwable -> {
                     btn_mua_ngay.setEnabled(true);
                     btn_them_vao_gio_hang.setEnabled(true);
