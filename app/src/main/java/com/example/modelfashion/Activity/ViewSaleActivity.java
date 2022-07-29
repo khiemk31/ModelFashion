@@ -166,6 +166,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_a_z.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getAll();
                 productSaleFilter.clear();
                 productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -185,6 +186,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_z_a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getAll();
                 productSaleFilter.clear();
                 productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -246,6 +248,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_tall_low.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getAll();
                 productSaleFilter.clear();
                 productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -273,6 +276,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_low_tall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getAll();
                 productSaleFilter.clear();
                 productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -310,6 +314,7 @@ public class ViewSaleActivity extends AppCompatActivity {
         return p;
     }
     private void SortPrice(int price1 , int price2){
+        getAll();
         productSaleFilter.clear();
         for (int i=0;i<productSaleAll.size();i++){
             ProductSale productSale = productSaleAll.get(i);

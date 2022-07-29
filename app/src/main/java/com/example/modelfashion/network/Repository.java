@@ -17,6 +17,8 @@ import com.example.modelfashion.Model.response.Register.RegisterRequest;
 import com.example.modelfashion.Model.response.Register.RegisterResponse;
 import com.example.modelfashion.Model.response.Register.VerifyOTPRequest;
 import com.example.modelfashion.Model.response.Register.VerifyOTPResponse;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
+import com.example.modelfashion.Model.response.User.CheckUserActiveResponse;
 import com.example.modelfashion.Model.response.User.UpdateUserRequest;
 import com.example.modelfashion.Model.response.User.UpdateUserResponse;
 import com.example.modelfashion.Model.response.User.UserDetailResponse;
@@ -165,6 +167,12 @@ public final class Repository {
 
     public Single<GetAllProductByCategoryResponse> getAllProductByCategory() {
         return apiInterface.getAllProductByCategory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<CheckUserActiveResponse> checkUserActive(CheckUserActiveRequest request) {
+        return apiInterface.checkUserActive(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

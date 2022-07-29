@@ -1,5 +1,13 @@
 package com.example.modelfashion.Activity;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -12,6 +20,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,22 +28,30 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import com.cloudinary.android.MediaManager;
+import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Fragment.CartFragment;
 import com.example.modelfashion.Fragment.CategoryFragment;
 import com.example.modelfashion.Fragment.FragmentProfile;
 import com.example.modelfashion.Fragment.MainFragment;
+import com.example.modelfashion.Model.response.Login.LoginRequest;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.KeyboardUtils;
+import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
+import com.example.modelfashion.network.Repository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
@@ -42,14 +59,18 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.disposables.CompositeDisposable;
 import vn.momo.momo_partner.AppMoMoLib;
 
 public class MainActivity extends AppCompatActivity {
+    PreferenceManager preferenceManager;
     String user_id;
     Boolean isLogin;
     Bundle info;
     public static BottomNavigationView navigationView;
     public static ViewPager viewPager;
+    CompositeDisposable disposable = new CompositeDisposable();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +78,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         info = new Bundle();
         getUserData();
-        info.putString("user_id",user_id);
-        navigationView=findViewById(R.id.bottom_navigation_view_linear);
+        info.putString("user_id", user_id);
+
+
+        navigationView = findViewById(R.id.bottom_navigation_view_linear);
+        preferenceManager = new PreferenceManager(this);
+
+        if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
+            checkUserActive();
+        }
+
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.main_item_home:
-                       viewPager.setCurrentItem(0);
+                        viewPager.setCurrentItem(0);
                         break;
                     case R.id.main_item_cart:
                         viewPager.setCurrentItem(2);
@@ -89,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         navigationView.getMenu().getItem(0).setChecked(true);
                         break;
@@ -122,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class MyPagerAdapter extends FragmentPagerAdapter{
+    private class MyPagerAdapter extends FragmentPagerAdapter {
 
         public MyPagerAdapter(@NonNull FragmentManager fm) {
             super(fm);
@@ -131,14 +160,19 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
 
-                case 0: return MainFragment.newInstance("FirstFragment, Instance 1");
-                case 1: return CategoryFragment.newInstance("SecondFragment, Instance 2");
-                case 2: return CartFragment.newInstance("ThirdFragment, Instance 3");
-                case 3: return FragmentProfile.newInstance("FourthFragment, Instance 4");
+                case 0:
+                    return MainFragment.newInstance("FirstFragment, Instance 1");
+                case 1:
+                    return CategoryFragment.newInstance("SecondFragment, Instance 2");
+                case 2:
+                    return CartFragment.newInstance("ThirdFragment, Instance 3");
+                case 3:
+                    return FragmentProfile.newInstance("FourthFragment, Instance 4");
 
-                default: return FragmentProfile.newInstance("FourthFragment, Default");
+                default:
+                    return FragmentProfile.newInstance("FourthFragment, Default");
             }
         }
 
@@ -152,11 +186,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.KEY_SAVE_USER, Context.MODE_MULTI_PROCESS);
         isLogin = sharedPreferences.getBoolean(Constants.KEY_CHECK_LOGIN, true);
         if (isLogin == false) {
-//            User user = new User("", "", "", "", "", "", "");
-//            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-//            prefsEditor.putString("user", user.toString());
-//            prefsEditor.apply();
-            user_id = "null";
+            user_id = "";
         } else {
             if (sharedPreferences.contains(Constants.KEY_GET_USER)) {
                 String userData = sharedPreferences.getString(Constants.KEY_GET_USER, "");
@@ -172,14 +202,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void replaceFragment(Fragment fm){
-//        FragmentManager fragmentManager= getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-//        fm.setArguments(info);
-//        fragmentTransaction.replace(R.id.frmlayout,fm);
-//        fragmentTransaction.commit();
-//
-//    }
+    private void checkUserActive() {
+        Repository repository = new Repository(this);
+        disposable.add(repository.checkUserActive(new CheckUserActiveRequest(preferenceManager.getString(KEY_ID)))
+                .doOnSubscribe(disposable -> {
+                    // hien loading
+                }).subscribe(response -> {
+                    Log.e("123", String.valueOf(response.getActive()));
+                    if (!response.getActive()) {
+                        Dialog dialog = new Dialog(MainActivity.this);
+                        dialog.setContentView(R.layout.dialog_user_check);
+                        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.findViewById(R.id.tv_confirm_user_check).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                preferenceManager.putBoolean(KEY_CHECK_LOGIN, false);
+                                preferenceManager.putString(KEY_AVARTAR, "");
+                                preferenceManager.putString(KEY_FULL_NAME, "");
+                                preferenceManager.putString(KEY_PHONE, "");
+                                preferenceManager.putString(KEY_ADDRESS, "");
+                                preferenceManager.putString(KEY_BIRTHDAY, "");
+                                preferenceManager.putString(KEY_ID, "");
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }, throwable -> {
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
+                }));
+    }
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -209,18 +264,6 @@ public class MainActivity extends AppCompatActivity {
     public void hideBottomNavigation() {
         navigationView.setVisibility(View.GONE);
     }
-
-//    public void moveToFragmentProfile() {
-//        FragmentProfile fragmentProfile = new FragmentProfile();
-//        replaceFragment(fragmentProfile);
-//        navigationView.setSelectedItemId(R.id.main_item_profile);
-//    }
-
-//    public void moveToCartFragment() {
-//        CartFragment cartFragment = new CartFragment();
-//        replaceFragment(cartFragment);
-//        navigationView.setSelectedItemId(R.id.main_item_cart);
-//    }
 
     @Override
     protected void onResume() {

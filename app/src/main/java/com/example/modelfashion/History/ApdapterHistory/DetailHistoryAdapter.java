@@ -70,6 +70,7 @@ public class DetailHistoryAdapter extends BaseAdapter {
         TextView tv_price = view.findViewById(R.id.tv_price);
         TextView tv_size_subproduct = view.findViewById(R.id.tv_size_subproduct);
         TextView tv_sumproduct = view.findViewById(R.id.tv_sumproduct);
+        TextView tv_price_sale = view.findViewById(R.id.tv_price_sale);
         RelativeLayout rl_view_subproduct = view.findViewById(R.id.rl_view_subproduct);
 //        rl_view_subproduct.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -85,9 +86,16 @@ public class DetailHistoryAdapter extends BaseAdapter {
         //Set data
         Glide.with(context).load(arr_bill_detail.get(i).getProduct_image()).into(img_subproduct);
         tv_name_subproduct.setText(arr_bill_detail.get(i).getProduct_name());
-        tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice()))+" đ");
+
         tv_size_subproduct.setText(arr_bill_detail.get(i).getSize());
-        tv_sumproduct.setText("Số lượng: "+arr_bill_detail.get(i).getQuantity());
+        tv_sumproduct.setText("x"+arr_bill_detail.get(i).getQuantity());
+        if(Integer.parseInt(arr_bill_detail.get(i).getPrice_sale()) == 0){
+            tv_price_sale.setVisibility(View.GONE);
+            tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice())) + " đ");
+        }else {
+            tv_price.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice_sale())) + " đ");
+            tv_price_sale.setText(format.format(Double.parseDouble(arr_bill_detail.get(i).getPrice())) + " đ");
+        }
 
         return view;
     }
