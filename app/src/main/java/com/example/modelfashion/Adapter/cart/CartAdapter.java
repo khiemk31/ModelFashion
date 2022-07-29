@@ -160,8 +160,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             listSize.add(myProductCart.getProductSize());
             totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
             listPrice.add(String.valueOf(myProductCart.getProductPrice()));
-            listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
-            discountVoucherPrice = String.valueOf(myProductCart.getDiscount()) + "";
+
+            if (myProductCart.getDiscount() == 0) {
+                listPriceSale.add("0");
+            }else listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
         }
 
 //        productArrayList.forEach(myProductCart -> {
@@ -184,7 +186,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
     public Long getTotal() {
         long total = 0L;
         for (int i = 0; i < productArrayList.size(); i++) {
-            total += (long) productArrayList.get(i).getProductPrice() * productArrayList.get(i).getProductQuantity();
+            if (productArrayList.get(i).getDiscount() != 0) {
+                total += (long) productArrayList.get(i).getProductPriceSale() * productArrayList.get(i).getProductQuantity();
+            }else
+                total += (long) productArrayList.get(i).getProductPrice() * productArrayList.get(i).getProductQuantity();
         }
         return total;
     }

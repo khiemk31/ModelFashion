@@ -292,7 +292,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             MyProductCart myProductCart = new MyProductCart(
                     myProductDetail.getProduct().get(0).getProductId(),
                     myProductDetail.getProduct().get(0).getProductName(),
-                    priceSale,
+                    myProductDetail.getProduct().get(0).getPrice(),
                     size,
                     1,
                     myProductDetail.getProduct().get(0).getProductImage(),
@@ -317,12 +317,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         new CircleAnimationUtil().attachActivity(this).setTargetView(targetView).setMoveDuration(1000).setDestView(destView).setAnimationListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                showProgressBar(progressBar);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 insertProduct(myProductCart);
+                hideProgressBar(progressBar);
             }
 
             @Override

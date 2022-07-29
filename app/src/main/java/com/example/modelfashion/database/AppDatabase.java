@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 @Database(
         entities = {MyProductCart.class},
-        version = 1
+        version = 2
 )
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "cart.db";
