@@ -52,6 +52,8 @@ import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.database.AppDatabase;
 import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
+import com.example.modelfashion.rx.RxBus;
+import com.example.modelfashion.rx.RxEvent;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -159,6 +161,8 @@ public class CartFragment extends Fragment {
         sharedPref = new PreferenceManager(requireContext());
         repository = new Repository(requireContext());
 
+        rxListener();
+
         rdo_cash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,6 +213,22 @@ public class CartFragment extends Fragment {
              getAddress();
         }
         return initView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void rxListener() {
+        disposable.add(
+                RxBus.listen(RxEvent.addItemToCart.getClass())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(okResponse -> {
+                            // refresh
+                            getProductInCart();
+                            tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                        }, throwable -> {
+                            Log.d("ahuhu", "listene: error: " + throwable.getMessage());
+                        })
+        );
     }
 
     @Override
