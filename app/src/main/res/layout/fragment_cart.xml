@@ -127,6 +127,7 @@
                         android:buttonTint="#000000"
                         android:checked="true"
                         android:text="Tiền mặt"
+                        android:textColor="@color/black"
                         android:layout_marginEnd="10dp"/>
 
                     <RadioButton
@@ -134,6 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:buttonTint="#000000"
+                        android:textColor="@color/black"
                         android:text="Ví Momo" />
 
                 </RadioGroup>
