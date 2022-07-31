@@ -19,23 +19,34 @@
         android:padding="10dp"
         android:textColor="#8E97FD"
         android:textColorHint="#8E97FD"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/img_feedback"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginVertical="10dp"
+        android:src="@drawable/ic_img_feedback" />
+
     <EditText
         android:id="@+id/edt_content"
-        android:layout_below="@+id/edt_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/img_feedback"
         android:layout_marginHorizontal="20dp"
-        android:fontFamily="@font/nunito_light"
-        android:textSize="15dp"
-        android:hint="Nội dung..."
-        android:gravity="top"
-        android:padding="10dp"
-        android:minLines="10"
-        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
         android:background="@drawable/bt_item_history"
-        android:textColorHint="#8E97FD"
-        />
+        android:fontFamily="@font/nunito_light"
+        android:gravity="top"
+        android:hint="Nhập phản hồi của bạn..."
+        android:minLines="5"
+        android:padding="10dp"
+        android:scrollHorizontally="false"
+        android:textColor="@color/black"
+        android:textColorHint="#808E97FD"
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/btn_send"

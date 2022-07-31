@@ -159,6 +159,8 @@
         android:backgroundTint="@color/black"
         android:textSize="16dp"
         android:hint="Lý do trả hàng"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:visibility="gone"
         />
     <TextView

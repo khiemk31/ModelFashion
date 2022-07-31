@@ -82,6 +82,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/header_1"
+                    android:textColor="@color/black"
                     tools:text="221 Doãn Kế Thiện, Mai Dịch Cầu Giấy" />
 
                 <TextView
