@@ -26,7 +26,7 @@
         tools:replace="android:hardwareAccelerated">
         <activity
             android:name=".Activity.FAQSActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".Activity.ViewSaleActivity"
             android:exported="false"
