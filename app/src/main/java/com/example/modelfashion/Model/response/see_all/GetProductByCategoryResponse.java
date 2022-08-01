@@ -45,4 +45,13 @@ public class GetProductByCategoryResponse {
 
     public GetProductByCategoryResponse() {
     }
+
+    @Override
+    public String toString() {
+        return "GetProductByCategoryResponse{" +
+                "message='" + message + '\'' +
+                ", listProduct=" + listProduct +
+                ", totalPage=" + totalPage +
+                '}';
+    }
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_item_sale"
+    android:layout_marginRight="5dp"
+    android:paddingBottom="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/img_product_sale"
+            android:layout_width="152dp"
+            android:layout_height="138dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="10dp"
+
+            />
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_icon_sale"/>
+
+        <TextView
+            android:id="@+id/tv_discount_sale"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="0%"
+            android:textColor="#ff0000"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tv_name_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_product_sale"
+            android:layout_marginHorizontal="15dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:text="Sản phẩm"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_price_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_sale"
+            android:layout_marginHorizontal="15dp"
+            android:alpha="0.5"
+            android:background="@drawable/striking_text"
+            android:fontFamily="@font/nunito_medium"
+            android:maxLines="1"
+            android:paddingHorizontal="5dp"
+            android:text="0đ"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tv_price_sale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_price_old"
+            android:layout_marginHorizontal="15dp"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="1"
+            android:text="0đ"
+            android:textColor="#ff0000"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

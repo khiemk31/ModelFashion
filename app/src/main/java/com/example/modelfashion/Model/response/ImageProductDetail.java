@@ -42,4 +42,13 @@ public class ImageProductDetail {
 
     public ImageProductDetail() {
     }
+
+    @Override
+    public String toString() {
+        return "ImageProductDetail{" +
+                "image1='" + image1 + '\'' +
+                ", image2='" + image2 + '\'' +
+                ", image3='" + image3 + '\'' +
+                '}';
+    }
 }
