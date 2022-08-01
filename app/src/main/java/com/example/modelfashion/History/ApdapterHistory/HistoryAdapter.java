@@ -111,6 +111,7 @@ public class HistoryAdapter extends BaseAdapter {
         TextView item_history_time = view.findViewById(R.id.item_history_time);
         TextView tv_feedback = view.findViewById(R.id.tv_feedback);
         TextView tv_refund_of_order = view.findViewById(R.id.tv_refund_of_order);
+        TextView tv_price_sale = view.findViewById(R.id.tv_price_sale);
         LinearLayout ll_item_history = view.findViewById(R.id.ll_item_history);
 
 
@@ -125,6 +126,11 @@ public class HistoryAdapter extends BaseAdapter {
         tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice())) + " đ");
         tv_sumSP.setText(arr_bill.get(i).getTotal_product() + " Sản phẩm");
         tv_sumPrice.setText("Tổng: " + decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price())) + " đ");
+        if (Integer.parseInt(arr_bill.get(i).getPrice_sale()) == 0) {
+            tv_price_sale.setVisibility(View.GONE);
+        } else {
+            tv_price_sale.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice_sale())) + " đ");
+        }
 
         tv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +205,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     }
 
-    private void sendRefundOfOrder(RefundOfOrder refundOfOrder){
+    private void sendRefundOfOrder(RefundOfOrder refundOfOrder) {
         ApiHistory.API_HISTORY.refundOfOrder(refundOfOrder).enqueue(new Callback<RefundOfOrder>() {
             @Override
             public void onResponse(Call<RefundOfOrder> call, Response<RefundOfOrder> response) {
@@ -210,17 +216,17 @@ public class HistoryAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(Call<RefundOfOrder> call, Throwable t) {
-             hideLoad();
+                hideLoad();
                 Toast.makeText(context, "Yêu cầu trả hàng thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void sendFeedbackBill(FeedbackBill feedbackBill){
+    private void sendFeedbackBill(FeedbackBill feedbackBill) {
         ApiHistory.API_HISTORY.feedbackBill(feedbackBill).enqueue(new Callback<FeedbackBill>() {
             @Override
             public void onResponse(Call<FeedbackBill> call, Response<FeedbackBill> response) {
-               hideLoad();
+                hideLoad();
                 Toast.makeText(context, "Đã gửi phản hồi", Toast.LENGTH_SHORT).show();
 
             }
@@ -261,7 +267,7 @@ public class HistoryAdapter extends BaseAdapter {
 //                    Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
 //                    sendIntent.setData(uri);
 //                    context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
-                    sendFeedbackBill(new FeedbackBill(maDH,content));
+                    sendFeedbackBill(new FeedbackBill(maDH, content));
                     dialog.dismiss();
 
                 }
@@ -349,18 +355,18 @@ public class HistoryAdapter extends BaseAdapter {
                 if (reason_check == 4) {
                     if (edt_reason_cacel_bill.getText().length() > 0) {
                         reason = edt_reason_cacel_bill.getText().toString().trim();
-                        cancelBill = new CancelBill(build_id,reason);
+                        cancelBill = new CancelBill(build_id, reason);
                         //Toast.makeText(context,reason,Toast.LENGTH_SHORT).show();
 
                         showDialogConfirmCancerBill(cancelBill);
                         dialog.dismiss();
-                    }else {
-                        Toast.makeText(context,"Vui lòng nhập lý do hủy đơn",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Vui lòng nhập lý do hủy đơn", Toast.LENGTH_SHORT).show();
                     }
 
 
-                }else {
-                    cancelBill = new CancelBill(build_id,reason);
+                } else {
+                    cancelBill = new CancelBill(build_id, reason);
                     //Toast.makeText(context,reason,Toast.LENGTH_SHORT).show();
                     showDialogConfirmCancerBill(cancelBill);
                     dialog.dismiss();
@@ -375,7 +381,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     }
 
-    private void showDialogConfirmCancerBill(CancelBill cancelBill){
+    private void showDialogConfirmCancerBill(CancelBill cancelBill) {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.confirm_cancer_bill);
         dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -474,18 +480,18 @@ public class HistoryAdapter extends BaseAdapter {
         tv_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(reason_check==4){
-                    if(edt_reason_cacel_bill.getText().toString().trim().length()>0){
+                if (reason_check == 4) {
+                    if (edt_reason_cacel_bill.getText().toString().trim().length() > 0) {
                         reason = edt_reason_cacel_bill.getText().toString().trim();
-                        sendRefundOfOrder(new RefundOfOrder(build_id,reason));
+                        sendRefundOfOrder(new RefundOfOrder(build_id, reason));
                         showLoad();
                         dialog.dismiss();
-                    }else {
-                        Toast.makeText(context,"Vui lòng nhập lý do trả hàng",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Vui lòng nhập lý do trả hàng", Toast.LENGTH_SHORT).show();
                     }
 
-                }else {
-                    sendRefundOfOrder(new RefundOfOrder(build_id,reason));
+                } else {
+                    sendRefundOfOrder(new RefundOfOrder(build_id, reason));
                     showLoad();
                     dialog.dismiss();
                 }
@@ -541,12 +547,13 @@ public class HistoryAdapter extends BaseAdapter {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void showLoad(){
+    private void showLoad() {
         HistoryActivity.rl_load.setVisibility(View.VISIBLE);
         activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
     }
-    private void hideLoad(){
+
+    private void hideLoad() {
         HistoryActivity.rl_load.setVisibility(View.GONE);
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 

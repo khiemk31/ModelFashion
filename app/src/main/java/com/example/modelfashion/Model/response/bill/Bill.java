@@ -9,24 +9,29 @@ public class Bill {
     private String status;
     private String total_price;
     private String total_product;
+    private String created_at;
+    private String bill_detail;
     private String product_name;
     private String size;
     private String quantity;
     private String price;
     private String product_image;
-    private String created_at;
+    private String price_sale;
 
-    public Bill(String bill_id, String status, String total_price, String total_product, String product_name, String size, String quantity, String price, String product_image, String created_at) {
+
+    public Bill(String bill_id, String status, String total_price, String total_product, String created_at, String bill_detail, String product_name, String size, String quantity, String price, String product_image, String price_sale) {
         this.bill_id = bill_id;
         this.status = status;
         this.total_price = total_price;
         this.total_product = total_product;
+        this.created_at = created_at;
+        this.bill_detail = bill_detail;
         this.product_name = product_name;
         this.size = size;
         this.quantity = quantity;
         this.price = price;
         this.product_image = product_image;
-        this.created_at = created_at;
+        this.price_sale = price_sale;
     }
 
     public String getBill_id() {
@@ -59,6 +64,22 @@ public class Bill {
 
     public void setTotal_product(String total_product) {
         this.total_product = total_product;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getBill_detail() {
+        return bill_detail;
+    }
+
+    public void setBill_detail(String bill_detail) {
+        this.bill_detail = bill_detail;
     }
 
     public String getProduct_name() {
@@ -101,11 +122,11 @@ public class Bill {
         this.product_image = product_image;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getPrice_sale() {
+        return price_sale;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setPrice_sale(String price_sale) {
+        this.price_sale = price_sale;
     }
 }
