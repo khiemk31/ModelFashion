@@ -117,7 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         viewHolder();
         setListener();
-        profileAnimation();
         preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, false);
         getData();
     }
@@ -407,49 +406,7 @@ public class ProfileActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    //animation
-    private void profileAnimation() {
-        Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
-        Animation animation3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
-        Animation animation4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
-        Animation animation5 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
-        Animation animation6 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layoutActProfilePhone.setVisibility(View.VISIBLE);
-                layoutActProfilePhone.startAnimation(animation3);
-            }
-        }, 50);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layoutActProfileName.setVisibility(View.VISIBLE);
-                layoutActProfileName.startAnimation(animation2);
-            }
-        }, 100);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layoutActProfileSex.setVisibility(View.VISIBLE);
-                layoutActProfileSex.startAnimation(animation4);
-            }
-        }, 150);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layoutActProfileBirthday.setVisibility(View.VISIBLE);
-                layoutActProfileBirthday.startAnimation(animation5);
-            }
-        }, 200);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layoutActProfileAddrest.setVisibility(View.VISIBLE);
-                layoutActProfileAddrest.startAnimation(animation6);
-            }
-        }, 250);
-    }
+
 
 
     // lấy ảnh từ máy và đưa lên màn hình

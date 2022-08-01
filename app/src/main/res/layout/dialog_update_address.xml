@@ -24,6 +24,7 @@
         android:layout_below="@+id/tv_title_logout"
         android:fontFamily="@font/nunito_medium"
         android:hint="Địa chỉ"
+        android:textColor="@color/black"
         android:textSize="12dp" />
 
     <TextView
