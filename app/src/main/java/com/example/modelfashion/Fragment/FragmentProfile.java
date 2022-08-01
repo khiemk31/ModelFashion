@@ -27,6 +27,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.example.modelfashion.Activity.CartActivity;
+import com.example.modelfashion.Activity.FAQSActivity;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.ProfileActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
@@ -51,7 +52,7 @@ public class FragmentProfile extends Fragment {
     Boolean isLogin;
     String user_id = "1";
     RelativeLayout rl_logout;
-    RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout;
+    RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout,btn_frag_Profile_FAQS;
     ProgressLoadingCommon progressLoadingCommon;
 
     public static FragmentProfile newInstance(String text) {
@@ -81,6 +82,7 @@ public class FragmentProfile extends Fragment {
         btn_cart = view.findViewById(R.id.btn_frag_Profile_cart);
         btn_history = view.findViewById(R.id.btn_frag_Profile_history);
         btn_logout = view.findViewById(R.id.rl_logout);
+        btn_frag_Profile_FAQS = view.findViewById(R.id.btn_frag_Profile_FAQS);
         btn_status = view.findViewById(R.id.btn_frag_Profile_status);
         btn_status2 = view.findViewById(R.id.btn_frag_Profile_status2);
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
@@ -215,6 +217,9 @@ public class FragmentProfile extends Fragment {
                 intent.putExtra("use_id", user_id);
                 startActivity(intent);
             }
+        });
+        btn_frag_Profile_FAQS.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), FAQSActivity.class));
         });
     }
 
