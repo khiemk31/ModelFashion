@@ -62,7 +62,7 @@
                 android:id="@+id/detai_FAQS_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="500dp"
                 android:visibility="gone"
                 android:orientation="horizontal">
 
