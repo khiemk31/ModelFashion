@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_item_sale"
+    android:layout_marginRight="5dp"
     android:paddingBottom="10dp">
 
     <RelativeLayout
@@ -15,21 +14,20 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_product_sale"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_width="152dp"
+            android:layout_height="138dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
             app:riv_corner_radius="10dp"
 
             />
-
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_alignParentEnd="true"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_icon_sale" />
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_icon_sale"/>
 
         <TextView
             android:id="@+id/tv_discount_sale"
@@ -56,6 +54,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/nunito_bold"
             android:maxLines="2"
+            android:singleLine="true"
             android:text="Sản phẩm"
             android:textColor="@color/black"
             android:textSize="15dp" />
@@ -88,6 +87,7 @@
             android:textSize="14dp" />
 
     </RelativeLayout>
+
 
 
 </LinearLayout>
