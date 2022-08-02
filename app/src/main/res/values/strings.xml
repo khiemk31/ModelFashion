@@ -19,6 +19,10 @@
     <string name="hang_loi">Hàng lỗi</string>
 
     //FAQs
+    <string name="phone">0376892920</string>
+    <string name="emailFAQs">modelfashion1998@gmail.com</string>
+    <string name="title">Làm thế nào để liên lạc với chúng tôi ?</string>
+    <string name="content">Bạn có thể liên lạc trực tiếp qua hotline : 0376892920 hoặc email : modelfashion1998@gmail.com hoặc phản hồi qua mục trả hàng để được hỗ trợ cụ thể !</string>
     <string name="title1">Làm thế nào để đặt sản phẩm trong ứng dụng?</string>
     <string name="content1">Người dùng có thể đặt mua đồng thời nhiều sản phẩm một cách dễ dàng trên ứng dụng.\nTrước khi đặt mua sản phẩm cần:
 \n- Đăng nhập/đăng ký tài khoản

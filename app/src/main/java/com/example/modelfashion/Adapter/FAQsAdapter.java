@@ -2,11 +2,21 @@ package com.example.modelfashion.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +47,62 @@ public class FAQsAdapter extends RecyclerView.Adapter<FAQsAdapter.FAQsHolder> {
     public void onBindViewHolder(@NonNull FAQsHolder holder, @SuppressLint("RecyclerView") int position) {
             FAQs faQs = list.get(position);
             holder.title_faqs.setText(faQs.getTitle());
-            holder.content_faqs.setText(faQs.getContent());
+
+            if(position==0){
+                String phone = context.getString(R.string.phone);
+                String email = context.getString(R.string.emailFAQs);
+                int startPhone = -1;
+                int startEmail = -1;
+                ClickableSpan clickableSpanPhone = new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View view) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                        context.startActivity(intent);
+                        view.invalidate();
+                    }
+
+                    @Override
+                    public void updateDrawState(@NonNull TextPaint ds) {
+                        if (holder.content_faqs.isPressed()) {
+                            ds.setColor(Color.BLUE);
+                        } else {
+                            ds.setColor(Color.BLUE);
+                        }
+                        holder.content_faqs.invalidate();
+                    }
+                };
+                ClickableSpan clickableSpanEmail = new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View view) {
+                        String uriText = "mailto:" +email+
+                                "?subject=" + "" +
+                                "&body=" +" ";
+                        Uri uri = Uri.parse(uriText);
+                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                        sendIntent.setData(uri);
+                        context.startActivity(Intent.createChooser(sendIntent, "Send Email"));
+                        view.invalidate();
+                    }
+
+                    @Override
+                    public void updateDrawState(@NonNull TextPaint ds) {
+                        if (holder.content_faqs.isPressed()) {
+                            ds.setColor(Color.BLUE);
+                        } else {
+                            ds.setColor(Color.BLUE);
+                        }
+                        holder.content_faqs.invalidate();
+                    }
+                };
+                holder.content_faqs.setHighlightColor(Color.TRANSPARENT);
+                Spannable spannablePhone = new SpannableString(faQs.getContent());
+                startPhone = faQs.getContent().toString().indexOf(phone,startPhone+1);
+                startEmail = faQs.getContent().toString().indexOf(email,startEmail+1);
+                spannablePhone.setSpan(clickableSpanPhone,startPhone,startPhone+phone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannablePhone.setSpan(clickableSpanEmail,startEmail,startEmail+email.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.content_faqs.setText(spannablePhone,TextView.BufferType.SPANNABLE);
+                holder.content_faqs.setMovementMethod(LinkMovementMethod.getInstance());
+            }
             if (faQs.isOpen()){
                 Glide.with(context).load(R.drawable.ic_open_faqs).into(holder.open_close_faqs);
                 holder.content_faqs.setVisibility(View.VISIBLE);

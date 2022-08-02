@@ -45,6 +45,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/nunito_medium"
         android:layout_marginHorizontal="10dp"
+        android:textColorLink="#008EFF"
         android:text="Người dùng có thể đặt mua đồng thời
 nhiều sản phẩm một cách dễ dàng trên
 ứng dụng.

@@ -43,6 +43,7 @@ public class FAQSActivity extends AppCompatActivity {
     }
     private void setDateFAQs(){
         list.clear();
+        list.add(new FAQs(getString(R.string.title),getString(R.string.content),false));
         list.add(new FAQs(getString(R.string.title1),getString(R.string.content1),false));
         list.add(new FAQs(getString(R.string.title2),getString(R.string.content2),false));
         list.add(new FAQs(getString(R.string.title3),getString(R.string.content3),false));
