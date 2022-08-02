@@ -41,6 +41,7 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
 import com.example.modelfashion.Model.response.bill.UserID;
@@ -49,6 +50,7 @@ import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.database.AppDatabase;
 import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
@@ -322,7 +324,7 @@ public class CartFragment extends Fragment {
                     Toast.makeText(requireContext(), "Bạn cần nhập địa chỉ giao hàng!", Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                 } else {
-                    addBill();
+                    checkUserActive();
                 }
             }else {
                 requestPayment();
@@ -356,6 +358,35 @@ public class CartFragment extends Fragment {
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                }));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void checkUserActive() {
+        Repository repository = new Repository(getContext());
+        disposable.add(repository.checkUserActive(new CheckUserActiveRequest(sharedPref.getString(KEY_ID)))
+                .doOnSubscribe(disposable -> {
+                    // hien loading
+                }).subscribe(response -> {
+                    if (!response.getActive()) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.setContentView(R.layout.dialog_user_check);
+                        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.findViewById(R.id.tv_confirm_user_check).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    } else {
+                        addBill();
+                    }
+                }, throwable -> {
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                 }));
     }
 

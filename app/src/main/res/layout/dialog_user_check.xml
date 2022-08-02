@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Tài khoản của bạn đã bị khóa!"
+        android:text="Tài khoản của bạn đã bị khóa! \n Vui lòng liên hệ hotline: 0376892920 để được hỗ trợ!"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="13dp"
         android:textStyle="bold" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:background="@drawable/bt_btn_feedback"
         android:gravity="center"
         android:paddingVertical="5dp"
-        android:text="Xác nhận"
+        android:text="Đồng ý"
         android:textColor="@color/white"
         android:textSize="15dp"
         android:textStyle="bold" />
