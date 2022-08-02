@@ -45,7 +45,7 @@ public class FAQsAdapter extends RecyclerView.Adapter<FAQsAdapter.FAQsHolder> {
                 Glide.with(context).load(R.drawable.ic_close_faqs).into(holder.open_close_faqs);
                 holder.content_faqs.setVisibility(View.GONE);
             }
-            holder.open_close_faqs.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     updateFAQs(position);
