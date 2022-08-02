@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPager viewPager;
     CompositeDisposable disposable = new CompositeDisposable();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,10 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.bottom_navigation_view_linear);
         preferenceManager = new PreferenceManager(this);
-
-        if (preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
-            checkUserActive();
-        }
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -200,40 +195,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private void checkUserActive() {
-        Repository repository = new Repository(this);
-        disposable.add(repository.checkUserActive(new CheckUserActiveRequest(preferenceManager.getString(KEY_ID)))
-                .doOnSubscribe(disposable -> {
-                    // hien loading
-                }).subscribe(response -> {
-                    Log.e("123", String.valueOf(response.getActive()));
-                    if (!response.getActive()) {
-                        Dialog dialog = new Dialog(MainActivity.this);
-                        dialog.setContentView(R.layout.dialog_user_check);
-                        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        dialog.getWindow().setGravity(Gravity.CENTER);
-                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        dialog.findViewById(R.id.tv_confirm_user_check).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                preferenceManager.putBoolean(KEY_CHECK_LOGIN, false);
-                                preferenceManager.putString(KEY_AVARTAR, "");
-                                preferenceManager.putString(KEY_FULL_NAME, "");
-                                preferenceManager.putString(KEY_PHONE, "");
-                                preferenceManager.putString(KEY_ADDRESS, "");
-                                preferenceManager.putString(KEY_BIRTHDAY, "");
-                                preferenceManager.putString(KEY_ID, "");
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    }
-                }, throwable -> {
-                    String error = new Utils().getErrorBody(throwable).getMessage();
-                    Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
-                }));
     }
 
     boolean doubleBackToExitPressedOnce = false;
