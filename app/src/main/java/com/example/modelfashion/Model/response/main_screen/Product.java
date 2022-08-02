@@ -86,4 +86,17 @@ public class Product {
         this.price = price;
         this.discount = discount;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "categoryId=" + categoryId +
+                ", categoryName='" + categoryName + '\'' +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productImage='" + productImage + '\'' +
+                ", price=" + price +
+                ", discount=" + discount +
+                '}';
+    }
 }

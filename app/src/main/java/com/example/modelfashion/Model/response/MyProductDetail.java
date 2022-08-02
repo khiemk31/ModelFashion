@@ -49,6 +49,8 @@ public class MyProductDetail {
     public String toString() {
         return "MyProductDetail{" +
                 "product=" + product +
+                ", listSize=" + listSize +
+                ", listImage=" + listImage +
                 '}';
     }
 }

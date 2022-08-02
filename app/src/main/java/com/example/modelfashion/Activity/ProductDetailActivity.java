@@ -101,6 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     this.myProductDetail = myProductDetail;
                     hideProgressBar(progressBar);
                     setData(myProductDetail);
+                    Log.d("ahihi", "myProductDetail: " + myProductDetail.toString());
                 }, throwable -> {
                     hideProgressBar(progressBar);
                 }));

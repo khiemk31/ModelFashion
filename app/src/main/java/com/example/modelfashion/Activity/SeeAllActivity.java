@@ -75,6 +75,7 @@ public class SeeAllActivity extends AppCompatActivity {
         initListener();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initListener() {
 
 
@@ -235,6 +236,7 @@ public class SeeAllActivity extends AppCompatActivity {
     private int price1 = 0, price2 = 10000000;
     private String sortPrice = "DESC", sortDiscount = "DESC";
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void getProductByCategory() {
         compositeDisposable.add(repository.getProductByCategory(categoryId,
                         price1,
@@ -252,6 +254,12 @@ public class SeeAllActivity extends AppCompatActivity {
 
                     pageAdapter.setPageCount(productResponse.getTotalPage());
                     hideProgressBar(progressBar);
+
+                    productResponse.getListProduct().forEach(item -> {
+                        Log.d("abcdef", "productResponse: " +             item.toString());
+
+                    });
+
 
                 }, throwable -> {
                     hideProgressBar(progressBar);
