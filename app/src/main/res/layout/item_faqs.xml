@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginHorizontal="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_faqs">
+
+        <ImageView
+
+            android:id="@+id/open_close_faqs"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_open_faqs" />
+
+        <TextView
+            android:id="@+id/title_faqs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginVertical="10dp"
+            android:layout_toLeftOf="@+id/open_close_faqs"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Làm thế nào để đặt sản phẩm trong ứng dụng?"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/content_faqs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nunito_medium"
+        android:layout_marginHorizontal="10dp"
+        android:text="Người dùng có thể đặt mua đồng thời
+nhiều sản phẩm một cách dễ dàng trên
+ứng dụng.
+Trước khi đặt mua sản phẩm cần:\n
+- Đăng nhập/đăng ký tài khoản
+đồng thời tài khoản này cần
+được xác minh bởi hệ thống\n
+- Tham khảo và lựa chọn sản
+phẩm phù hợp
+- Thêm sản phẩm vào giỏ hàng\n
+- Cập nhật thông tin địa chỉ giao
+hàng và cách thức thanh toán\n
+- Tiến hành đặt hàng và chờ shop
+xác nhận đóng gói và giao cho
+bên giao hàng"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+</LinearLayout>
