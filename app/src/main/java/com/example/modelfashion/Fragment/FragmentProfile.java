@@ -294,7 +294,10 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadDetails();
+        tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
+        Glide.with(getActivity())
+                .load(preferenceManager.getString(Constants.KEY_AVARTAR))
+                .into(img);
     }
 }
 
