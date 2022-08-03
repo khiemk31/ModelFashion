@@ -6,18 +6,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.modelfashion.Adapter.AllSaleAdapter;
 import com.example.modelfashion.Fragment.MainFragment;
+import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.sale.ProductSale;
+import com.example.modelfashion.Model.sale.SaleModel;
 import com.example.modelfashion.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -27,12 +32,15 @@ import java.util.Comparator;
 
 import javax.xml.transform.sax.SAXResult;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ViewSaleActivity extends AppCompatActivity {
     private RecyclerView rcl_view_sale;
     private ArrayList<ProductSale> productSaleSearch = new ArrayList<>();
     private ArrayList<ProductSale> productSaleFilter = new ArrayList<>();
     private ArrayList<ProductSale> productSaleAll = new ArrayList<>();
-    private ArrayList<ProductSale> productSaleAllFilter = new ArrayList<>();
     private String content = "";
     private EditText edt_search_sale;
     private ImageView filter_sale;
@@ -41,12 +49,15 @@ public class ViewSaleActivity extends AppCompatActivity {
     private LinearLayout ll_a_z,ll_all,ll_z_a,ll_500,ll_500_1000,ll_1000,ll_tall_low,ll_low_tall;
     AllSaleAdapter allSaleAdapter;
     private ImageView img_tick_1,img_tick_2,img_tick_3,img_tick_4,img_tick_5,img_tick_6,img_tick_7,img_tick_8;
+    private SaleModel saleModel;
+    private int page = 1;
+    private ProgressBar progress_sale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
-        getAll();
+
         init();
         onClick();
 
@@ -73,8 +84,10 @@ public class ViewSaleActivity extends AppCompatActivity {
         img_tick_6=findViewById(R.id.img_tick_6);
         img_tick_7=findViewById(R.id.img_tick_7);
         img_tick_8=findViewById(R.id.img_tick_8);
+        progress_sale = findViewById(R.id.progress_sale);
+        progress_sale.setVisibility(View.GONE);
 
-
+        getListByFilter(10000,10000000,"DESC","ASC",page);
         bottomSheetBehavior = BottomSheetBehavior.from(layout_filter_sale);
 
         allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, productSaleAll);
@@ -120,9 +133,9 @@ public class ViewSaleActivity extends AppCompatActivity {
     }
     private void getListSearch(){
         productSaleSearch.clear();
-        for (int i=0;i<productSaleAllFilter.size();i++){
-            if(productSaleAllFilter.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
-                productSaleSearch.add(productSaleAllFilter.get(i));
+        for (int i=0;i<productSaleAll.size();i++){
+            if(productSaleAll.get(i).getProduct_name().toLowerCase().contains(content.toLowerCase())){
+                productSaleSearch.add(productSaleAll.get(i));
             }
         }
 
@@ -134,6 +147,51 @@ public class ViewSaleActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+    private void getAll(){
+        productSaleAll.clear();
+        for (int i=0;i<MainFragment.productSales.size();i++){
+            productSaleAll.add(MainFragment.productSales.get(i));
+        }
+    }
+
+    private void getListByFilter(int price1,int price2,String sortPrice,String sortDiscount,int pageNumber){
+        ApiHistory.API_HISTORY.getProductSaleByCategory(price1,price2,sortPrice,sortDiscount,pageNumber).enqueue(new Callback<SaleModel>() {
+            @Override
+            public void onResponse(Call<SaleModel> call, Response<SaleModel> response) {
+                if (response.body()!=null){
+                    saleModel = response.body();
+                    setListFilter();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SaleModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setListFilter(){
+        progress_sale.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(saleModel.getListProduct().size()>0){
+                    allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, saleModel.getListProduct());
+                    rcl_view_sale.setAdapter(allSaleAdapter);
+                    productSaleAll.addAll(saleModel.getListProduct());
+                }else {
+                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm phù hợp",Toast.LENGTH_SHORT).show();
+                }
+                progress_sale.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        },1000);
+
     }
 
     private void onClick(){
@@ -155,8 +213,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getListByFilter(10000,10000000,"DESC","ASC",page);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                allSaleAdapter.setList(productSaleAllFilter);
                 loadFilter(1);
 
 
@@ -166,18 +224,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_a_z.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAll();
-                productSaleFilter.clear();
-                productSaleFilter.addAll(productSaleAll);
+                allSaleAdapter.sortAToZ();
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                Collections.sort(productSaleFilter, new Comparator<ProductSale>() {
-                    @Override
-                    public int compare(ProductSale p1, ProductSale p2) {
-
-                        return p2.getProduct_name().compareToIgnoreCase(p1.getProduct_name());
-                    }
-                });
-                allSaleAdapter.setList(productSaleFilter);
                 loadFilter(2);
 
             }
@@ -186,18 +234,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_z_a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAll();
-                productSaleFilter.clear();
-                productSaleFilter.addAll(productSaleAll);
+                allSaleAdapter.sortZToA();
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                Collections.sort(productSaleFilter, new Comparator<ProductSale>() {
-                    @Override
-                    public int compare(ProductSale p1, ProductSale p2) {
-
-                        return p1.getProduct_name().compareToIgnoreCase(p2.getProduct_name());
-                    }
-                });
-                allSaleAdapter.setList(productSaleFilter);
                 loadFilter(3);
 
             }
@@ -206,41 +244,24 @@ public class ViewSaleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                SortPrice(0,500000);
-                if(productSaleFilter.size()>0) {
-                    allSaleAdapter.setList(productSaleFilter);
-                    loadFilter(4);
-                }else {
-                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
-                }
-
+                getListByFilter(10000,500000,"DESC","ASC",page);
+                loadFilter(4);
             }
         });
         ll_500_1000.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                SortPrice(500000,1000000);
-                if(productSaleFilter.size()>0) {
-                    allSaleAdapter.setList(productSaleFilter);
-                    loadFilter(5);
-                }else {
-                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
-                }
-
+                getListByFilter(500000,1000000,"DESC","ASC",page);
+                loadFilter(5);
             }
         });
         ll_1000.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                SortPrice(1000000,100000000);
-                if(productSaleFilter.size()>0) {
-                    allSaleAdapter.setList(productSaleFilter);
-                    loadFilter(6);
-                }else {
-                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm",Toast.LENGTH_SHORT).show();
-                }
+                getListByFilter(1000000,10000000,"DESC","ASC",page);
+                loadFilter(6);
 
 
             }
@@ -248,27 +269,8 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_tall_low.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAll();
-                productSaleFilter.clear();
-                productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                Collections.sort(productSaleFilter, new Comparator<ProductSale>() {
-                    @Override
-                    public int compare(ProductSale p1, ProductSale p2) {
-                        if (getPrice(p1.getPrice(),p1.getDiscount()) > getPrice(p2.getPrice(),p2.getDiscount())) {
-                            return -1;
-                        }
-                        else if (getPrice(p1.getPrice(),p1.getDiscount()) < getPrice(p2.getPrice(),p2.getDiscount())) {
-                            return 1;
-                        }
-                        else {
-                            return 0;
-                        }
-
-
-                    }
-                });
-                allSaleAdapter.setList(productSaleFilter);
+                getListByFilter(10000,10000000,"DESC","ASC",page);
                 loadFilter(8);
 
             }
@@ -276,58 +278,20 @@ public class ViewSaleActivity extends AppCompatActivity {
         ll_low_tall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAll();
-                productSaleFilter.clear();
-                productSaleFilter.addAll(productSaleAll);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                Collections.sort(productSaleFilter, new Comparator<ProductSale>() {
-                    @Override
-                    public int compare(ProductSale p1, ProductSale p2) {
-
-                        if (getPrice(p1.getPrice(),p1.getDiscount()) > getPrice(p2.getPrice(),p2.getDiscount())) {
-                            return 1;
-                        }
-                        else if (getPrice(p1.getPrice(),p1.getDiscount()) < getPrice(p2.getPrice(),p2.getDiscount())) {
-                            return -1;
-                        }
-                        else {
-                            return 0;
-                        }
-                    }
-                });
-                allSaleAdapter.setList(productSaleFilter);
+                getListByFilter(10000,10000000,"ASC","ASC",page);
                 loadFilter(7);
 
             }
         });
     }
-    private void getAll(){
-        productSaleAll.clear();
-        for (int i=0;i<MainFragment.productSales.size();i++){
-            productSaleAll.add(MainFragment.productSales.get(i));
-            productSaleAllFilter.add(MainFragment.productSales.get(i));
-        }
-    }
+
     private int getPrice(int price , int discount){
         int p =price-(price*discount/100);
 
         return p;
     }
-    private void SortPrice(int price1 , int price2){
-        getAll();
-        productSaleFilter.clear();
-        for (int i=0;i<productSaleAll.size();i++){
-            ProductSale productSale = productSaleAll.get(i);
-            int price = getPrice(productSale.getPrice(),productSale.getDiscount());
-            if(price>=price1 && price<=price2){
-                productSaleFilter.add(productSale);
-            }
 
-        }
-
-
-
-    }
 
     private void loadFilter(int i){
         if(i==1){
