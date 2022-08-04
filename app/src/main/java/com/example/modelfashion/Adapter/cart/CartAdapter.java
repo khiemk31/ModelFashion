@@ -123,6 +123,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         return productArrayList.size();
     }
 
+    public int getTotalProductInCart() {
+        int total =0;
+        for (int i = 0; i < productArrayList.size(); i++) {
+            MyProductCart p = productArrayList.get(i);
+            total += p.getProductQuantity();
+        }
+        return total;
+    }
+
     public void increaseAmount(int position) {
         productArrayList.get(position).setProductQuantity(productArrayList.get(position).getProductQuantity() + 1);
         notifyItemChanged(position);
