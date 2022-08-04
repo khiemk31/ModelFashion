@@ -10,6 +10,7 @@ import com.example.modelfashion.Model.response.bill.FeedbackBill;
 import com.example.modelfashion.Model.response.bill.RefundOfOrder;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
 import com.example.modelfashion.Model.response.bill.UserID;
+import com.example.modelfashion.Model.response.see_all.GetProductByCategoryResponse;
 import com.example.modelfashion.Model.sale.SaleModel;
 import com.example.modelfashion.Utility.Constants;
 import com.google.gson.Gson;
@@ -17,6 +18,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -60,6 +62,14 @@ public interface ApiHistory {
     Call<SaleModel> getListSale();
     @GET("category/getAll")
     Call<CategoryModel> getListCategory();
+    @GET("product/getAllProductDiscount")
+    Call<SaleModel> getProductSaleByCategory(
+            @Query("price1") int price1,
+            @Query("price2") int price2,
+            @Query("sortPrice") String sortPrice,
+            @Query("sortDiscount") String sortDiscount,
+            @Query("pageNumber") int pageNumber
+    );
 
 
 }

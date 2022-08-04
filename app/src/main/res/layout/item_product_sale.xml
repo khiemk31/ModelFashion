@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_item_sale"
-    android:layout_marginRight="5dp"
+    android:layout_margin="5dp"
     android:paddingBottom="10dp">
 
     <RelativeLayout
@@ -46,18 +46,18 @@
             android:textColor="#ff0000"
             android:textSize="12dp" />
 
-    <TextView
-        android:id="@+id/tv_name_sale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_product_sale"
-        android:layout_marginHorizontal="15dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/nunito_bold"
-        android:singleLine="true"
-        android:text="Sản phẩm"
-        android:textColor="@color/black"
-        android:textSize="15dp" />
+        <TextView
+            android:id="@+id/tv_name_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_product_sale"
+            android:layout_marginHorizontal="15dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="2"
+            android:text="Sản phẩm"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/tv_price_old"

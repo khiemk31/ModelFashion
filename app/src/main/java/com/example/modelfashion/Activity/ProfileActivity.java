@@ -149,10 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvActProfilePhone.setText(preferenceManager.getString(Constants.KEY_PHONE));
 
         birthDay = preferenceManager.getString(Constants.KEY_BIRTHDAY);
-        String date = birthDay.substring(0, 10);
-        String[] date1 = date.split("-");
-        String dateFormated = date1[2] + "-" + date1[1] + "-" + date1[0];
-        tvActProfileBirthday.setText(dateFormated.equals("null") ? "Trống" : dateFormated);
+        tvActProfileBirthday.setText(birthDay);
         String address = preferenceManager.getString(Constants.KEY_ADDRESS);
         tvActProfileAddress.setText(address.equals("null") ? "Trống" : address);
         putTVSex(preferenceManager.getInt(Constants.KEY_SEX));
@@ -334,9 +331,9 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvOK = dialog.findViewById(R.id.tv_layout_dialog_changebirthday_ok);
         DatePicker datePicker = dialog.findViewById(R.id.datePicker_layout_dialog_changeBirthday);
 
-        String date = birthDay.substring(0, 10);
+        String date = preferenceManager.getString(Constants.KEY_BIRTHDAY);
         String[] date1 = date.split("-");
-        datePicker.init(Integer.parseInt(date1[0]), Integer.parseInt(date1[1]) - 1, Integer.parseInt(date1[2]), new DatePicker.OnDateChangedListener() {
+        datePicker.init(Integer.parseInt(date1[2]), Integer.parseInt(date1[1]) - 1, Integer.parseInt(date1[0]), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 

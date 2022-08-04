@@ -20,6 +20,7 @@ import com.example.modelfashion.Utility.PreferenceManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AllSaleAdapter extends RecyclerView.Adapter<AllSaleAdapter.SaleHolder> {
     Context context;
@@ -69,6 +70,15 @@ public class AllSaleAdapter extends RecyclerView.Adapter<AllSaleAdapter.SaleHold
             }
         });
 
+    }
+    public void sortZToA() {
+        Collections.sort(this.productSales, (p1, p2) -> p1.getProduct_name().compareToIgnoreCase(p2.getProduct_name()));
+        notifyDataSetChanged();
+    }
+
+    public void sortAToZ() {
+        Collections.sort(this.productSales, (p1, p2) -> p2.getProduct_name().compareToIgnoreCase(p1.getProduct_name()));
+        notifyDataSetChanged();
     }
 
     @Override

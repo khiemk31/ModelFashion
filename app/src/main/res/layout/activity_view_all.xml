@@ -5,4 +5,5 @@
     <include layout="@layout/activity_view_sale"/>
     <include layout="@layout/dialog_filter_sale"/>
 
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

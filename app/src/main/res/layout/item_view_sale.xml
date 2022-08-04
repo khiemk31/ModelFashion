@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_item_sale"
-   android:layout_marginHorizontal="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
     android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_item_sale"
     android:paddingBottom="10dp">
 
     <RelativeLayout
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
@@ -23,12 +23,13 @@
             app:riv_corner_radius="10dp"
 
             />
-    <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_margin="5dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_icon_sale"/>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_icon_sale" />
 
         <TextView
             android:id="@+id/tv_discount_sale"
@@ -46,18 +47,18 @@
             android:textColor="#ff0000"
             android:textSize="12dp" />
 
-    <TextView
-        android:id="@+id/tv_name_sale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_product_sale"
-        android:layout_marginHorizontal="15dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/nunito_bold"
-        android:singleLine="true"
-        android:text="Sản phẩm"
-        android:textColor="@color/black"
-        android:textSize="15dp" />
+        <TextView
+            android:id="@+id/tv_name_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_product_sale"
+            android:layout_marginHorizontal="15dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="2"
+            android:text="Sản phẩm"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/tv_price_old"
@@ -74,20 +75,19 @@
             android:textColor="@color/black"
             android:textSize="12dp" />
 
-    <TextView
-        android:id="@+id/tv_price_sale"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_price_old"
-        android:layout_marginHorizontal="15dp"
-        android:fontFamily="@font/nunito_bold"
-        android:maxLines="1"
-        android:text="0đ"
-        android:textColor="#ff0000"
-        android:textSize="14dp" />
+        <TextView
+            android:id="@+id/tv_price_sale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_price_old"
+            android:layout_marginHorizontal="15dp"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="1"
+            android:text="0đ"
+            android:textColor="#ff0000"
+            android:textSize="14dp" />
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

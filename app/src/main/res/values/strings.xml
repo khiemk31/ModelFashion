@@ -18,5 +18,58 @@
     <string name="chua_nhan_hang">Chưa nhận được hàng</string>
     <string name="hang_loi">Hàng lỗi</string>
 
+    //FAQs
+    <string name="phone">0376892920</string>
+    <string name="emailFAQs">modelfashion1998@gmail.com</string>
+    <string name="title">Làm thế nào để liên lạc với chúng tôi ?</string>
+    <string name="content">Bạn có thể liên lạc trực tiếp qua hotline : 0376892920 hoặc email : modelfashion1998@gmail.com hoặc phản hồi qua mục trả hàng để được hỗ trợ cụ thể !</string>
+    <string name="title1">Làm thế nào để đặt sản phẩm trong ứng dụng?</string>
+    <string name="content1">Người dùng có thể đặt mua đồng thời nhiều sản phẩm một cách dễ dàng trên ứng dụng.\nTrước khi đặt mua sản phẩm cần:
+\n- Đăng nhập/đăng ký tài khoản
+đồng thời tài khoản này cần
+được xác minh bởi hệ thống
+\n- Tham khảo và lựa chọn sản
+phẩm phù hợp
+\n- Thêm sản phẩm vào giỏ hàng
+\n- Cập nhật thông tin địa chỉ giao
+hàng và cách thức thanh toán
+\n- Tiến hành đặt hàng và chờ shop
+xác nhận đóng gói và giao cho
+bên giao hàng</string>
+    <string name="title2">Phải làm sao khi chưa nhận được hàng nhưng hệ thống cập nhật đã giao hàng thành công?</string>
+    <string name="content2">- Nếu vẫn còn trong khoảng thời
+gian 24h tính từ lúc cập nhật bạn
+vui lòng tiếp tục chờ để đơn vị
+vận chuyển giao đến bạn
+\n- Nếu đã qua 24 giờ tính từ lúc
+trạng thái được cập nhật mà bạn
+vẫn chưa nhận được hàng. Hãy
+bấm “trả hàng” tại vị trí đơn
+hàng sau đó chọn lý do “chưa
+nhận được hàng” để shop có
+biện phải xử lý và khiếu nại với
+bên giao hàng</string>
+    <string name="title3">Phải làm sao khi tài khoản của bạn bị khóa?</string>
+    <string name="content3">- Bạn vui lòng vào phần thông tin liên hệ để liên hệ với cửa hàng để mở khóa lại tài khoản của bạn</string>
+    <string name="title4">Tại sao tôi không nhận được mã xác thực OTP?</string>
+    <string name="content4">Trong trường hợp này bạn nên thử các
+cách giải quyết sau:
+\n- Kiểm tra lại kết nốt mạng của
+thiết bị,
+\n- Yêu cầu gửi lại mã xác thực
+OTP
+\n- Kiểm tra số điện thoại bạn nhập
+vào đã đúng là số điện thoại của
+mình chưa</string>
+    <string name="title5">Có thể hủy được đơn hàng khi nào?</string>
+    <string name="content5">-Bạn chỉ có thể hủy được đơn hàng khi
+đơn vẫn đang trong trạng thái “chờ xác
+nhận” nhưng sau khi cửa hàng đã xác
+nhận đơn hàng thì bạn không thể hủy
+đơn.
+\n-Nếu có vấn đề phát sinh vui lòng liên
+hệ với cửa hàng để có thể có biện pháp
+xử lý sớm nhất</string>
+
 
 </resources>

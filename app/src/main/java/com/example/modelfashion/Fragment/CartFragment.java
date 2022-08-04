@@ -38,9 +38,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.modelfashion.Activity.CartActivity;
 import com.example.modelfashion.Activity.MainActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
+import com.example.modelfashion.Adapter.VoucherAdapter;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
+import com.example.modelfashion.Model.Voucher;
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
 import com.example.modelfashion.Model.response.bill.UserID;
@@ -49,6 +52,7 @@ import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.database.AppDatabase;
 import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
@@ -94,6 +98,11 @@ public class CartFragment extends Fragment {
     private int payment_methods = 0;
     private String addRess = "";
     private TextView btn_change_address;
+    private List<Voucher> voucherList = new ArrayList<>();
+    public static TextView btn_voucher;
+    public static TextView btn_clear_voucher;
+    public static String IDVoucher = "";
+    private Dialog dialog;
 
 
     CartAdapter adapter = new CartAdapter();
@@ -114,6 +123,11 @@ public class CartFragment extends Fragment {
             String check = intent.getStringExtra("action");
             if (check.matches("addbill")){
                 addBill();
+            }
+            if(check.matches("closevoucher")){
+                dialog.dismiss();
+                btn_voucher.setText(IDVoucher);
+                btn_clear_voucher.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -158,6 +172,17 @@ public class CartFragment extends Fragment {
         rdo_momo = initView.findViewById(R.id.rdo_momo);
         tv_address = initView.findViewById(R.id.tv_address);
         btn_change_address = initView.findViewById(R.id.btn_change_address);
+        btn_voucher = initView.findViewById(R.id.btn_voucher);
+        btn_clear_voucher = initView.findViewById(R.id.btn_clear_voucher);
+        btn_clear_voucher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IDVoucher = "";
+                btn_voucher.setText("Mã giảm giá");
+                btn_clear_voucher.setVisibility(View.INVISIBLE);
+            }
+        });
+        btn_clear_voucher.setVisibility(View.INVISIBLE);
         sharedPref = new PreferenceManager(requireContext());
         repository = new Repository(requireContext());
 
@@ -213,7 +238,16 @@ public class CartFragment extends Fragment {
         });
         if (sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
              getAddress();
+            fakeVoucher();
+
         }
+        btn_voucher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreateAndShowVoucher();
+            }
+        });
+
         return initView;
     }
 
@@ -238,6 +272,35 @@ public class CartFragment extends Fragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver((BroadcastReceiver) broadCastReceiver);
     }
+    private void fakeVoucher(){
+        voucherList.clear();
+        voucherList.add(new Voucher("MF0","Voucher 1","02/08/2022",2000));
+        voucherList.add(new Voucher("MF01","Voucher 2","02/08/2022",2000));
+        voucherList.add(new Voucher("MF03","Voucher 3","02/08/2022",2000));
+
+
+    }
+    private  void CreateAndShowVoucher(){
+        dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.dialog_voucher);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        RecyclerView rcl_voucher = dialog.findViewById(R.id.rcl_voucher);
+        TextView tv_close_voucher = dialog.findViewById(R.id.tv_close_voucher);
+        tv_close_voucher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        VoucherAdapter voucherAdapter = new VoucherAdapter(requireContext(),voucherList);
+        rcl_voucher.setAdapter(voucherAdapter);
+
+        dialog.show();
+    }
+
+
 
     private void showDialogAdress(){
         Dialog dialog = new Dialog(getContext());
@@ -324,7 +387,7 @@ public class CartFragment extends Fragment {
                     Toast.makeText(requireContext(), "Bạn cần nhập địa chỉ giao hàng!", Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                 } else {
-                    addBill();
+                    checkUserActive();
                 }
             }else {
                 requestPayment();
@@ -358,6 +421,35 @@ public class CartFragment extends Fragment {
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                }));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void checkUserActive() {
+        Repository repository = new Repository(getContext());
+        disposable.add(repository.checkUserActive(new CheckUserActiveRequest(sharedPref.getString(KEY_ID)))
+                .doOnSubscribe(disposable -> {
+                    // hien loading
+                }).subscribe(response -> {
+                    if (!response.getActive()) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.setContentView(R.layout.dialog_user_check);
+                        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.findViewById(R.id.tv_confirm_user_check).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    } else {
+                        addBill();
+                    }
+                }, throwable -> {
+                    String error = new Utils().getErrorBody(throwable).getMessage();
+                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                 }));
     }
 

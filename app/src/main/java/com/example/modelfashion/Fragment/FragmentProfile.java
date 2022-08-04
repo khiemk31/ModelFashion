@@ -5,8 +5,10 @@ import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
 import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
 import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +23,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -34,9 +39,11 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Activity.SignIn.SignUpActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.History.ViewHistory.HistoryActivity;
+import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.R;
 import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
+import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -54,7 +61,7 @@ public class FragmentProfile extends Fragment {
     RelativeLayout rl_logout;
     RelativeLayout layout_status_order, btn_profile, btn_cart, btn_logout,btn_frag_Profile_FAQS;
     ProgressLoadingCommon progressLoadingCommon;
-
+    CompositeDisposable disposable = new CompositeDisposable();
     public static FragmentProfile newInstance(String text) {
 
         FragmentProfile f = new FragmentProfile();
@@ -88,7 +95,6 @@ public class FragmentProfile extends Fragment {
         btn_status3 = view.findViewById(R.id.btn_frag_Profile_status3);
         preferenceManager = new PreferenceManager(requireContext());
 
-
         loadDetails();
         setListener();
         return view;
@@ -96,11 +102,11 @@ public class FragmentProfile extends Fragment {
 
     //load dữ liệu lên màn hình
     private void loadDetails() {
-        isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
-        if (isLogin == false) {
+        if (!preferenceManager.getBoolean(KEY_CHECK_LOGIN)) {
             btn_logout.setVisibility(View.GONE);
             layout_btn.setVisibility(View.VISIBLE);
             layout_name.setVisibility(View.GONE);
+            img.setImageResource(R.drawable.bg_gradient_blue);
         } else {
             btn_logout.setVisibility(View.VISIBLE);
             layout_btn.setVisibility(View.GONE);
@@ -144,8 +150,7 @@ public class FragmentProfile extends Fragment {
             showDialogLogout();
         });
         btn_profile.setOnClickListener(v -> {
-            isLogin = preferenceManager.getBoolean(Constants.KEY_CHECK_LOGIN);
-            if (isLogin == false) {
+            if (!preferenceManager.getBoolean(KEY_CHECK_LOGIN))  {
                 showDialogLogIn();
                 // Toast.makeText(this, "Bạn chưa thực hiện đăng nhập", Toast.LENGTH_SHORT).show();
             } else {
@@ -289,7 +294,7 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        tv_name.setText(preferenceManager.getString(KEY_FULL_NAME));
+        tv_name.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
         Glide.with(getActivity())
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(img);
