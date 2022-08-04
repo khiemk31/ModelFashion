@@ -399,11 +399,15 @@ public class CartFragment extends Fragment {
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addBill(){
+        // payment status
+        String paymentStatus;
+        if (rdo_cash.isChecked()) paymentStatus = "Thanh toán khi nhận hàng"; else paymentStatus = "Thanh toán ngay ???";
+
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
         CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
-                temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
-                temp.getListPrice(), temp.getListPriceSale(), temp.getDiscountVoucherPrice(),
-                temp.getProductImage(), addRess);  // thay bằng address từ api get address nhé
+                temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getListPrice(),
+                temp.getListPriceSale(), "day discount voucher", addRess,
+                paymentStatus);
 
         disposable.add(repository.createBill(real)
                 .doOnSubscribe(disposable1 -> {

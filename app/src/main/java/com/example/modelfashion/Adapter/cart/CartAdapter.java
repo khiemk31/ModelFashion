@@ -159,36 +159,32 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         List<String> listSize = new ArrayList<>();
         List<String> listPrice = new ArrayList<>();
         List<String> listPriceSale = new ArrayList<>();
-        String discountVoucherPrice = "0";
 
-        AtomicLong totalPrice = new AtomicLong();
+        int totalPrice = 0;
         for (int i = 0; i < productArrayList.size(); i++) {
             MyProductCart myProductCart = productArrayList.get(i);
             listProduct.add(myProductCart.getProductName());
             listQuantity.add(String.valueOf(myProductCart.getProductQuantity()));
             listSize.add(myProductCart.getProductSize());
-            totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
+
+            if (myProductCart.getDiscount() == 0) {
+                totalPrice += myProductCart.getProductPrice() * myProductCart.getProductQuantity();
+            } else {
+                totalPrice += priceSale(myProductCart.getProductPrice(), myProductCart.getDiscount()) * myProductCart.getProductQuantity();
+            }
+
             listPrice.add(String.valueOf(myProductCart.getProductPrice()));
 
             if (myProductCart.getDiscount() == 0) {
                 listPriceSale.add("0");
-            }else listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
+            }else listPriceSale.add(String.valueOf(priceSale(myProductCart.getProductPrice(), myProductCart.getDiscount())));
         }
 
-//        productArrayList.forEach(myProductCart -> {
-//            listProduct.add(myProductCart.getProductName());
-//            listQuantity.add(String.valueOf(myProductCart.getProductQuantity()));
-//            listSize.add(myProductCart.getProductSize());
-//            totalPrice.addAndGet((long) myProductCart.getProductPrice() * myProductCart.getProductQuantity());
-//            listPrice.add(String.valueOf(myProductCart.getProductPrice()));
-//            listPriceSale.add(String.valueOf(myProductCart.getProductPriceSale()));
-//            discountVoucherPrice = String.valueOf(myProductCart.getDiscount()) + "";
-//        });
+        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, totalPrice, listPrice, listPriceSale);
+    }
 
-        String price = String.valueOf(productArrayList.get(0).getProductPrice());
-        String image = productArrayList.get(0).getProductImage();
-
-        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, String.valueOf(totalPrice.get()), price, listPrice, listPriceSale, discountVoucherPrice, image);
+    private int priceSale(int price, int discount) {
+        return price * (1 - (discount/100));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

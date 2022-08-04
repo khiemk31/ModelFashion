@@ -14,34 +14,48 @@ public class CreateBillRequest {
     @SerializedName("list_size")
     private List<String> listSize;
     @SerializedName("total_price")
-    private String totalPrice;
-    @SerializedName("price")
-    private String price;
+    private int totalPrice;
     @SerializedName("list_price")
     private List<String> listPrice;
     @SerializedName("list_price_sale")
     private List<String> listPriceSale;
     @SerializedName("discount_voucher_price")
     private String discountVoucherPrice;
-    @SerializedName("product_image")
-    private String productImage;
     @SerializedName("address")
     private String address;
+    @SerializedName("payment_status")
+    private String paymentStatus;
 
-    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, List<String> listPrice, List<String> listPriceSale, String discountVoucherPrice, String productImage, String address) {
+    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, int totalPrice, List<String> listPrice, List<String> listPriceSale, String discountVoucherPrice, String address, String paymentStatus) {
         this.userId = userId;
         this.productList = productList;
         this.listQuantity = listQuantity;
         this.listSize = listSize;
         this.totalPrice = totalPrice;
-        this.price = price;
         this.listPrice = listPrice;
         this.listPriceSale = listPriceSale;
         this.discountVoucherPrice = discountVoucherPrice;
-        this.productImage = productImage;
         this.address = address;
+        this.paymentStatus = paymentStatus;
     }
 
+    public CreateBillRequest(String userId, List<String> listProduct, List<String> listQuantity, List<String> listSize, int totalPrice, List<String> listPrice, List<String> listPriceSale) {
+        this.userId = userId;
+        this.productList = listProduct;
+        this.listQuantity = listQuantity;
+        this.listSize = listSize;
+        this.totalPrice = totalPrice;
+        this.listPrice = listPrice;
+        this.listPriceSale = listPriceSale;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 
     public List<String> getListPrice() {
         return listPrice;
@@ -110,40 +124,11 @@ public class CreateBillRequest {
         this.listSize = listSize;
     }
 
-    public String getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
-
-    public CreateBillRequest(String userId, List<String> productList, List<String> listQuantity, List<String> listSize, String totalPrice, String price, List<String> listPrice, List<String> listPriceSale, String discountVoucherPrice, String productImage) {
-        this.userId = userId;
-        this.productList = productList;
-        this.listQuantity = listQuantity;
-        this.listSize = listSize;
-        this.totalPrice = totalPrice;
-        this.price = price;
-        this.listPrice = listPrice;
-        this.listPriceSale = listPriceSale;
-        this.discountVoucherPrice = discountVoucherPrice;
-        this.productImage = productImage;
     }
 }
