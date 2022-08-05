@@ -71,12 +71,12 @@ public class AllSaleAdapter extends RecyclerView.Adapter<AllSaleAdapter.SaleHold
         });
 
     }
-    public void sortZToA() {
+    public void sortAToZ() {
         Collections.sort(this.productSales, (p1, p2) -> p1.getProduct_name().compareToIgnoreCase(p2.getProduct_name()));
         notifyDataSetChanged();
     }
 
-    public void sortAToZ() {
+    public void sortZToA() {
         Collections.sort(this.productSales, (p1, p2) -> p2.getProduct_name().compareToIgnoreCase(p1.getProduct_name()));
         notifyDataSetChanged();
     }
@@ -103,11 +103,11 @@ public class AllSaleAdapter extends RecyclerView.Adapter<AllSaleAdapter.SaleHold
 
         public SaleHolder(@NonNull View itemView) {
             super(itemView);
-            this.img_product_sale = itemView.findViewById(R.id.img_product_sale);
+            this.img_product_sale = itemView.findViewById(R.id.img_product_main_avatar);
             this.tv_discount_sale = itemView.findViewById(R.id.tv_discount_sale);
-            this.tv_name_sale = itemView.findViewById(R.id.tv_name_sale);
-            this.tv_price_old = itemView.findViewById(R.id.tv_price_old);
-            this.tv_price_sale = itemView.findViewById(R.id.tv_price_sale);
+            this.tv_name_sale = itemView.findViewById(R.id.tv_my_product_name);
+            this.tv_price_old = itemView.findViewById(R.id.tv_my_product_price);
+            this.tv_price_sale = itemView.findViewById(R.id.tv_my_product_price_discount);
 
         }
     }
