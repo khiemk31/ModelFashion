@@ -214,6 +214,8 @@ public class CartFragment extends Fragment {
             } else {
                 if (adapter.getItemCount() == 0) {
                     Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
+                }else if (adapter.getTotalProductInCart() > 5 && rdo_cash.isChecked()) {
+                    Toast.makeText(requireContext(), "Bạn cần chọn thanh toán qua Momo với hóa đơn có nhiều hơn 5 sản phẩm", Toast.LENGTH_SHORT).show();
                 }else if(addRess ==""){
                     Toast.makeText(requireContext(), "Chưa có địa chỉ", Toast.LENGTH_SHORT).show();
                 }else {
