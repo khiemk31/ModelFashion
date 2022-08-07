@@ -2,11 +2,13 @@ package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -216,6 +218,7 @@ public class CartFragment extends Fragment {
                     Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
                 }else if (adapter.getTotalProductInCart() > 5 && rdo_cash.isChecked()) {
                     Toast.makeText(requireContext(), "Bạn cần chọn thanh toán qua Momo với hóa đơn có nhiều hơn 5 sản phẩm", Toast.LENGTH_SHORT).show();
+                    showDialog();
                 }else if(addRess ==""){
                     Toast.makeText(requireContext(), "Chưa có địa chỉ", Toast.LENGTH_SHORT).show();
                 }else {
@@ -399,11 +402,13 @@ public class CartFragment extends Fragment {
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addBill(){
+        String paymentStatus;
+        if (rdo_cash.isChecked()) paymentStatus = "Thanh toán khi nhận hàng"; else paymentStatus = "Thanh toan trước khi đặt hàng";
+
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
-        CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
-                temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getPrice(),
-                temp.getListPrice(), temp.getListPriceSale(), temp.getDiscountVoucherPrice(),
-                temp.getProductImage(), addRess);  // thay bằng address từ api get address nhé
+        CreateBillRequest real = new CreateBillRequest(sharedPref.getString(KEY_ID), temp.getProductList(),
+                temp.getTotalPrice(), temp.getListQuantity(), temp.getListSize(), temp.getListPrice(),
+                temp.getListPriceSale(), "0", addRess, paymentStatus);
 
         disposable.add(repository.createBill(real)
                 .doOnSubscribe(disposable1 -> {
@@ -609,6 +614,17 @@ public class CartFragment extends Fragment {
 //
 //        eventValue.put("extra", "");
         AppMoMoLib.getInstance().requestMoMoCallBack(getActivity(), eventValue);
+    }
+
+    private void showDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.logo)
+                .setTitle("Hãy thanh toán bằng Momo")
+                .setMessage("Bạn cần thanh toán bằng Momo với đơn hàng trên 5 sản phẩm")
+                .setPositiveButton("Đồng ý", (dialogInterface, i) -> {
+
+                })
+                .show();
     }
 
 
