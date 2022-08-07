@@ -69,6 +69,9 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             discount.tv_name_sale.setText(product.getProductName());
             discount.tv_price_old.setText(formatString(product.getPrice()));
             discount.tv_price_sale.setText(formatString((int) (product.getPrice() * (1 - (product.getDiscount() / 100f)))) + " đ");
+            holder.itemView.setOnClickListener(v -> {
+                itemClickListener.onItemClick(position, product);
+            });
         }
     }
 
