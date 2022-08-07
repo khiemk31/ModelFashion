@@ -246,7 +246,7 @@
         <RelativeLayout
             android:id="@+id/rl_bottom"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/bg_sub_detail">
 
@@ -314,8 +314,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rl_sale_detail_history"
-                android:visibility="invisible"
-                android:layout_marginHorizontal="20dp">
+                android:layout_marginHorizontal="20dp"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/title_transport_detail_history"

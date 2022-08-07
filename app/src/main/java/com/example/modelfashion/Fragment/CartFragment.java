@@ -236,9 +236,10 @@ public class CartFragment extends Fragment {
         });
         if (sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
              getAddress();
-            fakeVoucher();
+
 
         }
+        fakeVoucher();
         btn_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
