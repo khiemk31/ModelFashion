@@ -1,47 +1,77 @@
 package com.example.modelfashion.Model;
 
 public class Voucher {
-    private String mIDVoucher;
-    private String mTitleVoucher;
-    private String mHSD;
-    private int mPriceVoucher;
+    private String id;
+    private String title;
+    private String code;
+    private String user_id;
+    private int price_discount;
+    private int active;
+    private String expired;
 
-    public Voucher(String mIDVoucher, String mTitleVoucher, String mHSD, int mPriceVoucher) {
-        this.mIDVoucher = mIDVoucher;
-        this.mTitleVoucher = mTitleVoucher;
-        this.mHSD = mHSD;
-        this.mPriceVoucher = mPriceVoucher;
+    public Voucher(String id, String title, String code, String user_id, int price_discount, int active, String expired) {
+        this.id = id;
+        this.title = title;
+        this.code = code;
+        this.user_id = user_id;
+        this.price_discount = price_discount;
+        this.active = active;
+        this.expired = expired;
     }
 
-    public String getmIDVoucher() {
-        return mIDVoucher;
+    public String getId() {
+        return id;
     }
 
-    public void setmIDVoucher(String mIDVoucher) {
-        this.mIDVoucher = mIDVoucher;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getmTitleVoucher() {
-        return mTitleVoucher;
+    public String getTitle() {
+        return title;
     }
 
-    public void setmTitleVoucher(String mTitleVoucher) {
-        this.mTitleVoucher = mTitleVoucher;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getmHSD() {
-        return mHSD;
+    public String getCode() {
+        return code;
     }
 
-    public void setmHSD(String mHSD) {
-        this.mHSD = mHSD;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public int getmPriceVoucher() {
-        return mPriceVoucher;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setmPriceVoucher(int mPriceVoucher) {
-        this.mPriceVoucher = mPriceVoucher;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getPrice_discount() {
+        return price_discount;
+    }
+
+    public void setPrice_discount(int price_discount) {
+        this.price_discount = price_discount;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public String getExpired() {
+        return expired;
+    }
+
+    public void setExpired(String expired) {
+        this.expired = expired;
     }
 }

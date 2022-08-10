@@ -44,6 +44,7 @@ import com.example.modelfashion.Adapter.VoucherAdapter;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.Voucher;
+import com.example.modelfashion.Model.VoucherCall;
 import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.Model.response.bill.Address;
@@ -104,7 +105,11 @@ public class CartFragment extends Fragment {
     public static TextView btn_voucher;
     public static TextView btn_clear_voucher;
     public static String IDVoucher = "";
+    public static String CodeVoucher = "";
+    public static int DiscountVoucher =0;
+    public static int PositionVoucher =-1;
     private Dialog dialog;
+    private TextView tv_price_discount,tv_price_provisional;
 
 
     CartAdapter adapter = new CartAdapter();
@@ -128,8 +133,10 @@ public class CartFragment extends Fragment {
             }
             if(check.matches("closevoucher")){
                 dialog.dismiss();
-                btn_voucher.setText(IDVoucher);
+                btn_voucher.setText(CodeVoucher);
                 btn_clear_voucher.setVisibility(View.VISIBLE);
+                tv_price_discount.setText("-"+moneyFormat((long) DiscountVoucher));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
             }
         }
     };
@@ -176,10 +183,18 @@ public class CartFragment extends Fragment {
         btn_change_address = initView.findViewById(R.id.btn_change_address);
         btn_voucher = initView.findViewById(R.id.btn_voucher);
         btn_clear_voucher = initView.findViewById(R.id.btn_clear_voucher);
+        tv_price_provisional = initView.findViewById(R.id.tv_price_provisional);
+        tv_price_discount = initView.findViewById(R.id.tv_price_discount);
+        tv_price_discount.setText("-"+DiscountVoucher);
         btn_clear_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CodeVoucher = "";
                 IDVoucher = "";
+                DiscountVoucher =0;
+                PositionVoucher = -1;
+                tv_price_discount.setText("-"+DiscountVoucher);
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
                 btn_voucher.setText("Mã giảm giá");
                 btn_clear_voucher.setVisibility(View.INVISIBLE);
             }
@@ -205,6 +220,7 @@ public class CartFragment extends Fragment {
 
         setAdapter();
         getProductInCart();
+        getListVoucher();
 
         btn_payment.setOnClickListener(v -> {
 
@@ -231,7 +247,8 @@ public class CartFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getProductInCart();
-            tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+            tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
         });
         btn_change_address.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +261,7 @@ public class CartFragment extends Fragment {
 
 
         }
-        fakeVoucher();
+
         btn_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,7 +281,8 @@ public class CartFragment extends Fragment {
                         .subscribe(okResponse -> {
                             // refresh
                             getProductInCart();
-                            tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                            tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                         }, throwable -> {
                             Log.d("ahuhu", "listene: error: " + throwable.getMessage());
                         })
@@ -276,14 +294,7 @@ public class CartFragment extends Fragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver((BroadcastReceiver) broadCastReceiver);
     }
-    private void fakeVoucher(){
-        voucherList.clear();
-        voucherList.add(new Voucher("MF0","Voucher 1","02/08/2022",2000));
-        voucherList.add(new Voucher("MF01","Voucher 2","02/08/2022",2000));
-        voucherList.add(new Voucher("MF03","Voucher 3","02/08/2022",2000));
 
-
-    }
     private  void CreateAndShowVoucher(){
         dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_voucher);
@@ -303,6 +314,27 @@ public class CartFragment extends Fragment {
 
         dialog.show();
     }
+    private void getListVoucher(){
+        String id = sharedPref.getString(KEY_ID);
+
+        ApiHistory.API_HISTORY.getListVoucher(id).enqueue(new Callback<VoucherCall>() {
+            @Override
+            public void onResponse(Call<VoucherCall> call, Response<VoucherCall> response) {
+                if (response.body() != null) {
+                    voucherList.clear();
+                    voucherList = response.body().getListVoucher();
+                    Log.e("xxx", String.valueOf(voucherList.size()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoucherCall> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 
 
 
@@ -336,20 +368,8 @@ public class CartFragment extends Fragment {
         });
         dialog.show();
     }
-    private void updateAddress(){
-        UpdateAdress updateAdress = new UpdateAdress("1",addRess);
-        ApiHistory.API_HISTORY.updateAddress(updateAdress).enqueue(new Callback<UpdateAdress>() {
-            @Override
-            public void onResponse(Call<UpdateAdress> call, Response<UpdateAdress> response) {
 
-            }
 
-            @Override
-            public void onFailure(Call<UpdateAdress> call, Throwable t) {
-
-            }
-        });
-    }
 
     private void getAddress(){
         String id = sharedPref.getString(KEY_ID);
@@ -498,7 +518,8 @@ public class CartFragment extends Fragment {
 
                 }).subscribe(myProductCarts -> {
                     adapter.setListData(myProductCarts);
-                    tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                    tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                    tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                 }, throwable -> {
                     Log.d("ahuhu", "getProductInCart: error" + throwable.toString());
                 }));
@@ -513,19 +534,22 @@ public class CartFragment extends Fragment {
             @Override
             public void OnClickDelete(int position, MyProductCart myProductCart) {
                 deleteProductFromCart(position, myProductCart);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickIncreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.increaseAmount(position);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickDecreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.decreaseAmount(position);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
 //            @Override
@@ -550,7 +574,8 @@ public class CartFragment extends Fragment {
                     .doFinally(() -> {})
                     .subscribe(() -> {
                         adapter.removeProduct(position);
-                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                        tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal()-DiscountVoucher));
+                        tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                     },throwable -> {}));
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {

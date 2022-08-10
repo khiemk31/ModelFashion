@@ -1,11 +1,15 @@
 package com.example.modelfashion.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -34,17 +38,29 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VoucherHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VoucherHolder holder, @SuppressLint("RecyclerView") int position) {
         Voucher voucher = list.get(position);
-        holder.voucher_title.setText(voucher.getmTitleVoucher());
-        holder.voucher_hsd.setText("HSD:"+voucher.getmHSD());
+        holder.voucher_title.setText(voucher.getTitle());
+        holder.voucher_hsd.setText("HSD:"+voucher.getExpired());
+        if(CartFragment.PositionVoucher==position){
+            holder.tv_select_voucher.setBackgroundResource(R.drawable.bg_btn_voucher_select);
+        }else {
+            holder.tv_select_voucher.setBackgroundResource(R.drawable.bg_btn_voucher);
+        }
         holder.tv_select_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CartFragment.IDVoucher = voucher.getmIDVoucher();
-                Intent intent = new Intent("send_data_to_fragment");
-                intent.putExtra("action","closevoucher");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                if(CartFragment.PositionVoucher==position){
+                    Toast.makeText(context,"Bạn đang sử dụng mã giảm giá này",Toast.LENGTH_SHORT).show();
+                }else {
+                    CartFragment.CodeVoucher = voucher.getCode();
+                    CartFragment.IDVoucher = voucher.getId();
+                    CartFragment.DiscountVoucher = voucher.getPrice_discount();
+                    CartFragment.PositionVoucher = position;
+                    Intent intent = new Intent("send_data_to_fragment");
+                    intent.putExtra("action", "closevoucher");
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
             }
         });
     }
