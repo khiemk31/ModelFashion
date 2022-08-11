@@ -50,16 +50,11 @@ import retrofit2.Response;
 
 public class HistoryAdapter extends BaseAdapter {
 
-    //    List<ModelHistory> listModel;
     ArrayList<Bill> arr_bill;
     Context context;
-    ArrayList<MyProduct> arr_my_product;
-    String user_id;
-    private ArrayList<Bill> bills;
     String reason = "";
     CancelBill cancelBill;
     Dialog dialog;
-    AsyncTask<?, ?, ?> runningTask;
     Activity activity;
 
     public HistoryAdapter(Context context, ArrayList<Bill> arr_bill, Activity activity) {
@@ -184,6 +179,12 @@ public class HistoryAdapter extends BaseAdapter {
             }
         });
         return view;
+    }
+
+    public void updatelist(ArrayList<Bill> bills){
+        arr_bill.clear();
+        arr_bill.addAll(bills);
+        notifyDataSetChanged();
     }
 
 
