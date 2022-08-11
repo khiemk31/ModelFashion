@@ -44,7 +44,7 @@ public class Constants {
     // main
     public static final String KEY_PRODUCT_TYPE = "KEY_PRODUCT_TYPE";
 
-
+    public static final String KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
 
 
 }
