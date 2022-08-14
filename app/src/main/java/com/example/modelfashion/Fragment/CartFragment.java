@@ -316,7 +316,7 @@ public class CartFragment extends Fragment {
     }
     private void getListVoucher(){
         String id = sharedPref.getString(KEY_ID);
-
+        Log.e("xxx",id );
         ApiHistory.API_HISTORY.getListVoucher(id).enqueue(new Callback<VoucherCall>() {
             @Override
             public void onResponse(Call<VoucherCall> call, Response<VoucherCall> response) {

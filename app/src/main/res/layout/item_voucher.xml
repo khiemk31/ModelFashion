@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="20sp"
     android:layout_marginBottom="20sp">
     <LinearLayout
         android:layout_toLeftOf="@+id/tv_select_voucher"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_stroke_voucher"
         android:layout_marginEnd="10dp"
-        android:paddingVertical="10dp"
+        android:paddingVertical="5dp"
         android:paddingLeft="20sp"
         >
         <TextView
@@ -42,12 +42,14 @@
 
     <TextView
         android:id="@+id/tv_select_voucher"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:background="@drawable/bg_btn_voucher"
         android:fontFamily="@font/nunito_bold"
         android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="15dp"
         android:text="Áp dụng"
         android:textColor="@color/white"
         android:textSize="15dp" />
