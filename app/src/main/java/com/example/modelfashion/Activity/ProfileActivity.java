@@ -38,6 +38,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -50,6 +51,7 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.example.modelfashion.Activity.SignIn.ConfirmPasswordActivity;
 import com.example.modelfashion.Activity.SignIn.OTPPhoneActivity;
 import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Common.ProgressLoadingCommon;
@@ -108,6 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
     String birthDay;
     CompositeDisposable disposable = new CompositeDisposable();
     ProgressBar progressBar;
+    Button btnChangePass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         btnActProfileBack = findViewById(R.id.btn_act_profile_back);
         btnActProfileCheck = findViewById(R.id.btn_act_profile_check);
+        btnChangePass = findViewById(R.id.btnChangePass);
 
         imgActProfileAvatar = findViewById(R.id.img_act_profile_avatar);
         progressLoadingCommon = new ProgressLoadingCommon();
@@ -171,6 +175,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     //thêm chức năng vào các nút bấm
     private void setListener() {
+        btnChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProfileActivity.this, ConfirmPasswordActivity.class));
+                finish();
+            }
+        });
+
         layoutActProfileAvatar.setOnClickListener(v -> {
             RequestPermissions();
 
