@@ -298,6 +298,7 @@ public class FragmentProfile extends Fragment {
         Glide.with(getActivity())
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(img);
+        loadDetails();
     }
 }
 

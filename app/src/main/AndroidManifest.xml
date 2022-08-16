@@ -26,6 +26,9 @@
         tools:Replace="android:theme"
         tools:replace="android:hardwareAccelerated">
         <activity
+            android:name=".Activity.SignIn.ConfirmPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.FAQSActivity"
             android:exported="false" />
         <activity
