@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         info = new Bundle();
         getUserData();
         info.putString("user_id", user_id);
-
+        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
 
         navigationView = findViewById(R.id.bottom_navigation_view_linear);
         preferenceManager = new PreferenceManager(this);
@@ -258,9 +258,10 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             } else {
-
+                Toast.makeText(this,"Thanh toán thất bại",Toast.LENGTH_SHORT).show();
             }
         } else {
+            Toast.makeText(this,"Thanh toán thất bại",Toast.LENGTH_SHORT).show();
         }
     }
 

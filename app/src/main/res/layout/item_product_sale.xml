@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_item_sale"
-    android:layout_marginRight="5dp"
+    android:layout_marginRight="10dp"
     android:paddingBottom="10dp">
 
     <RelativeLayout
@@ -52,9 +52,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/img_product_sale"
             android:layout_marginHorizontal="15dp"
+            android:gravity="center_vertical"
             android:ellipsize="end"
             android:fontFamily="@font/nunito_bold"
             android:maxLines="2"
+            android:minLines="2"
             android:text="Sản phẩm"
             android:textColor="@color/black"
             android:textSize="15dp" />
