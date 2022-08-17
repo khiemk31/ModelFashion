@@ -429,7 +429,7 @@ public class CartFragment extends Fragment {
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
         CreateBillRequest real = new CreateBillRequest(sharedPref.getString(KEY_ID), temp.getProductList(),
                 temp.getTotalPrice(), temp.getListQuantity(), temp.getListSize(), temp.getListPrice(),
-                temp.getListPriceSale(), "0", addRess, paymentStatus);
+                temp.getListPriceSale(), String.valueOf(DiscountVoucher), addRess, paymentStatus);
 
         disposable.add(repository.createBill(real)
                 .doOnSubscribe(disposable1 -> {
