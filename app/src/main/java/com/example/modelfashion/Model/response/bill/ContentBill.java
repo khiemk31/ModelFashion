@@ -13,9 +13,10 @@ public class ContentBill {
     private String feedback;
     private String return_request;
     private String feedback_by_store;
+    private String payment_status;
 
 
-    public ContentBill(String bill_id, String status, String phone, String user_name, String address, String created_at, int total_price, int discount_voucher_price, String cancellation_reason, String feedback, String return_request, String feedback_by_store) {
+    public ContentBill(String bill_id, String status, String phone, String user_name, String address, String created_at, int total_price, int discount_voucher_price, String cancellation_reason, String feedback, String return_request, String feedback_by_store,String payment_status) {
         this.bill_id = bill_id;
         this.status = status;
         this.phone = phone;
@@ -28,6 +29,15 @@ public class ContentBill {
         this.feedback = feedback;
         this.return_request = return_request;
         this.feedback_by_store = feedback_by_store;
+        this.payment_status = payment_status;
+    }
+
+    public String getPayment_status() {
+        return payment_status;
+    }
+
+    public void setPayment_status(String payment_status) {
+        this.payment_status = payment_status;
     }
 
     public String getBill_id() {

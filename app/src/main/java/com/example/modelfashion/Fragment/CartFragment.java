@@ -447,9 +447,9 @@ public class CartFragment extends Fragment {
     private void addBill() {
         String paymentStatus;
         if (payment_methods == 0){
-            paymentStatus = "Chưa thanh toán";
+            paymentStatus = "Thanh toán khi nhận hàng";
         }else {
-            paymentStatus = "Đã thanh toán";
+            paymentStatus = "Đã thanh toán bằng Momo";
         }
 
 

@@ -30,7 +30,7 @@ import retrofit2.Response;
 
 public class DetailHistoryActivity extends AppCompatActivity {
     TextView tv_dh_detail_history,phoneNumber_detail_history,address_detail_history,
-            date_detail_history,summoney_detail_history,title_date_detail_history,tv_sum,tv_close_detail;
+            date_detail_history,summoney_detail_history,title_date_detail_history,tv_sum,tv_close_detail,paystatus;
 //    List<ProductHistory> list;
     ListView lv_detail_history;
     ImageView back_detail_history;
@@ -59,6 +59,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         tv_feedback_shop = findViewById(R.id.tv_feedback_shop);
         tv_close_detail = findViewById(R.id.tv_close_detail);
         tv_sum = findViewById(R.id.tv_sum);
+        paystatus = findViewById(R.id.paystatus);
         back_detail_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +123,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         int sumprice = contentBill.getTotal_price() - priceSale;
         summoney_price_history.setText(format.format(Double.valueOf(sumprice))+" đ ");
         tv_sum.setText("Tất cả("+arr_bill_detail.size()+" sản phẩm)");
+        paystatus.setText(contentBill.getPayment_status());
         lv_detail_history.setAdapter(historyAdapter);
 
         if(contentBill.getCancellation_reason() == null && contentBill.getFeedback()==null && contentBill.getReturn_request()==null){
