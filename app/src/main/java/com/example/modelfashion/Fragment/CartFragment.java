@@ -46,6 +46,7 @@ import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.Voucher;
 import com.example.modelfashion.Model.VoucherCall;
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.request.UseVoucherRequest;
 import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
@@ -324,6 +325,9 @@ public class CartFragment extends Fragment {
                     voucherList.clear();
                     voucherList = response.body().getListVoucher();
                     Log.e("xxx", String.valueOf(voucherList.size()));
+                    for (int i = 0; i < voucherList.size(); i++) {
+                        Log.d("ahihi", "onResponse: " + voucherList.get(i).toString());
+                    }
                 }
             }
 
@@ -444,9 +448,22 @@ public class CartFragment extends Fragment {
                     }, throwable -> {
                     }));
                     adapter.clearData();
+                    useVoucher();
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                }));
+    }
+
+    private void useVoucher() {
+        disposable.add(repository.useVoucher(new UseVoucherRequest(String.valueOf(DiscountVoucher)))
+                .doOnSubscribe(disposable1 -> {
+                })
+                .subscribe(okResponse -> {
+                    Log.d("ahuhu", "useVoucher: success: ");
+                }, throwable -> {
+                    hideProgressBar(progressBar);
+                    Log.d("ahuhu", "useVoucher: error: " + throwable.getMessage());
                 }));
     }
 

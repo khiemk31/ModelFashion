@@ -74,4 +74,17 @@ public class Voucher {
     public void setExpired(String expired) {
         this.expired = expired;
     }
+
+    @Override
+    public String toString() {
+        return "Voucher{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", code='" + code + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", price_discount=" + price_discount +
+                ", active=" + active +
+                ", expired='" + expired + '\'' +
+                '}';
+    }
 }

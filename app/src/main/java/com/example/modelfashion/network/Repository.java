@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.request.GetProductByPriceRequest;
+import com.example.modelfashion.Model.request.UseVoucherRequest;
+import com.example.modelfashion.Model.response.BaseResponse;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -173,6 +175,12 @@ public final class Repository {
 
     public Single<CheckUserActiveResponse> checkUserActive(CheckUserActiveRequest request) {
         return apiInterface.checkUserActive(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<BaseResponse> useVoucher(UseVoucherRequest request) {
+        return apiInterface.useVoucher(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
