@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,7 +62,9 @@ public class SeeAllActivity extends AppCompatActivity {
     private LinearLayout ll_a_z, ll_z_a, ll_500, ll_500_1000, ll_1000, ll_low_tall, ll_tall_low, ll_all;
     private ImageView img_tick_1, img_tick_2, img_tick_3, img_tick_4, img_tick_5, img_tick_6, img_tick_7, img_tick_8;
     private List<ImageView> listTick = new ArrayList<>();
+    private TextView tv_no_data;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +101,16 @@ public class SeeAllActivity extends AppCompatActivity {
 
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void afterTextChanged(String content) {
                 adapter.search(content);
+                if (adapter.getItemCount() == 0 ){
+                    tv_no_data.setVisibility(View.VISIBLE);
+                    rcv.setVisibility(View.GONE);
+                } else {
+                    tv_no_data.setVisibility(View.GONE);
+                    rcv.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -226,8 +235,11 @@ public class SeeAllActivity extends AppCompatActivity {
         img_tick_7 = findViewById(R.id.img_tick_7);   listTick.add(img_tick_7);
         img_tick_8 = findViewById(R.id.img_tick_8);   listTick.add(img_tick_8);
 
+        tv_no_data = findViewById(R.id.tv_no_data);
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         getProductByCategory();
     }
