@@ -262,7 +262,7 @@ public class HistoryActivity extends AppCompatActivity {
                         subBill.add(bills.get(i));
                     }
                 } else if (status == 2) {
-                    if (bills.get(i).getStatus().matches("Yêu Cầu Hủy Đơn") || bills.get(i).getStatus().matches("Yêu Cầu Trả Hàng")) {
+                    if (bills.get(i).getStatus().matches("Yêu Cầu Hủy Đơn") || bills.get(i).getStatus().matches("Yêu Cầu Hoàn Đơn")) {
                         subBill.add(bills.get(i));
                     }
                 } else if (status == 3) {

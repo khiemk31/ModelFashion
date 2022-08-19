@@ -446,8 +446,12 @@ public class CartFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addBill() {
         String paymentStatus;
-        if (rdo_cash.isChecked()) paymentStatus = "Thanh toán khi nhận hàng";
-        else paymentStatus = "Thanh toan trước khi đặt hàng";
+        if (payment_methods == 0){
+            paymentStatus = "Chưa thanh toán";
+        }else {
+            paymentStatus = "Đã thanh toán";
+        }
+
 
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
         CreateBillRequest real = new CreateBillRequest(sharedPref.getString(KEY_ID), temp.getProductList(),
