@@ -187,6 +187,8 @@ public class MainFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getAllProductByCategory();
+            rl_sale.setVisibility(View.GONE);
+            getListProductSale();
         });
 
         img_notifi.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +371,7 @@ public class MainFragment extends Fragment {
             rl_sale.setVisibility(View.VISIBLE);
             ProductSaleAdapter productSaleAdapter = new ProductSaleAdapter(requireContext(),productSales);
             rcl_product_sale.setAdapter(productSaleAdapter);
-            rcl_product_sale.addItemDecoration(new SpacesItemDecoration(10));
+           // rcl_product_sale.addItemDecoration(new SpacesItemDecoration(10));
         }else {
             rl_sale.setVisibility(View.GONE);
         }

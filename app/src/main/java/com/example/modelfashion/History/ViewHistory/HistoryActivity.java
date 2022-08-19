@@ -3,6 +3,7 @@ package com.example.modelfashion.History.ViewHistory;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -14,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -77,6 +79,7 @@ public class HistoryActivity extends AppCompatActivity {
     private int month = 0;
     private int year = 0;
     private RelativeLayout rl_month_history;
+    private SwipeRefreshLayout refresh_history;
 
 
     private BroadcastReceiver broadCastReceiver = new BroadcastReceiver() {
@@ -107,6 +110,7 @@ public class HistoryActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar_history);
         tv_month_history = findViewById(R.id.tv_month_history);
         rl_month_history = findViewById(R.id.rl_month_history);
+        refresh_history = findViewById(R.id.refresh_history);
         tv_empty = findViewById(R.id.tv_empty);
         bills = new ArrayList<>();
         rl_load = findViewById(R.id.rl_load);
@@ -160,6 +164,13 @@ public class HistoryActivity extends AppCompatActivity {
         getAllBill();
 
         Log.e("id", String.valueOf(user_id));
+        refresh_history.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh_history.setRefreshing(false);
+                setListBill(numberStatus, bills);
+            }
+        });
 
 
     }
@@ -213,6 +224,7 @@ public class HistoryActivity extends AppCompatActivity {
 //                }, throwable -> {
 //                    Log.e("err", String.valueOf(bills.size()));
 //                }));
+        rl_load.setVisibility(View.VISIBLE);
         ApiHistory.API_HISTORY.getBill(user_id).enqueue(new Callback<ArrayList<Bill>>() {
             @Override
             public void onResponse(Call<ArrayList<Bill>> call, Response<ArrayList<Bill>> response) {
@@ -238,6 +250,10 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     private void setListBill(int status, ArrayList<Bill> bills) {
+        rl_load.setVisibility(View.VISIBLE);
+        lv_history.setVisibility(View.INVISIBLE);
+        tv_empty.setVisibility(View.INVISIBLE);
+
         ArrayList<Bill> subBill = new ArrayList<>();
         if (status < 6) {
             for (int i = 0; i < bills.size(); i++) {
@@ -269,16 +285,23 @@ public class HistoryActivity extends AppCompatActivity {
             subBill.addAll(bills);
         }
 
-        historyAdapter = new HistoryAdapter(HistoryActivity.this, subBill, HistoryActivity.this);
-        FindBillByMonth(month, year, subBill);
-        lv_history.setAdapter(historyAdapter);
-        Log.e("zzzz", String.valueOf(subBill.size()));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                historyAdapter = new HistoryAdapter(HistoryActivity.this, subBill, HistoryActivity.this);
+                FindBillByMonth(month, year, subBill);
+                lv_history.setAdapter(historyAdapter);
+                Log.e("zzzz", String.valueOf(subBill.size()));
+            }
+        },2000);
+
 
     }
 
     public void FindBillByMonth(int month, int year, ArrayList<Bill> mybills) {
 
         ArrayList<Bill> billbymonth = new ArrayList<>();
+        rl_load.setVisibility(View.INVISIBLE);
         if (bills != null) {
 
             if (month != 0 && year != 0) {
@@ -302,6 +325,7 @@ public class HistoryActivity extends AppCompatActivity {
                 tv_empty.setVisibility(View.VISIBLE);
                 lv_history.setVisibility(View.GONE);
             }
+
 
             historyAdapter.updatelist(billbymonth);
         }

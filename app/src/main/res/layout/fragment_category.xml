@@ -30,20 +30,27 @@
                         android:textColor="@color/black"
                         android:textSize="20dp" />
                 </RelativeLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcv_mycategory"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/refresh_category"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rl_title"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_title">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_mycategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     android:visibility="visible"
                     tools:listitem="@layout/item_mycategory" />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
                 <TextView
@@ -57,16 +64,47 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    style="@style/BackgroundProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
+
+                <RelativeLayout
+                    android:id="@+id/rl_load"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@drawable/bg_load"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_medium"
+                            android:text="Yêu cầu đang thực hiện ..."
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:theme="@style/progressBarApp"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

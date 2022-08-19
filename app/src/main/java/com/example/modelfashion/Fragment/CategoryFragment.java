@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,6 +61,8 @@ public class CategoryFragment extends Fragment {
 
     private ArrayList<Category> myCategories ;
     private RecyclerView rcv_mycategory;
+    private RelativeLayout rl_load;
+    private SwipeRefreshLayout refresh_category;
 
     private ArrayList<MyProductByCategory> productArrayList = new ArrayList<>();
 
@@ -85,6 +89,8 @@ public class CategoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         rcv_mycategory = view.findViewById(R.id.rcv_mycategory);
+        rl_load = view.findViewById(R.id.rl_load);
+        refresh_category = view.findViewById(R.id.refresh_category);
 
         return view;
     }
@@ -93,9 +99,18 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getListCategory();
+        refresh_category.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh_category.setRefreshing(false);
+                getListCategory();
+            }
+        });
     }
 
     private void getListCategory(){
+        rl_load.setVisibility(View.VISIBLE);
+        rcv_mycategory.setVisibility(View.INVISIBLE);
         ApiHistory.API_HISTORY.getListCategory().enqueue(new Callback<CategoryModel>() {
             @Override
             public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
@@ -127,6 +142,14 @@ public class CategoryFragment extends Fragment {
             intent.putExtra(KEY_PRODUCT_TYPE, myCategory.getCategory_id());
             startActivity(intent);
         });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rl_load.setVisibility(View.INVISIBLE);
+                rcv_mycategory.setVisibility(View.VISIBLE);
+            }
+        },2000);
+
     }
 
 
