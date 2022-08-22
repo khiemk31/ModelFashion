@@ -30,6 +30,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<Product> listProduct = new ArrayList<>();
     private List<Product> listStatic = new ArrayList<>();
+    private List<Product> listStaticAll = new ArrayList<>();
 
     private static final int VIEW_DISCOUNT = 2;
     private static final int VIEW_NORMAL = 1;
@@ -39,6 +40,10 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.listProduct.clear();
         this.listProduct = list;
         notifyDataSetChanged();
+    }
+
+    public void listStaticAll(List<Product> list) {
+        this.listStatic = list;
     }
 
     public void addItems(List<Product> listLoadMore) {
@@ -63,7 +68,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void search(String word) {
-        this.listProduct = this.listStatic.stream().filter(x -> x.getProductName().toLowerCase().contains(word.toLowerCase())).collect(Collectors.toList());
+        this.listProduct = this.listStaticAll.stream().filter(x -> x.getProductName().toLowerCase().contains(word.toLowerCase())).collect(Collectors.toList());
         notifyDataSetChanged();
     }
 

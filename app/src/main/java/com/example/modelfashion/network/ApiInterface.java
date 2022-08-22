@@ -142,4 +142,7 @@ public interface ApiInterface {
 
     @POST("useVoucher")
     Single<BaseResponse> useVoucher(@Body UseVoucherRequest request);
+
+    @GET("product/getProductByCategorySearch")
+    Single<GetProductByCategoryResponse> getProductSearch(@Query("id") int id);
 }

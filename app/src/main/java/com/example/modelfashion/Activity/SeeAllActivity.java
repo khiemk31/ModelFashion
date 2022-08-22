@@ -38,7 +38,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class SeeAllActivity extends AppCompatActivity {
@@ -103,7 +105,19 @@ public class SeeAllActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(String content) {
-                adapter.search(content);
+                compositeDisposable.add(Single.just(1)
+                                .delay(1000, TimeUnit.MILLISECONDS)
+                        .doOnSubscribe(disposable -> {
+                            showProgressBar(progressBar);
+                        })
+                        .subscribe(productResponse -> {
+                            hideProgressBar(progressBar);
+                            adapter.search(content);
+                        }, throwable -> {
+                            hideProgressBar(progressBar);
+                        }));
+
+
                 if (adapter.getItemCount() == 0 ){
                     tv_no_data.setVisibility(View.VISIBLE);
                     rcv.setVisibility(View.GONE);
@@ -242,6 +256,21 @@ public class SeeAllActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         getProductByCategory();
+        getProductSearch(); // all product to fake search
+    }
+
+    private void getProductSearch() {
+        compositeDisposable.add(repository.getProductSearch(categoryId)
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(productResponse -> {
+                    adapter.setListProduct(productResponse.getListProduct());
+
+                }, throwable -> {
+                    Log.d("ahihi", "getProductSearch: " + new Utils().getErrorBody(throwable).toString());
+                }));
     }
 
     private int pageNumber = 1;
