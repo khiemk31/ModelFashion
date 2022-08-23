@@ -23,17 +23,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
                 <TextView
                     android:id="@+id/title"
-                    android:paddingHorizontal="10dp"
-                    android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingHorizontal="10dp"
                     android:text="Giỏ Hàng Của Bạn"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                     />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
 
@@ -45,130 +45,15 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@+id/csl_address"
+                app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rl_title"
                 tools:listitem="@layout/item_cart" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/csl_address"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/header_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Địa chỉ giao hàng"
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/header_1"
-                    android:textColor="@color/black"
-                    tools:text="221 Doãn Kế Thiện, Mai Dịch Cầu Giấy" />
-
-                <TextView
-                    android:id="@+id/btn_change_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/bg_btn_edit_address"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="5dp"
-                    android:text="Thay Đổi"
-                    android:textColor="#fff"
-                    android:textSize="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_marginBottom="10dp"
-                    android:id="@+id/header_2"
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Phương thức thanh toán"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/radio_group" />
-
-                <RadioGroup
-                    android:id="@+id/radio_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    >
-
-                    <RadioButton
-                        android:id="@+id/rdo_cash"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:buttonTint="#000000"
-                        android:checked="true"
-                        android:text="Tiền mặt"
-                        android:textColor="@color/black"
-                        android:layout_marginEnd="10dp"/>
-
-                    <RadioButton
-                        android:id="@+id/rdo_momo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:buttonTint="#000000"
-                        android:textColor="@color/black"
-                        android:text="Ví Momo" />
-
-                </RadioGroup>
-
-                <TextView
-                    android:id="@+id/btn_voucher"
-                    android:layout_width="0dp"
-                    android:layout_marginHorizontal="10sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="64dp"
-                    android:background="@color/gray"
-                    android:gravity="center"
-                    android:padding="20sp"
-                    android:text="Mã giảm giá"
-                    app:layout_constraintHorizontal_bias="0.827"
-                    app:layout_constraintLeft_toRightOf="@+id/radio_group"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_change_address" />
-                <TextView
-                    android:id="@+id/btn_clear_voucher"
-                    android:layout_width="0dp"
-                    android:layout_marginHorizontal="10sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="64dp"
-                    android:background="@color/gray"
-                    android:gravity="center"
-                    android:padding="10sp"
-                    android:text="X"
-                    app:layout_constraintHorizontal_bias="0.827"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_change_address" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:id="@+id/ll_bottom"
                 android:layout_width="match_parent"
@@ -177,36 +62,231 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:background="@color/white"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/total_money"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="18dp"
-                    android:lineHeight="28dp"
-                    android:text="Tổng tiền:  VNĐ"
-                    android:textColor="#ff0000"
-                    android:textSize="15sp"
-                    android:textStyle="bold|italic"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="20sp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tạm tính:"
+                        android:textSize="15dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/nunito_bold"/>
+                    <TextView
+                        android:id="@+id/tv_price_provisional"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0đ"
+                        android:gravity="right"
+                        android:textSize="15dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/nunito_bold"
+                        />
 
-                    tools:layout_editor_absoluteX="16dp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_payment"
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/border_button_fb"
-                    android:text="Mua Hàng"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="20sp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Khuyến mãi:"
+                        android:textSize="15dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/nunito_bold"/>
+                    <TextView
+                        android:id="@+id/tv_price_discount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0đ"
+                        android:gravity="right"
+                        android:textSize="12dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/nunito_medium"
+                        />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/header_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ giao hàng:"
+                    android:textSize="15dp"
+                    android:textColor="@color/black"
                     android:fontFamily="@font/nunito_bold"
-                     />
+                    android:layout_marginStart="20sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20sp">
+
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/btn_change_address"
+                        android:layout_weight="8"
+                        android:ellipsize="end"
+                        android:paddingLeft="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        tools:text="Địa chỉ" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_below="@+id/tv_address"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toLeftOf="@+id/btn_change_address"
+                        android:background="@color/black" />
+
+                    <TextView
+                        android:id="@+id/btn_change_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:background="@drawable/bg_btn_edit_address"
+                        android:paddingHorizontal="25dp"
+                        android:paddingVertical="5dp"
+                        android:text="Sửa"
+                        android:textColor="#fff"
+                        android:textSize="12dp" />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:paddingTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/ll_pay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/header_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20sp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Thanh toán :"
+                            android:textSize="15dp"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/nunito_bold" />
+
+                        <RadioGroup
+                            android:id="@+id/radio_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20sp"
+                            android:orientation="vertical">
+
+                            <RadioButton
+                                android:id="@+id/rdo_cash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:buttonTint="#000000"
+                                android:checked="true"
+                                android:text="Tiền mặt"
+                                android:textColor="@color/black" />
+
+                            <RadioButton
+                                android:id="@+id/rdo_momo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:buttonTint="#000000"
+                                android:text="Ví Momo"
+                                android:textColor="@color/black" />
+
+                        </RadioGroup>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/ll_pay"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_centerVertical="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20sp"
+                           >
+
+
+                            <TextView
+                                android:id="@+id/btn_voucher"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_discount"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:paddingHorizontal="5dp"
+                                android:paddingVertical="15sp"
+                                android:text="Mã giảm giá"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/btn_clear_voucher"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginHorizontal="10dp"
+                                android:gravity="center"
+                                android:textSize="15dp"
+                                android:textColor="@color/black"
+                                android:text="X" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginHorizontal="20sp">
+                    <TextView
+                        android:id="@+id/total_money"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Tổng tiền: \n đ"
+                        android:textColor="#ff0000"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_payment"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border_button_fb"
+                        android:text="Mua Hàng"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito_bold"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
 
 

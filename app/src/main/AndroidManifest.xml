@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Notification.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/logo"
@@ -24,6 +25,9 @@
         android:usesCleartextTraffic="true"
         tools:Replace="android:theme"
         tools:replace="android:hardwareAccelerated">
+        <activity
+            android:name=".Activity.SignIn.ConfirmPasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.FAQSActivity"
             android:exported="false" />
@@ -104,6 +108,14 @@
         <meta-data
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://537853312614449:__Rb7zY3SQzgNSdlzh3PLP0Jz8Y@cde" />
+
+        <service
+            android:name=".Notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

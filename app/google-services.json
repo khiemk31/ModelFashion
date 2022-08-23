@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "656319385401",
+    "project_id": "modelfashion-59dba",
+    "storage_bucket": "modelfashion-59dba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656319385401:android:04323ff7183f706d0422e8",
+        "android_client_info": {
+          "package_name": "com.example.modelfashion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656319385401-mb0ht81mj403r79jtoors216aeo2f5uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvHsbx9Tuu9qhAfO8gU8BVz1i6mKj8mvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656319385401-mb0ht81mj403r79jtoors216aeo2f5uu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

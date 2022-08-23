@@ -1,5 +1,12 @@
 package com.example.modelfashion.Activity.SignIn;
 
+import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
+import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
+import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
+import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
+import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
+import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,6 +21,7 @@ import com.example.modelfashion.Common.ProgressLoadingCommon;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Register.GetOTPRequest;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.network.Repository;
 
@@ -26,6 +34,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     String phone;
     CompositeDisposable disposable = new CompositeDisposable();
     ProgressLoadingCommon progressLoadingCommon;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         btnChangePassword = findViewById(R.id.btnChangePassword);
         imgBackToGetCapcha = findViewById(R.id.imgBackToGetCapcha);
         progressLoadingCommon = new ProgressLoadingCommon();
+        preferenceManager = new PreferenceManager(this);
     }
 
     private void setListener() {
@@ -78,6 +88,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 }).subscribe(response -> {
                     Toast.makeText(ChangePasswordActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ChangePasswordActivity.this, SignInActivity.class));
+
+                    preferenceManager.putBoolean(KEY_CHECK_LOGIN, false);
+                    preferenceManager.putString(KEY_AVARTAR, "");
+                    preferenceManager.putString(KEY_FULL_NAME, "");
+                    preferenceManager.putString(KEY_PHONE, "");
+                    preferenceManager.putString(KEY_ADDRESS, "");
+                    preferenceManager.putString(KEY_BIRTHDAY, "");
+
+                    finish();
                 }, throwable -> {
                     String error = new Utils().getErrorBody(throwable).getMessage();
                     Toast.makeText(ChangePasswordActivity.this, error, Toast.LENGTH_SHORT).show();

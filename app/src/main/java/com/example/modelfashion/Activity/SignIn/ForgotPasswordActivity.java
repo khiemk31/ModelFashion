@@ -53,6 +53,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     bundle.putString("phoneForgotPass", edtPhone.getText().toString());
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

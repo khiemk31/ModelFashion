@@ -156,6 +156,8 @@ public class SignInActivity extends AppCompatActivity {
 
                     sharedPreferences.putString(KEY_ID, loginResponse.getData());
                     sharedPreferences.putBoolean(Constants.KEY_CHECK_LOGIN, true);
+                    sharedPreferences.putString(Constants.KEY_PASS, edtPassword.getText().toString().trim());
+                    sharedPreferences.putString(Constants.KEY_USER, edtAccount.getText().toString().trim());
                     Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     getUserDetail(loginResponse.getData());
                 }, throwable -> {

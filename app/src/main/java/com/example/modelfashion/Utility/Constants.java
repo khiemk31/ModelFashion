@@ -21,6 +21,8 @@ public class Constants {
     public static final String KEY_ID = "id";
     public static final String KEY_TAI_KHOAN = "taiKhoan";
     public static final String KEY_MAT_KHAU = "matKhau";
+    public static final String KEY_PASS = "password";
+    public static final String KEY_USER= "user";
     public static final String KEY_CHECK_BOX = "KEY_CHECK_BOX";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_FULL_NAME = "fullName";
@@ -44,7 +46,7 @@ public class Constants {
     // main
     public static final String KEY_PRODUCT_TYPE = "KEY_PRODUCT_TYPE";
 
-
+    public static final String KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
 
 
 }

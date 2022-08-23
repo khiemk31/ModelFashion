@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingHorizontal="10dp"
+        android:background="@drawable/bt_item_history"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30sp">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <NumberPicker
+            android:layout_weight="1"
+            android:solidColor="#8E97FD"
+            android:id="@+id/picker_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+           />
+
+
+        <NumberPicker
+            android:solidColor="@color/black"
+            android:id="@+id/picker_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"/>
+
+        <NumberPicker
+            android:layout_weight="1"
+            android:solidColor="#8E97FD"
+            android:id="@+id/picker_year"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp"
+        android:gravity="right">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="15dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20sp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đồng ý"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="15dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20sp"
+            android:layout_marginEnd="10dp"
+            android:textColor="#8E97FD"/>
+
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

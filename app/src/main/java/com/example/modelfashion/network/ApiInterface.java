@@ -2,6 +2,8 @@ package com.example.modelfashion.network;
 
 import com.example.modelfashion.Model.request.CreateBillRequest;
 import com.example.modelfashion.Model.request.GetProductByPriceRequest;
+import com.example.modelfashion.Model.request.UseVoucherRequest;
+import com.example.modelfashion.Model.response.BaseResponse;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordRequest;
 import com.example.modelfashion.Model.response.Login.ForgotPasswordResponse;
 import com.example.modelfashion.Model.response.Login.LoginRequest;
@@ -137,4 +139,10 @@ public interface ApiInterface {
 
     @POST("user/checkActive")
     Single<CheckUserActiveResponse> checkUserActive(@Body CheckUserActiveRequest request);
+
+    @POST("useVoucher")
+    Single<BaseResponse> useVoucher(@Body UseVoucherRequest request);
+
+    @GET("product/getProductByCategorySearch")
+    Single<GetProductByCategoryResponse> getProductSearch(@Query("id") int id);
 }

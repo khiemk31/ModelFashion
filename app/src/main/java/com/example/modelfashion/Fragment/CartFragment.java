@@ -2,11 +2,13 @@ package com.example.modelfashion.Fragment;
 
 import static com.example.modelfashion.Utility.Constants.KEY_CHECK_LOGIN;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -42,7 +44,9 @@ import com.example.modelfashion.Adapter.VoucherAdapter;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.Voucher;
+import com.example.modelfashion.Model.VoucherCall;
 import com.example.modelfashion.Model.request.CreateBillRequest;
+import com.example.modelfashion.Model.request.UseVoucherRequest;
 import com.example.modelfashion.Model.response.User.CheckUserActiveRequest;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.UpdateAdress;
@@ -58,6 +62,9 @@ import com.example.modelfashion.database.MyProductCart;
 import com.example.modelfashion.network.Repository;
 import com.example.modelfashion.rx.RxBus;
 import com.example.modelfashion.rx.RxEvent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -75,6 +82,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.momo.momo_partner.AppMoMoLib;
+import vn.momo.momo_partner.MoMoParameterNameMap;
+
 
 public class CartFragment extends Fragment {
     private View initView;
@@ -85,7 +94,7 @@ public class CartFragment extends Fragment {
     private ArrayList<String> arr_size_id = new ArrayList<>();
     private ArrayList<String> arr_product_name = new ArrayList<>();
     private String user_id, total_money;
-    private TextView tvTotal,tv_address;
+    private TextView tvTotal, tv_address;
     public static Button btn_payment;
     private SwipeRefreshLayout refreshLayout;
     private ProgressBar progressBar;
@@ -94,7 +103,7 @@ public class CartFragment extends Fragment {
     private CompositeDisposable disposable = new CompositeDisposable();
     private PreferenceManager sharedPref;
     private Repository repository;
-    private RadioButton rdo_cash,rdo_momo;
+    private RadioButton rdo_cash, rdo_momo;
     private int payment_methods = 0;
     private String addRess = "";
     private TextView btn_change_address;
@@ -102,14 +111,21 @@ public class CartFragment extends Fragment {
     public static TextView btn_voucher;
     public static TextView btn_clear_voucher;
     public static String IDVoucher = "";
+    public static String CodeVoucher = "";
+    public static int DiscountVoucher = 0;
+    public static int PositionVoucher = -1;
     private Dialog dialog;
+    private TextView tv_price_discount, tv_price_provisional;
+    private ProgressBar prg_voucher;
+    private TextView tv_emty_voucher;
+    private RecyclerView rcl_voucher;
 
 
     CartAdapter adapter = new CartAdapter();
 
     //momo
     private Integer amount = 100000;
-    private String fee = "0";
+    private Integer fee = 0;
     int environment = 0;//developer default
     private String merchantName = "FShop";
     private String merchantCode = "MOMOLWUA20220517";
@@ -121,13 +137,15 @@ public class CartFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String check = intent.getStringExtra("action");
-            if (check.matches("addbill")){
+            if (check.matches("addbill")) {
                 addBill();
             }
-            if(check.matches("closevoucher")){
+            if (check.matches("closevoucher")) {
                 dialog.dismiss();
-                btn_voucher.setText(IDVoucher);
+                btn_voucher.setText(CodeVoucher);
                 btn_clear_voucher.setVisibility(View.VISIBLE);
+                tv_price_discount.setText("-" + moneyFormat((long) DiscountVoucher));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
             }
         }
     };
@@ -144,10 +162,6 @@ public class CartFragment extends Fragment {
     }
 
 
-
-
-
-
     public CartFragment() {
     }
 
@@ -161,7 +175,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initView = inflater.inflate(R.layout.fragment_cart, container, false);
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadCastReceiver,new IntentFilter("send_data_to_fragment"));
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadCastReceiver, new IntentFilter("send_data_to_fragment"));
 
         recyclerView = initView.findViewById(R.id.list_product_cart);
         tvTotal = initView.findViewById(R.id.total_money);
@@ -174,10 +188,18 @@ public class CartFragment extends Fragment {
         btn_change_address = initView.findViewById(R.id.btn_change_address);
         btn_voucher = initView.findViewById(R.id.btn_voucher);
         btn_clear_voucher = initView.findViewById(R.id.btn_clear_voucher);
+        tv_price_provisional = initView.findViewById(R.id.tv_price_provisional);
+        tv_price_discount = initView.findViewById(R.id.tv_price_discount);
+        tv_price_discount.setText("-" + DiscountVoucher);
         btn_clear_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CodeVoucher = "";
                 IDVoucher = "";
+                DiscountVoucher = 0;
+                PositionVoucher = -1;
+                tv_price_discount.setText("-" + DiscountVoucher);
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
                 btn_voucher.setText("Mã giảm giá");
                 btn_clear_voucher.setVisibility(View.INVISIBLE);
             }
@@ -197,12 +219,13 @@ public class CartFragment extends Fragment {
         rdo_momo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                payment_methods =1;
+                payment_methods = 1;
             }
         });
 
         setAdapter();
         getProductInCart();
+
 
         btn_payment.setOnClickListener(v -> {
 
@@ -214,11 +237,12 @@ public class CartFragment extends Fragment {
             } else {
                 if (adapter.getItemCount() == 0) {
                     Toast.makeText(requireContext(), "Trong giỏ hàng không có sản phẩm", Toast.LENGTH_SHORT).show();
-                }else if (adapter.getTotalProductInCart() > 5 && rdo_cash.isChecked()) {
+                } else if (adapter.getTotalProductInCart() > 5 && rdo_cash.isChecked()) {
                     Toast.makeText(requireContext(), "Bạn cần chọn thanh toán qua Momo với hóa đơn có nhiều hơn 5 sản phẩm", Toast.LENGTH_SHORT).show();
-                }else if(addRess ==""){
+                    showDialog();
+                } else if (addRess == "") {
                     Toast.makeText(requireContext(), "Chưa có địa chỉ", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
 //                    requestPayment();
                     createBill();
                 }
@@ -228,7 +252,8 @@ public class CartFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getProductInCart();
-            tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+            tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
         });
         btn_change_address.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,10 +262,11 @@ public class CartFragment extends Fragment {
             }
         });
         if (sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
-             getAddress();
-            fakeVoucher();
+            getAddress();
+
 
         }
+
         btn_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,7 +286,8 @@ public class CartFragment extends Fragment {
                         .subscribe(okResponse -> {
                             // refresh
                             getProductInCart();
-                            tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                            tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                         }, throwable -> {
                             Log.d("ahuhu", "listene: error: " + throwable.getMessage());
                         })
@@ -272,40 +299,70 @@ public class CartFragment extends Fragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver((BroadcastReceiver) broadCastReceiver);
     }
-    private void fakeVoucher(){
-        voucherList.clear();
-        voucherList.add(new Voucher("MF0","Voucher 1","02/08/2022",2000));
-        voucherList.add(new Voucher("MF01","Voucher 2","02/08/2022",2000));
-        voucherList.add(new Voucher("MF03","Voucher 3","02/08/2022",2000));
 
+    private void CreateAndShowVoucher() {
 
-    }
-    private  void CreateAndShowVoucher(){
         dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_voucher);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-        RecyclerView rcl_voucher = dialog.findViewById(R.id.rcl_voucher);
+        rcl_voucher = dialog.findViewById(R.id.rcl_voucher);
         TextView tv_close_voucher = dialog.findViewById(R.id.tv_close_voucher);
+        tv_emty_voucher = dialog.findViewById(R.id.tv_emty_voucher);
+        prg_voucher = dialog.findViewById(R.id.prg_voucher);
+        getListVoucher();
         tv_close_voucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
-        VoucherAdapter voucherAdapter = new VoucherAdapter(requireContext(),voucherList);
-        rcl_voucher.setAdapter(voucherAdapter);
+
+
 
         dialog.show();
     }
 
+    private void getListVoucher() {
+        prg_voucher.setVisibility(View.VISIBLE);
+        try {
+            String id = sharedPref.getString(KEY_ID);
+            Log.e("xxx", id);
+            ApiHistory.API_HISTORY.getListVoucher(id).enqueue(new Callback<VoucherCall>() {
+                @Override
+                public void onResponse(Call<VoucherCall> call, Response<VoucherCall> response) {
+                    if (response.body() != null) {
+                        voucherList.clear();
+                        voucherList = response.body().getListVoucher();
+                        if(voucherList.size()>0){
+                            tv_emty_voucher.setVisibility(View.INVISIBLE);
+                            VoucherAdapter voucherAdapter = new VoucherAdapter(requireContext(), voucherList);
+                            rcl_voucher.setAdapter(voucherAdapter);
+                        }else {
+                            tv_emty_voucher.setVisibility(View.VISIBLE);
+                        }
+                        Log.e("xxx", String.valueOf(voucherList.size()));
+                        prg_voucher.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<VoucherCall> call, Throwable t) {
+                    prg_voucher.setVisibility(View.INVISIBLE);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
-    private void showDialogAdress(){
+    private void showDialogAdress() {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_update_address);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText edt_address = dialog.findViewById(R.id.edt_address);
         TextView tv_no_update = dialog.findViewById(R.id.tv_no_update);
@@ -320,9 +377,9 @@ public class CartFragment extends Fragment {
         tv_yes_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(edt_address.getText().toString().isEmpty()){
-                    Toast.makeText(requireContext(),"Bạn chưa nhập địa chỉ",Toast.LENGTH_SHORT).show();
-                }else {
+                if (edt_address.getText().toString().isEmpty()) {
+                    Toast.makeText(requireContext(), "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
+                } else {
                     addRess = edt_address.getText().toString();
                     tv_address.setText(edt_address.getText());
                     //updateAddress();
@@ -332,22 +389,9 @@ public class CartFragment extends Fragment {
         });
         dialog.show();
     }
-    private void updateAddress(){
-        UpdateAdress updateAdress = new UpdateAdress("1",addRess);
-        ApiHistory.API_HISTORY.updateAddress(updateAdress).enqueue(new Callback<UpdateAdress>() {
-            @Override
-            public void onResponse(Call<UpdateAdress> call, Response<UpdateAdress> response) {
 
-            }
 
-            @Override
-            public void onFailure(Call<UpdateAdress> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void getAddress(){
+    private void getAddress() {
         String id = sharedPref.getString(KEY_ID);
         try {
 //            showProgressBar(progressBar);
@@ -366,7 +410,7 @@ public class CartFragment extends Fragment {
 //                    hideProgressBar(progressBar);
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -382,32 +426,37 @@ public class CartFragment extends Fragment {
 
         alertDialog.setMessage("Xác nhận đặt hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
-            if(payment_methods == 0) {
-                if (tv_address.toString().trim().isEmpty()){
+            if (payment_methods == 0) {
+                if (tv_address.toString().trim().isEmpty()) {
                     Toast.makeText(requireContext(), "Bạn cần nhập địa chỉ giao hàng!", Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                 } else {
                     checkUserActive();
                 }
-            }else {
+            } else {
                 requestPayment();
             }
         });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {});
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {
+        });
         alertDialog.show();
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void addBill(){
-        // payment status
+    private void addBill() {
         String paymentStatus;
-        if (rdo_cash.isChecked()) paymentStatus = "Thanh toán khi nhận hàng"; else paymentStatus = "Thanh toán ngay ???";
+        if (payment_methods == 0){
+            paymentStatus = "Thanh toán khi nhận hàng";
+        }else {
+            paymentStatus = "Đã thanh toán bằng Momo";
+        }
+
 
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
-        CreateBillRequest real = new CreateBillRequest(temp.getUserId(), temp.getProductList(),
-                temp.getListQuantity(), temp.getListSize(), temp.getTotalPrice(), temp.getListPrice(),
-                temp.getListPriceSale(), "day discount voucher", addRess,
-                paymentStatus);
+        CreateBillRequest real = new CreateBillRequest(sharedPref.getString(KEY_ID), temp.getProductList(),
+                temp.getTotalPrice(), temp.getListQuantity(), temp.getListSize(), temp.getListPrice(),
+                temp.getListPriceSale(), String.valueOf(DiscountVoucher), addRess, paymentStatus);
 
         disposable.add(repository.createBill(real)
                 .doOnSubscribe(disposable1 -> {
@@ -422,9 +471,22 @@ public class CartFragment extends Fragment {
                     }, throwable -> {
                     }));
                     adapter.clearData();
+                    useVoucher();
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());
+                }));
+    }
+
+    private void useVoucher() {
+        disposable.add(repository.useVoucher(new UseVoucherRequest(String.valueOf(DiscountVoucher)))
+                .doOnSubscribe(disposable1 -> {
+                })
+                .subscribe(okResponse -> {
+                    Log.d("ahuhu", "useVoucher: success: ");
+                }, throwable -> {
+                    hideProgressBar(progressBar);
+                    Log.d("ahuhu", "useVoucher: error: " + throwable.getMessage());
                 }));
     }
 
@@ -496,7 +558,8 @@ public class CartFragment extends Fragment {
 
                 }).subscribe(myProductCarts -> {
                     adapter.setListData(myProductCarts);
-                    tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                    tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                    tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                 }, throwable -> {
                     Log.d("ahuhu", "getProductInCart: error" + throwable.toString());
                 }));
@@ -511,19 +574,22 @@ public class CartFragment extends Fragment {
             @Override
             public void OnClickDelete(int position, MyProductCart myProductCart) {
                 deleteProductFromCart(position, myProductCart);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickIncreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.increaseAmount(position);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickDecreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.decreaseAmount(position);
-                tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
 //            @Override
@@ -544,22 +610,26 @@ public class CartFragment extends Fragment {
         alertDialog.setMessage("Xóa khỏi giỏ hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xóa", (dialogInterface, i) -> {
             disposable.add(AppDatabase.getInstance(requireContext()).cartDao().removeProductFromCart(myProductCart)
-                    .doOnSubscribe(disposable1 -> {})
-                    .doFinally(() -> {})
+                    .doOnSubscribe(disposable1 -> {
+                    })
+                    .doFinally(() -> {
+                    })
                     .subscribe(() -> {
                         adapter.removeProduct(position);
-                        tvTotal.setText("Tổng tiền: " + moneyFormat(adapter.getTotal()));
-                    },throwable -> {}));
-                });
+                        tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                        tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
+                    }, throwable -> {
+                    }));
+        });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Hủy", (dialogInterface, i) -> {
 
-                });
+        });
 
         alertDialog.show();
     }
 
 
-    private String moneyFormat(Long amount){
+    private String moneyFormat(Long amount) {
         NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setMaximumFractionDigits(0);
         format.setCurrency(Currency.getInstance("VND"));
@@ -573,9 +643,10 @@ public class CartFragment extends Fragment {
     }
 
     // goi request MoMo pay
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void requestPayment() {
         amount = Integer.parseInt(String.valueOf(adapter.getTotal()));
+        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
 
@@ -586,7 +657,7 @@ public class CartFragment extends Fragment {
         eventValue.put("merchantname", merchantName); //Tên đối tác. được đăng ký tại https://business.momo.vn. VD: Google, Apple, Tiki , CGV Cinemas
         eventValue.put("merchantcode", merchantCode); //Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
         eventValue.put("amount", amount); //Kiểu integer
-        eventValue.put("orderId", merchantCode + "-" + UUID.randomUUID().toString()); //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
+        eventValue.put("orderId", UUID.randomUUID().toString()); //uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
         eventValue.put("orderLabel", "Mã đơn hàng"); //gán nhãn
 
         //client Optional - bill info
@@ -595,26 +666,36 @@ public class CartFragment extends Fragment {
         eventValue.put("description", description); //mô tả đơn hàng - short description
 
         //client extra data
-        eventValue.put("requestId",  merchantCode+"merchant_billId_"+System.currentTimeMillis());
+        eventValue.put("requestId", "abc" + "merchant_billId_" + System.currentTimeMillis());
         eventValue.put("partnerCode", merchantCode);
 //        //Example extra data
-//        JSONObject objExtraData = new JSONObject();
-//        try {
-//            objExtraData.put("site_code", "008");
-//            objExtraData.put("site_name", "CGV Cresent Mall");
-//            objExtraData.put("screen_code", 0);
-//            objExtraData.put("screen_name", "Special");
-//            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
-//            objExtraData.put("movie_format", "2D");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        eventValue.put("extraData", objExtraData.toString());
-//
-//        eventValue.put("extra", "");
-        AppMoMoLib.getInstance().requestMoMoCallBack(getActivity(), eventValue);
+        JSONObject objExtraData = new JSONObject();
+        try {
+            objExtraData.put("site_code", "008");
+            objExtraData.put("site_name", "CGV Cresent Mall");
+            objExtraData.put("screen_code", 0);
+            objExtraData.put("screen_name", "Special");
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+            objExtraData.put("movie_format", "2D");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        eventValue.put("extraData", objExtraData.toString());
+
+        eventValue.put("extra", "");
+        AppMoMoLib.getInstance().requestMoMoCallBack(requireActivity(), eventValue);
     }
 
+    private void showDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.logo)
+                .setTitle("Hãy thanh toán bằng Momo")
+                .setMessage("Bạn cần thanh toán bằng Momo với đơn hàng trên 5 sản phẩm")
+                .setPositiveButton("Đồng ý", (dialogInterface, i) -> {
+
+                })
+                .show();
+    }
 
 
     void showProgressBar(ProgressBar progressBar) {

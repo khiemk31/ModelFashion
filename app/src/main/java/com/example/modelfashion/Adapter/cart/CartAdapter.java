@@ -2,6 +2,7 @@ package com.example.modelfashion.Adapter.cart;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,13 +155,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public CreateBillRequest billInformation(String userId) {
-        List<String> listProduct = new ArrayList<>();
+        List<String> listProduct = new ArrayList<>();  // product list
+        int totalPrice = 0;                              // total price
         List<String> listQuantity = new ArrayList<>();
         List<String> listSize = new ArrayList<>();
         List<String> listPrice = new ArrayList<>();
         List<String> listPriceSale = new ArrayList<>();
 
-        int totalPrice = 0;
         for (int i = 0; i < productArrayList.size(); i++) {
             MyProductCart myProductCart = productArrayList.get(i);
             listProduct.add(myProductCart.getProductName());
@@ -168,23 +169,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
             listSize.add(myProductCart.getProductSize());
 
             if (myProductCart.getDiscount() == 0) {
-                totalPrice += myProductCart.getProductPrice() * myProductCart.getProductQuantity();
-            } else {
-                totalPrice += priceSale(myProductCart.getProductPrice(), myProductCart.getDiscount()) * myProductCart.getProductQuantity();
-            }
+                totalPrice += myProductCart.getProductPrice();
+            } else totalPrice += priceSaleCalculate(myProductCart.getProductPrice(), myProductCart.getDiscount());
 
             listPrice.add(String.valueOf(myProductCart.getProductPrice()));
 
             if (myProductCart.getDiscount() == 0) {
                 listPriceSale.add("0");
-            }else listPriceSale.add(String.valueOf(priceSale(myProductCart.getProductPrice(), myProductCart.getDiscount())));
+            }else listPriceSale.add(String.valueOf(priceSaleCalculate(myProductCart.getProductPrice(), myProductCart.getDiscount())));
         }
 
-        return new CreateBillRequest(userId, listProduct, listQuantity, listSize, totalPrice, listPrice, listPriceSale);
-    }
-
-    private int priceSale(int price, int discount) {
-        return price * (1 - (discount/100));
+        return new CreateBillRequest(userId, listProduct, String.valueOf(totalPrice), listQuantity, listSize, listPrice, listPriceSale);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -199,6 +194,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHoder> {
         return total;
     }
 
+    private int priceSaleCalculate(int price, int discount) {
+        float a = price * (1 - ((float) discount/100));
+        return (int) a;
+    }
 
     public interface CartOnClick {
         void OnClickDelete(int position, MyProductCart myProductCart);

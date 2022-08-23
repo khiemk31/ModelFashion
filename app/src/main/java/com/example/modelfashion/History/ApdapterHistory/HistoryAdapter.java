@@ -50,16 +50,11 @@ import retrofit2.Response;
 
 public class HistoryAdapter extends BaseAdapter {
 
-    //    List<ModelHistory> listModel;
     ArrayList<Bill> arr_bill;
     Context context;
-    ArrayList<MyProduct> arr_my_product;
-    String user_id;
-    private ArrayList<Bill> bills;
     String reason = "";
     CancelBill cancelBill;
     Dialog dialog;
-    AsyncTask<?, ?, ?> runningTask;
     Activity activity;
 
     public HistoryAdapter(Context context, ArrayList<Bill> arr_bill, Activity activity) {
@@ -123,13 +118,13 @@ public class HistoryAdapter extends BaseAdapter {
         tv_name_subproduct0.setText(arr_bill.get(i).getProduct_name());
         tv_sumproduct0.setText("x" + arr_bill.get(i).getQuantity());
         tv_size_subproduct0.setText(arr_bill.get(i).getSize());
-        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice())) + " đ");
+        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice_sale())) + " đ");
         tv_sumSP.setText(arr_bill.get(i).getTotal_product() + " Sản phẩm");
         tv_sumPrice.setText("Tổng: " + decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price())) + " đ");
         if (Integer.parseInt(arr_bill.get(i).getPrice_sale()) == 0) {
             tv_price_sale.setVisibility(View.GONE);
         } else {
-            tv_price_sale.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice_sale())) + " đ");
+            tv_price_sale.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice())) + " đ");
         }
 
         tv_detail.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +179,12 @@ public class HistoryAdapter extends BaseAdapter {
             }
         });
         return view;
+    }
+
+    public void updatelist(ArrayList<Bill> bills){
+        arr_bill.clear();
+        arr_bill.addAll(bills);
+        notifyDataSetChanged();
     }
 
 

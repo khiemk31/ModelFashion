@@ -1,6 +1,7 @@
 package com.example.modelfashion.History.ApiHistory;
 
 import com.example.modelfashion.Model.CategoryModel;
+import com.example.modelfashion.Model.VoucherCall;
 import com.example.modelfashion.Model.response.bill.Address;
 import com.example.modelfashion.Model.response.bill.Bill;
 
@@ -70,6 +71,8 @@ public interface ApiHistory {
             @Query("sortDiscount") String sortDiscount,
             @Query("pageNumber") int pageNumber
     );
+    @GET("getVoucherUser")
+    Call<VoucherCall> getListVoucher(@Query("id") String id);
 
 
 }

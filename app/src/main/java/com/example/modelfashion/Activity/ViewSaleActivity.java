@@ -2,6 +2,7 @@ package com.example.modelfashion.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.modelfashion.Adapter.AllSaleAdapter;
+import com.example.modelfashion.Adapter.see_all.PageAdapter;
 import com.example.modelfashion.Fragment.MainFragment;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
 import com.example.modelfashion.Model.sale.ProductSale;
@@ -52,6 +54,9 @@ public class ViewSaleActivity extends AppCompatActivity {
     private SaleModel saleModel;
     private int page = 1;
     private ProgressBar progress_sale;
+    private RecyclerView rcv_pages;
+    private PageAdapter pageAdapter;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +89,24 @@ public class ViewSaleActivity extends AppCompatActivity {
         img_tick_6=findViewById(R.id.img_tick_6);
         img_tick_7=findViewById(R.id.img_tick_7);
         img_tick_8=findViewById(R.id.img_tick_8);
+        refreshLayout = findViewById(R.id.refresh_layout);
         progress_sale = findViewById(R.id.progress_sale);
         progress_sale.setVisibility(View.GONE);
+        rcv_pages = findViewById(R.id.rcv_pages);
+        pageAdapter = new PageAdapter();
+        rcv_pages.setAdapter(pageAdapter);
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(false);
+            edt_search_sale.setText("");
+            getListByFilter(10000,10000000,"DESC","ASC",page);
+
+        });
+
+        pageAdapter.setOnItemClickListener(position -> {
+            page = position + 1;
+            pageAdapter.setColor(position);
+            getListByFilter(10000,10000000,"DESC","ASC",page);
+        });
 
         getListByFilter(10000,10000000,"DESC","ASC",page);
         bottomSheetBehavior = BottomSheetBehavior.from(layout_filter_sale);
@@ -148,20 +169,20 @@ public class ViewSaleActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-    private void getAll(){
-        productSaleAll.clear();
-        for (int i=0;i<MainFragment.productSales.size();i++){
-            productSaleAll.add(MainFragment.productSales.get(i));
-        }
-    }
 
     private void getListByFilter(int price1,int price2,String sortPrice,String sortDiscount,int pageNumber){
+
         ApiHistory.API_HISTORY.getProductSaleByCategory(price1,price2,sortPrice,sortDiscount,pageNumber).enqueue(new Callback<SaleModel>() {
             @Override
             public void onResponse(Call<SaleModel> call, Response<SaleModel> response) {
                 if (response.body()!=null){
-                    saleModel = response.body();
-                    setListFilter();
+                    if (response.body().getListProduct().size()>0) {
+                        saleModel = response.body();
+                        pageAdapter.setPageCount(saleModel.getTotalPage());
+                        setListFilter();
+                    }else {
+                        Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm phù hợp",Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -175,6 +196,7 @@ public class ViewSaleActivity extends AppCompatActivity {
 
     private void setListFilter(){
         progress_sale.setVisibility(View.VISIBLE);
+        rcl_view_sale.setVisibility(View.INVISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         new Handler().postDelayed(new Runnable() {
@@ -188,6 +210,7 @@ public class ViewSaleActivity extends AppCompatActivity {
                     Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm phù hợp",Toast.LENGTH_SHORT).show();
                 }
                 progress_sale.setVisibility(View.GONE);
+                rcl_view_sale.setVisibility(View.VISIBLE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         },1000);

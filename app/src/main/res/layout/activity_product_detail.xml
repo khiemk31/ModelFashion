@@ -50,6 +50,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_icon_cart_detail" />
+    <ImageView
+        android:id="@+id/img_show"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@id/img_cart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_show_cons" />
 
     <ImageView
         android:id="@+id/img_prev"
@@ -85,7 +94,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
         <ImageView
             android:id="@+id/img_product"

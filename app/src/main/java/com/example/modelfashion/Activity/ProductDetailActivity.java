@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
@@ -70,6 +71,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     String productName = "";
     private int index = 0;
     private TextView tv_discount_sale;
+    private ImageView img_show;
+    private boolean isShow = true;
+    private ConstraintLayout ctl_model;
 
     private MyProductDetail myProductDetail;
     private String size = "not specified";
@@ -94,6 +98,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
+
         disposable.add(
                 repository.getProductDetail(productId).doOnSubscribe(disposable -> {
                     showProgressBar(progressBar);
@@ -110,6 +115,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setData(MyProductDetail myProductDetail) {
+
         DecimalFormat format = new DecimalFormat("###,###,###");
         List<String> images = new ArrayList<>();
         images.add(myProductDetail.getProduct().get(0).getProductBgr1());
@@ -117,6 +123,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         images.add(myProductDetail.getProduct().get(0).getProductBgr3());
         adapter.setArrItem(images);
         ci_detail_fm.setViewPager(viewPager);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -383,6 +390,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         ci_detail_fm = findViewById(R.id.cir_3);
         tv_discount_sale = findViewById(R.id.tv_discount_sale);
         img_product_sub = findViewById(R.id.img_product_sub);
+        img_show = findViewById(R.id.img_show);
+        ctl_model = findViewById(R.id.ctl_model);
+        img_show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isShow){
+                    isShow = false;
+                    ctl_model.setVisibility(View.GONE);
+                    Glide.with(view).load(R.drawable.ic_hide_cons).into(img_show);
+                }else {
+                    isShow = true;
+                    ctl_model.setVisibility(View.VISIBLE);
+                    Glide.with(view).load(R.drawable.ic_show_cons).into(img_show);
+                }
+            }
+        });
 
 
         tv_price = findViewById(R.id.tv_price);

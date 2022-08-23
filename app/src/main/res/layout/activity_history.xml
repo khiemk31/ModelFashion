@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:background="#E8E8E8"
     tools:context=".History.ViewHistory.HistoryActivity">
+
     <RelativeLayout
         android:id="@+id/rl_history"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentTop="true"
         android:background="@drawable/bt_toolbar_history">
 
         <ImageView
@@ -31,6 +32,38 @@
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/rl_month_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15sp"
+            android:layout_toLeftOf="@+id/rl_filter_history"
+            android:background="@drawable/bt_item_history">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_icon_date" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_filter_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15sp"
+            android:background="@drawable/bt_item_history">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:src="@drawable/filter_history" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -40,20 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp">
-        <RelativeLayout
-            android:id="@+id/rl_filter_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bt_item_history"
-            >
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="5dp"
-                android:src="@drawable/filter_history" />
-        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_status_history"
@@ -68,6 +88,20 @@
             android:textSize="15dp"
             android:textStyle="normal" />
 
+        <TextView
+            android:id="@+id/tv_month_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:background="@drawable/bt_item_history"
+            android:paddingHorizontal="30dp"
+            android:paddingVertical="5dp"
+            android:text="Tháng ?"
+            android:textColor="@color/green_active"
+            android:textSize="15dp"
+            android:textStyle="normal" />
+
     </RelativeLayout>
 
     <TextView
@@ -76,20 +110,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Trống"
+        android:text="Đơn hàng trống"
         android:textSize="20dp"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:visibility="invisible"/>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_status_history">
+
 
     <ListView
         android:id="@+id/lv_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_status_history"
+
         android:background="#00000000"
         android:divider="@null"
         android:dividerHeight="10dp"
         android:padding="10dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        tools:listitem="@layout/item_history"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/rl_load"
