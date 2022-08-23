@@ -43,6 +43,7 @@ import com.example.modelfashion.Activity.SignIn.SignInActivity;
 import com.example.modelfashion.Adapter.VoucherAdapter;
 import com.example.modelfashion.Adapter.cart.CartAdapter;
 import com.example.modelfashion.History.ApiHistory.ApiHistory;
+import com.example.modelfashion.History.ViewHistory.HistoryActivity;
 import com.example.modelfashion.Model.Voucher;
 import com.example.modelfashion.Model.VoucherCall;
 import com.example.modelfashion.Model.request.CreateBillRequest;
@@ -55,6 +56,7 @@ import com.example.modelfashion.Model.response.my_product.CartProduct;
 import com.example.modelfashion.Model.response.my_product.MyProduct;
 import com.example.modelfashion.Model.response.my_product.Sizes;
 import com.example.modelfashion.R;
+import com.example.modelfashion.Utility.Constants;
 import com.example.modelfashion.Utility.PreferenceManager;
 import com.example.modelfashion.Utility.Utils;
 import com.example.modelfashion.database.AppDatabase;
@@ -466,7 +468,11 @@ public class CartFragment extends Fragment {
                     Log.d("ahuhu", "createBill: success: ");
                     hideProgressBar(progressBar);
                     Toast.makeText(requireContext(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(requireContext(), MainActivity.class));
+                    String id = sharedPref.getString(KEY_ID);
+                    Intent intent = new Intent(requireContext(), HistoryActivity.class);
+                    intent.putExtra("numberStatus", 1);
+                    intent.putExtra("user_id", id);
+                    startActivity(intent);
                     disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {
                     }, throwable -> {
                     }));

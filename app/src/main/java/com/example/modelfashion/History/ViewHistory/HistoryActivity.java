@@ -47,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
@@ -234,6 +235,7 @@ public class HistoryActivity extends AppCompatActivity {
                     for (int i = 0; i < response.body().size(); i++) {
                         bills.add(response.body().get(i));
                     }
+                    Collections.reverse(bills);
                     setListBill(numberStatus, bills);
                 }
 
