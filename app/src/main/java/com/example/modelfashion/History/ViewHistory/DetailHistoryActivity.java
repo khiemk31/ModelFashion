@@ -125,7 +125,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
             sumprice = 0;
         }
         summoney_price_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" đ ");
-        tv_sum.setText("Tất cả("+arr_bill_detail.size()+" sản phẩm)");
+        tv_sum.setText("Tất cả("+arr_my_product.size()+" sản phẩm)");
         paystatus.setText(contentBill.getPayment_status());
         lv_detail_history.setAdapter(historyAdapter);
 
