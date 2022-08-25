@@ -118,7 +118,11 @@ public class HistoryAdapter extends BaseAdapter {
         tv_name_subproduct0.setText(arr_bill.get(i).getProduct_name());
         tv_sumproduct0.setText("x" + arr_bill.get(i).getQuantity());
         tv_size_subproduct0.setText(arr_bill.get(i).getSize());
-        tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice_sale())) + " đ");
+        if(Double.parseDouble(arr_bill.get(i).getPrice_sale())>0) {
+            tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice_sale())) + " đ");
+        }else {
+            tv_price0.setText(decimalFormat.format(Double.parseDouble(arr_bill.get(i).getPrice())) + " đ");
+        }
         tv_sumSP.setText(arr_bill.get(i).getTotal_product() + " Sản phẩm");
         tv_sumPrice.setText("Tổng: " + decimalFormat.format(Integer.parseInt(arr_bill.get(i).getTotal_price())) + " đ");
         if (Integer.parseInt(arr_bill.get(i).getPrice_sale()) == 0) {

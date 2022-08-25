@@ -114,14 +114,17 @@ public class DetailHistoryActivity extends AppCompatActivity {
         phoneNumber_detail_history.setText(contentBill.getPhone());
         address_detail_history.setText(contentBill.getAddress());
         date_detail_history.setText(contentBill.getCreated_at().substring(0,10));
-        summoney_detail_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" đ");
+        summoney_detail_history.setText(format.format(Double.valueOf(getSumListPrice()))+" đ");
         tv_bill_status.setText(contentBill.getStatus());
 
         DetailHistoryAdapter historyAdapter = new DetailHistoryAdapter(DetailHistoryActivity.this,arr_my_product);
         int priceSale = contentBill.getDiscount_voucher_price();
         sale_detail_history.setText("-"+format.format(Double.valueOf(priceSale))+" đ");
         int sumprice = contentBill.getTotal_price() - priceSale;
-        summoney_price_history.setText(format.format(Double.valueOf(sumprice))+" đ ");
+        if (sumprice<0){
+            sumprice = 0;
+        }
+        summoney_price_history.setText(format.format(Double.valueOf(contentBill.getTotal_price()))+" đ ");
         tv_sum.setText("Tất cả("+arr_bill_detail.size()+" sản phẩm)");
         paystatus.setText(contentBill.getPayment_status());
         lv_detail_history.setAdapter(historyAdapter);
@@ -144,6 +147,18 @@ public class DetailHistoryActivity extends AppCompatActivity {
             tv_feedback_shop.setText("Cửa hàng : "+contentBill.getFeedback_by_store());
         }
 
+    }
+
+    private int getSumListPrice(){
+        int price = 0;
+        for (int i=0;i<arr_my_product.size();i++){
+            if (Integer.parseInt(arr_my_product.get(i).getPrice_sale())>0) {
+                price += Integer.parseInt(arr_my_product.get(i).getPrice_sale());
+            }else {
+                price += Integer.parseInt(arr_my_product.get(i).getPrice());
+            }
+        }
+        return price;
     }
 
 
