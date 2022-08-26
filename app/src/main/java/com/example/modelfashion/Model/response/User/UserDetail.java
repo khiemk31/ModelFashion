@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public class UserDetail {
     @SerializedName("user_id")
     private String userId;
-    @SerializedName("role")
-    private String role;
-    @SerializedName("active")
-    private int active;
     @SerializedName("phone")
     private String phone;
     @SerializedName("user_name")
@@ -21,14 +17,12 @@ public class UserDetail {
     private int gender;
     @SerializedName("avatar")
     private String avatar;
-    @SerializedName("password")
-    private String password;
-    @SerializedName("created_at")
-    private String createdAt;
-    @SerializedName("updatedAt")
-    private String updated_at;
-    @SerializedName("deletedAt")
-    private String deleted_at;
+    @SerializedName("number_of_orders")
+    private int numberOfOrders;
+    @SerializedName("avatar")
+    private int moneySpent;
+
+
 
     public String getUserId() {
         return userId;
@@ -36,22 +30,6 @@ public class UserDetail {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
     }
 
     public String getPhone() {
@@ -102,60 +80,34 @@ public class UserDetail {
         this.avatar = avatar;
     }
 
-    public String getPassword() {
-        return password;
+    public int getNumberOfOrders() {
+        return numberOfOrders;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNumberOfOrders(int numberOfOrders) {
+        this.numberOfOrders = numberOfOrders;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public int getMoneySpent() {
+        return moneySpent;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setMoneySpent(int moneySpent) {
+        this.moneySpent = moneySpent;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
-    }
-
-    public String getDeleted_at() {
-        return deleted_at;
-    }
-
-    public void setDeleted_at(String deleted_at) {
-        this.deleted_at = deleted_at;
-    }
-
-    public UserDetail(String userId, String role, int active, String phone, String username, String dateOfBirth, String address, int gender, String avatar, String password, String createdAt, String updated_at, String deleted_at) {
+    public UserDetail(String userId, String phone, String username, String dateOfBirth, String address, int gender, String avatar, int numberOfOrders, int moneySpent) {
         this.userId = userId;
-        this.role = role;
-        this.active = active;
         this.phone = phone;
         this.username = username;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.gender = gender;
         this.avatar = avatar;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updated_at = updated_at;
-        this.deleted_at = deleted_at;
+        this.numberOfOrders = numberOfOrders;
+        this.moneySpent = moneySpent;
     }
 
     public UserDetail() {
-    }
-
-    public Boolean getRealActive(){
-        if (this.active == 0)
-            return true;
-        else  return false;
     }
 }

@@ -35,7 +35,8 @@ public class Constants {
     public static final String KEY_TEMP_AVARTAR = "avatar";
     public static final String KEY_CHANGE_IMAGE = "changeImage";
     public static final String FIRST_TIME_INIT = "firstTimeInit";
-
+    public static final String KEY_NUMBER_OF_ORDER = "KEY_NUMBER_OF_ORDER";
+    public static final String KEY_MONEY_SPENT = "KEY_MONEY_SPENT";
     // login
     public static final String KEY_LOGIN_STARUS = "KEY_LOGIN_STARUS";
     public static final String KEY_SAVE_USER_INFO = "KEY_SAVE_USER_INFO";

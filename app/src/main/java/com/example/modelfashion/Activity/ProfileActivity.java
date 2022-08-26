@@ -1,11 +1,12 @@
 package com.example.modelfashion.Activity;
 
-import static com.example.modelfashion.Utility.Constants.KEY_ACTIVE;
 import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
 import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
 import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
 import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_MONEY_SPENT;
+import static com.example.modelfashion.Utility.Constants.KEY_NUMBER_OF_ORDER;
 import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 import static com.example.modelfashion.Utility.Constants.KEY_SEX;
 
@@ -101,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
     ConstraintLayout layoutActProfileName, layoutActProfilePhone, layoutActProfileSex, layoutActProfileBirthday, layoutActProfileAddrest;
     RelativeLayout layoutActProfileAvatar;
     AppCompatImageView btnActProfileBack, btnActProfileCheck;
-    TextView tvActProfileSex, tvActProfileName, tvActProfileAddress, tvActProfileBirthday, tvActProfilePhone;
+    TextView tvActProfileSex, tvActProfileName, tvActProfileAddress, tvActProfileBirthday, tvActProfilePhone, tvNumberOrder, tvMoneySpent;
     RoundedImageView imgActProfileAvatar;
     ProgressLoadingCommon progressLoadingCommon;
     ApiInterface apiInterface;
@@ -122,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         setListener();
         preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, false);
         getData();
+        getUserDetail();
     }
 
     private void viewHolder() {
@@ -137,6 +139,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvActProfileAddress = findViewById(R.id.tv_act_Profile_address);
         tvActProfileBirthday = findViewById(R.id.tv_act_Profile_birthday);
         tvActProfilePhone = findViewById(R.id.tv_act_Profile_Phone);
+        tvNumberOrder = findViewById(R.id.numberOrder);
+        tvMoneySpent = findViewById(R.id.moneySpent);
 
         btnActProfileBack = findViewById(R.id.btn_act_profile_back);
         btnActProfileCheck = findViewById(R.id.btn_act_profile_check);
@@ -160,6 +164,10 @@ public class ProfileActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(imgActProfileAvatar);
+
+        tvMoneySpent.setText("Số tiền đã thanh toán: " +preferenceManager.getInt(KEY_MONEY_SPENT) + "VNĐ");
+
+        tvNumberOrder.setText("Số đơn đã đặt: " + preferenceManager.getInt(KEY_NUMBER_OF_ORDER) + "đơn");
     }
 
     // check thông tin giới tính
@@ -261,6 +269,8 @@ public class ProfileActivity extends AppCompatActivity {
                     preferenceManager.putString(KEY_BIRTHDAY, registerResponse.getData().getDateOfBirth());
                     preferenceManager.putString(KEY_ADDRESS, registerResponse.getData().getAddress());
                     preferenceManager.putInt(KEY_SEX, registerResponse.getData().getGender());
+                    preferenceManager.putInt(KEY_NUMBER_OF_ORDER, registerResponse.getData().getNumberOfOrders());
+                    preferenceManager.putInt(KEY_MONEY_SPENT, registerResponse.getData().getMoneySpent());
                     onBackPressed();
                 }, throwable -> {
                     hideProgressBar(progressBar);
