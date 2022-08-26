@@ -16,6 +16,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,6 +72,7 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
@@ -370,6 +373,21 @@ public class CartFragment extends Fragment {
         TextView tv_no_update = dialog.findViewById(R.id.tv_no_update);
         TextView tv_yes_update = dialog.findViewById(R.id.tv_yes_update);
         edt_address.setText(addRess);
+
+        InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+            String stringSource = source.toString();
+            String stringDest = dest.toString();
+            if (stringSource.equals(" ")) {
+                if (stringDest.length() == 0)
+                    return "";
+                if (stringDest.length() >= 1)
+                    if ((dstart > 0 && edt_address.getText().toString().charAt(dstart - 1) == ' ') || (edt_address.getText().toString().length() >  dstart && edt_address.getText().toString().charAt(dstart) == ' ') || dstart == 0)
+                        return "";
+            }
+            return null;
+        };
+        edt_address.setFilters(new InputFilter[]{filter});
+
         tv_no_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
