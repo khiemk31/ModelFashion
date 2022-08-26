@@ -1,11 +1,12 @@
 package com.example.modelfashion.Activity;
 
-import static com.example.modelfashion.Utility.Constants.KEY_ACTIVE;
 import static com.example.modelfashion.Utility.Constants.KEY_ADDRESS;
 import static com.example.modelfashion.Utility.Constants.KEY_AVARTAR;
 import static com.example.modelfashion.Utility.Constants.KEY_BIRTHDAY;
 import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
+import static com.example.modelfashion.Utility.Constants.KEY_MONEY_SPENT;
+import static com.example.modelfashion.Utility.Constants.KEY_NUMBER_OF_ORDER;
 import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 import static com.example.modelfashion.Utility.Constants.KEY_SEX;
 
@@ -78,6 +79,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -101,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
     ConstraintLayout layoutActProfileName, layoutActProfilePhone, layoutActProfileSex, layoutActProfileBirthday, layoutActProfileAddrest;
     RelativeLayout layoutActProfileAvatar;
     AppCompatImageView btnActProfileBack, btnActProfileCheck;
-    TextView tvActProfileSex, tvActProfileName, tvActProfileAddress, tvActProfileBirthday, tvActProfilePhone;
+    TextView tvActProfileSex, tvActProfileName, tvActProfileAddress, tvActProfileBirthday, tvActProfilePhone, tvNumberOrder, tvMoneySpent;
     RoundedImageView imgActProfileAvatar;
     ProgressLoadingCommon progressLoadingCommon;
     ApiInterface apiInterface;
@@ -122,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
         setListener();
         preferenceManager.putBoolean(Constants.KEY_CHANGE_IMAGE, false);
         getData();
+        getUserDetail();
     }
 
     private void viewHolder() {
@@ -137,6 +140,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvActProfileAddress = findViewById(R.id.tv_act_Profile_address);
         tvActProfileBirthday = findViewById(R.id.tv_act_Profile_birthday);
         tvActProfilePhone = findViewById(R.id.tv_act_Profile_Phone);
+        tvNumberOrder = findViewById(R.id.numberOrder);
+        tvMoneySpent = findViewById(R.id.moneySpent);
 
         btnActProfileBack = findViewById(R.id.btn_act_profile_back);
         btnActProfileCheck = findViewById(R.id.btn_act_profile_check);
@@ -160,6 +165,11 @@ public class ProfileActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(imgActProfileAvatar);
+
+        tvNumberOrder.setText("Số đơn đã đặt: " + preferenceManager.getInt(KEY_NUMBER_OF_ORDER) + "đơn");
+
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        tvMoneySpent.setText("Số tiền đã thanh toán: " + decimalFormat.format((preferenceManager.getInt(KEY_MONEY_SPENT))) + "VNĐ");
     }
 
     // check thông tin giới tính
@@ -239,6 +249,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }).subscribe(updateResponse -> {
                     Toast.makeText(ProfileActivity.this, updateResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     getUserDetail();
+                    onBackPressed();
                     hideProgressBar(progressBar);
                 }, throwable -> {
                     hideProgressBar(progressBar);
@@ -261,7 +272,8 @@ public class ProfileActivity extends AppCompatActivity {
                     preferenceManager.putString(KEY_BIRTHDAY, registerResponse.getData().getDateOfBirth());
                     preferenceManager.putString(KEY_ADDRESS, registerResponse.getData().getAddress());
                     preferenceManager.putInt(KEY_SEX, registerResponse.getData().getGender());
-                    onBackPressed();
+                    preferenceManager.putInt(KEY_NUMBER_OF_ORDER, registerResponse.getData().getNumberOfOrders());
+                    preferenceManager.putInt(KEY_MONEY_SPENT, registerResponse.getData().getMoneySpent());
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     String error = new Utils().getErrorBody(throwable).getMessage();
@@ -297,7 +309,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (edt.getText().toString().trim().isEmpty()) {
                     tvActProfileName.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
                 } else {
-                    tvActProfileName.setText(edt.getText().toString().trim());
+                    tvActProfileName.setText(edt.getText().toString().replaceAll("\\s+", " ").trim());
                 }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);
@@ -310,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (edt.getText().toString().trim().isEmpty()) {
                     tvActProfileAddress.setText(preferenceManager.getString(Constants.KEY_ADDRESS));
                 } else {
-                    tvActProfileAddress.setText(edt.getText().toString().trim());
+                    tvActProfileAddress.setText(edt.getText().toString().replaceAll("\\s+", " ").trim());
                 }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);

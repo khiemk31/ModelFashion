@@ -8,6 +8,8 @@ import static com.example.modelfashion.Utility.Constants.KEY_CHECK_BOX;
 import static com.example.modelfashion.Utility.Constants.KEY_FULL_NAME;
 import static com.example.modelfashion.Utility.Constants.KEY_ID;
 import static com.example.modelfashion.Utility.Constants.KEY_MAT_KHAU;
+import static com.example.modelfashion.Utility.Constants.KEY_MONEY_SPENT;
+import static com.example.modelfashion.Utility.Constants.KEY_NUMBER_OF_ORDER;
 import static com.example.modelfashion.Utility.Constants.KEY_PHONE;
 import static com.example.modelfashion.Utility.Constants.KEY_SEX;
 import static com.example.modelfashion.Utility.Constants.KEY_TAI_KHOAN;
@@ -88,22 +90,22 @@ public class SignInActivity extends AppCompatActivity {
 
     private Boolean validate() {
         Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
-        if (edtAccount.getText().toString().trim().isEmpty() || edtPassword.getText().toString().trim().isEmpty()) {
+        if (edtAccount.getText().toString().replaceAll("\\s+", " ").trim().isEmpty() || edtPassword.getText().toString().replaceAll("\\s+", " ").trim().isEmpty()) {
             Toast.makeText(SignInActivity.this, "Không để trống số điện thoại hoặc mật khẩu", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (special.matcher(edtAccount.getText().toString().trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
+        if (special.matcher(edtAccount.getText().toString().replaceAll("\\s+", " ").trim()).find() || special.matcher(edtPassword.getText().toString().replaceAll("\\s+", " ").trim()).find()) {
             Toast.makeText(SignInActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtPassword.getText().toString().trim().length() < 6) {
+        if (edtPassword.getText().toString().replaceAll("\\s+", " ").trim().length() < 6) {
             Toast.makeText(SignInActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (edtAccount.getText().toString().trim().length() > 10 || edtAccount.getText().toString().trim().length() < 10) {
+        if (edtAccount.getText().toString().replaceAll("\\s+", " ").trim().length() > 10 || edtAccount.getText().toString().trim().length() < 10) {
             Toast.makeText(SignInActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -143,8 +145,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private void login() {
         Repository repository = new Repository(this);
-        disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString().trim(),
-                edtPassword.getText().toString().trim()))
+        disposable.add(repository.login(new LoginRequest(edtAccount.getText().toString().replaceAll("\\s+", " ").trim(),
+                edtPassword.getText().toString().replaceAll("\\s+", " ").trim()))
                 .doOnSubscribe(disposable -> {
                     // hien loading
                 }).subscribe(loginResponse -> {
@@ -197,11 +199,12 @@ public class SignInActivity extends AppCompatActivity {
                     sharedPreferences.putString(KEY_ID, userDetailResponse.getData().getUserId());
                     sharedPreferences.putString(KEY_AVARTAR, userDetailResponse.getData().getAvatar());
                     sharedPreferences.putString(KEY_FULL_NAME, userDetailResponse.getData().getUsername());
-                    sharedPreferences.putInt(KEY_ACTIVE, userDetailResponse.getData().getActive());
                     sharedPreferences.putString(KEY_PHONE, userDetailResponse.getData().getPhone());
                     sharedPreferences.putString(KEY_BIRTHDAY, userDetailResponse.getData().getDateOfBirth());
                     sharedPreferences.putString(KEY_ADDRESS, userDetailResponse.getData().getAddress());
                     sharedPreferences.putInt(KEY_SEX, userDetailResponse.getData().getGender());
+                    sharedPreferences.putInt(KEY_NUMBER_OF_ORDER, userDetailResponse.getData().getNumberOfOrders());
+                    sharedPreferences.putInt(KEY_MONEY_SPENT, userDetailResponse.getData().getMoneySpent());
 
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
