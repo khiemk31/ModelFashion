@@ -19,7 +19,7 @@ public class UserDetail {
     private String avatar;
     @SerializedName("number_of_orders")
     private int numberOfOrders;
-    @SerializedName("avatar")
+    @SerializedName("money_spent")
     private int moneySpent;
 
 
