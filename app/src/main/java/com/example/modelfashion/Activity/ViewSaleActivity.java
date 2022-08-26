@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.xml.transform.sax.SAXResult;
 
@@ -216,6 +218,65 @@ public class ViewSaleActivity extends AppCompatActivity {
         },1000);
 
     }
+    private void setListTallLow(int index){
+        progress_sale.setVisibility(View.VISIBLE);
+        rcl_view_sale.setVisibility(View.INVISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(saleModel.getListProduct().size()>0){
+                    ArrayList<ProductSale> list = saleModel.getListProduct();
+
+                    if (index==0){
+                        Collections.sort(list, new Comparator<ProductSale>() {
+                            @Override
+                            public int compare(ProductSale p1, ProductSale p2) {
+                                float price1 = p1.getPrice() - (p1.getPrice()*p1.getDiscount()/100);
+                                float price2 = p2.getPrice() - (p2.getPrice()*p2.getDiscount()/100);;
+                                if (price1 > price2) {
+                                    return 1;
+                                }
+                                else if (price1 <  price2) {
+                                    return -1;
+                                }
+                                else {
+                                    return 0;
+                                }
+                            }
+                        });
+                    }else {
+                        Collections.sort(list, new Comparator<ProductSale>() {
+                            @Override
+                            public int compare(ProductSale p1, ProductSale p2) {
+                                float price1 = p1.getPrice() - (p1.getPrice()*p1.getDiscount()/100);
+                                float price2 = p2.getPrice() - (p2.getPrice()*p2.getDiscount()/100);;
+                                if (price1 > price2) {
+                                    return -1;
+                                }
+                                else if (price1 <  price2) {
+                                    return 1;
+                                }
+                                else {
+                                    return 0;
+                                }
+                            }
+                        });
+                    }
+                    allSaleAdapter = new AllSaleAdapter(ViewSaleActivity.this, list);
+                    rcl_view_sale.setAdapter(allSaleAdapter);
+                    productSaleAll.addAll(saleModel.getListProduct());
+                }else {
+                    Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm phù hợp",Toast.LENGTH_SHORT).show();
+                }
+                progress_sale.setVisibility(View.GONE);
+                rcl_view_sale.setVisibility(View.VISIBLE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        },1000);
+
+    }
 
     private void onClick(){
 
@@ -293,7 +354,8 @@ public class ViewSaleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                getListByFilter(10000,10000000,"DESC","ASC",page);
+                getListFromTallLow(1);
+
                 loadFilter(8);
 
             }
@@ -302,8 +364,31 @@ public class ViewSaleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                getListByFilter(10000,10000000,"ASC","ASC",page);
+                getListFromTallLow(0);
                 loadFilter(7);
+
+            }
+        });
+    }
+
+    private void getListFromTallLow(int index){
+        ApiHistory.API_HISTORY.getProductSaleByCategory(10000,10000000,"ASC","ASC",page).enqueue(new Callback<SaleModel>() {
+            @Override
+            public void onResponse(Call<SaleModel> call, Response<SaleModel> response) {
+                if (response.body()!=null){
+                    if (response.body().getListProduct().size()>0) {
+                        saleModel = response.body();
+                        pageAdapter.setPageCount(saleModel.getTotalPage());
+                        setListTallLow(index);
+                    }else {
+                        Toast.makeText(ViewSaleActivity.this,"Không tìm thấy sản phẩm phù hợp",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SaleModel> call, Throwable t) {
 
             }
         });

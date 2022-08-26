@@ -147,7 +147,10 @@ public class CartFragment extends Fragment {
                 addBill();
             }
             if (check.matches("closevoucher")) {
-                dialog.dismiss();
+                if (dialog!=null && dialog.isShowing()){
+                    dialog.dismiss();
+                }
+
                 btn_voucher.setText(CodeVoucher);
                 btn_clear_voucher.setVisibility(View.VISIBLE);
                 tv_price_discount.setText("-" + moneyFormat((long) DiscountVoucher));
@@ -159,6 +162,25 @@ public class CartFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!sharedPref.getBoolean(KEY_CHECK_LOGIN)) {
+            CodeVoucher = "";
+            IDVoucher = "";
+            DiscountVoucher = 0;
+            PositionVoucher = -1;
+            tv_price_discount.setText("-" + DiscountVoucher);
+            sumPrice = adapter.getTotal() - DiscountVoucher;
+            if (sumPrice < 0) {
+                sumPrice = 0;
+            }
+            tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
+            btn_voucher.setText("Mã giảm giá");
+            btn_clear_voucher.setVisibility(View.INVISIBLE);
+        }
+    }
 
     public static CartFragment newInstance(String text) {
 
@@ -266,6 +288,7 @@ public class CartFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getProductInCart();
+            tv_price_discount.setText("-" + DiscountVoucher);
             sumPrice = adapter.getTotal() - DiscountVoucher;
             if (sumPrice < 0) {
                 sumPrice = 0;
@@ -512,6 +535,19 @@ public class CartFragment extends Fragment {
                     }));
                     adapter.clearData();
                     useVoucher();
+                    CodeVoucher = "";
+                    IDVoucher = "";
+                    DiscountVoucher = 0;
+                    PositionVoucher = -1;
+                    tv_price_discount.setText("-" + DiscountVoucher);
+                    sumPrice = adapter.getTotal() - DiscountVoucher;
+                    if (sumPrice < 0) {
+                        sumPrice = 0;
+                    }
+                    tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
+                    btn_voucher.setText("Mã giảm giá");
+                    tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
+                    btn_clear_voucher.setVisibility(View.INVISIBLE);
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     Log.d("ahuhu", "createBill: error: " + throwable.getMessage());

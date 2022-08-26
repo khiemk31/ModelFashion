@@ -253,12 +253,16 @@ public class FragmentProfile extends Fragment {
                 preferenceManager.putString(KEY_PHONE, "");
                 preferenceManager.putString(KEY_ADDRESS, "");
                 preferenceManager.putString(KEY_BIRTHDAY, "");
+                preferenceManager.putString(KEY_ID, "");
 
                 img.setImageResource(R.drawable.bg_gradient_blue);
                 loadDetails();
+                dialog.dismiss();
+                getActivity().finish();
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
-                dialog.dismiss();
+
+
             }
         });
 
