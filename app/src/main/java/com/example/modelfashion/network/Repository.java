@@ -184,4 +184,10 @@ public final class Repository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Single<GetProductByCategoryResponse> getProductSearch(int id) {
+        return apiInterface.getProductSearch(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
