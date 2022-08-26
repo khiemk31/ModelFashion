@@ -79,6 +79,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -165,9 +166,10 @@ public class ProfileActivity extends AppCompatActivity {
                 .load(preferenceManager.getString(Constants.KEY_AVARTAR))
                 .into(imgActProfileAvatar);
 
-        tvMoneySpent.setText("Số tiền đã thanh toán: " +preferenceManager.getInt(KEY_MONEY_SPENT) + "VNĐ");
-
         tvNumberOrder.setText("Số đơn đã đặt: " + preferenceManager.getInt(KEY_NUMBER_OF_ORDER) + "đơn");
+        
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        tvMoneySpent.setText("Số tiền đã thanh toán: " + decimalFormat.format((preferenceManager.getInt(KEY_MONEY_SPENT))) + "VNĐ");
     }
 
     // check thông tin giới tính
