@@ -38,10 +38,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SeeAllActivity extends AppCompatActivity {
 
@@ -100,31 +103,40 @@ public class SeeAllActivity extends AppCompatActivity {
         searchBar.onSearchBarClick(new SearchBar.SearchListener() {
             @Override
             public void onClearClick() {
-
+                getProductByCategory();
             }
 
             @Override
             public void afterTextChanged(String content) {
                 compositeDisposable.add(Single.just(1)
-                                .delay(1000, TimeUnit.MILLISECONDS)
+                        .delay(1000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> {
                             showProgressBar(progressBar);
                         })
                         .subscribe(productResponse -> {
                             hideProgressBar(progressBar);
                             adapter.search(content);
+                            if (adapter.getItemCount() == 0 ){
+                                tv_no_data.setVisibility(View.VISIBLE);
+                                rcv.setVisibility(View.GONE);
+                            } else {
+                                tv_no_data.setVisibility(View.GONE);
+                                rcv.setVisibility(View.VISIBLE);
+                            }
+
+                            // set page count = adapter.itemCount / 8 or
+                            pageAdapter.setPageCount(1);
+
+                            if (Objects.equals(content, "")) {
+                                getProductByCategory();
+                            }
+
                         }, throwable -> {
                             hideProgressBar(progressBar);
                         }));
 
-
-                if (adapter.getItemCount() == 0 ){
-                    tv_no_data.setVisibility(View.VISIBLE);
-                    rcv.setVisibility(View.GONE);
-                } else {
-                    tv_no_data.setVisibility(View.GONE);
-                    rcv.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
@@ -256,7 +268,7 @@ public class SeeAllActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
         getProductByCategory();
-        getProductSearch(); // all product to fake search
+        getProductSearch();
     }
 
     private void getProductSearch() {
@@ -266,7 +278,7 @@ public class SeeAllActivity extends AppCompatActivity {
                 .doFinally(() -> {
                 })
                 .subscribe(productResponse -> {
-                    adapter.setListProduct(productResponse.getListProduct());
+                    adapter.listStaticAll(productResponse.getListProduct());
 
                 }, throwable -> {
                     Log.d("ahihi", "getProductSearch: " + new Utils().getErrorBody(throwable).toString());
@@ -274,6 +286,7 @@ public class SeeAllActivity extends AppCompatActivity {
     }
 
     private int pageNumber = 1;
+    private int totalPage = 0;
     private int price1 = 0, price2 = 10000000;
     private String sortPrice = "DESC", sortDiscount = "DESC";
 
@@ -292,9 +305,11 @@ public class SeeAllActivity extends AppCompatActivity {
                 })
                 .subscribe(productResponse -> {
                     adapter.setListProduct(productResponse.getListProduct());
-
+                    totalPage = productResponse.getTotalPage();
                     pageAdapter.setPageCount(productResponse.getTotalPage());
                     hideProgressBar(progressBar);
+
+                    showDataOrNot();
 
                     productResponse.getListProduct().forEach(item -> {
                         Log.d("abcdef", "productResponse: " +             item.toString());
@@ -306,6 +321,16 @@ public class SeeAllActivity extends AppCompatActivity {
                     hideProgressBar(progressBar);
                     Toast.makeText(this, new Utils().getErrorBody(throwable).toString(), Toast.LENGTH_SHORT).show();
                 }));
+    }
+
+    private void showDataOrNot() {
+        if (adapter.getItemCount() == 0 ){
+            tv_no_data.setVisibility(View.VISIBLE);
+            rcv.setVisibility(View.GONE);
+        } else {
+            tv_no_data.setVisibility(View.GONE);
+            rcv.setVisibility(View.VISIBLE);
+        }
     }
 
     private void removeAllTick() {

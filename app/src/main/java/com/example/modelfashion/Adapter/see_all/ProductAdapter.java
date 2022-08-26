@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.modelfashion.Model.response.main_screen.Product;
 import com.example.modelfashion.R;
+import com.example.modelfashion.customview.VNCharacterUtils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -43,7 +44,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void listStaticAll(List<Product> list) {
-        this.listStatic = list;
+        this.listStaticAll.clear();
+        this.listStaticAll = list;
     }
 
     public void addItems(List<Product> listLoadMore) {
@@ -57,12 +59,12 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void sortAToZ() {
-        Collections.sort(this.listProduct, (p1, p2) -> p1.getProductName().compareToIgnoreCase(p2.getProductName()));
+        Collections.sort(this.listProduct, (p1, p2) -> VNCharacterUtils.removeAccent(p1.getProductName()).compareToIgnoreCase(VNCharacterUtils.removeAccent(p2.getProductName())));
         notifyDataSetChanged();
     }
 
     public void sortZToA() {
-        Collections.sort(this.listProduct, (p1, p2) -> p2.getProductName().compareToIgnoreCase(p1.getProductName()));
+        Collections.sort(this.listProduct, (p1, p2) -> VNCharacterUtils.removeAccent(p2.getProductName()).compareToIgnoreCase(VNCharacterUtils.removeAccent(p1.getProductName())));
         notifyDataSetChanged();
     }
 
