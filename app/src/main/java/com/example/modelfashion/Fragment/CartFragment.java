@@ -124,6 +124,7 @@ public class CartFragment extends Fragment {
     private ProgressBar prg_voucher;
     private TextView tv_emty_voucher;
     private RecyclerView rcl_voucher;
+    private long sumPrice = 0;
 
 
     CartAdapter adapter = new CartAdapter();
@@ -150,7 +151,11 @@ public class CartFragment extends Fragment {
                 btn_voucher.setText(CodeVoucher);
                 btn_clear_voucher.setVisibility(View.VISIBLE);
                 tv_price_discount.setText("-" + moneyFormat((long) DiscountVoucher));
-                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                sumPrice = adapter.getTotal() - DiscountVoucher;
+                if (sumPrice < 0) {
+                    sumPrice = 0;
+                }
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
             }
         }
     };
@@ -204,7 +209,11 @@ public class CartFragment extends Fragment {
                 DiscountVoucher = 0;
                 PositionVoucher = -1;
                 tv_price_discount.setText("-" + DiscountVoucher);
-                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                sumPrice = adapter.getTotal() - DiscountVoucher;
+                if (sumPrice < 0) {
+                    sumPrice = 0;
+                }
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                 btn_voucher.setText("Mã giảm giá");
                 btn_clear_voucher.setVisibility(View.INVISIBLE);
             }
@@ -257,7 +266,11 @@ public class CartFragment extends Fragment {
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(false);
             getProductInCart();
-            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+            sumPrice = adapter.getTotal() - DiscountVoucher;
+            if (sumPrice < 0) {
+                sumPrice = 0;
+            }
+            tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
             tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
         });
         btn_change_address.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +304,11 @@ public class CartFragment extends Fragment {
                         .subscribe(okResponse -> {
                             // refresh
                             getProductInCart();
-                            tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                            sumPrice = adapter.getTotal() - DiscountVoucher;
+                            if (sumPrice < 0) {
+                                sumPrice = 0;
+                            }
+                            tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                             tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                         }, throwable -> {
                             Log.d("ahuhu", "listene: error: " + throwable.getMessage());
@@ -325,7 +342,6 @@ public class CartFragment extends Fragment {
         });
 
 
-
         dialog.show();
     }
 
@@ -340,11 +356,11 @@ public class CartFragment extends Fragment {
                     if (response.body() != null) {
                         voucherList.clear();
                         voucherList = response.body().getListVoucher();
-                        if(voucherList.size()>0){
+                        if (voucherList.size() > 0) {
                             tv_emty_voucher.setVisibility(View.INVISIBLE);
                             VoucherAdapter voucherAdapter = new VoucherAdapter(requireContext(), voucherList);
                             rcl_voucher.setAdapter(voucherAdapter);
-                        }else {
+                        } else {
                             tv_emty_voucher.setVisibility(View.VISIBLE);
                         }
                         Log.e("xxx", String.valueOf(voucherList.size()));
@@ -466,16 +482,16 @@ public class CartFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addBill() {
         String paymentStatus;
-        if (payment_methods == 0){
+        if (payment_methods == 0) {
             paymentStatus = "Thanh toán khi nhận hàng";
-        }else {
+        } else {
             paymentStatus = "Đã thanh toán bằng Momo";
         }
 
 
         CreateBillRequest temp = adapter.billInformation(sharedPref.getString(KEY_ID));
         CreateBillRequest real = new CreateBillRequest(sharedPref.getString(KEY_ID), temp.getProductList(),
-                temp.getTotalPrice(), temp.getListQuantity(), temp.getListSize(), temp.getListPrice(),
+                String.valueOf(sumPrice), temp.getListQuantity(), temp.getListSize(), temp.getListPrice(),
                 temp.getListPriceSale(), String.valueOf(DiscountVoucher), addRess, paymentStatus);
 
         disposable.add(repository.createBill(real)
@@ -582,7 +598,11 @@ public class CartFragment extends Fragment {
 
                 }).subscribe(myProductCarts -> {
                     adapter.setListData(myProductCarts);
-                    tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                    sumPrice = adapter.getTotal() - DiscountVoucher;
+                    if (sumPrice < 0) {
+                        sumPrice = 0;
+                    }
+                    tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                     tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                 }, throwable -> {
                     Log.d("ahuhu", "getProductInCart: error" + throwable.toString());
@@ -598,21 +618,33 @@ public class CartFragment extends Fragment {
             @Override
             public void OnClickDelete(int position, MyProductCart myProductCart) {
                 deleteProductFromCart(position, myProductCart);
-                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                sumPrice = adapter.getTotal() - DiscountVoucher;
+                if (sumPrice < 0) {
+                    sumPrice = 0;
+                }
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                 tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickIncreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.increaseAmount(position);
-                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                sumPrice = adapter.getTotal() - DiscountVoucher;
+                if (sumPrice < 0) {
+                    sumPrice = 0;
+                }
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                 tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
             @Override
             public void OnClickDecreaseQuantity(int position, MyProductCart myProductCart) {
                 adapter.decreaseAmount(position);
-                tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                sumPrice = adapter.getTotal() - DiscountVoucher;
+                if (sumPrice < 0) {
+                    sumPrice = 0;
+                }
+                tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                 tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
             }
 
@@ -640,7 +672,11 @@ public class CartFragment extends Fragment {
                     })
                     .subscribe(() -> {
                         adapter.removeProduct(position);
-                        tvTotal.setText("Tổng tiền:\n" + moneyFormat(adapter.getTotal() - DiscountVoucher));
+                        sumPrice = adapter.getTotal() - DiscountVoucher;
+                        if (sumPrice < 0) {
+                            sumPrice = 0;
+                        }
+                        tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
                         tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
                     }, throwable -> {
                     }));
@@ -669,7 +705,10 @@ public class CartFragment extends Fragment {
     // goi request MoMo pay
 
     private void requestPayment() {
-        amount = Integer.parseInt(String.valueOf(adapter.getTotal()));
+        amount = Integer.parseInt(String.valueOf(adapter.getTotal() - DiscountVoucher));
+        if (amount < 0) {
+            amount = 0;
+        }
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
@@ -707,7 +746,11 @@ public class CartFragment extends Fragment {
         eventValue.put("extraData", objExtraData.toString());
 
         eventValue.put("extra", "");
-        AppMoMoLib.getInstance().requestMoMoCallBack(requireActivity(), eventValue);
+        if (amount > 0) {
+            AppMoMoLib.getInstance().requestMoMoCallBack(requireActivity(), eventValue);
+        }else {
+            Toast.makeText(requireContext(),"Chỉ thanh toán với đơn hàng trên 0đ",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showDialog() {

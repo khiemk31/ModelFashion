@@ -119,6 +119,7 @@ public class HistoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         numberStatus = intent.getIntExtra("numberStatus", 4);
         user_id = intent.getStringExtra("user_id");
+        Log.e("onCreate", user_id);
         loadTitleStatus(numberStatus);
         // Toast.makeText(this, ""+user_id, Toast.LENGTH_SHORT).show();
         img_history_back.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +170,8 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 refresh_history.setRefreshing(false);
+                month = 0;
+                year = 0;
                 setListBill(numberStatus, bills);
             }
         });
