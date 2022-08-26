@@ -167,7 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .into(imgActProfileAvatar);
 
         tvNumberOrder.setText("Số đơn đã đặt: " + preferenceManager.getInt(KEY_NUMBER_OF_ORDER) + "đơn");
-        
+
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         tvMoneySpent.setText("Số tiền đã thanh toán: " + decimalFormat.format((preferenceManager.getInt(KEY_MONEY_SPENT))) + "VNĐ");
     }
@@ -249,6 +249,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }).subscribe(updateResponse -> {
                     Toast.makeText(ProfileActivity.this, updateResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     getUserDetail();
+                    onBackPressed();
                     hideProgressBar(progressBar);
                 }, throwable -> {
                     hideProgressBar(progressBar);
@@ -273,7 +274,6 @@ public class ProfileActivity extends AppCompatActivity {
                     preferenceManager.putInt(KEY_SEX, registerResponse.getData().getGender());
                     preferenceManager.putInt(KEY_NUMBER_OF_ORDER, registerResponse.getData().getNumberOfOrders());
                     preferenceManager.putInt(KEY_MONEY_SPENT, registerResponse.getData().getMoneySpent());
-                    onBackPressed();
                 }, throwable -> {
                     hideProgressBar(progressBar);
                     String error = new Utils().getErrorBody(throwable).getMessage();
