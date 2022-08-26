@@ -309,7 +309,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (edt.getText().toString().trim().isEmpty()) {
                     tvActProfileName.setText(preferenceManager.getString(Constants.KEY_FULL_NAME));
                 } else {
-                    tvActProfileName.setText(edt.getText().toString().trim());
+                    tvActProfileName.setText(edt.getText().toString().replaceAll("\\s+", " ").trim());
                 }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);
@@ -322,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (edt.getText().toString().trim().isEmpty()) {
                     tvActProfileAddress.setText(preferenceManager.getString(Constants.KEY_ADDRESS));
                 } else {
-                    tvActProfileAddress.setText(edt.getText().toString().trim());
+                    tvActProfileAddress.setText(edt.getText().toString().replaceAll("\\s+", " ").trim());
                 }
                 dialog.dismiss();
                 btnActProfileCheck.setVisibility(View.VISIBLE);
