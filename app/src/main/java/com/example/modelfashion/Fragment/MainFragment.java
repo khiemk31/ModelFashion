@@ -138,7 +138,7 @@ public class MainFragment extends Fragment {
         ciSale = view.findViewById(R.id.ci_sale_main_fm);
         progressBar = view.findViewById(R.id.progress_bar);
         avatar = view.findViewById(R.id.img_user_avatar);
-        img_notifi = view.findViewById(R.id.img_notifi);
+//        img_notifi = view.findViewById(R.id.img_notifi);
         rcv = view.findViewById(R.id.rcv);
         tv_viewall_sale = view.findViewById(R.id.tv_viewall_sale);
         tv_viewall_sale.setOnClickListener(new View.OnClickListener() {
@@ -191,12 +191,12 @@ public class MainFragment extends Fragment {
             getListProductSale();
         });
 
-        img_notifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(requireContext(), NotifiActivity.class));
-            }
-        });
+//        img_notifi.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(requireContext(), NotifiActivity.class));
+//            }
+//        });
         return view;
     }
 

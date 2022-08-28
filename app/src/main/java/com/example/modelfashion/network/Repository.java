@@ -105,6 +105,7 @@ public final class Repository {
 
     public Single<UpdateUserResponse> updateUser(String userID, UpdateUserRequest request) {
         return apiInterface.updateUser(userID, request)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

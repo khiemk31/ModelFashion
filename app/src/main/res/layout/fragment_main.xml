@@ -56,18 +56,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:riv_corner_radius="100dip" />
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/img_notifi"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_img_notifi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/img_user_avatar"
-            app:layout_constraintTop_toTopOf="parent"
+<!--        <com.makeramen.roundedimageview.RoundedImageView-->
+<!--            android:id="@+id/img_notifi"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/ic_img_notifi"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/img_user_avatar"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
 
-            />
+<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
