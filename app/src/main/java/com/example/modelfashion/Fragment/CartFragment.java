@@ -337,6 +337,24 @@ public class CartFragment extends Fragment {
                             Log.d("ahuhu", "listene: error: " + throwable.getMessage());
                         })
         );
+
+        disposable.add(
+                RxBus.listen(RxEvent.getProductInCart.getClass())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(okResponse -> {
+                            // refresh
+                            getProductInCart();
+                            sumPrice = adapter.getTotal() - DiscountVoucher;
+                            if (sumPrice < 0) {
+                                sumPrice = 0;
+                            }
+                            tvTotal.setText("Tổng tiền:\n" + moneyFormat(sumPrice));
+                            tv_price_provisional.setText("" + moneyFormat(adapter.getTotal()));
+                        }, throwable -> {
+                            Log.d("ahuhu", "listene: error: " + throwable.getMessage());
+                        })
+        );
     }
 
     @Override
@@ -480,10 +498,11 @@ public class CartFragment extends Fragment {
     private void createBill() {
         AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
                 .create();
-        alertDialog.setTitle("Thông báo");
+        alertDialog.setTitle("Xác nhận đặt hàng");
+        alertDialog.setIcon(R.drawable.logo);
         alertDialog.setCancelable(false);
 
-        alertDialog.setMessage("Xác nhận đặt hàng");
+        alertDialog.setMessage("Tổng tiền hóa đơn chưa bao gồm chi phí giao hàng");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, i) -> {
             if (payment_methods == 0) {
                 if (tv_address.toString().trim().isEmpty()) {
@@ -531,6 +550,8 @@ public class CartFragment extends Fragment {
                     intent.putExtra("user_id", id);
                     startActivity(intent);
                     disposable.add(AppDatabase.getInstance(requireContext()).cartDao().deleteAll().subscribe(() -> {
+                        AppDatabase.getInstance(requireContext()).cartDao().getAllProductInCart();
+                        RxBus.publish(RxEvent.getProductInCart);
                     }, throwable -> {
                     }));
                     adapter.clearData();
@@ -555,7 +576,7 @@ public class CartFragment extends Fragment {
     }
 
     private void useVoucher() {
-        disposable.add(repository.useVoucher(new UseVoucherRequest(String.valueOf(DiscountVoucher)))
+        disposable.add(repository.useVoucher(new UseVoucherRequest(String.valueOf(IDVoucher)))
                 .doOnSubscribe(disposable1 -> {
                 })
                 .subscribe(okResponse -> {
