@@ -259,10 +259,8 @@ public class FragmentProfile extends Fragment {
                 loadDetails();
                 dialog.dismiss();
                 getActivity().finish();
-                Intent intent = new Intent(getContext(), MainActivity.class);
+                Intent intent = new Intent(getContext(), SignInActivity.class);
                 startActivity(intent);
-
-
             }
         });
 

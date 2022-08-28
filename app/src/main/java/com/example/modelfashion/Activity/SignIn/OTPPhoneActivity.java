@@ -127,7 +127,7 @@ public class OTPPhoneActivity extends AppCompatActivity {
                     progressLoadingCommon.showProgressLoading(this);
                 }).subscribe(registerResponse -> {
                     Toast.makeText(OTPPhoneActivity.this, registerResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(OTPPhoneActivity.this, MainActivity.class));
+                    startActivity(new Intent(OTPPhoneActivity.this, SignInActivity.class));
                 }, throwable -> {
                     String error = new Utils().getErrorBody(throwable).getMessage();
                     Toast.makeText(OTPPhoneActivity.this, error, Toast.LENGTH_SHORT).show();
