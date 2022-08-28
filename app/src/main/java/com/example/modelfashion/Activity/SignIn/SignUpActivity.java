@@ -89,7 +89,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validate()) {
-                    checkUser();
+//                    checkUser();
+                    Toast.makeText(SignUpActivity.this,"done",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -134,27 +135,28 @@ public class SignUpActivity extends AppCompatActivity {
 
     // validate
     private Boolean validate() {
-        Pattern special = Pattern.compile("[!#$%&*^()_+=|<>?{}\\[\\]~-]");
-        if (edtPhoneSu.getText().toString().replaceAll("\\s+", " ").trim().isEmpty() || edtPassword.getText().toString().isEmpty() || edtConfirmPassword.getText().toString().replaceAll("\\s+", " ").trim().isEmpty() || edtNameSu.getText().toString().replaceAll("\\s+", " ").trim().isEmpty()) {
+        Pattern special = Pattern.compile("[.!#$%&*^()_+=|<>?{}\\[\\]~-]");
+        Pattern checksdst = Pattern.compile("^[0-9]{10}$");
+        if (edtPhoneSu.getText().toString().replaceAll("\\s+", "").trim().isEmpty() || edtPassword.getText().toString().replaceAll("\\s+", "").trim().isEmpty() || edtConfirmPassword.getText().toString().replaceAll("\\s+", "").trim().isEmpty() || edtNameSu.getText().toString().replaceAll("\\s+", "").trim().isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Không để trống", Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            if (special.matcher(edtNameSu.getText().toString().replaceAll("\\s+", " ").replaceAll("\\s+", " ").trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
+            if (special.matcher(edtNameSu.getText().toString().replaceAll("\\s+", " ").trim()).find() || special.matcher(edtPassword.getText().toString().trim()).find()) {
                 Toast.makeText(SignUpActivity.this, "Không được viết kí tự đặc biệt", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            if (edtPassword.getText().toString().replaceAll("\\s+", " ").trim().length() < 6) {
-                Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự", Toast.LENGTH_SHORT).show();
+            if (edtPassword.getText().toString().replaceAll("\\s", "").trim().length() < 6 || edtPassword.getText().toString().contains(" ")) {
+                Toast.makeText(SignUpActivity.this, "Mật khẩu ít nhất 6 kí tự và không có dấu cách", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            if (edtPhoneSu.getText().toString().replaceAll("\\s+", " ").trim().length() > 10 || edtPhoneSu.getText().toString().trim().length() < 10) {
-                Toast.makeText(SignUpActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
+            if ( edtPhoneSu.getText().toString().contains(" ") || !checksdst.matcher(edtPhoneSu.getText().toString()).find()   ) {
+                Toast.makeText(SignUpActivity.this, "Số điện thoại không hợp lệ!", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            if (!edtConfirmPassword.getText().toString().replaceAll("\\s+", " ").trim().equalsIgnoreCase(edtPassword.getText().toString().trim())) {
+            if (!edtConfirmPassword.getText().toString().replaceAll("\\s", "").trim().equalsIgnoreCase(edtPassword.getText().toString().replaceAll("\\s", "").trim())) {
                 Toast.makeText(SignUpActivity.this, "Mật khẩu không giống nhau", Toast.LENGTH_SHORT).show();
                 return false;
             }

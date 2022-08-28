@@ -105,8 +105,8 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
 
-        if (edtAccount.getText().toString().replaceAll("\\s+", " ").trim().length() > 10 || edtAccount.getText().toString().trim().length() < 10) {
-            Toast.makeText(SignInActivity.this, "Số điện thoại có 10 kí tự!", Toast.LENGTH_SHORT).show();
+        if (edtAccount.getText().toString().replaceAll("\\s+", "").trim().length() > 10 || edtAccount.getText().toString().replaceAll("\\s+", "").length() < 10 || edtAccount.getText().toString().contains(" ")) {
+            Toast.makeText(SignInActivity.this, "Số điện thoại không hợp lệ!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
